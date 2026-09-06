@@ -14,6 +14,7 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 | ID | Project Name | Archetype | Status | Primary Owner | Codebase / Reference | Runbook | Journal |
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **`LAB-001`** | **[AAMAS (Autism Activity Monitoring & Alerting System)](projects/LAB-001-ammas/README.md)** | 💻 Mini-App | `🟢 Active` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [Runbook](projects/LAB-001-ammas/runbook.md) | [Journal](projects/LAB-001-ammas/journal.md) |
+| **`LAB-002`** | **[WrenAI Capabilities & GenBI Evaluation](projects/LAB-002-wrenai-eval/README.md)** | 📑 Research | `🟢 Active` | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [Runbook](projects/LAB-002-wrenai-eval/runbook.md) | [Journal](projects/LAB-002-wrenai-eval/journal.md) |
 
 ---
 
@@ -33,10 +34,14 @@ cetana-labs/
 │   ├── data-collection/           # For data pipelines, datasets & web scraping
 │   └── verification/              # For benchmarks, test harnesses & QA audits
 └── projects/                      # All lab initiatives (flat hierarchy)
-    └── LAB-001-ammas/             # Behavioral CV Edge System & GenBI Analytics
-        ├── README.md              # Project Charter & Architecture
-        ├── runbook.md             # Setup, Execution, & Commands
-        └── journal.md             # Phase History & Milestone Timeline
+    ├── LAB-001-ammas/             # Behavioral CV Edge System & GenBI Analytics
+    │   ├── README.md
+    │   ├── runbook.md
+    │   └── journal.md
+    └── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
+        ├── README.md
+        ├── runbook.md
+        └── journal.md
 ```
 
 ---
