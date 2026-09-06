@@ -85,3 +85,23 @@ Here are copy-pasteable prompt templates:
 
 ### D. Cross-Lab Summary
 > *"Provide a summary of all active lab projects, their current phases, and pending milestones."*
+
+---
+
+## 6. Manager & Stakeholder Quick-Briefing Prompts
+
+If you are a manager, team lead, or stakeholder reviewing this repository, you can query your AI chat tool directly with these prompts for instant, accurate answers:
+
+### 👔 Executive & Status Briefings
+- **Overall Status**:  
+  > *"Give me an executive briefing of all active lab projects in this repository, including their current phase, owner, and key blockers."*
+- **Recent Progress**:  
+  > *"Summarize the last 2 weeks of milestone achievements and architectural decisions recorded across all lab journals."*
+
+### 🔍 Project-Specific Deep Dives
+- **30-Second Elevator Pitch**:  
+  > *"Give me a concise 3-paragraph summary of project [LAB-XXX]: what problem it solves, its tech stack, and its current status."*
+- **Architecture & Trade-Offs**:  
+  > *"What architectural decisions and trade-offs were made in project [LAB-XXX], and why was this approach selected?"*
+- **Replication / How-To**:  
+  > *"What are the exact prerequisites and steps required for another engineer to run and test [LAB-XXX] locally?"*
