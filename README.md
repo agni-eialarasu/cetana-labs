@@ -15,6 +15,7 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **`LAB-001`** | **[AAMAS (Autism Activity Monitoring & Alerting System)](projects/LAB-001-ammas/README.md)** | 💻 Mini-App | `🟢 Active` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [Runbook](projects/LAB-001-ammas/runbook.md) | [Journal](projects/LAB-001-ammas/journal.md) |
 | **`LAB-002`** | **[WrenAI Capabilities & GenBI Evaluation](projects/LAB-002-wrenai-eval/README.md)** | 📑 Research | `🟢 Active` | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [Runbook](projects/LAB-002-wrenai-eval/runbook.md) | [Journal](projects/LAB-002-wrenai-eval/journal.md) |
+| **`LAB-003`** | **[Nexus Pulse (Governed Deterministic Vertical Engine)](projects/LAB-003-nexus-pulse/README.md)** | 💻 Mini-App | `🟢 Active` | Hariharasubramanian | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [Runbook](projects/LAB-003-nexus-pulse/runbook.md) | [Journal](projects/LAB-003-nexus-pulse/journal.md) |
 
 ---
 
@@ -38,7 +39,11 @@ cetana-labs/
     │   ├── README.md
     │   ├── runbook.md
     │   └── journal.md
-    └── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
+    ├── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
+    │   ├── README.md
+    │   ├── runbook.md
+    │   └── journal.md
+    └── LAB-003-nexus-pulse/       # Governed Operational & Financial Intelligence Engine
         ├── README.md
         ├── runbook.md
         └── journal.md
