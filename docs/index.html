@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="system">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
+    /* Default / Dark Theme Palette */
+    :root, [data-theme="dark"] {
       --bg: #090d16;
       --card-bg: #121826;
       --card-border: #1f293d;
@@ -27,6 +28,59 @@
       --info-bg: rgba(2, 132, 199, 0.12);
       --danger: #ef4444;
       --danger-bg: rgba(239, 68, 68, 0.12);
+      --btn-bg: #1e293b;
+      --btn-hover: #334155;
+      --shadow-color: rgba(0, 0, 0, 0.35);
+    }
+
+    /* Light Theme Palette */
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --card-hover: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+      --accent: #0284c7;
+      --accent-glow: rgba(2, 132, 199, 0.1);
+      --success: #059669;
+      --success-bg: rgba(5, 150, 105, 0.1);
+      --warning: #d97706;
+      --warning-bg: rgba(217, 119, 6, 0.1);
+      --info: #0284c7;
+      --info-bg: rgba(2, 132, 199, 0.1);
+      --danger: #dc2626;
+      --danger-bg: rgba(220, 38, 38, 0.1);
+      --btn-bg: #f1f5f9;
+      --btn-hover: #e2e8f0;
+      --shadow-color: rgba(0, 0, 0, 0.08);
+    }
+
+    /* System Theme Auto Detection */
+    @media (prefers-color-scheme: light) {
+      [data-theme="system"] {
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --card-border: #e2e8f0;
+        --card-hover: #cbd5e1;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --text-dim: #64748b;
+        --accent: #0284c7;
+        --accent-glow: rgba(2, 132, 199, 0.1);
+        --success: #059669;
+        --success-bg: rgba(5, 150, 105, 0.1);
+        --warning: #d97706;
+        --warning-bg: rgba(217, 119, 6, 0.1);
+        --info: #0284c7;
+        --info-bg: rgba(2, 132, 199, 0.1);
+        --danger: #dc2626;
+        --danger-bg: rgba(220, 38, 38, 0.1);
+        --btn-bg: #f1f5f9;
+        --btn-hover: #e2e8f0;
+        --shadow-color: rgba(0, 0, 0, 0.08);
+      }
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,6 +91,7 @@
       line-height: 1.5;
       padding: 2rem 1.5rem;
       min-height: 100vh;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
     .container {
@@ -59,16 +114,14 @@
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
     .brand-title {
       font-size: 1.875rem;
       font-weight: 800;
       letter-spacing: -0.025em;
-      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -80,11 +133,53 @@
       margin-top: 0.25rem;
     }
 
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Theme Switcher Segmented Control */
+    .theme-switcher {
+      display: inline-flex;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.25rem;
+      gap: 0.2rem;
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+    }
+
+    .theme-btn:hover {
+      color: var(--text-main);
+    }
+
+    .theme-btn.active {
+      background: var(--btn-bg);
+      color: var(--accent);
+      box-shadow: 0 1px 3px var(--shadow-color);
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: #1e293b;
+      background: var(--btn-bg);
       color: var(--text-main);
       border: 1px solid var(--card-border);
       padding: 0.65rem 1.15rem;
@@ -96,7 +191,7 @@
       text-decoration: none;
     }
     .btn:hover {
-      background: #334155;
+      background: var(--btn-hover);
       border-color: var(--accent);
       transform: translateY(-1px);
     }
@@ -126,6 +221,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
     }
     .kpi-label {
       font-size: 0.8rem;
@@ -172,10 +268,10 @@
     }
     .tab:hover {
       color: var(--text-main);
-      border-color: #475569;
+      border-color: var(--card-hover);
     }
     .tab.active {
-      background: #1e293b;
+      background: var(--btn-bg);
       color: var(--accent);
       border-color: var(--accent);
     }
@@ -223,11 +319,12 @@
       display: flex;
       flex-direction: column;
       gap: 1.15rem;
+      box-shadow: 0 2px 8px var(--shadow-color);
       transition: all 0.2s ease;
     }
     .project-card:hover {
       border-color: var(--card-hover);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 6px 20px var(--shadow-color);
       transform: translateY(-2px);
     }
 
@@ -256,9 +353,9 @@
       align-items: center;
       gap: 0.35rem;
     }
-    .health-on-track { background: var(--success-bg); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .health-pending { background: var(--warning-bg); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .health-completed { background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25); }
+    .health-on-track { background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .health-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .health-completed { background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.25); }
 
     .card-header-main {
       display: flex;
@@ -269,7 +366,7 @@
       font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: -0.015em;
-      color: #ffffff;
+      color: var(--text-main);
     }
     .card-meta {
       font-size: 0.8rem;
@@ -281,7 +378,7 @@
 
     .pitch-box {
       font-size: 0.875rem;
-      color: #cbd5e1;
+      color: var(--text-muted);
       line-height: 1.45;
     }
 
@@ -302,7 +399,7 @@
     }
     .wins-list li {
       font-size: 0.825rem;
-      color: #e2e8f0;
+      color: var(--text-main);
       position: relative;
       padding-left: 1rem;
       line-height: 1.4;
@@ -316,12 +413,12 @@
     }
 
     .alert-box {
-      background: rgba(245, 158, 11, 0.08);
+      background: var(--warning-bg);
       border: 1px dashed rgba(245, 158, 11, 0.35);
       border-radius: 8px;
       padding: 0.85rem;
       font-size: 0.8rem;
-      color: #fde68a;
+      color: var(--warning);
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
@@ -360,7 +457,7 @@
       border-radius: 8px;
       font-size: 0.875rem;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       opacity: 0;
       transform: translateY(15px);
       transition: all 0.25s ease;
@@ -390,7 +487,20 @@
           <h1 class="brand-title">🌐 Cetana Labs</h1>
           <p class="brand-subtitle">Executive Engineering Portfolio & Automated Status Dashboard</p>
         </div>
-        <div style="display: flex; gap: 0.75rem;">
+        <div class="header-actions">
+          <!-- Theme Switcher -->
+          <div class="theme-switcher">
+            <button class="theme-btn active" id="theme-system" onclick="setTheme('system')">
+              💻 System
+            </button>
+            <button class="theme-btn" id="theme-light" onclick="setTheme('light')">
+              ☀️ Light
+            </button>
+            <button class="theme-btn" id="theme-dark" onclick="setTheme('dark')">
+              🌙 Dark
+            </button>
+          </div>
+
           <button class="btn btn-primary" onclick="copyPortfolioBriefing()">
             📋 Copy Executive WhatsApp Digest
           </button>
@@ -408,17 +518,17 @@
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Active Projects</span>
-          <span class="kpi-val" style="color: #34d399;">3</span>
+          <span class="kpi-val" style="color: var(--success);">3</span>
           <span class="kpi-sub">Client & product initiatives</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Onboarding Setup</span>
-          <span class="kpi-val" style="color: #fbbf24;">2</span>
+          <span class="kpi-val" style="color: var(--warning);">2</span>
           <span class="kpi-sub">Awaiting /status-init baseline</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Completed Spikes</span>
-          <span class="kpi-val" style="color: #cbd5e1;">2</span>
+          <span class="kpi-val" style="color: var(--text-muted);">2</span>
           <span class="kpi-sub">Operationalized & archived</span>
         </div>
       </div>
@@ -466,7 +576,7 @@
         </div>
         <div>
           <div class="section-title">Current Focus</div>
-          <p style="font-size: 0.825rem; color: #cbd5e1;">Sprint 3 execution: Portfolio Web Dashboard (`BK-002`) architecture, feasibility spike, and static HTML visualization engine.</p>
+          <p style="font-size: 0.825rem; color: var(--text-muted);">Sprint 3 execution: Portfolio Web Dashboard (`BK-002`) architecture, feasibility spike, and static HTML visualization engine.</p>
         </div>
         <div class="card-footer">
           <div class="card-actions">
@@ -506,7 +616,7 @@
         </div>
         <div>
           <div class="section-title">Current Focus</div>
-          <p style="font-size: 0.825rem; color: #cbd5e1;">Operationalized and verified; transitioned to maintenance and reference baseline.</p>
+          <p style="font-size: 0.825rem; color: var(--text-muted);">Operationalized and verified; transitioned to maintenance and reference baseline.</p>
         </div>
         <div class="card-footer">
           <div class="card-actions">
@@ -546,7 +656,7 @@
         </div>
         <div>
           <div class="section-title">Current Focus</div>
-          <p style="font-size: 0.825rem; color: #cbd5e1;">Evaluation successfully concluded and documented; established as approved reference architecture for on-premise GenBI.</p>
+          <p style="font-size: 0.825rem; color: var(--text-muted);">Evaluation successfully concluded and documented; established as approved reference architecture for on-premise GenBI.</p>
         </div>
         <div class="card-footer">
           <div class="card-actions">
@@ -586,7 +696,7 @@
         </div>
         <div>
           <div class="section-title">Current Focus</div>
-          <p style="font-size: 0.825rem; color: #cbd5e1;">Scenario simulation engine and Next.js multi-tenant operational frontend.</p>
+          <p style="font-size: 0.825rem; color: var(--text-muted);">Scenario simulation engine and Next.js multi-tenant operational frontend.</p>
         </div>
         <div class="card-footer">
           <div class="card-actions">
@@ -666,7 +776,7 @@
     </div>
 
     <footer>
-      <p>Cetana Labs Control Hub • Last Generated: 23-Sep-2026 23:00 IST • Auto-synchronized from authoritative STATUS.md records</p>
+      <p>Cetana Labs Control Hub • Last Generated: 23-Sep-2026 23:11 IST • Auto-synchronized from authoritative STATUS.md records</p>
     </footer>
   </div>
 
@@ -675,6 +785,32 @@
   <script>
     const b64Portfolio = "8J+TiiAqQ0VUQU5BIExBQlMg4oCUIEVYRUNVVElWRSBQT1JURk9MSU8gU1RBVFVTKgpfRGF0ZTogMjMtU2VwLTIwMjYgfCBBdWRpZW5jZTogTWFuYWdlbWVudCBUZWFtXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfn6IgT24gVHJhY2sgKkxBQi0wMDM6IE5leHVzIFB1bHNlIChHb3Zlcm5lZCBEZXRlcm1pbmlzdGljIFZlcnRpY2FsIEVuZ2luZSkqCuKAoiAqTGVhZDoqIEVpYWxhcmFzdQrigKIgKlBpdGNoOiogQW4gZW50ZXJwcmlzZSBvcGVyYXRpb25hbCBhbmQgZmluYW5jaWFsIGludGVsbGlnZW5jZSBlbmdpbmUgZXhlY3V0aW5nIGFuIGF1dGhvcml0YXRpdmUgZGV0ZXJtaW5pc3RpYyBwaXBlbGluZSBhY3Jvc3MgQ29tbWVyY2lhbCBTT1dzLCBXb3JrZm9yY2UgQWxsb2NhdGlvbnMsIEdvdmVybmVkIEZpbmFuY2UgTWFyZ2lucywgYW5kIEF1dG9tYXRlZCBSaXNrIFNpZ25hbHMgdG8gcHJvdGVjdCBjb21wYW55IHByb2ZpdGFiaWxpdHkuCuKAoiAqTGF0ZXN0IFdpbjoqICpEZXRlcm1pbmlzdGljIFNpZ25hbHMgRW5naW5lIChULTAxNC4uVC0wMTYpKjogUmVhbC10aW1lIGF1dG9tYXRlZCBydWxlIGVuZ2luZSBkZXRlY3RpbmcgbWFyZ2luIGVyb3Npb24gKFNJRy0wMSksIFNPVyBjb25zdW1wdGlvbiByaXNrIChTSUctMDIpLCBhbmQgd29ya2ZvcmNlIGFsbG9jYXRpb24gY29uZmxpY3RzIChTSUctMDMpLgrigKIgKkN1cnJlbnQgRm9jdXM6KiBTY2VuYXJpbyBzaW11bGF0aW9uIGVuZ2luZSBhbmQgTmV4dC5qcyBtdWx0aS10ZW5hbnQgb3BlcmF0aW9uYWwgZnJvbnRlbmQuCuKAoiAqQmxvY2tlcnM6KiBOb25lCvCflJcgaHR0cHM6Ly9naXRodWIuY29tL2VBZ25pLVRlY2hub2xvZ2llcy9uZXh1cy1wdWxzZQoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCuKPsyBPbmJvYXJkaW5nIFBlbmRpbmcgKkxBQi0wMDQ6IFplcm9iZWEuYWkqCuKAoiAqTGVhZDoqIEFiaXNoZWsgU2luZ2hhdmkK4oCiICpQaXRjaDoqIEEgbXVsdGktdGVuYW50IEFJIHNlY3VyaXR5IGNvbnRyb2wgcGxhbmUgYW5kIGdvdmVybmVkIGdhdGV3YXkgcGxhdGZvcm0gcHJvdmlkaW5nIHJ1bnRpbWUgcG9saWN5IGVuZm9yY2VtZW50LCBnYXRld2F5IGF1dGggZnJvbnRpZXJzLCBhbmQgZXZpZGVuY2UtZ3JhZGUgYXVkaXRhYmlsaXR5IGZvciBnZW5lcmF0aXZlIEFJIHN5c3RlbXMuCuKAoiAqU3RhdHVzIEFsZXJ0Oiog4pqg77iPIF9Jbml0aWFsIG9uYm9hcmRpbmcgcHJvdG9jb2wgcGVuZGluZyBmcm9tIHByb2plY3QgbGVhZC5fCuKAoiAqQWN0aW9uIFJlcXVpcmVkOiogUnVuIGAvc3RhdHVzLWluaXRgIGluIHJlcG8gcm9vdCB0byBlc3RhYmxpc2ggc3ByaW50IGJhc2VsaW5lLgrwn5SXIGh0dHBzOi8vZ2l0aHViLmNvbS96ZXJvYmVhZG90YWkvemVyb2JlYS5haQoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCuKPsyBPbmJvYXJkaW5nIFBlbmRpbmcgKkxBQi0wMDU6IE5leHVzIEJlYWNvbioK4oCiICpMZWFkOiogQXJ1biBFbGFtYmFyYW0K4oCiICpQaXRjaDoqIEEgcmVhbC10aW1lIHRlbGVtZXRyeSwgbm90aWZpY2F0aW9uLCBhbmQgZXZlbnQgYnJvYWRjYXN0IGJlYWNvbiBzZXJ2aWNlIHRoYXQgZGVsaXZlcnMgb3BlcmF0aW9uYWwgcmlzayBzaWduYWxzIGFuZCB3b3JrZmxvdyBhbGVydHMgYWNyb3NzIHRoZSBOZXh1cyBwbGF0Zm9ybS4K4oCiICpTdGF0dXMgQWxlcnQ6KiDimqDvuI8gX0luaXRpYWwgb25ib2FyZGluZyBwcm90b2NvbCBwZW5kaW5nIGZyb20gcHJvamVjdCBsZWFkLl8K4oCiICpBY3Rpb24gUmVxdWlyZWQ6KiBSdW4gYC9zdGF0dXMtaW5pdGAgaW4gcmVwbyByb290IHRvIGVzdGFibGlzaCBzcHJpbnQgYmFzZWxpbmUuCvCflJcgaHR0cHM6Ly9naXRodWIuY29tL2VBZ25pLVRlY2hub2xvZ2llcy9uZXh1cy1iZWFjb24KCuKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgQpfQWN0aXZlIEluaXRpYXRpdmVzOiAzIHwgSGFyZCBCbG9ja2VyczogMCB8IOKPsyBQZW5kaW5nIFNldHVwOiAyIHwg4pyFIENvbXBsZXRlZDogMl8=";
     let currentFilter = 'all';
+
+    // Theme Management: System (default), Light, Dark
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('theme-' + theme);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function setTheme(theme) {
+      localStorage.setItem('cetana-theme', theme);
+      applyTheme(theme);
+    }
+
+    // Initialize Theme (Default to system)
+    const savedTheme = localStorage.getItem('cetana-theme') || 'system';
+    applyTheme(savedTheme);
+
+    // Watch OS Theme Changes when in 'system' mode
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if ((localStorage.getItem('cetana-theme') || 'system') === 'system') {
+          applyTheme('system');
+        }
+      });
+    }
 
     function setFilter(filter, el) {
       currentFilter = filter;

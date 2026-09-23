@@ -2,7 +2,8 @@
 """
 Cetana Labs — Portfolio Web Dashboard Generator
 Generates a zero-dependency, ultra-fast, responsive static HTML dashboard (docs/index.html)
-with real-time client-side search, filtering, and 1-click WhatsApp executive briefing export.
+with real-time client-side search, filtering, theme toggle (System/Light/Dark),
+and 1-click WhatsApp executive briefing export.
 """
 
 import sys
@@ -99,7 +100,7 @@ def build_dashboard():
 
     # Render HTML template
     html = f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="system">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,7 +110,8 @@ def build_dashboard():
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
-    :root {{
+    /* Default / Dark Theme Palette */
+    :root, [data-theme="dark"] {{
       --bg: #090d16;
       --card-bg: #121826;
       --card-border: #1f293d;
@@ -127,6 +129,59 @@ def build_dashboard():
       --info-bg: rgba(2, 132, 199, 0.12);
       --danger: #ef4444;
       --danger-bg: rgba(239, 68, 68, 0.12);
+      --btn-bg: #1e293b;
+      --btn-hover: #334155;
+      --shadow-color: rgba(0, 0, 0, 0.35);
+    }}
+
+    /* Light Theme Palette */
+    [data-theme="light"] {{
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --card-hover: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+      --accent: #0284c7;
+      --accent-glow: rgba(2, 132, 199, 0.1);
+      --success: #059669;
+      --success-bg: rgba(5, 150, 105, 0.1);
+      --warning: #d97706;
+      --warning-bg: rgba(217, 119, 6, 0.1);
+      --info: #0284c7;
+      --info-bg: rgba(2, 132, 199, 0.1);
+      --danger: #dc2626;
+      --danger-bg: rgba(220, 38, 38, 0.1);
+      --btn-bg: #f1f5f9;
+      --btn-hover: #e2e8f0;
+      --shadow-color: rgba(0, 0, 0, 0.08);
+    }}
+
+    /* System Theme Auto Detection */
+    @media (prefers-color-scheme: light) {{
+      [data-theme="system"] {{
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --card-border: #e2e8f0;
+        --card-hover: #cbd5e1;
+        --text-main: #0f172a;
+        --text-muted: #475569;
+        --text-dim: #64748b;
+        --accent: #0284c7;
+        --accent-glow: rgba(2, 132, 199, 0.1);
+        --success: #059669;
+        --success-bg: rgba(5, 150, 105, 0.1);
+        --warning: #d97706;
+        --warning-bg: rgba(217, 119, 6, 0.1);
+        --info: #0284c7;
+        --info-bg: rgba(2, 132, 199, 0.1);
+        --danger: #dc2626;
+        --danger-bg: rgba(220, 38, 38, 0.1);
+        --btn-bg: #f1f5f9;
+        --btn-hover: #e2e8f0;
+        --shadow-color: rgba(0, 0, 0, 0.08);
+      }}
     }}
 
     * {{ box-sizing: border-box; margin: 0; padding: 0; }}
@@ -137,6 +192,7 @@ def build_dashboard():
       line-height: 1.5;
       padding: 2rem 1.5rem;
       min-height: 100vh;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }}
 
     .container {{
@@ -159,16 +215,14 @@ def build_dashboard():
       flex-wrap: wrap;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 1rem;
+      gap: 1.25rem;
     }}
 
     .brand-title {{
       font-size: 1.875rem;
       font-weight: 800;
       letter-spacing: -0.025em;
-      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -180,11 +234,53 @@ def build_dashboard():
       margin-top: 0.25rem;
     }}
 
+    .header-actions {{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }}
+
+    /* Theme Switcher Segmented Control */
+    .theme-switcher {{
+      display: inline-flex;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.25rem;
+      gap: 0.2rem;
+    }}
+
+    .theme-btn {{
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.775rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+    }}
+
+    .theme-btn:hover {{
+      color: var(--text-main);
+    }}
+
+    .theme-btn.active {{
+      background: var(--btn-bg);
+      color: var(--accent);
+      box-shadow: 0 1px 3px var(--shadow-color);
+    }}
+
     .btn {{
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: #1e293b;
+      background: var(--btn-bg);
       color: var(--text-main);
       border: 1px solid var(--card-border);
       padding: 0.65rem 1.15rem;
@@ -196,7 +292,7 @@ def build_dashboard():
       text-decoration: none;
     }}
     .btn:hover {{
-      background: #334155;
+      background: var(--btn-hover);
       border-color: var(--accent);
       transform: translateY(-1px);
     }}
@@ -226,6 +322,7 @@ def build_dashboard():
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
     }}
     .kpi-label {{
       font-size: 0.8rem;
@@ -272,10 +369,10 @@ def build_dashboard():
     }}
     .tab:hover {{
       color: var(--text-main);
-      border-color: #475569;
+      border-color: var(--card-hover);
     }}
     .tab.active {{
-      background: #1e293b;
+      background: var(--btn-bg);
       color: var(--accent);
       border-color: var(--accent);
     }}
@@ -323,11 +420,12 @@ def build_dashboard():
       display: flex;
       flex-direction: column;
       gap: 1.15rem;
+      box-shadow: 0 2px 8px var(--shadow-color);
       transition: all 0.2s ease;
     }}
     .project-card:hover {{
       border-color: var(--card-hover);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 6px 20px var(--shadow-color);
       transform: translateY(-2px);
     }}
 
@@ -356,9 +454,9 @@ def build_dashboard():
       align-items: center;
       gap: 0.35rem;
     }}
-    .health-on-track {{ background: var(--success-bg); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }}
-    .health-pending {{ background: var(--warning-bg); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }}
-    .health-completed {{ background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25); }}
+    .health-on-track {{ background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }}
+    .health-pending {{ background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }}
+    .health-completed {{ background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.25); }}
 
     .card-header-main {{
       display: flex;
@@ -369,7 +467,7 @@ def build_dashboard():
       font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: -0.015em;
-      color: #ffffff;
+      color: var(--text-main);
     }}
     .card-meta {{
       font-size: 0.8rem;
@@ -381,7 +479,7 @@ def build_dashboard():
 
     .pitch-box {{
       font-size: 0.875rem;
-      color: #cbd5e1;
+      color: var(--text-muted);
       line-height: 1.45;
     }}
 
@@ -402,7 +500,7 @@ def build_dashboard():
     }}
     .wins-list li {{
       font-size: 0.825rem;
-      color: #e2e8f0;
+      color: var(--text-main);
       position: relative;
       padding-left: 1rem;
       line-height: 1.4;
@@ -416,12 +514,12 @@ def build_dashboard():
     }}
 
     .alert-box {{
-      background: rgba(245, 158, 11, 0.08);
+      background: var(--warning-bg);
       border: 1px dashed rgba(245, 158, 11, 0.35);
       border-radius: 8px;
       padding: 0.85rem;
       font-size: 0.8rem;
-      color: #fde68a;
+      color: var(--warning);
       display: flex;
       flex-direction: column;
       gap: 0.3rem;
@@ -460,7 +558,7 @@ def build_dashboard():
       border-radius: 8px;
       font-size: 0.875rem;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
       opacity: 0;
       transform: translateY(15px);
       transition: all 0.25s ease;
@@ -490,7 +588,20 @@ def build_dashboard():
           <h1 class="brand-title">🌐 Cetana Labs</h1>
           <p class="brand-subtitle">Executive Engineering Portfolio & Automated Status Dashboard</p>
         </div>
-        <div style="display: flex; gap: 0.75rem;">
+        <div class="header-actions">
+          <!-- Theme Switcher -->
+          <div class="theme-switcher">
+            <button class="theme-btn active" id="theme-system" onclick="setTheme('system')">
+              💻 System
+            </button>
+            <button class="theme-btn" id="theme-light" onclick="setTheme('light')">
+              ☀️ Light
+            </button>
+            <button class="theme-btn" id="theme-dark" onclick="setTheme('dark')">
+              🌙 Dark
+            </button>
+          </div>
+
           <button class="btn btn-primary" onclick="copyPortfolioBriefing()">
             📋 Copy Executive WhatsApp Digest
           </button>
@@ -508,17 +619,17 @@ def build_dashboard():
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Active Projects</span>
-          <span class="kpi-val" style="color: #34d399;">{active_count}</span>
+          <span class="kpi-val" style="color: var(--success);">{active_count}</span>
           <span class="kpi-sub">Client & product initiatives</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Onboarding Setup</span>
-          <span class="kpi-val" style="color: #fbbf24;">{onboarding_count}</span>
+          <span class="kpi-val" style="color: var(--warning);">{onboarding_count}</span>
           <span class="kpi-sub">Awaiting /status-init baseline</span>
         </div>
         <div class="kpi-card">
           <span class="kpi-label">Completed Spikes</span>
-          <span class="kpi-val" style="color: #cbd5e1;">{completed_count}</span>
+          <span class="kpi-val" style="color: var(--text-muted);">{completed_count}</span>
           <span class="kpi-sub">Operationalized & archived</span>
         </div>
       </div>
@@ -593,7 +704,7 @@ def build_dashboard():
             if focus:
                 html += f"""        <div>
           <div class="section-title">Current Focus</div>
-          <p style="font-size: 0.825rem; color: #cbd5e1;">{focus}</p>
+          <p style="font-size: 0.825rem; color: var(--text-muted);">{focus}</p>
         </div>
 """
 
@@ -625,6 +736,32 @@ def build_dashboard():
   <script>
     const b64Portfolio = "{b64_portfolio}";
     let currentFilter = 'all';
+
+    // Theme Management: System (default), Light, Dark
+    function applyTheme(theme) {{
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('theme-' + theme);
+      if (activeBtn) activeBtn.classList.add('active');
+    }}
+
+    function setTheme(theme) {{
+      localStorage.setItem('cetana-theme', theme);
+      applyTheme(theme);
+    }}
+
+    // Initialize Theme (Default to system)
+    const savedTheme = localStorage.getItem('cetana-theme') || 'system';
+    applyTheme(savedTheme);
+
+    // Watch OS Theme Changes when in 'system' mode
+    if (window.matchMedia) {{
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {{
+        if ((localStorage.getItem('cetana-theme') || 'system') === 'system') {{
+          applyTheme('system');
+        }}
+      }});
+    }}
 
     function setFilter(filter, el) {{
       currentFilter = filter;
