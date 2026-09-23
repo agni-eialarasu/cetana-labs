@@ -19,6 +19,7 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 | **`LAB-002`** | **[WrenAI Evaluation](projects/LAB-002-wrenai-eval/README.md)** (Semantic GenBI) | 📑 Research | `✅ Completed` | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [STATUS.md](projects/LAB-002-wrenai-eval/STATUS.md) |
 | **`LAB-003`** | **[Nexus Pulse](projects/LAB-003-nexus-pulse/README.md)** (Vertical Engine) | 💻 Mini-App | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [STATUS.md](projects/LAB-003-nexus-pulse/STATUS.md) |
 | **`LAB-004`** | **[Cetana Labs Control Hub](projects/LAB-004-cetana-labs/README.md)** (Protocol Engine) | 💻 Mini-App | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/cetana-labs) | [STATUS.md](projects/LAB-004-cetana-labs/STATUS.md) |
+| **`LAB-005`** | **[Zerobea.ai](projects/LAB-005-zerobea-ai/README.md)** (AI Security Control Plane) | 💻 Mini-App | `🟢 On Track` | Abishek Singhavi | [GitHub Repo](https://github.com/zerobeadotai/zerobea.ai) | [STATUS.md](projects/LAB-005-zerobea-ai/STATUS.md) |
 
 ---
 
@@ -50,7 +51,8 @@ cetana-labs/
     ├── LAB-001-ammas/             # Behavioral CV Edge System & GenBI Analytics
     ├── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
     ├── LAB-003-nexus-pulse/       # Governed Operational & Financial Intelligence Engine
-    └── LAB-004-cetana-labs/       # Central Command Plane & Protocol Engine
+    ├── LAB-004-cetana-labs/       # Central Command Plane & Protocol Engine
+    └── LAB-005-zerobea-ai/        # AI Security Control Plane & Governed Gateway
 ```
 
 ---

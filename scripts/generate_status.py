@@ -106,9 +106,9 @@ def parse_status_file(status_path: Path) -> dict:
         if url_match:
             data["repo_url"] = url_match.group(1).strip()
         else:
-            url_match2 = re.search(r"https://github\.com/[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+", readme_content)
+            url_match2 = re.search(r"https://github\.com/[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+", readme_content)
             if url_match2:
-                data["repo_url"] = url_match2.group(0).strip()
+                data["repo_url"] = url_match2.group(0).strip().rstrip(".)")
 
     return data
 
