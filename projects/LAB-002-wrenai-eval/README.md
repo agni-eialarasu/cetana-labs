@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **Project ID** | `LAB-002` |
 | **Archetype** | 📑 Research / Feasibility Spike |
-| **Status** | 🟢 Active |
+| **Status** | ✅ Completed |
 | **Owner** | Eialarasu ([@agni-eialarasu](https://github.com/agni-eialarasu)) |
 | **Target Technology** | [WrenAI](https://www.getwren.ai/) ([GitHub: Canner/WrenAI](https://github.com/Canner/WrenAI)) |
 | **Practical Reference / Proof** | [LAB-001: AAMAS](../LAB-001-ammas/README.md) ([github.com/agni-eialarasu/ammas](https://github.com/agni-eialarasu/ammas)) |

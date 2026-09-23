@@ -7,11 +7,20 @@
 | **Phase 1: Architecture Survey & Discovery** | Evaluate WrenAI MDL vs direct Text-to-SQL prompting | ✅ Completed | 2026-09-01 |
 | **Phase 2: Local Docker & Ollama Spike** | Stand up local stack with open-source LLMs | ✅ Completed | 2026-09-03 |
 | **Phase 3: Practical Integration (AAMAS Proof)** | Validate with real SQLite telemetry database in LAB-001 | ✅ Completed | 2026-09-04 |
-| **Phase 4: Synthesis & Dual-Device Topology** | Document deployment patterns for companion AI hosts | 🟢 Active | 2026-09-30 |
+| **Phase 4: Synthesis & Dual-Device Topology** | Document deployment patterns for companion AI hosts | ✅ Completed | 2026-09-23 |
 
 ---
 
 ## 🗓️ Milestone Log
+
+### [2026-09-23] Milestone: Research Evaluation Concluded & Operationalized
+- **Context**: Transitioned research spike health from active to `✅ Completed`.
+- **Key Findings & Outcomes**:
+  - Evaluation successfully answered all research questions: declarative MDL manifests eliminate SQL hallucinations and provide deterministic semantic grounding.
+  - Successfully verified in production proof-of-concept within LAB-001 (AAMAS).
+  - Adopted as approved reference architecture for on-premise GenBI across future initiatives.
+
+---
 
 ### [2026-09-06] Milestone: Centralized Research Documentation
 - **Context**: Structured WrenAI evaluation as dedicated research project `LAB-002` in Cetana Labs.

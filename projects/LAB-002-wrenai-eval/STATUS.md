@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **Project ID** | LAB-002 |
 | **Project Name** | WrenAI Capabilities & Semantic GenBI Evaluation |
-| **Current Health** | 🟢 On Track |
+| **Current Health** | ✅ Completed |
 | **Owner / Lead** | Eialarasu |
 | **Last Updated** | 2026-09-23 |
 
@@ -19,11 +19,11 @@ A research spike evaluating WrenAI's semantic Modeling Definition Language (MDL)
 - **Production Proof in LAB-001**: Successfully wired into AAMAS SQLite database (`data/outbox.db`) to answer real-time behavioral queries.
 
 ### 3. Current Focus & Next Milestone
-- Formalizing companion AI host Docker manifests and resource provisioning guidelines.
+- Evaluation successfully concluded and documented; established as approved reference architecture for on-premise GenBI.
 
 ### 4. Blockers & Risks
 - **Blockers**: None.
-- **Key Risks**: Memory footprint (~4-8 GB RAM) requires a dedicated companion server rather than co-locating on low-power edge hardware.
+- **Key Risks**: None. Research questions answered and verified.
 
 ### 5. Verified Quality Metrics
 - 100% accuracy on tested temporal, aggregation, and event outbox SQL test cases.
