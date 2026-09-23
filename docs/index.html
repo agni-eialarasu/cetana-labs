@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cetana Labs — Engineering Portfolio Dashboard</title>
+  <meta name="description" content="Executive management command plane, active project registry, and automated status tracker.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #121826;
+      --card-border: #1f293d;
+      --card-hover: #26334d;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.15);
+      --success: #10b981;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --warning: #f59e0b;
+      --warning-bg: rgba(245, 158, 11, 0.12);
+      --info: #0284c7;
+      --info-bg: rgba(2, 132, 199, 0.12);
+      --danger: #ef4444;
+      --danger-bg: rgba(239, 68, 68, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 2rem;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .brand-title {
+      font-size: 1.875rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #1e293b;
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 0.65rem 1.15rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: #334155;
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .btn-primary {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+    }
+    .btn-primary:hover {
+      background: #0369a1;
+      border-color: #7dd3fc;
+    }
+
+    /* KPI Bar */
+    .kpi-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .kpi-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+    }
+    .kpi-val {
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Controls: Search & Tabs */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tab {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.5rem 0.95rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .tab:hover {
+      color: var(--text-main);
+      border-color: #475569;
+    }
+    .tab.active {
+      background: #1e293b;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 260px;
+    }
+    .search-box input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.55rem 1rem 0.55rem 2.25rem;
+      color: var(--text-main);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+    .search-box svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-dim);
+    }
+
+    /* Project Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+      transition: all 0.2s ease;
+    }
+    .project-card:hover {
+      border-color: var(--card-hover);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .id-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .health-pill {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .health-on-track { background: var(--success-bg); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .health-pending { background: var(--warning-bg); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .health-completed { background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25); }
+
+    .card-header-main {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.015em;
+      color: #ffffff;
+    }
+    .card-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .pitch-box {
+      font-size: 0.875rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .wins-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .wins-list li {
+      font-size: 0.825rem;
+      color: #e2e8f0;
+      position: relative;
+      padding-left: 1rem;
+      line-height: 1.4;
+    }
+    .wins-list li::before {
+      content: "•";
+      color: var(--accent);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .alert-box {
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px dashed rgba(245, 158, 11, 0.35);
+      border-radius: 8px;
+      padding: 0.85rem;
+      font-size: 0.8rem;
+      color: #fde68a;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .card-footer {
+      margin-top: auto;
+      padding-top: 1rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .card-actions .btn {
+      flex: 1;
+      justify-content: center;
+      font-size: 0.775rem;
+      padding: 0.5rem 0.6rem;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #0284c7;
+      color: #ffffff;
+      padding: 0.85rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.25s ease;
+      pointer-events: none;
+      z-index: 1000;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <div>
+          <h1 class="brand-title">🌐 Cetana Labs</h1>
+          <p class="brand-subtitle">Executive Engineering Portfolio & Automated Status Dashboard</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="btn btn-primary" onclick="copyPortfolioBriefing()">
+            📋 Copy Executive WhatsApp Digest
+          </button>
+          <a href="https://github.com/agni-eialarasu/cetana-labs" target="_blank" class="btn">
+            GitHub Repository ↗
+          </a>
+        </div>
+      </div>
+
+      <div class="kpi-bar">
+        <div class="kpi-card">
+          <span class="kpi-label">Total Initiatives</span>
+          <span class="kpi-val" style="color: var(--accent);">6</span>
+          <span class="kpi-sub">Registered in Cetana Labs</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Active Projects</span>
+          <span class="kpi-val" style="color: #34d399;">3</span>
+          <span class="kpi-sub">Client & product initiatives</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Onboarding Setup</span>
+          <span class="kpi-val" style="color: #fbbf24;">2</span>
+          <span class="kpi-sub">Awaiting /status-init baseline</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Completed Spikes</span>
+          <span class="kpi-val" style="color: #cbd5e1;">2</span>
+          <span class="kpi-sub">Operationalized & archived</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="tabs">
+        <button class="tab active" onclick="setFilter('all', this)">All Projects (6)</button>
+        <button class="tab" onclick="setFilter('active', this)">Active Products (3)</button>
+        <button class="tab" onclick="setFilter('onboarding-pending', this)">Onboarding Pending (2)</button>
+        <button class="tab" onclick="setFilter('completed', this)">Completed (2)</button>
+        <button class="tab" onclick="setFilter('control-plane', this)">Control Hub (1)</button>
+      </div>
+      <div class="search-box">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        <input type="text" id="searchInput" placeholder="Search by title, lead, ID..." oninput="handleSearch()">
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid">
+      <div class="project-card" data-tags="control-plane" data-search="LAB-000 Cetana Labs Control Hub & Protocol Engine Eialarasu Control Plane">
+        <div class="card-top">
+          <span class="id-badge">LAB-000</span>
+          <span class="health-pill health-on-track">🟢 On Track</span>
+        </div>
+        <div class="card-header-main">
+          <h2 class="card-title">Cetana Labs Control Hub & Protocol Engine</h2>
+          <div class="card-meta">
+            <span>👤 Eialarasu</span>
+            <span>•</span>
+            <span>💻 Control Plane</span>
+          </div>
+        </div>
+
+        <div class="pitch-box">
+          The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
+        </div>
+        <div>
+          <div class="section-title">Latest Deliveries & Wins</div>
+          <ul class="wins-list">
+            <li><strong>Sprint 2 Closeout & v0.4.0 Release</strong>: Shipped automated sprint closeout protocol (`/sprint-done`), portfolio validator (`validate_portfolio.py`), and remote status auto-sync (`--sync-remote`).</li>
+            <li><strong>Portfolio Sequence Compaction</strong>: Normalized registry to contiguous series `LAB-000` through `LAB-005` with zero sequence gaps.</li>
+            <li><strong>Remote Status Auto-Sync</strong>: Connected status engine directly to external project repos via GitHub API/raw content fallbacks.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-title">Current Focus</div>
+          <p style="font-size: 0.825rem; color: #cbd5e1;">Sprint 3 execution: Portfolio Web Dashboard (`BK-002`) architecture, feasibility spike, and static HTML visualization engine.</p>
+        </div>
+        <div class="card-footer">
+          <div class="card-actions">
+            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IENldGFuYSBMYWJzIENvbnRyb2wgSHViICYgUHJvdG9jb2wgRW5naW5lIChMQUItMDAwKSoKX0xlYWQ6IEVpYWxhcmFzdSB8IERhdGU6IDIzLVNlcC0yMDI2XwpfSGVhbHRoOiDwn5+iIE9uIFRyYWNrXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfk4wgKkJVU0lORVNTIFZBTFVFICYgUFVSUE9TRSoKVGhlIGNlbnRyYWwgZW5naW5lZXJpbmcgY29tbWFuZCBwbGFuZSwgbGFiIG5vdGVib29rLCBhbmQgYXV0b21hdGVkIG1hbmFnZW1lbnQgcmVwb3J0aW5nIGVuZ2luZSB0aGF0IGVsaW1pbmF0ZXMgbWFudWFsIHN0YXR1cyBmcmljdGlvbiBhY3Jvc3MgYWxsIGFjdGl2ZSBlbmdpbmVlcmluZyBpbml0aWF0aXZlcy4KCvCfjJ8gKkxBVEVTVCBERUxJVkVSSUVTICYgV0lOUyoK4oCiICpTcHJpbnQgMiBDbG9zZW91dCAmIHYwLjQuMCBSZWxlYXNlKjogU2hpcHBlZCBhdXRvbWF0ZWQgc3ByaW50IGNsb3Nlb3V0IHByb3RvY29sIChgL3NwcmludC1kb25lYCksIHBvcnRmb2xpbyB2YWxpZGF0b3IgKGB2YWxpZGF0ZV9wb3J0Zm9saW8ucHlgKSwgYW5kIHJlbW90ZSBzdGF0dXMgYXV0by1zeW5jIChgLS1zeW5jLXJlbW90ZWApLgrigKIgKlBvcnRmb2xpbyBTZXF1ZW5jZSBDb21wYWN0aW9uKjogTm9ybWFsaXplZCByZWdpc3RyeSB0byBjb250aWd1b3VzIHNlcmllcyBgTEFCLTAwMGAgdGhyb3VnaCBgTEFCLTAwNWAgd2l0aCB6ZXJvIHNlcXVlbmNlIGdhcHMuCuKAoiAqUmVtb3RlIFN0YXR1cyBBdXRvLVN5bmMqOiBDb25uZWN0ZWQgc3RhdHVzIGVuZ2luZSBkaXJlY3RseSB0byBleHRlcm5hbCBwcm9qZWN0IHJlcG9zIHZpYSBHaXRIdWIgQVBJL3JhdyBjb250ZW50IGZhbGxiYWNrcy4K4oCiICpCYXJlLU1pbmltdW0gU3ByaW50IFRyYWNraW5nKjogT3BlcmF0aW9uYWxpemVkIGBCQUNLTE9HLm1kYCBhbmQgYENIQU5HRUxPRy5tZGAgZm9yIHplcm8tZnJpY3Rpb24gcHJvamVjdCBnb3Zlcm5hbmNlLgoK8J+OryAqQ1VSUkVOVCBGT0NVUyAmIE5FWFQgTUlMRVNUT05FKgrigKIgU3ByaW50IDMgZXhlY3V0aW9uOiBQb3J0Zm9saW8gV2ViIERhc2hib2FyZCAoYEJLLTAwMmApIGFyY2hpdGVjdHVyZSwgZmVhc2liaWxpdHkgc3Bpa2UsIGFuZCBzdGF0aWMgSFRNTCB2aXN1YWxpemF0aW9uIGVuZ2luZS4KCvCfm6HvuI8gKlFVQUxJVFkgQVNTVVJBTkNFICYgTUVUUklDUyoK4oCiIDYvNiBwcm9qZWN0cyBwYXNzaW5nIHBvcnRmb2xpbyBzdHJ1Y3R1cmFsIGludGVncml0eSBhbmQgcHJvdG9jb2wgY2hlY2tzIChgdmFsaWRhdGVfcG9ydGZvbGlvLnB5YCkuCuKAoiBBdXRvbWF0ZWQgd2Vla2RheSBtb3JuaW5nIEdpdEh1YiBBY3Rpb25zIGNyb24gYnJvYWRjYXN0IHdpdGggcmVtb3RlIHN5bmMgYWN0aXZlLgrigKIgQ2xlYW4gdHJ1bmstYmFzZWQgZ2l0IHN5bmNocm9uaXphdGlvbiBvbiBgbWFpbmAuCgrimqDvuI8gKkJMT0NLRVJTICYgUklTS1MqCuKAoiAqQmxvY2tlcnM6KiBOb25lCuKAoiAqUmlza3M6KiBFbnN1cmluZyBleHRlcm5hbCBwcm9qZWN0IGxlYWRzIHJlZ3VsYXJseSBpbnZva2UgYC9zdGF0dXMtdXBkYXRlYCBhdCBzcHJpbnQgY2xvc2UKCvCflJcgKlJlcG9zaXRvcnkgJiBBcnRpZmFjdHM6KgpodHRwczovL2dpdGh1Yi5jb20vYWduaS1laWFsYXJhc3UvY2V0YW5hLWxhYnM=">
+              📋 Copy WhatsApp Status
+            </button>
+            <a href="https://github.com/agni-eialarasu/cetana-labs" target="_blank" class="btn">
+              Codebase ↗
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-tags="completed" data-search="LAB-001 AAMAS (Autism Activity Monitoring & Alerting System) Eialarasu Mini-App">
+        <div class="card-top">
+          <span class="id-badge">LAB-001</span>
+          <span class="health-pill health-completed">✅ Completed</span>
+        </div>
+        <div class="card-header-main">
+          <h2 class="card-title">AAMAS (Autism Activity Monitoring & Alerting System)</h2>
+          <div class="card-meta">
+            <span>👤 Eialarasu</span>
+            <span>•</span>
+            <span>💻 Mini-App</span>
+          </div>
+        </div>
+
+        <div class="pitch-box">
+          A lightweight, privacy-first edge computer vision system for real-time behavioral monitoring (stimming and physical avoidance) that instantly alerts caregivers via Webhooks/SMS and offers interactive 3D skeleton replays with conversational GenBI analytics.
+        </div>
+        <div>
+          <div class="section-title">Latest Deliveries & Wins</div>
+          <ul class="wins-list">
+            <li><strong>Edge Vision & Privacy Core</strong>: In-memory frame processing (~30 FPS MediaPipe) purging video frames each loop—storing only numeric 3D skeleton trajectories.</li>
+            <li><strong>Offline Ingestion & Replay</strong>: Batch video ingest CLI coupled with a zero-dependency web server and HTML5 Canvas 3D skeleton replay player.</li>
+            <li><strong>Conversational GenBI Layer</strong>: Integrated WrenAI semantic modeling with local Ollama LLMs for conversational queries over behavior events.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-title">Current Focus</div>
+          <p style="font-size: 0.825rem; color: #cbd5e1;">Operationalized and verified; transitioned to maintenance and reference baseline.</p>
+        </div>
+        <div class="card-footer">
+          <div class="card-actions">
+            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IEFBTUFTIChBdXRpc20gQWN0aXZpdHkgTW9uaXRvcmluZyAmIEFsZXJ0aW5nIFN5c3RlbSkgKExBQi0wMDEpKgpfTGVhZDogRWlhbGFyYXN1IHwgRGF0ZTogMjMtU2VwLTIwMjZfCl9IZWFsdGg6IOKchSBDb21wbGV0ZWRfCgrilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIEK8J+TjCAqQlVTSU5FU1MgVkFMVUUgJiBQVVJQT1NFKgpBIGxpZ2h0d2VpZ2h0LCBwcml2YWN5LWZpcnN0IGVkZ2UgY29tcHV0ZXIgdmlzaW9uIHN5c3RlbSBmb3IgcmVhbC10aW1lIGJlaGF2aW9yYWwgbW9uaXRvcmluZyAoc3RpbW1pbmcgYW5kIHBoeXNpY2FsIGF2b2lkYW5jZSkgdGhhdCBpbnN0YW50bHkgYWxlcnRzIGNhcmVnaXZlcnMgdmlhIFdlYmhvb2tzL1NNUyBhbmQgb2ZmZXJzIGludGVyYWN0aXZlIDNEIHNrZWxldG9uIHJlcGxheXMgd2l0aCBjb252ZXJzYXRpb25hbCBHZW5CSSBhbmFseXRpY3MuCgrwn4yfICpMQVRFU1QgREVMSVZFUklFUyAmIFdJTlMqCuKAoiAqRWRnZSBWaXNpb24gJiBQcml2YWN5IENvcmUqOiBJbi1tZW1vcnkgZnJhbWUgcHJvY2Vzc2luZyAofjMwIEZQUyBNZWRpYVBpcGUpIHB1cmdpbmcgdmlkZW8gZnJhbWVzIGVhY2ggbG9vcOKAlHN0b3Jpbmcgb25seSBudW1lcmljIDNEIHNrZWxldG9uIHRyYWplY3Rvcmllcy4K4oCiICpPZmZsaW5lIEluZ2VzdGlvbiAmIFJlcGxheSo6IEJhdGNoIHZpZGVvIGluZ2VzdCBDTEkgY291cGxlZCB3aXRoIGEgemVyby1kZXBlbmRlbmN5IHdlYiBzZXJ2ZXIgYW5kIEhUTUw1IENhbnZhcyAzRCBza2VsZXRvbiByZXBsYXkgcGxheWVyLgrigKIgKkNvbnZlcnNhdGlvbmFsIEdlbkJJIExheWVyKjogSW50ZWdyYXRlZCBXcmVuQUkgc2VtYW50aWMgbW9kZWxpbmcgd2l0aCBsb2NhbCBPbGxhbWEgTExNcyBmb3IgY29udmVyc2F0aW9uYWwgcXVlcmllcyBvdmVyIGJlaGF2aW9yIGV2ZW50cy4KCvCfjq8gKkNVUlJFTlQgRk9DVVMgJiBORVhUIE1JTEVTVE9ORSoK4oCiIE9wZXJhdGlvbmFsaXplZCBhbmQgdmVyaWZpZWQ7IHRyYW5zaXRpb25lZCB0byBtYWludGVuYW5jZSBhbmQgcmVmZXJlbmNlIGJhc2VsaW5lLgoK8J+boe+4jyAqUVVBTElUWSBBU1NVUkFOQ0UgJiBNRVRSSUNTKgrigKIgNjkvNjkgdW5pdCBhbmQgaW50ZWdyYXRpb24gdGVzdHMgcGFzc2luZyBhY3Jvc3MgMTQgbW9kdWxlcy4K4oCiIFN0cmljdCBsaW50ZXIgYW5kIHN0eWxlIGNvbXBsaWFuY2UuCgrimqDvuI8gKkJMT0NLRVJTICYgUklTS1MqCuKAoiAqQmxvY2tlcnM6KiBOb25lCuKAoiAqUmlza3M6KiBOb25lCgrwn5SXICpSZXBvc2l0b3J5ICYgQXJ0aWZhY3RzOioKaHR0cHM6Ly9naXRodWIuY29tL2FnbmktZWlhbGFyYXN1L2FtbWFz">
+              📋 Copy WhatsApp Status
+            </button>
+            <a href="https://github.com/agni-eialarasu/ammas" target="_blank" class="btn">
+              Codebase ↗
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-tags="completed" data-search="LAB-002 WrenAI Capabilities & Semantic GenBI Evaluation Eialarasu Research Spike">
+        <div class="card-top">
+          <span class="id-badge">LAB-002</span>
+          <span class="health-pill health-completed">✅ Completed</span>
+        </div>
+        <div class="card-header-main">
+          <h2 class="card-title">WrenAI Capabilities & Semantic GenBI Evaluation</h2>
+          <div class="card-meta">
+            <span>👤 Eialarasu</span>
+            <span>•</span>
+            <span>📑 Research Spike</span>
+          </div>
+        </div>
+
+        <div class="pitch-box">
+          A research spike evaluating WrenAI's semantic Modeling Definition Language (MDL) to power on-premise Conversational GenBI, enabling stakeholders to query operational databases in natural language with zero cloud data leaks and zero SQL hallucinations.
+        </div>
+        <div>
+          <div class="section-title">Latest Deliveries & Wins</div>
+          <ul class="wins-list">
+            <li><strong>Hallucination Elimination</strong>: Confirmed declarative MDL manifests ground schema definitions and aggregations reliably, outperforming direct prompt engineering.</li>
+            <li><strong>100% On-Premise Execution</strong>: Verified seamless integration with local Ollama endpoints (Qwen/Llama 3) without external API dependencies.</li>
+            <li><strong>Production Proof in LAB-001</strong>: Successfully wired into AAMAS SQLite database (`data/outbox.db`) to answer real-time behavioral queries.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-title">Current Focus</div>
+          <p style="font-size: 0.825rem; color: #cbd5e1;">Evaluation successfully concluded and documented; established as approved reference architecture for on-premise GenBI.</p>
+        </div>
+        <div class="card-footer">
+          <div class="card-actions">
+            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IFdyZW5BSSBDYXBhYmlsaXRpZXMgJiBTZW1hbnRpYyBHZW5CSSBFdmFsdWF0aW9uIChMQUItMDAyKSoKX0xlYWQ6IEVpYWxhcmFzdSB8IERhdGU6IDIzLVNlcC0yMDI2XwpfSGVhbHRoOiDinIUgQ29tcGxldGVkXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfk4wgKkJVU0lORVNTIFZBTFVFICYgUFVSUE9TRSoKQSByZXNlYXJjaCBzcGlrZSBldmFsdWF0aW5nIFdyZW5BSSdzIHNlbWFudGljIE1vZGVsaW5nIERlZmluaXRpb24gTGFuZ3VhZ2UgKE1ETCkgdG8gcG93ZXIgb24tcHJlbWlzZSBDb252ZXJzYXRpb25hbCBHZW5CSSwgZW5hYmxpbmcgc3Rha2Vob2xkZXJzIHRvIHF1ZXJ5IG9wZXJhdGlvbmFsIGRhdGFiYXNlcyBpbiBuYXR1cmFsIGxhbmd1YWdlIHdpdGggemVybyBjbG91ZCBkYXRhIGxlYWtzIGFuZCB6ZXJvIFNRTCBoYWxsdWNpbmF0aW9ucy4KCvCfjJ8gKkxBVEVTVCBERUxJVkVSSUVTICYgV0lOUyoK4oCiICpIYWxsdWNpbmF0aW9uIEVsaW1pbmF0aW9uKjogQ29uZmlybWVkIGRlY2xhcmF0aXZlIE1ETCBtYW5pZmVzdHMgZ3JvdW5kIHNjaGVtYSBkZWZpbml0aW9ucyBhbmQgYWdncmVnYXRpb25zIHJlbGlhYmx5LCBvdXRwZXJmb3JtaW5nIGRpcmVjdCBwcm9tcHQgZW5naW5lZXJpbmcuCuKAoiAqMTAwJSBPbi1QcmVtaXNlIEV4ZWN1dGlvbio6IFZlcmlmaWVkIHNlYW1sZXNzIGludGVncmF0aW9uIHdpdGggbG9jYWwgT2xsYW1hIGVuZHBvaW50cyAoUXdlbi9MbGFtYSAzKSB3aXRob3V0IGV4dGVybmFsIEFQSSBkZXBlbmRlbmNpZXMuCuKAoiAqUHJvZHVjdGlvbiBQcm9vZiBpbiBMQUItMDAxKjogU3VjY2Vzc2Z1bGx5IHdpcmVkIGludG8gQUFNQVMgU1FMaXRlIGRhdGFiYXNlIChgZGF0YS9vdXRib3guZGJgKSB0byBhbnN3ZXIgcmVhbC10aW1lIGJlaGF2aW9yYWwgcXVlcmllcy4KCvCfjq8gKkNVUlJFTlQgRk9DVVMgJiBORVhUIE1JTEVTVE9ORSoK4oCiIEV2YWx1YXRpb24gc3VjY2Vzc2Z1bGx5IGNvbmNsdWRlZCBhbmQgZG9jdW1lbnRlZDsgZXN0YWJsaXNoZWQgYXMgYXBwcm92ZWQgcmVmZXJlbmNlIGFyY2hpdGVjdHVyZSBmb3Igb24tcHJlbWlzZSBHZW5CSS4KCvCfm6HvuI8gKlFVQUxJVFkgQVNTVVJBTkNFICYgTUVUUklDUyoK4oCiIDEwMCUgYWNjdXJhY3kgb24gdGVzdGVkIHRlbXBvcmFsLCBhZ2dyZWdhdGlvbiwgYW5kIGV2ZW50IG91dGJveCBTUUwgdGVzdCBjYXNlcy4KCuKaoO+4jyAqQkxPQ0tFUlMgJiBSSVNLUyoK4oCiICpCbG9ja2VyczoqIE5vbmUK4oCiICpSaXNrczoqIE5vbmUKCvCflJcgKlJlcG9zaXRvcnkgJiBBcnRpZmFjdHM6KgpodHRwczovL2dpdGh1Yi5jb20vQ2FubmVyL1dyZW5BSQ==">
+              📋 Copy WhatsApp Status
+            </button>
+            <a href="https://github.com/Canner/WrenAI" target="_blank" class="btn">
+              Codebase ↗
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-tags="active on-track" data-search="LAB-003 Nexus Pulse (Governed Deterministic Vertical Engine) Eialarasu Mini-App">
+        <div class="card-top">
+          <span class="id-badge">LAB-003</span>
+          <span class="health-pill health-on-track">🟢 On Track</span>
+        </div>
+        <div class="card-header-main">
+          <h2 class="card-title">Nexus Pulse (Governed Deterministic Vertical Engine)</h2>
+          <div class="card-meta">
+            <span>👤 Eialarasu</span>
+            <span>•</span>
+            <span>💻 Mini-App</span>
+          </div>
+        </div>
+
+        <div class="pitch-box">
+          An enterprise operational and financial intelligence engine executing an authoritative deterministic pipeline across Commercial SOWs, Workforce Allocations, Governed Finance Margins, and Automated Risk Signals to protect company profitability.
+        </div>
+        <div>
+          <div class="section-title">Latest Deliveries & Wins</div>
+          <ul class="wins-list">
+            <li><strong>Deterministic Signals Engine (T-014..T-016)</strong>: Real-time automated rule engine detecting margin erosion (SIG-01), SOW consumption risk (SIG-02), and workforce allocation conflicts (SIG-03).</li>
+            <li><strong>Governed Finance Variance (T-013)</strong>: Immutable baseline-vs-forecast variance calculations verified against golden canonical dataset `NP-GOLDEN-001`.</li>
+            <li><strong>Tenancy & Scoped RBAC (T-002..T-004)</strong>: Five-role fail-closed permission matrix and tenant-filtered commercial rate resolution.</li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-title">Current Focus</div>
+          <p style="font-size: 0.825rem; color: #cbd5e1;">Scenario simulation engine and Next.js multi-tenant operational frontend.</p>
+        </div>
+        <div class="card-footer">
+          <div class="card-actions">
+            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IE5leHVzIFB1bHNlIChHb3Zlcm5lZCBEZXRlcm1pbmlzdGljIFZlcnRpY2FsIEVuZ2luZSkgKExBQi0wMDMpKgpfTGVhZDogRWlhbGFyYXN1IHwgRGF0ZTogMjMtU2VwLTIwMjZfCl9IZWFsdGg6IPCfn6IgT24gVHJhY2tfCgrilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIHilIEK8J+TjCAqQlVTSU5FU1MgVkFMVUUgJiBQVVJQT1NFKgpBbiBlbnRlcnByaXNlIG9wZXJhdGlvbmFsIGFuZCBmaW5hbmNpYWwgaW50ZWxsaWdlbmNlIGVuZ2luZSBleGVjdXRpbmcgYW4gYXV0aG9yaXRhdGl2ZSBkZXRlcm1pbmlzdGljIHBpcGVsaW5lIGFjcm9zcyBDb21tZXJjaWFsIFNPV3MsIFdvcmtmb3JjZSBBbGxvY2F0aW9ucywgR292ZXJuZWQgRmluYW5jZSBNYXJnaW5zLCBhbmQgQXV0b21hdGVkIFJpc2sgU2lnbmFscyB0byBwcm90ZWN0IGNvbXBhbnkgcHJvZml0YWJpbGl0eS4KCvCfjJ8gKkxBVEVTVCBERUxJVkVSSUVTICYgV0lOUyoK4oCiICpEZXRlcm1pbmlzdGljIFNpZ25hbHMgRW5naW5lIChULTAxNC4uVC0wMTYpKjogUmVhbC10aW1lIGF1dG9tYXRlZCBydWxlIGVuZ2luZSBkZXRlY3RpbmcgbWFyZ2luIGVyb3Npb24gKFNJRy0wMSksIFNPVyBjb25zdW1wdGlvbiByaXNrIChTSUctMDIpLCBhbmQgd29ya2ZvcmNlIGFsbG9jYXRpb24gY29uZmxpY3RzIChTSUctMDMpLgrigKIgKkdvdmVybmVkIEZpbmFuY2UgVmFyaWFuY2UgKFQtMDEzKSo6IEltbXV0YWJsZSBiYXNlbGluZS12cy1mb3JlY2FzdCB2YXJpYW5jZSBjYWxjdWxhdGlvbnMgdmVyaWZpZWQgYWdhaW5zdCBnb2xkZW4gY2Fub25pY2FsIGRhdGFzZXQgYE5QLUdPTERFTi0wMDFgLgrigKIgKlRlbmFuY3kgJiBTY29wZWQgUkJBQyAoVC0wMDIuLlQtMDA0KSo6IEZpdmUtcm9sZSBmYWlsLWNsb3NlZCBwZXJtaXNzaW9uIG1hdHJpeCBhbmQgdGVuYW50LWZpbHRlcmVkIGNvbW1lcmNpYWwgcmF0ZSByZXNvbHV0aW9uLgoK8J+OryAqQ1VSUkVOVCBGT0NVUyAmIE5FWFQgTUlMRVNUT05FKgrigKIgU2NlbmFyaW8gc2ltdWxhdGlvbiBlbmdpbmUgYW5kIE5leHQuanMgbXVsdGktdGVuYW50IG9wZXJhdGlvbmFsIGZyb250ZW5kLgoK8J+boe+4jyAqUVVBTElUWSBBU1NVUkFOQ0UgJiBNRVRSSUNTKgrigKIgMTI2LzEyNiBhdXRvbWF0ZWQgdGVzdCBzdWl0ZSBwYXNzaW5nIGNsZWFubHkuCuKAoiA0Mi80MiBhcmNoaXRlY3R1cmFsIEFTVCBib3VuZGFyeSBmaXRuZXNzIGNoZWNrcyB2ZXJpZmllZCB3aXRoIHplcm8gbGVha3MuCgrimqDvuI8gKkJMT0NLRVJTICYgUklTS1MqCuKAoiAqQmxvY2tlcnM6KiBOb25lCuKAoiAqUmlza3M6KiBDb29yZGluYXRpbmcgY3Jvc3MtZG9tYWluIGNvbnRyYWN0IGNoYW5nZXMgZHVyaW5nIHJhcGlkIHNjZW5hcmlvIGJyYW5jaCBldm9sdXRpb24KCvCflJcgKlJlcG9zaXRvcnkgJiBBcnRpZmFjdHM6KgpodHRwczovL2dpdGh1Yi5jb20vZUFnbmktVGVjaG5vbG9naWVzL25leHVzLXB1bHNl">
+              📋 Copy WhatsApp Status
+            </button>
+            <a href="https://github.com/eAgni-Technologies/nexus-pulse" target="_blank" class="btn">
+              Codebase ↗
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-tags="active onboarding-pending" data-search="LAB-004 Zerobea.ai Abishek Singhavi Mini-App">
+        <div class="card-top">
+          <span class="id-badge">LAB-004</span>
+          <span class="health-pill health-pending">⏳ Onboarding Pending</span>
+        </div>
+        <div class="card-header-main">
+          <h2 class="card-title">Zerobea.ai</h2>
+          <div class="card-meta">
+            <span>👤 Abishek Singhavi</span>
+            <span>•</span>
+            <span>💻 Mini-App</span>
+          </div>
+        </div>
+
+        <div class="pitch-box">
+          A multi-tenant AI security control plane and governed gateway platform providing runtime policy enforcement, gateway auth frontiers, and evidence-grade auditability for generative AI systems.
+        </div>
+        <div class="alert-box">
+          <strong>⚠️ Onboarding Protocol Pending</strong>
+          <span>Run <code>/status-init</code> in repo root to establish verified sprint deliverables and metrics.</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-actions">
+            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IFplcm9iZWEuYWkgKExBQi0wMDQpKgpfTGVhZDogQWJpc2hlayBTaW5naGF2aSB8IERhdGU6IDIzLVNlcC0yMDI2XwpfSGVhbHRoOiDij7MgT25ib2FyZGluZyBQZW5kaW5nXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfk4wgKkJVU0lORVNTIFZBTFVFICYgUFVSUE9TRSoKQSBtdWx0aS10ZW5hbnQgQUkgc2VjdXJpdHkgY29udHJvbCBwbGFuZSBhbmQgZ292ZXJuZWQgZ2F0ZXdheSBwbGF0Zm9ybSBwcm92aWRpbmcgcnVudGltZSBwb2xpY3kgZW5mb3JjZW1lbnQsIGdhdGV3YXkgYXV0aCBmcm9udGllcnMsIGFuZCBldmlkZW5jZS1ncmFkZSBhdWRpdGFiaWxpdHkgZm9yIGdlbmVyYXRpdmUgQUkgc3lzdGVtcy4KCuKaoO+4jyAqT05CT0FSRElORyBQUk9UT0NPTCBQRU5ESU5HKgrigKIgKlN0YXR1czoqIFByb2plY3QgaGFzIGJlZW4gcmVnaXN0ZXJlZCBpbiB0aGUgQ2V0YW5hIExhYnMgcG9ydGZvbGlvLCBidXQgdGhlIGluaXRpYWwgc3RhdHVzIGJhc2VsaW5lIChgU1RBVFVTLm1kYCkgaGFzIG5vdCB5ZXQgYmVlbiBjb21taXR0ZWQgdG8gdGhlIHByb2plY3QgY29kZWJhc2UuCuKAoiAqTGVhZCBBY3Rpb24gUmVxdWlyZWQ6KiBPcGVuIHRoZSBwcm9qZWN0IHJlcG9zaXRvcnkgYW5kIHJ1biBgL3N0YXR1cy1pbml0YCAob3IgY29tbWl0IGBTVEFUVVMubWRgKSB0byBlc3RhYmxpc2ggcXVhbGl0eSBtZXRyaWNzLCBzcHJpbnQgZGVsaXZlcmFibGVzLCBhbmQgdmVyaWZpZWQgaGVhbHRoLgoKCvCflJcgKlJlcG9zaXRvcnkgJiBBcnRpZmFjdHM6KgpodHRwczovL2dpdGh1Yi5jb20vemVyb2JlYWRvdGFpL3plcm9iZWEuYWk=">
+              📋 Copy WhatsApp Status
+            </button>
+            <a href="https://github.com/zerobeadotai/zerobea.ai" target="_blank" class="btn">
+              Codebase ↗
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="project-card" data-tags="active onboarding-pending" data-search="LAB-005 Nexus Beacon Arun Elambaram Mini-App">
+        <div class="card-top">
+          <span class="id-badge">LAB-005</span>
+          <span class="health-pill health-pending">⏳ Onboarding Pending</span>
+        </div>
+        <div class="card-header-main">
+          <h2 class="card-title">Nexus Beacon</h2>
+          <div class="card-meta">
+            <span>👤 Arun Elambaram</span>
+            <span>•</span>
+            <span>💻 Mini-App</span>
+          </div>
+        </div>
+
+        <div class="pitch-box">
+          A real-time telemetry, notification, and event broadcast beacon service that delivers operational risk signals and workflow alerts across the Nexus platform.
+        </div>
+        <div class="alert-box">
+          <strong>⚠️ Onboarding Protocol Pending</strong>
+          <span>Run <code>/status-init</code> in repo root to establish verified sprint deliverables and metrics.</span>
+        </div>
+        <div class="card-footer">
+          <div class="card-actions">
+            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IE5leHVzIEJlYWNvbiAoTEFCLTAwNSkqCl9MZWFkOiBBcnVuIEVsYW1iYXJhbSB8IERhdGU6IDIzLVNlcC0yMDI2XwpfSGVhbHRoOiDij7MgT25ib2FyZGluZyBQZW5kaW5nXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfk4wgKkJVU0lORVNTIFZBTFVFICYgUFVSUE9TRSoKQSByZWFsLXRpbWUgdGVsZW1ldHJ5LCBub3RpZmljYXRpb24sIGFuZCBldmVudCBicm9hZGNhc3QgYmVhY29uIHNlcnZpY2UgdGhhdCBkZWxpdmVycyBvcGVyYXRpb25hbCByaXNrIHNpZ25hbHMgYW5kIHdvcmtmbG93IGFsZXJ0cyBhY3Jvc3MgdGhlIE5leHVzIHBsYXRmb3JtLgoK4pqg77iPICpPTkJPQVJESU5HIFBST1RPQ09MIFBFTkRJTkcqCuKAoiAqU3RhdHVzOiogUHJvamVjdCBoYXMgYmVlbiByZWdpc3RlcmVkIGluIHRoZSBDZXRhbmEgTGFicyBwb3J0Zm9saW8sIGJ1dCB0aGUgaW5pdGlhbCBzdGF0dXMgYmFzZWxpbmUgKGBTVEFUVVMubWRgKSBoYXMgbm90IHlldCBiZWVuIGNvbW1pdHRlZCB0byB0aGUgcHJvamVjdCBjb2RlYmFzZS4K4oCiICpMZWFkIEFjdGlvbiBSZXF1aXJlZDoqIE9wZW4gdGhlIHByb2plY3QgcmVwb3NpdG9yeSBhbmQgcnVuIGAvc3RhdHVzLWluaXRgIChvciBjb21taXQgYFNUQVRVUy5tZGApIHRvIGVzdGFibGlzaCBxdWFsaXR5IG1ldHJpY3MsIHNwcmludCBkZWxpdmVyYWJsZXMsIGFuZCB2ZXJpZmllZCBoZWFsdGguCgoK8J+UlyAqUmVwb3NpdG9yeSAmIEFydGlmYWN0czoqCmh0dHBzOi8vZ2l0aHViLmNvbS9lQWduaS1UZWNobm9sb2dpZXMvbmV4dXMtYmVhY29u">
+              📋 Copy WhatsApp Status
+            </button>
+            <a href="https://github.com/eAgni-Technologies/nexus-beacon" target="_blank" class="btn">
+              Codebase ↗
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Cetana Labs Control Hub • Last Generated: 23-Sep-2026 23:00 IST • Auto-synchronized from authoritative STATUS.md records</p>
+    </footer>
+  </div>
+
+  <div id="toast">Copied to clipboard! Ready to paste into WhatsApp.</div>
+
+  <script>
+    const b64Portfolio = "8J+TiiAqQ0VUQU5BIExBQlMg4oCUIEVYRUNVVElWRSBQT1JURk9MSU8gU1RBVFVTKgpfRGF0ZTogMjMtU2VwLTIwMjYgfCBBdWRpZW5jZTogTWFuYWdlbWVudCBUZWFtXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfn6IgT24gVHJhY2sgKkxBQi0wMDM6IE5leHVzIFB1bHNlIChHb3Zlcm5lZCBEZXRlcm1pbmlzdGljIFZlcnRpY2FsIEVuZ2luZSkqCuKAoiAqTGVhZDoqIEVpYWxhcmFzdQrigKIgKlBpdGNoOiogQW4gZW50ZXJwcmlzZSBvcGVyYXRpb25hbCBhbmQgZmluYW5jaWFsIGludGVsbGlnZW5jZSBlbmdpbmUgZXhlY3V0aW5nIGFuIGF1dGhvcml0YXRpdmUgZGV0ZXJtaW5pc3RpYyBwaXBlbGluZSBhY3Jvc3MgQ29tbWVyY2lhbCBTT1dzLCBXb3JrZm9yY2UgQWxsb2NhdGlvbnMsIEdvdmVybmVkIEZpbmFuY2UgTWFyZ2lucywgYW5kIEF1dG9tYXRlZCBSaXNrIFNpZ25hbHMgdG8gcHJvdGVjdCBjb21wYW55IHByb2ZpdGFiaWxpdHkuCuKAoiAqTGF0ZXN0IFdpbjoqICpEZXRlcm1pbmlzdGljIFNpZ25hbHMgRW5naW5lIChULTAxNC4uVC0wMTYpKjogUmVhbC10aW1lIGF1dG9tYXRlZCBydWxlIGVuZ2luZSBkZXRlY3RpbmcgbWFyZ2luIGVyb3Npb24gKFNJRy0wMSksIFNPVyBjb25zdW1wdGlvbiByaXNrIChTSUctMDIpLCBhbmQgd29ya2ZvcmNlIGFsbG9jYXRpb24gY29uZmxpY3RzIChTSUctMDMpLgrigKIgKkN1cnJlbnQgRm9jdXM6KiBTY2VuYXJpbyBzaW11bGF0aW9uIGVuZ2luZSBhbmQgTmV4dC5qcyBtdWx0aS10ZW5hbnQgb3BlcmF0aW9uYWwgZnJvbnRlbmQuCuKAoiAqQmxvY2tlcnM6KiBOb25lCvCflJcgaHR0cHM6Ly9naXRodWIuY29tL2VBZ25pLVRlY2hub2xvZ2llcy9uZXh1cy1wdWxzZQoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCuKPsyBPbmJvYXJkaW5nIFBlbmRpbmcgKkxBQi0wMDQ6IFplcm9iZWEuYWkqCuKAoiAqTGVhZDoqIEFiaXNoZWsgU2luZ2hhdmkK4oCiICpQaXRjaDoqIEEgbXVsdGktdGVuYW50IEFJIHNlY3VyaXR5IGNvbnRyb2wgcGxhbmUgYW5kIGdvdmVybmVkIGdhdGV3YXkgcGxhdGZvcm0gcHJvdmlkaW5nIHJ1bnRpbWUgcG9saWN5IGVuZm9yY2VtZW50LCBnYXRld2F5IGF1dGggZnJvbnRpZXJzLCBhbmQgZXZpZGVuY2UtZ3JhZGUgYXVkaXRhYmlsaXR5IGZvciBnZW5lcmF0aXZlIEFJIHN5c3RlbXMuCuKAoiAqU3RhdHVzIEFsZXJ0Oiog4pqg77iPIF9Jbml0aWFsIG9uYm9hcmRpbmcgcHJvdG9jb2wgcGVuZGluZyBmcm9tIHByb2plY3QgbGVhZC5fCuKAoiAqQWN0aW9uIFJlcXVpcmVkOiogUnVuIGAvc3RhdHVzLWluaXRgIGluIHJlcG8gcm9vdCB0byBlc3RhYmxpc2ggc3ByaW50IGJhc2VsaW5lLgrwn5SXIGh0dHBzOi8vZ2l0aHViLmNvbS96ZXJvYmVhZG90YWkvemVyb2JlYS5haQoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCuKPsyBPbmJvYXJkaW5nIFBlbmRpbmcgKkxBQi0wMDU6IE5leHVzIEJlYWNvbioK4oCiICpMZWFkOiogQXJ1biBFbGFtYmFyYW0K4oCiICpQaXRjaDoqIEEgcmVhbC10aW1lIHRlbGVtZXRyeSwgbm90aWZpY2F0aW9uLCBhbmQgZXZlbnQgYnJvYWRjYXN0IGJlYWNvbiBzZXJ2aWNlIHRoYXQgZGVsaXZlcnMgb3BlcmF0aW9uYWwgcmlzayBzaWduYWxzIGFuZCB3b3JrZmxvdyBhbGVydHMgYWNyb3NzIHRoZSBOZXh1cyBwbGF0Zm9ybS4K4oCiICpTdGF0dXMgQWxlcnQ6KiDimqDvuI8gX0luaXRpYWwgb25ib2FyZGluZyBwcm90b2NvbCBwZW5kaW5nIGZyb20gcHJvamVjdCBsZWFkLl8K4oCiICpBY3Rpb24gUmVxdWlyZWQ6KiBSdW4gYC9zdGF0dXMtaW5pdGAgaW4gcmVwbyByb290IHRvIGVzdGFibGlzaCBzcHJpbnQgYmFzZWxpbmUuCvCflJcgaHR0cHM6Ly9naXRodWIuY29tL2VBZ25pLVRlY2hub2xvZ2llcy9uZXh1cy1iZWFjb24KCuKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgQpfQWN0aXZlIEluaXRpYXRpdmVzOiAzIHwgSGFyZCBCbG9ja2VyczogMCB8IOKPsyBQZW5kaW5nIFNldHVwOiAyIHwg4pyFIENvbXBsZXRlZDogMl8=";
+    let currentFilter = 'all';
+
+    function setFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      filterCards();
+    }
+
+    function handleSearch() {
+      filterCards();
+    }
+
+    function filterCards() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const cards = document.querySelectorAll('.project-card');
+
+      cards.forEach(card => {
+        const tags = card.getAttribute('data-tags') || '';
+        const searchTarget = card.getAttribute('data-search').toLowerCase();
+
+        const matchesFilter = (currentFilter === 'all') || tags.includes(currentFilter);
+        const matchesQuery = !query || searchTarget.includes(query);
+
+        if (matchesFilter && matchesQuery) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg || 'Copied to clipboard!';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    function copyPortfolioBriefing() {
+      try {
+        const text = decodeURIComponent(escape(window.atob(b64Portfolio)));
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('📋 Executive Portfolio Digest copied to clipboard!');
+        }).catch(err => {
+          console.error('Failed to copy', err);
+        });
+      } catch (e) {
+        console.error('Decoding failed', e);
+      }
+    }
+
+    function copySingleBriefing(btn) {
+      try {
+        const rawB64 = btn.getAttribute('data-briefing') || '';
+        const text = decodeURIComponent(escape(window.atob(rawB64)));
+        navigator.clipboard.writeText(text).then(() => {
+          showToast('📋 Project WhatsApp update copied to clipboard!');
+        }).catch(err => {
+          console.error('Failed to copy', err);
+        });
+      } catch (e) {
+        console.error('Decoding failed', e);
+      }
+    }
+  </script>
+</body>
+</html>

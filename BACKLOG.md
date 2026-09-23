@@ -10,7 +10,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | :--- | :--- |
 | **Sprint ID** | `SPRINT-03` |
 | **Duration** | 2026-09-24 to 2026-10-08 (2 Weeks) |
-| **Sprint Goal** | Implement static single-page Portfolio Web Dashboard (`BK-002`) for visual executive reporting. |
+| **Sprint Goal** | Implement static single-page Portfolio Web Dashboard (`BK-002`) with automated GitHub Pages hosting for visual executive reporting. |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -18,9 +18,9 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-017` | Portfolio Web Dashboard architecture & feasibility spike (`BK-002`) | P1 | Eialarasu | 🚧 In Progress | 2026-09-25 |
-| `TSK-018` | Static dashboard generator (`scripts/generate_dashboard.py`) & HTML template | P1 | Eialarasu | 📋 Planned | 2026-09-30 |
-| `TSK-019` | GitHub Pages deployment workflow for automated dashboard hosting | P2 | Eialarasu | 📋 Planned | 2026-10-05 |
+| `TSK-017` | Portfolio Web Dashboard architecture & feasibility spike (`BK-002`) | P1 | Eialarasu | ✅ Done | 2026-09-23 |
+| `TSK-018` | Static dashboard generator (`scripts/generate_dashboard.py`) & HTML template (`docs/index.html`) | P1 | Eialarasu | ✅ Done | 2026-09-23 |
+| `TSK-019` | GitHub Pages deployment workflow (`.github/workflows/deploy-pages.yml`) for automated hosting | P1 | Eialarasu | ✅ Done | 2026-09-23 |
 
 ---
 

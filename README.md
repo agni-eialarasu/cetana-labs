@@ -1,5 +1,6 @@
 # Cetana Labs (Master Registry & Lab Notebook)
 
+> 🌐 **Live Portfolio Dashboard:** [agni-eialarasu.github.io/cetana-labs](https://agni-eialarasu.github.io/cetana-labs/)  
 > 📖 **User Guide:** [docs/user-guide.md](docs/user-guide.md)  
 > 👥 **Project Owner Guide & AI Prompts:** [docs/project-owner-guide.md](docs/project-owner-guide.md)  
 > 📋 **Project Status Protocol (`STATUS.md`):** [docs/project-protocol.md](docs/project-protocol.md)  
@@ -37,11 +38,14 @@ cetana-labs/
 ├── BACKLOG.md                     # 🎯 Sprint Backlog, Roadmap & Delivered Sprints
 ├── CHANGELOG.md                   # 📜 Keep a Changelog Historical Releases
 ├── .github/workflows/
-│   └── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
+│   ├── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
+│   └── deploy-pages.yml           # 🌐 Automated GitHub Pages dashboard deployment workflow
 ├── scripts/
 │   ├── generate_status.py         # 📱 Standalone WhatsApp executive status generator
+│   ├── generate_dashboard.py      # 🌐 Static HTML portfolio web dashboard generator
 │   └── validate_portfolio.py      # 🛡️ CI linter & project structure validator
 ├── docs/
+│   ├── index.html                 # 🌐 Live Interactive Portfolio Dashboard (GitHub Pages)
 │   ├── user-guide.md              # 👤 Human Guide: Navigation, Archetypes, Statuses & AI Prompts
 │   ├── project-owner-guide.md     # 👥 Developer & Lead Guide: AI Prompts (/status-init, /status-update)
 │   └── project-protocol.md        # 📋 Authoritative STATUS.md specification

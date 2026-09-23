@@ -8,9 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [Unreleased]
-### Planned
-- Portfolio Web Dashboard (`BK-002`) static visualization.
-- Automated GitHub Pages deployment pipeline.
+### Added
+- **Portfolio Web Dashboard (`BK-002`)**: Built standalone generator (`scripts/generate_dashboard.py`) creating an interactive executive dashboard (`docs/index.html`) with real-time text search, status filtering, and 1-click WhatsApp briefings.
+- **Automated GitHub Pages Deployment**: Configured `.github/workflows/deploy-pages.yml` to automatically build and host the dashboard on GitHub Pages on every push to `main`.
 
 ---
 
@@ -57,4 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Cetana Labs Master Hub**: Initialized control plane, repository registry, and universal AI agent guidelines (`AGENTS.md`, `CLAUDE.md`).
 - **Standardized Archetype Templates**: Scaffolds for `mini-app`, `research`, `data-collection`, and `verification`.
-- **Initial Portfolio Initiatives**:\n  - `LAB-001`: AAMAS (Autism Activity Monitoring & Alerting System).\n  - `LAB-002`: WrenAI Capabilities & Semantic GenBI Evaluation.\n  - `LAB-003`: Nexus Pulse (Governed Deterministic Vertical Engine).\n- **Trunk-Based Commit Standard**: Automated commit-changes playbook and linear main branch policy.\n
+- **Initial Portfolio Initiatives**:
+  - `LAB-001`: AAMAS (Autism Activity Monitoring & Alerting System).
+  - `LAB-002`: WrenAI Capabilities & Semantic GenBI Evaluation.
+  - `LAB-003`: Nexus Pulse (Governed Deterministic Vertical Engine).
+- **Trunk-Based Commit Standard**: Automated commit-changes playbook and linear main branch policy.
