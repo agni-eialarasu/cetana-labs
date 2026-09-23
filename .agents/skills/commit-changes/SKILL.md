@@ -19,11 +19,13 @@ Stage and commit changes directly to `main` following trunk-based conventions wi
 2. **Select Commit Prefix & Message**:
    - For a new project: `feat(lab-XXX): init <project-name>`
    - For a milestone update: `log(lab-XXX): <milestone summary>`
-   - For a runbook update: `docs(lab-XXX): <runbook update summary>`
-   - For global repo updates: `docs: <summary>` or `chore: <summary>`
+   - For an executive status update: `status(lab-XXX): <health/win summary>`
+   - For project metadata edit: `chore(lab-XXX): update <attribute>`
+   - For global repo updates: `docs: <summary>`, `chore: <summary>`, or `feat(core): <summary>`
 
 3. **Stage and Commit**:
    ```bash
    git add .
    git commit -m "<type>(<scope>): <summary>"
+   git push origin main
    ```

@@ -1,7 +1,7 @@
 ---
 name: project-status
 description: >-
-  Generates an on-demand WhatsApp-compatible executive status message for management across all projects or a specific project (e.g. "/project-status", "/project-status LAB-003"). Parses the authoritative STATUS.md protocol file.
+  Generates an on-demand WhatsApp-compatible executive status message for management across all active projects or a specific project (e.g. "/project-status", "/project-status LAB-003"). Parses authoritative STATUS.md files and excludes completed projects.
 ---
 
 # Skill: On-Demand Project Status Broadcast (`/project-status`)
@@ -14,82 +14,41 @@ Generate a mobile-friendly, executive-ready WhatsApp status broadcast for leader
 ## 1. Trigger Patterns
 Activate this skill whenever the user invokes:
 - `/project-status`
-- `/project-status <ID>` (e.g. `/project-status LAB-001`, `/project-status LAB-003`)
+- `/project-status <ID>` (e.g. `/project-status LAB-000`, `/project-status LAB-003`, `/project-status LAB-005`)
 - `/project-status all`
 - *"Generate executive update for WhatsApp"*
 - *"Share project status to management"*
 
 ---
 
-## 2. Execution Steps
+## 2. Automated Execution Engine
 
-### Step 1: Resolve Target Scope
-- If a project ID is specified (e.g. `LAB-003`), generate a **Deep Dive Single-Project Broadcast**.
-- If no argument or `all` is specified, iterate through all active projects registered in [README.md](../../../README.md) and generate an **Executive Portfolio Digest**.
+The authoritative implementation is executed directly via Python:
+```bash
+# Full active portfolio digest
+python3 scripts/generate_status.py
 
-### Step 2: Locate & Read `STATUS.md`
-For each target project:
-1. First, check `projects/<ID>/STATUS.md`.
-2. Also check if the project has a local adjacent repo checkout with a fresher `STATUS.md` (e.g. `../nexus-pulse/STATUS.md`, `../ammas/STATUS.md`).
-3. If `STATUS.md` is missing, read the project's `README.md` and `journal.md` as fallback.
+# Single project deep-dive
+python3 scripts/generate_status.py LAB-XXX
 
-### Step 3: Format for WhatsApp
-WhatsApp uses specific formatting:
-- `*bold text*` for headlines and keys (Do NOT use `**double asterisks**`).
-- `_italic text_` for subtitles and dates.
-- `• bullet points` with clear spacing.
-- **NEVER use markdown tables** (they break horribly on mobile WhatsApp).
-- Include dividers like `━━━━━━━━━━━━━━━━━━━━━`.
+# Output with GitHub Actions step summary markdown block
+python3 scripts/generate_status.py --github-summary
+```
 
 ---
 
-## 3. Output Format Templates
+## 3. Core Filtering & Presentation Rules
 
-### Template A: Executive Portfolio Digest (All Projects)
-```text
-📊 *CETANA LABS — EXECUTIVE PORTFOLIO STATUS*
-_Date: [DD-Mon-YYYY] | Audience: Management Team_
-
-━━━━━━━━━━━━━━━━━━━━━
-[Health Badge] *[PROJECT ID]: [Project Name]*
-• *Lead:* [Owner Name]
-• *Pitch:* [1-line elevator pitch]
-• *Latest Win:* [Key capability or milestone delivered]
-• *Current Focus:* [What is actively being built]
-• *Blockers:* [None / Specific Blocker]
-🔗 [Remote Repo / Link]
-
-━━━━━━━━━━━━━━━━━━━━━
-[Repeat for each active project]
-
-━━━━━━━━━━━━━━━━━━━━━
-_Total Active Initiatives: [N] | Hard Blockers: [N]_
-```
-
-### Template B: Single Project Deep Dive (`/project-status <ID>`)
-```text
-🚀 *PROJECT STATUS BRIEFING: [Project Name] ([PROJECT ID])*
-_Lead: [Owner Name] | Date: [DD-Mon-YYYY]_
-_Health: [Health Badge]_
-
-━━━━━━━━━━━━━━━━━━━━━
-📌 *BUSINESS VALUE & PURPOSE*
-[2-sentence elevator pitch]
-
-🌟 *LATEST DELIVERIES & WINS*
-• *[Win 1]:* [Description of impact]
-• *[Win 2]:* [Description of impact]
-
-🎯 *CURRENT FOCUS & NEXT MILESTONE*
-• [What the team is actively executing right now]
-
-🛡️ *QUALITY ASSURANCE & METRICS*
-• [Test pass rates, performance or architectural benchmarks]
-
-⚠️ *BLOCKERS & RISKS*
-• *Blockers:* [None / Blocker details]
-• *Risks:* [Key risk to monitor]
-
-🔗 *Repository & Artifacts:*
-[Remote GitHub Link]
-```
+1. **Active Initiatives Only**:
+   - The default portfolio digest excludes completed initiatives (`✅ Completed`) and the central control hub kernel (`LAB-000`).
+   - Completed counts are summarized in the digest footer.
+2. **Onboarding Pending Alert ("Soft Pressure")**:
+   - Projects in `⏳ Onboarding Pending` have routine wins suppressed.
+   - The generator injects an alert and CTA instructing the lead to run `/status-init`.
+3. **Sprint Cadence Staleness (> 14 Days)**:
+   - If an active project's `Last Updated` date is older than 14 days, a subtle cadence reminder is appended.
+4. **WhatsApp Text Optimization**:
+   - `*bold text*` for headings (no double-asterisks `**`).
+   - `_italic text_` for subtitles and dates.
+   - Clean horizontal ASCII dividers (`━━━━━━━━━━━━━━━━━━━━━`).
+   - Strictly **no markdown tables** (tables break on mobile WhatsApp).

@@ -1,6 +1,6 @@
 # Project Lead & Developer Guide — Automated Status Protocol
 
-Welcome! This guide is for **project leads and contributing engineers** (e.g. Nexus Pulse, AAMAS, Zerobea.ai, and upcoming initiatives).
+Welcome! This guide is for **project leads and contributing engineers** (e.g. Nexus Pulse, AAMAS, Zerobea.ai, Nexus Beacon, and upcoming initiatives).
 
 To eliminate repetitive status writing, long standup recaps, and management interruptions, our engineering organization uses a **single, 30-line `STATUS.md` file at the root of every project repository**.
 
@@ -126,7 +126,7 @@ For reference, this is what the file looks like:
 | **Project ID** | LAB-XXX |
 | **Project Name** | Nexus Pulse |
 | **Current Health** | 🟢 On Track |
-| **Owner / Lead** | Hariharasubramanian |
+| **Owner / Lead** | Eialarasu |
 | **Last Updated** | YYYY-MM-DD |
 
 ---
