@@ -20,6 +20,7 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 | **`LAB-003`** | **[Nexus Pulse](projects/LAB-003-nexus-pulse/README.md)** (Vertical Engine) | 💻 Mini-App | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [STATUS.md](projects/LAB-003-nexus-pulse/STATUS.md) |
 | **`LAB-004`** | **[Cetana Labs Control Hub](projects/LAB-004-cetana-labs/README.md)** (Protocol Engine) | 💻 Mini-App | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/cetana-labs) | [STATUS.md](projects/LAB-004-cetana-labs/STATUS.md) |
 | **`LAB-005`** | **[Zerobea.ai](projects/LAB-005-zerobea-ai/README.md)** (AI Security Control Plane) | 💻 Mini-App | `⏳ Onboarding Pending` | Abishek Singhavi | [GitHub Repo](https://github.com/zerobeadotai/zerobea.ai) | [STATUS.md](projects/LAB-005-zerobea-ai/STATUS.md) |
+| **`LAB-006`** | **[Nexus Beacon](projects/LAB-006-nexus-beacon/README.md)** (Operational Alert Service) | 💻 Mini-App | `⏳ Onboarding Pending` | Arun Elambaram | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-beacon) | [STATUS.md](projects/LAB-006-nexus-beacon/STATUS.md) |
 
 ---
 
@@ -52,7 +53,8 @@ cetana-labs/
     ├── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
     ├── LAB-003-nexus-pulse/       # Governed Operational & Financial Intelligence Engine
     ├── LAB-004-cetana-labs/       # Central Command Plane & Protocol Engine
-    └── LAB-005-zerobea-ai/        # AI Security Control Plane & Governed Gateway
+    ├── LAB-005-zerobea-ai/        # AI Security Control Plane & Governed Gateway
+    └── LAB-006-nexus-beacon/      # Telemetry & Operational Alert Service
 ```
 
 ---
