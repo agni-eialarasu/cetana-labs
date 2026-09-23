@@ -3,6 +3,8 @@
 > 📖 **User Guide:** [docs/user-guide.md](docs/user-guide.md)  
 > 👥 **Project Owner Guide & AI Prompts:** [docs/project-owner-guide.md](docs/project-owner-guide.md)  
 > 📋 **Project Status Protocol (`STATUS.md`):** [docs/project-protocol.md](docs/project-protocol.md)  
+> 🎯 **Sprint Backlog & Roadmap:** [BACKLOG.md](BACKLOG.md)  
+> 📜 **Project Changelog:** [CHANGELOG.md](CHANGELOG.md)  
 > 💬 **On-Demand Management Broadcasts:** Run `/project-status` or `/project-status <ID>` for WhatsApp-ready executive updates.
 
 ---
@@ -32,6 +34,8 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 cetana-labs/
 ├── README.md                      # Master Dashboard & Project Registry (You are here)
 ├── STATUS.md                      # 📋 Authoritative Root Status for Cetana Labs (LAB-000)
+├── BACKLOG.md                     # 🎯 Sprint Backlog, Roadmap & Delivered Sprints
+├── CHANGELOG.md                   # 📜 Keep a Changelog Historical Releases
 ├── .github/workflows/
 │   └── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
 ├── scripts/
