@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [Unreleased]
+### Planned
+- Portfolio Web Dashboard (`BK-002`) static visualization.
+- Automated GitHub Pages deployment pipeline.
+
+---
+
+## [0.4.0] - 2026-09-23
 ### Added
 - **Remote `STATUS.md` Auto-Fetcher**: Added `--sync-remote` flag to `scripts/generate_status.py` using `gh api` and raw GitHub fallbacks to automatically fetch the latest `STATUS.md` committed by project leads.
 - **CI Linter & Portfolio Integrity Validator**: Created `scripts/validate_portfolio.py` to enforce strict directory naming, required documentation files, health badges, and master README sync.
@@ -50,8 +57,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Cetana Labs Master Hub**: Initialized control plane, repository registry, and universal AI agent guidelines (`AGENTS.md`, `CLAUDE.md`).
 - **Standardized Archetype Templates**: Scaffolds for `mini-app`, `research`, `data-collection`, and `verification`.
-- **Initial Portfolio Initiatives**:
-  - `LAB-001`: AAMAS (Autism Activity Monitoring & Alerting System).
-  - `LAB-002`: WrenAI Capabilities & Semantic GenBI Evaluation.
-  - `LAB-003`: Nexus Pulse (Governed Deterministic Vertical Engine).
-- **Trunk-Based Commit Standard**: Automated commit-changes playbook and linear main branch policy.
+- **Initial Portfolio Initiatives**:\n  - `LAB-001`: AAMAS (Autism Activity Monitoring & Alerting System).\n  - `LAB-002`: WrenAI Capabilities & Semantic GenBI Evaluation.\n  - `LAB-003`: Nexus Pulse (Governed Deterministic Vertical Engine).\n- **Trunk-Based Commit Standard**: Automated commit-changes playbook and linear main branch policy.\n
