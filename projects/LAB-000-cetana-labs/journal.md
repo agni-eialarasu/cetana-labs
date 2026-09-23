@@ -1,4 +1,4 @@
-# LAB-004: Cetana Labs Control Hub — Project Journal & Timeline
+# LAB-000: Cetana Labs Control Hub — Project Journal & Timeline
 
 ## 📌 Phase Summary
 
@@ -13,10 +13,17 @@
 
 ## 🗓️ Milestone Log
 
+### [2026-09-23] Milestone: Reindexed to LAB-000 Kernel Identifier
+- **Context**: Reindexed Cetana Labs control hub to zero-index `LAB-000` to distinguish the core command plane from active portfolio products.
+- **Key Decisions**:
+  - Excluded `LAB-000` from routine portfolio broadcasts (inspectable via direct query: `/project-status LAB-000`).
+  - Standardized portfolio broadcast filter to display only active, non-completed product engineering initiatives.
+
+---
+
 ### [2026-09-23] Milestone: Full Command Suite & Verification
 - **Context**: Executed live end-to-end testing of `/project-status`, `/project-add`, `/project-update`, and `/project-edit`.
 - **Key Deliverables**:
-  - Registered `LAB-004` (Cetana Labs) into the central registry.
   - Verified instant single-project and portfolio-level WhatsApp broadcast outputs.
   - Validated synchronization between local files, status generator, and remote git repository.
 

@@ -4,9 +4,11 @@ Cetana Labs — On-Demand Executive Status Generator
 Parses authoritative STATUS.md files across projects and generates
 mobile-scannable, WhatsApp-compatible text broadcasts for leadership.
 
-Supports:
-- ⏳ Onboarding Pending: Highlights missing setup baseline and guides leads to /status-init.
-- ⏰ Cadence Tracking: Flags projects with stale status (> 14 days) to maintain sprint accountability.
+Filters:
+- Portfolio digest: Reports only active, non-completed product engineering initiatives.
+  (Excludes completed projects and LAB-000 control hub kernel by default).
+- Single project lookup: Reports any project by ID (e.g. LAB-000, LAB-001, etc.).
+- Soft pressure: Flags pending onboarding and stale statuses (> 14 days).
 """
 
 import sys
@@ -18,6 +20,7 @@ from datetime import datetime
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PROJECTS_DIR = REPO_ROOT / "projects"
 STALE_DAYS_THRESHOLD = 14
+SYSTEM_CONTROL_PLANE_ID = "LAB-000"
 
 
 def parse_status_file(status_path: Path) -> dict:
@@ -41,6 +44,7 @@ def parse_status_file(status_path: Path) -> dict:
         "repo_url": "",
         "days_ago": 0,
         "is_onboarding_pending": False,
+        "is_completed": False,
         "is_stale": False
     }
 
@@ -65,21 +69,21 @@ def parse_status_file(status_path: Path) -> dict:
     if updated_match:
         data["last_updated"] = updated_match.group(1).strip()
 
+    health_lower = data["health"].lower()
+    if "completed" in health_lower:
+        data["is_completed"] = True
+    if "onboarding pending" in health_lower or "pending onboarding" in health_lower or "pending setup" in health_lower:
+        data["is_onboarding_pending"] = True
+
     # Calculate days since last update
     if data["last_updated"]:
         try:
             up_dt = datetime.strptime(data["last_updated"], "%Y-%m-%d")
             data["days_ago"] = max(0, (datetime.now() - up_dt).days)
-            is_completed = "completed" in data["health"].lower()
-            if data["days_ago"] > STALE_DAYS_THRESHOLD and not is_completed:
+            if data["days_ago"] > STALE_DAYS_THRESHOLD and not data["is_completed"]:
                 data["is_stale"] = True
         except ValueError:
             pass
-
-    # Check onboarding pending
-    health_lower = data["health"].lower()
-    if "onboarding pending" in health_lower or "pending onboarding" in health_lower or "pending setup" in health_lower:
-        data["is_onboarding_pending"] = True
 
     # Extract 1. Elevator Pitch
     pitch_match = re.search(r"###\s*1\.\s*Elevator Pitch[^\n]*\n+([^#]+)", content)
@@ -138,7 +142,7 @@ def parse_status_file(status_path: Path) -> dict:
 
 
 def format_portfolio_digest(projects: list) -> str:
-    """Formats all projects into an executive WhatsApp portfolio digest."""
+    """Formats active, non-completed projects into an executive WhatsApp portfolio digest."""
     now_str = datetime.now().strftime("%d-%b-%Y")
     lines = [
         "📊 *CETANA LABS — EXECUTIVE PORTFOLIO STATUS*",
@@ -146,11 +150,17 @@ def format_portfolio_digest(projects: list) -> str:
         ""
     ]
 
-    total_active = len(projects)
+    # Filter: exclude control hub kernel (LAB-000) and completed projects from daily digest
+    active_projects = [
+        p for p in projects
+        if p.get("id", "").upper() != SYSTEM_CONTROL_PLANE_ID and not p.get("is_completed", False)
+    ]
+    completed_count = sum(1 for p in projects if p.get("is_completed", False))
+
     hard_blockers = 0
     pending_onboarding = 0
 
-    for p in projects:
+    for p in active_projects:
         lines.append("━━━━━━━━━━━━━━━━━━━━━")
         health = p.get("health", "🟢 On Track")
         pid = p.get("id", "LAB-???")
@@ -173,7 +183,6 @@ def format_portfolio_digest(projects: list) -> str:
             lines.append("• *Status Alert:* ⚠️ _Initial onboarding protocol pending from project lead._")
             lines.append("• *Action Required:* Run `/status-init` in repo root to establish sprint baseline.")
         else:
-            # Primary Win (first bullet)
             wins = p.get("wins", [])
             if wins:
                 first_win = re.sub(r"\*\*([^*]+)\*\*", r"*\1*", wins[0])
@@ -188,7 +197,6 @@ def format_portfolio_digest(projects: list) -> str:
                 hard_blockers += 1
             lines.append(f"• *Blockers:* {blockers}")
 
-            # Staleness reminder (soft pressure to update at sprint close)
             if is_stale:
                 lines.append(f"• *Cadence Notice:* ℹ️ _Last updated {days_ago} days ago. Awaiting sprint closeout (/status-update)._")
 
@@ -197,13 +205,15 @@ def format_portfolio_digest(projects: list) -> str:
         lines.append("")
 
     lines.append("━━━━━━━━━━━━━━━━━━━━━")
-    summary_parts = [f"Total Active Initiatives: {total_active}"]
+    summary_parts = [f"Active Initiatives: {len(active_projects)}"]
     if hard_blockers > 0:
         summary_parts.append(f"⚠️ Hard Blockers: {hard_blockers}")
     else:
         summary_parts.append("Hard Blockers: 0")
     if pending_onboarding > 0:
         summary_parts.append(f"⏳ Pending Setup: {pending_onboarding}")
+    if completed_count > 0:
+        summary_parts.append(f"✅ Completed: {completed_count}")
 
     lines.append(f"_{' | '.join(summary_parts)}_")
     return "\n".join(lines)
@@ -231,7 +241,6 @@ def format_single_project(p: dict) -> str:
         ""
     ]
 
-    # If onboarding pending, present clear setup CTA
     if is_pending:
         lines.extend([
             "⚠️ *ONBOARDING PROTOCOL PENDING*",
