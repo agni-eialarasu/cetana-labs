@@ -1,6 +1,6 @@
 # Project Lead & Developer Guide — Automated Status Protocol
 
-Welcome! This guide is for **project leads and contributing engineers** (e.g. Nexus Pulse, AAMAS, and upcoming initiatives).
+Welcome! This guide is for **project leads and contributing engineers** (e.g. Nexus Pulse, AAMAS, Zerobea.ai, and upcoming initiatives).
 
 To eliminate repetitive status writing, long standup recaps, and management interruptions, our engineering organization uses a **single, 30-line `STATUS.md` file at the root of every project repository**.
 
@@ -16,9 +16,26 @@ Developer prompts: "/status-update"
        ▼
 AI inspects recent Git commits / PRs
        │
-       ├── 1. Updates root STATUS.md & commits
-       └── 2. Outputs a ready-to-send WhatsApp standup message for your team!
+       ├──── 1. Updates root STATUS.md & commits
+       └──── 2. Outputs a ready-to-send WhatsApp standup message for your team!
 ```
+
+---
+
+## 🎯 Constructive Visibility: Why We Do This
+
+Every weekday morning at 9:30 AM IST, our automated system generates an executive portfolio update for management and engineering leadership.
+
+1. **When your project is first registered:**
+   - It appears as **`⏳ Onboarding Pending`** with an alert:
+     `• *Status Alert:* ⚠️ Initial onboarding protocol pending from project lead.`
+     `• *Action Required:* Run /status-init in repo root to establish sprint baseline.`
+   - Running `/status-init` and pushing `STATUS.md` immediately promotes your badge to **`🟢 On Track`** with your real wins!
+
+2. **Sprint Cadence Reminder (> 14 Days):**
+   - If your project goes longer than 14 days without an update, a gentle reminder appears in the morning brief:
+     `• *Cadence Notice:* ℹ️ Last updated 16 days ago. Awaiting sprint closeout (/status-update).`
+   - Running `/status-update` at each sprint close keeps your project green and leadership fully informed without interrupting you.
 
 ---
 
@@ -26,7 +43,7 @@ AI inspects recent Git commits / PRs
 
 If your repository doesn't have a `STATUS.md` yet, open your AI chat tool inside your repository and paste:
 
-> ### 📋 AI Prompt: Initialize Status
+> ### 📋 AI Prompt: Initialize Status (`/status-init`)
 > ```text
 > Act as our technical delivery assistant. Inspect this repository's README.md, package manifests, and recent git history. 
 > Create a standardized root `STATUS.md` adhering to our engineering protocol:

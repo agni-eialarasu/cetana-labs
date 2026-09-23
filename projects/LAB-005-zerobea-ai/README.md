@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **Project ID** | `LAB-005` |
 | **Archetype** | 💻 Mini-App / Coding |
-| **Status** | 🟢 Active |
+| **Status** | ⏳ Onboarding Pending |
 | **Owner** | Abishek Singhavi |
 | **Remote Repository** | [github.com/zerobeadotai/zerobea.ai](https://github.com/zerobeadotai/zerobea.ai) |
 | **Staging Target** | [staging.zerobea.ai](https://staging.zerobea.ai) |

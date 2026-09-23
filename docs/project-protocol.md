@@ -22,7 +22,7 @@ To ensure leadership, management, and cross-functional stakeholders receive **in
 
 | Project Type | Where `STATUS.md` Resides |
 | :--- | :--- |
-| **External Mini-Apps / Services** (e.g. `nexus-pulse`, `ammas`) | In the root of the project's own Git repository (`<repo>/STATUS.md`), with a synced copy or reference in `cetana-labs/projects/<ID>/STATUS.md`. |
+| **External Mini-Apps / Services** (e.g. `nexus-pulse`, `ammas`, `zerobea.ai`) | In the root of the project's own Git repository (`<repo>/STATUS.md`), with a synced copy or reference in `cetana-labs/projects/<ID>/STATUS.md`. |
 | **Internal Research Spikes / Benchmarks** (e.g. `wrenai-eval`) | Directly inside `cetana-labs/projects/<ID>/STATUS.md`. |
 
 ---
@@ -69,6 +69,7 @@ A 2-sentence summary of what this project does and the business value it deliver
 
 | Health | Badge | Meaning |
 | :--- | :---: | :--- |
+| **Onboarding Pending** | `⏳ Onboarding Pending` | Project registered in Cetana Labs, but awaiting initial `STATUS.md` baseline from project lead. |
 | **On Track** | `🟢 On Track` | Milestones progressing as scheduled. |
 | **At Risk** | `🟡 At Risk` | Minor delays or external dependencies pending; no escalation yet. |
 | **Blocked** | `🔴 Blocked` | Hard blocker requiring management intervention. |
@@ -77,9 +78,29 @@ A 2-sentence summary of what this project does and the business value it deliver
 
 ---
 
-## 5. Automated Consumption via `/project-status`
+## 5. Constructive Visibility & Cadence Enforcement ("Soft Pressure")
+
+Cetana Labs encourages consistent, high-hygiene engineering practices through transparent management visibility:
+
+1. **Onboarding Enforcement**:
+   - Newly registered initiatives start in `⏳ Onboarding Pending`.
+   - Routine delivery wins and metrics are suppressed in the executive report until the lead completes onboarding.
+   - The morning executive briefing highlights:
+     `• *Status Alert:* ⚠️ Initial onboarding protocol pending from project lead.`
+     `• *Action Required:* Run /status-init in repo root to establish sprint baseline.`
+
+2. **Sprint Cadence & Staleness Tracking**:
+   - Every active project is expected to update `STATUS.md` at sprint closeout (typically every 14 days).
+   - If `Last Updated` is older than **14 days**, the status engine automatically appends a subtle cadence flag:
+     `• *Cadence Notice:* ℹ️ Last updated X days ago. Awaiting sprint closeout (/status-update).`
+   - Completed initiatives are exempt from staleness tracking.
+
+---
+
+## 6. Automated Consumption via `/project-status`
 
 When `/project-status [project_id]` is executed:
 1. The AI agent locates the relevant `STATUS.md` file(s).
 2. It extracts the Elevator Pitch, Latest Wins, Current Focus, Health, and Blockers.
-3. It formats a crisp, emoji-rich, WhatsApp-friendly broadcast message ready to copy-paste.
+3. It evaluates onboarding and cadence health.
+4. It formats a crisp, emoji-rich, WhatsApp-friendly broadcast message ready to copy-paste.

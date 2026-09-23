@@ -3,6 +3,10 @@
 Cetana Labs — On-Demand Executive Status Generator
 Parses authoritative STATUS.md files across projects and generates
 mobile-scannable, WhatsApp-compatible text broadcasts for leadership.
+
+Supports:
+- ⏳ Onboarding Pending: Highlights missing setup baseline and guides leads to /status-init.
+- ⏰ Cadence Tracking: Flags projects with stale status (> 14 days) to maintain sprint accountability.
 """
 
 import sys
@@ -13,6 +17,7 @@ from datetime import datetime
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PROJECTS_DIR = REPO_ROOT / "projects"
+STALE_DAYS_THRESHOLD = 14
 
 
 def parse_status_file(status_path: Path) -> dict:
@@ -33,7 +38,10 @@ def parse_status_file(status_path: Path) -> dict:
         "blockers": "None",
         "risks": "",
         "metrics": [],
-        "repo_url": ""
+        "repo_url": "",
+        "days_ago": 0,
+        "is_onboarding_pending": False,
+        "is_stale": False
     }
 
     # Extract table metadata
@@ -56,6 +64,22 @@ def parse_status_file(status_path: Path) -> dict:
     updated_match = re.search(r"\*\*Last Updated\*\*\s*\|\s*([^|\n]+)", content)
     if updated_match:
         data["last_updated"] = updated_match.group(1).strip()
+
+    # Calculate days since last update
+    if data["last_updated"]:
+        try:
+            up_dt = datetime.strptime(data["last_updated"], "%Y-%m-%d")
+            data["days_ago"] = max(0, (datetime.now() - up_dt).days)
+            is_completed = "completed" in data["health"].lower()
+            if data["days_ago"] > STALE_DAYS_THRESHOLD and not is_completed:
+                data["is_stale"] = True
+        except ValueError:
+            pass
+
+    # Check onboarding pending
+    health_lower = data["health"].lower()
+    if "onboarding pending" in health_lower or "pending onboarding" in health_lower or "pending setup" in health_lower:
+        data["is_onboarding_pending"] = True
 
     # Extract 1. Elevator Pitch
     pitch_match = re.search(r"###\s*1\.\s*Elevator Pitch[^\n]*\n+([^#]+)", content)
@@ -124,6 +148,7 @@ def format_portfolio_digest(projects: list) -> str:
 
     total_active = len(projects)
     hard_blockers = 0
+    pending_onboarding = 0
 
     for p in projects:
         lines.append("━━━━━━━━━━━━━━━━━━━━━")
@@ -132,36 +157,55 @@ def format_portfolio_digest(projects: list) -> str:
         name = p.get("name", "Unnamed Project")
         lead = p.get("lead", "Engineering Team")
         pitch = p.get("pitch", "")
-        focus = p.get("focus", "")
-        blockers = p.get("blockers", "None")
-
-        if "block" in blockers.lower() and "none" not in blockers.lower():
-            hard_blockers += 1
+        repo_url = p.get("repo_url")
+        is_pending = p.get("is_onboarding_pending", False)
+        is_stale = p.get("is_stale", False)
+        days_ago = p.get("days_ago", 0)
 
         lines.append(f"{health} *{pid}: {name}*")
         lines.append(f"• *Lead:* {lead}")
         if pitch:
             lines.append(f"• *Pitch:* {pitch}")
 
-        # Primary Win (first bullet)
-        wins = p.get("wins", [])
-        if wins:
-            # Clean markdown bold formatting for WhatsApp (*bold* instead of **bold**)
-            first_win = re.sub(r"\*\*([^*]+)\*\*", r"*\1*", wins[0])
-            lines.append(f"• *Latest Win:* {first_win}")
+        # If Onboarding Pending: suppress routine wins and raise soft pressure alert
+        if is_pending:
+            pending_onboarding += 1
+            lines.append("• *Status Alert:* ⚠️ _Initial onboarding protocol pending from project lead._")
+            lines.append("• *Action Required:* Run `/status-init` in repo root to establish sprint baseline.")
+        else:
+            # Primary Win (first bullet)
+            wins = p.get("wins", [])
+            if wins:
+                first_win = re.sub(r"\*\*([^*]+)\*\*", r"*\1*", wins[0])
+                lines.append(f"• *Latest Win:* {first_win}")
 
-        if focus:
-            lines.append(f"• *Current Focus:* {focus}")
+            focus = p.get("focus", "")
+            if focus:
+                lines.append(f"• *Current Focus:* {focus}")
 
-        lines.append(f"• *Blockers:* {blockers}")
+            blockers = p.get("blockers", "None")
+            if "block" in blockers.lower() and "none" not in blockers.lower():
+                hard_blockers += 1
+            lines.append(f"• *Blockers:* {blockers}")
 
-        repo_url = p.get("repo_url")
+            # Staleness reminder (soft pressure to update at sprint close)
+            if is_stale:
+                lines.append(f"• *Cadence Notice:* ℹ️ _Last updated {days_ago} days ago. Awaiting sprint closeout (/status-update)._")
+
         if repo_url:
             lines.append(f"🔗 {repo_url}")
         lines.append("")
 
     lines.append("━━━━━━━━━━━━━━━━━━━━━")
-    lines.append(f"_Total Active Initiatives: {total_active} | Hard Blockers: {hard_blockers}_")
+    summary_parts = [f"Total Active Initiatives: {total_active}"]
+    if hard_blockers > 0:
+        summary_parts.append(f"⚠️ Hard Blockers: {hard_blockers}")
+    else:
+        summary_parts.append("Hard Blockers: 0")
+    if pending_onboarding > 0:
+        summary_parts.append(f"⏳ Pending Setup: {pending_onboarding}")
+
+    lines.append(f"_{' | '.join(summary_parts)}_")
     return "\n".join(lines)
 
 
@@ -172,6 +216,9 @@ def format_single_project(p: dict) -> str:
     name = p.get("name", "Unnamed Project")
     lead = p.get("lead", "Engineering Team")
     health = p.get("health", "🟢 On Track")
+    is_pending = p.get("is_onboarding_pending", False)
+    is_stale = p.get("is_stale", False)
+    days_ago = p.get("days_ago", 0)
 
     lines = [
         f"🚀 *PROJECT STATUS BRIEFING: {name} ({pid})*",
@@ -181,32 +228,47 @@ def format_single_project(p: dict) -> str:
         "━━━━━━━━━━━━━━━━━━━━━",
         "📌 *BUSINESS VALUE & PURPOSE*",
         p.get("pitch", "Deterministic engineering initiative."),
-        "",
-        "🌟 *LATEST DELIVERIES & WINS*"
+        ""
     ]
 
-    for win in p.get("wins", []):
-        cleaned_win = re.sub(r"\*\*([^*]+)\*\*", r"*\1*", win)
-        lines.append(f"• {cleaned_win}")
+    # If onboarding pending, present clear setup CTA
+    if is_pending:
+        lines.extend([
+            "⚠️ *ONBOARDING PROTOCOL PENDING*",
+            "• *Status:* Project has been registered in the Cetana Labs portfolio, but the initial status baseline (`STATUS.md`) has not yet been committed to the project codebase.",
+            "• *Lead Action Required:* Open the project repository and run `/status-init` (or commit `STATUS.md`) to establish quality metrics, sprint deliverables, and verified health.",
+            ""
+        ])
+    else:
+        lines.append("🌟 *LATEST DELIVERIES & WINS*")
+        for win in p.get("wins", []):
+            cleaned_win = re.sub(r"\*\*([^*]+)\*\*", r"*\1*", win)
+            lines.append(f"• {cleaned_win}")
 
-    lines.extend([
-        "",
-        "🎯 *CURRENT FOCUS & NEXT MILESTONE*",
-        f"• {p.get('focus', 'Active sprint execution.')}",
-        "",
-        "🛡️ *QUALITY ASSURANCE & METRICS*"
-    ])
+        lines.extend([
+            "",
+            "🎯 *CURRENT FOCUS & NEXT MILESTONE*",
+            f"• {p.get('focus', 'Active sprint execution.')}"
+        ])
 
-    for m in p.get("metrics", []):
-        cleaned_m = re.sub(r"\*\*([^*]+)\*\*", r"*\1*", m)
-        lines.append(f"• {cleaned_m}")
+        if is_stale:
+            lines.append(f"• ℹ️ *Cadence Notice:* Last updated {days_ago} days ago. Run `/status-update` at sprint closeout.")
 
-    lines.extend([
-        "",
-        "⚠️ *BLOCKERS & RISKS*",
-        f"• *Blockers:* {p.get('blockers', 'None')}",
-        f"• *Risks:* {p.get('risks', 'None identified.')}"
-    ])
+        lines.extend([
+            "",
+            "🛡️ *QUALITY ASSURANCE & METRICS*"
+        ])
+
+        for m in p.get("metrics", []):
+            cleaned_m = re.sub(r"\*\*([^*]+)\*\*", r"*\1*", m)
+            lines.append(f"• {cleaned_m}")
+
+        lines.extend([
+            "",
+            "⚠️ *BLOCKERS & RISKS*",
+            f"• *Blockers:* {p.get('blockers', 'None')}",
+            f"• *Risks:* {p.get('risks', 'None identified.')}"
+        ])
 
     repo_url = p.get("repo_url")
     if repo_url:
