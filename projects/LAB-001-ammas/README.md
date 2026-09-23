@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **Project ID** | `LAB-001` |
 | **Archetype** | 💻 Mini-App / Coding |
-| **Status** | 🟢 Active |
+| **Status** | ✅ Completed |
 | **Owner** | Eialarasu ([@agni-eialarasu](https://github.com/agni-eialarasu)) |
 | **Remote Repository** | [github.com/agni-eialarasu/ammas](https://github.com/agni-eialarasu/ammas) |
 | **Authoritative Changelog** | [github.com/agni-eialarasu/ammas/blob/main/CHANGELOG.md](https://github.com/agni-eialarasu/ammas/blob/main/CHANGELOG.md) |
