@@ -1,6 +1,7 @@
 # Cetana Labs (Master Registry & Lab Notebook)
 
 > 📖 **User Guide:** [docs/user-guide.md](docs/user-guide.md)  
+> 👥 **Project Owner Guide & AI Prompts:** [docs/project-owner-guide.md](docs/project-owner-guide.md)  
 > 📋 **Project Status Protocol (`STATUS.md`):** [docs/project-protocol.md](docs/project-protocol.md)  
 > 💬 **On-Demand Management Broadcasts:** Run `/project-status` or `/project-status <ID>` for WhatsApp-ready executive updates.
 
@@ -31,6 +32,7 @@ cetana-labs/
 │   └── generate_status.py         # 📱 Standalone WhatsApp executive status generator
 ├── docs/
 │   ├── user-guide.md              # 👤 Human Guide: Navigation, Archetypes, Statuses & AI Prompts
+│   ├── project-owner-guide.md     # 👥 Developer & Lead Guide: AI Prompts (/status-init, /status-update)
 │   └── project-protocol.md        # 📋 Authoritative STATUS.md specification
 ├── AGENTS.md                      # 🤖 Universal AI Instructions (Rules, Constraints, Workflows)
 ├── CLAUDE.md                      # 🤖 Agent pointer for Claude Code

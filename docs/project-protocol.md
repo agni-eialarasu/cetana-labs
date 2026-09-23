@@ -1,5 +1,10 @@
 # Project Status Protocol — The `STATUS.md` Standard
 
+> 👥 **For Project Leads & Developers:**  
+> Read the step-by-step developer playbook with AI prompts: **[Project Owner Guide (docs/project-owner-guide.md)](project-owner-guide.md)**.
+
+---
+
 This document defines the mandatory **`STATUS.md`** protocol for all projects tracked under **Cetana Labs**.
 
 ---
@@ -9,7 +14,7 @@ This document defines the mandatory **`STATUS.md`** protocol for all projects tr
 To ensure leadership, management, and cross-functional stakeholders receive **instant, high-fidelity, executive-ready updates** without interrupting engineering flow:
 - Every project must maintain a single, lightweight **`STATUS.md`** file at its root.
 - The AI agent parses this file on demand via `/project-status` to generate **WhatsApp-compatible broadcasts** for management in seconds.
-- Updating `STATUS.md` takes **under 2 minutes** at the close of a sprint or milestone.
+- Updating `STATUS.md` takes **under 2 minutes** at the close of a sprint or milestone using automated AI prompts.
 
 ---
 
