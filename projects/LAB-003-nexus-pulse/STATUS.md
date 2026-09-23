@@ -5,7 +5,7 @@
 | **Project ID** | LAB-003 |
 | **Project Name** | Nexus Pulse (Governed Deterministic Vertical Engine) |
 | **Current Health** | 🟢 On Track |
-| **Owner / Lead** | Hariharasubramanian |
+| **Owner / Lead** | Eialarasu |
 | **Last Updated** | 2026-09-23 |
 
 ---

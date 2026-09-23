@@ -5,7 +5,7 @@
 | **Project ID** | `LAB-003` |
 | **Archetype** | 💻 Mini-App / Coding |
 | **Status** | 🟢 Active |
-| **Owner** | Hariharasubramanian ([@eAgni-Technologies](https://github.com/eAgni-Technologies)) |
+| **Owner** | Eialarasu ([@agni-eialarasu](https://github.com/agni-eialarasu)) |
 | **Remote Repository** | [github.com/eAgni-Technologies/nexus-pulse](https://github.com/eAgni-Technologies/nexus-pulse) |
 | **Authoritative Changelog** | [github.com/eAgni-Technologies/nexus-pulse/blob/main/CHANGELOG.md](https://github.com/eAgni-Technologies/nexus-pulse/blob/main/CHANGELOG.md) |
 | **Executive Status** | [STATUS.md](STATUS.md) |
