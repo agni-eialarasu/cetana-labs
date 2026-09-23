@@ -2,7 +2,7 @@
 
 | Property | Value |
 | :--- | :--- |
-| **Project ID** | LAB-006 |
+| **Project ID** | LAB-005 |
 | **Project Name** | Nexus Beacon |
 | **Current Health** | ⏳ Onboarding Pending |
 | **Owner / Lead** | Arun Elambaram |

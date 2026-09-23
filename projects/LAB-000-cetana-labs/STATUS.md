@@ -14,19 +14,19 @@
 The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
 
 ### 2. Latest Deliveries & Business Wins
-- **Bare-Minimum Sprint Tracking**: Initialized root `BACKLOG.md` (active sprint tasks & prioritized backlog) and `CHANGELOG.md` (Keep-a-Changelog standard) for zero-overhead governance.
-- **Constructive Visibility & Cadence**: Deployed `⏳ Onboarding Pending` soft-pressure alerts and automated 14-day sprint cadence staleness tracking.
-- **Kernel Architecture Reindex**: Reindexed control hub to system zero-index `LAB-000` and filtered morning executive broadcasts to active-only client projects.
-- **AI Command Suite**: Deployed `/project-status`, `/project-add`, `/project-update`, and `/project-edit` slash commands for zero-paperwork project management.
+- **Remote Status Auto-Sync**: Deployed `--sync-remote` in status generator & cron to query external project GitHub repos directly for `STATUS.md` updates.
+- **CI Linter & Portfolio Integrity**: Built `scripts/validate_portfolio.py` ensuring 100% adherence to project schemas, directory names, and master registry links.
+- **Sequence Compaction**: Reindexed portfolio to a contiguous sequence `LAB-000` through `LAB-005` with zero ID gaps.
+- **Sprint Closeout & Backlog Protocol**: Created `/sprint-done` automated closeout skill and formalized `BACKLOG.md` & `CHANGELOG.md` tracking.
 
 ### 3. Current Focus & Next Milestone
-- Sprint 2 execution: Developing autonomous remote `STATUS.md` auto-fetcher and Option B direct webhook dispatcher for Slack/WhatsApp.
+- Sprint 2 completion: Preparing automated sprint closeout (`/sprint-done`) and evaluating webhook dispatcher backlog item.
 
 ### 4. Blockers & Risks
 - **Blockers**: None.
 - **Key Risks**: Ensuring external project leads regularly invoke `/status-update` at sprint close.
 
 ### 5. Verified Quality Metrics
-- 100% test coverage of status generator across all registered projects.
-- Automated GitHub Actions weekday cron broadcast active.
+- 6/6 projects passing portfolio structural integrity and protocol checks (`validate_portfolio.py`).
+- Automated weekday morning GitHub Actions cron broadcast with remote sync active.
 - Clean trunk-based git synchronization on `main`.

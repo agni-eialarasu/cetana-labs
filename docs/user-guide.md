@@ -28,8 +28,8 @@ projects/
 ├── LAB-001-ammas/         # ✅ Completed: Edge Computer Vision & GenBI System
 ├── LAB-002-wrenai-eval/   # ✅ Completed: Semantic Modeling Research Spike
 ├── LAB-003-nexus-pulse/   # 🟢 Active: Enterprise Operations & Margin Engine
-├── LAB-005-zerobea-ai/    # ⏳ Onboarding: AI Security Control Plane
-└── LAB-006-nexus-beacon/  # ⏳ Onboarding: Operational Alert Service
+├── LAB-004-zerobea-ai/    # ⏳ Onboarding: AI Security Control Plane
+└── LAB-005-nexus-beacon/  # ⏳ Onboarding: Operational Alert Service
 ```
 
 Each project folder contains standard documents:
@@ -73,7 +73,7 @@ You can execute the following standardized slash commands directly in chat with 
 
 ### 📱 `/project-status [ID]` (Management Broadcast)
 Generates an emoji-rich, mobile-friendly WhatsApp broadcast block for leadership:
-- `/project-status` $\rightarrow$ Portfolio digest of **active, non-completed product initiatives** (`LAB-003`, `LAB-005`, `LAB-006`).
+- `/project-status` $\rightarrow$ Portfolio digest of **active, non-completed product initiatives** (`LAB-003`, `LAB-004`, `LAB-005`).
 - `/project-status LAB-000` $\rightarrow$ Deep-dive briefing on the Cetana Labs Control Hub kernel.
 - `/project-status LAB-003` $\rightarrow$ Deep-dive briefing on a single project.
 
@@ -99,9 +99,8 @@ Modifies project ownership, titles, repository links, or archives an initiative:
 
 This repository includes a scheduled GitHub Actions workflow (`.github/workflows/project-status-cron.yml`):
 - **Schedule**: Weekdays (Monday–Friday) at 9:30 AM IST (4:00 AM UTC).
-- **Execution**: Runs `python3 scripts/generate_status.py --github-summary`.
+- **Execution**: Runs `python3 scripts/generate_status.py --sync-remote --github-summary`.
 - **Output (Option A)**: Publishes the WhatsApp-ready text directly on the GitHub Job Summary page for 1-click copy-pasting.
-- **Future Extension (Option B)**: Directly dispatches to a team WhatsApp / Slack incoming webhook (`TSK-013`).
 
 ---
 
@@ -112,7 +111,7 @@ We follow a simple **direct-to-`main`** commit workflow without branches or PR o
 ### Commit Message Prefixes
 | Type | Prefix Format | Example |
 | :--- | :--- | :--- |
-| **New Project** | `feat(<id>): init <name>` | `feat(lab-006): init nexus-beacon project` |
+| **New Project** | `feat(<id>): init <name>` | `feat(lab-005): init nexus-beacon project` |
 | **Milestone / Journal** | `log(<id>): <summary>` | `log(lab-001): record phase 3 genbi milestone` |
 | **Status Update** | `status(<id>): <summary>` | `status(lab-003): update health to on-track after signals merge` |
 | **Project Edit** | `chore(<id>): update <attribute>` | `chore(lab-003): update lead to Eialarasu` |

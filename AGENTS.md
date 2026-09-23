@@ -19,7 +19,7 @@ Your role is to keep this repository structured, well-documented, clean, and up 
 4. **Flat Directory & Sequential ID Scheme**:
    - Central control hub is indexed as system kernel **`LAB-000`** (`projects/LAB-000-cetana-labs/`).
    - All other projects reside in `projects/LAB-XXX-<slug>/`.
-   - `XXX` is a zero-padded sequential 3-digit number (e.g. `LAB-001`, `LAB-002`, `LAB-003`, `LAB-005`, `LAB-006`).
+   - `XXX` is a zero-padded sequential 3-digit number (e.g. `LAB-001`, `LAB-002`, `LAB-003`, `LAB-004`, `LAB-005`).
    - `<slug>` is lowercase, hyphen-separated, alphanumeric without spaces.
 5. **Synchronized Master Registry & Backlog**:
    - Whenever a project is created, edited, or changes health, the table in [README.md](README.md) MUST be updated immediately.
@@ -63,6 +63,7 @@ For detailed step-by-step procedures, refer to `.agents/skills/`:
 - **`/project-add <url_or_title>`**: Scaffolds next project ID, inspects remote repo, assigns `⏳ Onboarding Pending`, registers in `README.md`, and commits.
 - **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, and appends a milestone entry to `journal.md`.
 - **`/project-edit <ID>`**: Modifies owner, title, remote URL, or lifecycle health across project files and master registry.
+- **`/sprint-done [sprint_id]`**: Closes sprint, archives delivered tasks, bumps CHANGELOG, and refreshes STATUS.md.
 - **`log-milestone`**: Appends milestone entries directly to a project's `journal.md`.
 - **`commit-changes`**: Stages and commits changes directly to `main` with standardized semantic commit prefixes.
 

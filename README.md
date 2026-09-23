@@ -21,10 +21,10 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 | **`LAB-001`** | **[AAMAS](projects/LAB-001-ammas/README.md)** (Autism Activity Monitor) | 💻 Mini-App | `✅ Completed` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [STATUS.md](projects/LAB-001-ammas/STATUS.md) |
 | **`LAB-002`** | **[WrenAI Evaluation](projects/LAB-002-wrenai-eval/README.md)** (Semantic GenBI) | 📑 Research | `✅ Completed` | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [STATUS.md](projects/LAB-002-wrenai-eval/STATUS.md) |
 | **`LAB-003`** | **[Nexus Pulse](projects/LAB-003-nexus-pulse/README.md)** (Vertical Engine) | 💻 Mini-App | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [STATUS.md](projects/LAB-003-nexus-pulse/STATUS.md) |
-| **`LAB-005`** | **[Zerobea.ai](projects/LAB-005-zerobea-ai/README.md)** (AI Security Control Plane) | 💻 Mini-App | `⏳ Onboarding Pending` | Abishek Singhavi | [GitHub Repo](https://github.com/zerobeadotai/zerobea.ai) | [STATUS.md](projects/LAB-005-zerobea-ai/STATUS.md) |
-| **`LAB-006`** | **[Nexus Beacon](projects/LAB-006-nexus-beacon/README.md)** (Operational Alert Service) | 💻 Mini-App | `⏳ Onboarding Pending` | Arun Elambaram | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-beacon) | [STATUS.md](projects/LAB-006-nexus-beacon/STATUS.md) |
+| **`LAB-004`** | **[Zerobea.ai](projects/LAB-004-zerobea-ai/README.md)** (AI Security Control Plane) | 💻 Mini-App | `⏳ Onboarding Pending` | Abishek Singhavi | [GitHub Repo](https://github.com/zerobeadotai/zerobea.ai) | [STATUS.md](projects/LAB-004-zerobea-ai/STATUS.md) |
+| **`LAB-005`** | **[Nexus Beacon](projects/LAB-005-nexus-beacon/README.md)** (Operational Alert Service) | 💻 Mini-App | `⏳ Onboarding Pending` | Arun Elambaram | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-beacon) | [STATUS.md](projects/LAB-005-nexus-beacon/STATUS.md) |
 
-> ℹ️ *Note: `LAB-000` is the central control plane kernel. Routine morning portfolio broadcasts report active client/product initiatives (`LAB-003`, `LAB-005`, `LAB-006`). To inspect the Control Hub status specifically, run `/project-status LAB-000`.*
+> ℹ️ *Note: `LAB-000` is the central control plane kernel. Routine morning portfolio broadcasts report active client/product initiatives (`LAB-003`, `LAB-004`, `LAB-005`). To inspect the Control Hub status specifically, run `/project-status LAB-000`.*
 
 ---
 
@@ -39,7 +39,8 @@ cetana-labs/
 ├── .github/workflows/
 │   └── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
 ├── scripts/
-│   └── generate_status.py         # 📱 Standalone WhatsApp executive status generator
+│   ├── generate_status.py         # 📱 Standalone WhatsApp executive status generator
+│   └── validate_portfolio.py      # 🛡️ CI linter & project structure validator
 ├── docs/
 │   ├── user-guide.md              # 👤 Human Guide: Navigation, Archetypes, Statuses & AI Prompts
 │   ├── project-owner-guide.md     # 👥 Developer & Lead Guide: AI Prompts (/status-init, /status-update)
@@ -51,6 +52,7 @@ cetana-labs/
 │   ├── project-add/               # Onboards new initiatives via remote inspection (/project-add)
 │   ├── project-update/            # Logs delivery wins, health & milestones (/project-update)
 │   ├── project-edit/              # Modifies metadata, leads & lifecycle states (/project-edit)
+│   ├── sprint-done/               # Closes sprint, archives tasks & bumps changelog (/sprint-done)
 │   ├── log-milestone/             # Appends milestone entries to journal
 │   └── commit-changes/            # Standardized trunk-based git commits
 ├── templates/                     # Standardized scaffolds for rapid onboarding
@@ -59,8 +61,8 @@ cetana-labs/
     ├── LAB-001-ammas/             # Behavioral CV Edge System & GenBI Analytics
     ├── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
     ├── LAB-003-nexus-pulse/       # Governed Operational & Financial Intelligence Engine
-    ├── LAB-005-zerobea-ai/        # AI Security Control Plane & Governed Gateway
-    └── LAB-006-nexus-beacon/      # Telemetry & Operational Alert Service
+    ├── LAB-004-zerobea-ai/        # AI Security Control Plane & Governed Gateway
+    └── LAB-005-nexus-beacon/      # Telemetry & Operational Alert Service
 ```
 
 ---

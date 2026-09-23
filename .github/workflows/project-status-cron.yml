@@ -25,25 +25,15 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Run Portfolio Structural Validator
+        run: |
+          python3 scripts/validate_portfolio.py
+
       - name: Generate WhatsApp Executive Summary
         id: generate-summary
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TARGET="${{ github.event.inputs.project_id }}"
           echo "Generating executive status for target: ${TARGET:-ALL}"
-          python3 scripts/generate_status.py ${TARGET} --github-summary
-
-      # -------------------------------------------------------------
-      # Future Extension (Option B): Direct Webhook Delivery
-      # When you are ready to configure a WhatsApp / Slack / Telegram
-      # webhook, uncomment the step below and set WHATSAPP_WEBHOOK_URL secret.
-      # -------------------------------------------------------------
-      # - name: Dispatch to Team Channel (Option B)
-      #   if: env.WHATSAPP_WEBHOOK_URL != ''
-      #   env:
-      #     WHATSAPP_WEBHOOK_URL: ${{ secrets.WHATSAPP_WEBHOOK_URL }}
-      #   run: |
-      #     python3 -c "
-      #     import os, urllib.request, json
-      #     url = os.environ.get('WHATSAPP_WEBHOOK_URL')
-      #     # payload dispatch logic
-      #     "
+          python3 scripts/generate_status.py ${TARGET} --sync-remote --github-summary

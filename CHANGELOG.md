@@ -8,10 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [Unreleased]
-### Planned
-- Autonomous remote `STATUS.md` fetching from project GitHub repositories.
-- Option B direct webhook dispatcher for WhatsApp / Slack channels.
-- Single-page static web dashboard for portfolio-level visualization.
+### Added
+- **Remote `STATUS.md` Auto-Fetcher**: Added `--sync-remote` flag to `scripts/generate_status.py` using `gh api` and raw GitHub fallbacks to automatically fetch the latest `STATUS.md` committed by project leads.
+- **CI Linter & Portfolio Integrity Validator**: Created `scripts/validate_portfolio.py` to enforce strict directory naming, required documentation files, health badges, and master README sync.
+- **Automated Sprint Closeout Skill**: Authored `/sprint-done` skill playbook (`.agents/skills/sprint-done/SKILL.md`) for 1-click sprint archiving and changelog bumping.
+
+### Changed
+- **Compacted Project ID Sequence**: Reindexed `LAB-005` (Zerobea.ai) $\rightarrow$ `LAB-004` and `LAB-006` (Nexus Beacon) $\rightarrow$ `LAB-005` to maintain a continuous, contiguous ID sequence (`LAB-000` through `LAB-005`).
+- **Moved to Backlog**: Moved Option B webhook dispatch to future sprint backlog (`BK-001`).
 
 ---
 
@@ -20,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Constructive Visibility Protocol**: Implemented `⏳ Onboarding Pending` alert to hold project leads accountable for running `/status-init`.
 - **Sprint Cadence Staleness Tracking**: Automated 14-day staleness detection in `scripts/generate_status.py` to maintain bi-weekly update discipline.
 - **Bare-Minimum Sprint Tracking**: Introduced root `BACKLOG.md` and `CHANGELOG.md` to maintain planned sprint items, prioritized backlogs, and historical releases.
-- **New Initiatives Onboarded**: Registered `LAB-005` (Zerobea.ai) and `LAB-006` (Nexus Beacon) into the portfolio.
+- **New Initiatives Onboarded**: Registered `LAB-004` (Zerobea.ai) and `LAB-005` (Nexus Beacon) into the portfolio.
 
 ### Changed
 - **Kernel Architecture Reindex**: Reindexed Cetana Labs control hub from `LAB-004` to system zero-index `LAB-000`.

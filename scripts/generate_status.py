@@ -8,12 +8,16 @@ Filters:
 - Portfolio digest: Reports only active, non-completed product engineering initiatives.
   (Excludes completed projects and LAB-000 control hub kernel by default).
 - Single project lookup: Reports any project by ID (e.g. LAB-000, LAB-001, etc.).
+- Remote sync: Optional --sync-remote to pull latest STATUS.md from GitHub repositories.
 - Soft pressure: Flags pending onboarding and stale statuses (> 14 days).
 """
 
 import sys
 import os
 import re
+import base64
+import subprocess
+import urllib.request
 from pathlib import Path
 from datetime import datetime
 
@@ -23,12 +27,43 @@ STALE_DAYS_THRESHOLD = 14
 SYSTEM_CONTROL_PLANE_ID = "LAB-000"
 
 
-def parse_status_file(status_path: Path) -> dict:
-    """Parses a STATUS.md file into structured fields."""
-    if not status_path.exists():
-        return {}
+def fetch_remote_status(repo_url: str) -> str:
+    """Attempts to fetch remote STATUS.md from a GitHub repository."""
+    match = re.search(r"github\.com/([a-zA-Z0-9_.-]+)/([a-zA-Z0-9_.-]+)", repo_url)
+    if not match:
+        return ""
+    org, repo = match.group(1), match.group(2).rstrip(".git")
 
-    content = status_path.read_text(encoding="utf-8")
+    # 1. Try using GitHub CLI (gh)
+    try:
+        cmd = ["gh", "api", f"repos/{org}/{repo}/contents/STATUS.md", "--jq", ".content"]
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5)
+        if res.returncode == 0 and res.stdout.strip():
+            return base64.b64decode(res.stdout.strip()).decode("utf-8")
+    except Exception:
+        pass
+
+    # 2. Fallback to urllib with raw.githubusercontent.com
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    headers = {"User-Agent": "Cetana-Labs-Sync/1.0"}
+    if token:
+        headers["Authorization"] = f"token {token}"
+
+    for branch in ["main", "master"]:
+        raw_url = f"https://raw.githubusercontent.com/{org}/{repo}/{branch}/STATUS.md"
+        try:
+            req = urllib.request.Request(raw_url, headers=headers)
+            with urllib.request.urlopen(req, timeout=5) as response:
+                if response.status == 200:
+                    return response.read().decode("utf-8")
+        except Exception:
+            continue
+
+    return ""
+
+
+def parse_status_content(content: str, readme_content: str = "") -> dict:
+    """Parses raw text content of a STATUS.md file into structured fields."""
     data = {
         "id": "",
         "name": "",
@@ -126,10 +161,8 @@ def parse_status_file(status_path: Path) -> dict:
             if cleaned.startswith("- ") or cleaned.startswith("* "):
                 data["metrics"].append(cleaned[2:].strip())
 
-    # Check companion README.md for remote URL
-    readme_path = status_path.parent / "README.md"
-    if readme_path.exists():
-        readme_content = readme_path.read_text(encoding="utf-8")
+    # Check companion README.md content for remote URL
+    if readme_content:
         url_match = re.search(r"\[(?:GitHub Repo|Remote Repository|Repo)\]\((https://github\.com/[^)]+)\)", readme_content)
         if url_match:
             data["repo_url"] = url_match.group(1).strip()
@@ -137,6 +170,30 @@ def parse_status_file(status_path: Path) -> dict:
             url_match2 = re.search(r"https://github\.com/[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+", readme_content)
             if url_match2:
                 data["repo_url"] = url_match2.group(0).strip().rstrip(".)")
+
+    return data
+
+
+def parse_status_file(status_path: Path, sync_remote: bool = False) -> dict:
+    """Parses a STATUS.md file, optionally pulling latest from GitHub remote."""
+    if not status_path.exists():
+        return {}
+
+    content = status_path.read_text(encoding="utf-8")
+    readme_path = status_path.parent / "README.md"
+    readme_content = readme_path.read_text(encoding="utf-8") if readme_path.exists() else ""
+
+    data = parse_status_content(content, readme_content)
+
+    if sync_remote and data.get("repo_url"):
+        remote_status = fetch_remote_status(data["repo_url"])
+        if remote_status and len(remote_status.strip()) > 50:
+            # Overwrite local cache if valid remote status was found
+            try:
+                status_path.write_text(remote_status, encoding="utf-8")
+                data = parse_status_content(remote_status, readme_content)
+            except Exception:
+                pass
 
     return data
 
@@ -150,7 +207,6 @@ def format_portfolio_digest(projects: list) -> str:
         ""
     ]
 
-    # Filter: exclude control hub kernel (LAB-000) and completed projects from daily digest
     active_projects = [
         p for p in projects
         if p.get("id", "").upper() != SYSTEM_CONTROL_PLANE_ID and not p.get("is_completed", False)
@@ -177,7 +233,6 @@ def format_portfolio_digest(projects: list) -> str:
         if pitch:
             lines.append(f"• *Pitch:* {pitch}")
 
-        # If Onboarding Pending: suppress routine wins and raise soft pressure alert
         if is_pending:
             pending_onboarding += 1
             lines.append("• *Status Alert:* ⚠️ _Initial onboarding protocol pending from project lead._")
@@ -293,6 +348,7 @@ def format_single_project(p: dict) -> str:
 def main():
     target_id = None
     output_to_gh_summary = "--github-summary" in sys.argv
+    sync_remote = "--sync-remote" in sys.argv
 
     args = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
     if args:
@@ -300,13 +356,12 @@ def main():
         if target_id == "ALL":
             target_id = None
 
-    # Discover all projects
     project_dirs = sorted([d for d in PROJECTS_DIR.iterdir() if d.is_dir() and d.name.startswith("LAB-")])
     parsed_projects = []
 
     for pdir in project_dirs:
         status_file = pdir / "STATUS.md"
-        data = parse_status_file(status_file)
+        data = parse_status_file(status_file, sync_remote=sync_remote)
         if data:
             parsed_projects.append(data)
 
@@ -325,7 +380,6 @@ def main():
 
     print(output)
 
-    # If requested or in GitHub Actions, write to GITHUB_STEP_SUMMARY
     gh_summary_file = os.environ.get("GITHUB_STEP_SUMMARY")
     if output_to_gh_summary and gh_summary_file:
         with open(gh_summary_file, "a", encoding="utf-8") as f:

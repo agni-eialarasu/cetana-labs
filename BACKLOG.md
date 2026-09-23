@@ -10,7 +10,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | :--- | :--- |
 | **Sprint ID** | `SPRINT-02` |
 | **Duration** | 2026-09-24 to 2026-10-08 (2 Weeks) |
-| **Sprint Goal** | Implement bare-minimum sprint tracking, enhance automated remote sync, and prototype webhook dispatches. |
+| **Sprint Goal** | Implement bare-minimum sprint tracking, enhance automated remote sync, portfolio integrity validation, and sprint closeout tooling. |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -20,9 +20,10 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | `TSK-010` | Bare-minimum sprint tracking system (`BACKLOG.md` & `CHANGELOG.md`) | P0 | Eialarasu | ✅ Done | 2026-09-24 |
 | `TSK-011` | Synchronize current `LAB-000` status with sprint tracking milestone | P0 | Eialarasu | ✅ Done | 2026-09-24 |
-| `TSK-012` | Autonomous remote `STATUS.md` auto-fetcher (querying project repos directly) | P1 | Eialarasu | 📋 Planned | 2026-10-01 |
-| `TSK-013` | Option B: Slack / WhatsApp incoming webhook dispatch prototype | P1 | Eialarasu | 📋 Planned | 2026-10-05 |
-| `TSK-014` | Add automated sprint closeout skill (`/sprint-done` for Cetana Labs) | P2 | Eialarasu | 📋 Planned | 2026-10-08 |
+| `TSK-012` | Autonomous remote `STATUS.md` auto-fetcher (`--sync-remote`) | P1 | Eialarasu | ✅ Done | 2026-09-24 |
+| `TSK-014` | Add automated sprint closeout skill (`/sprint-done` for Cetana Labs) | P1 | Eialarasu | ✅ Done | 2026-09-24 |
+| `TSK-015` | Automated CI linter & portfolio integrity validator (`validate_portfolio.py`) | P1 | Eialarasu | ✅ Done | 2026-09-24 |
+| `TSK-016` | Compact project ID sequence (`LAB-000` through `LAB-005`) | P1 | Eialarasu | ✅ Done | 2026-09-24 |
 
 ---
 
@@ -30,10 +31,11 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Backlog ID | Proposed Initiative / Capability | Priority | Archetype | Target Sprint | Notes |
 | :---: | :--- | :---: | :---: | :---: | :--- |
-| `BK-001` | Portfolio Web Dashboard | P2 | Mini-App | Sprint 3 | Static single-page HTML/JS view hosted via GitHub Pages |
-| `BK-002` | Automated Lead Ping Engine | P2 | Automation | Sprint 3 | Auto-creates GitHub issue or Slack alert when status is stale > 14 days |
-| `BK-003` | Multi-Repository PR Cross-Referencer | P3 | Integration | Sprint 4 | Link pull requests across sub-projects directly into Cetana journal |
-| `BK-004` | PDF Executive Digest Export | P3 | Tooling | Backlog | One-click export for board/investor reporting |
+| `BK-001` | Option B: Slack / WhatsApp incoming webhook dispatch | P1 | Automation | Sprint 3 | Direct channel POSTing from GitHub Actions cron via secret URL |
+| `BK-002` | Portfolio Web Dashboard | P2 | Mini-App | Sprint 3 | Static single-page HTML/JS view hosted via GitHub Pages |
+| `BK-003` | Automated Lead Ping Engine | P2 | Automation | Sprint 3 | Auto-creates GitHub issue or Slack alert when status is stale > 14 days |
+| `BK-004` | Multi-Repository PR Cross-Referencer | P3 | Integration | Sprint 4 | Link pull requests across sub-projects directly into Cetana journal |
+| `BK-005` | PDF Executive Digest Export | P3 | Tooling | Backlog | One-click export for board/investor reporting |
 
 ---
 
@@ -47,7 +49,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
   - Constructive Visibility (`⏳ Onboarding Pending`) and 14-day staleness tracking.
   - Reindexed control hub to system zero-index `LAB-000`.
   - Slash commands: `/project-status`, `/project-add`, `/project-update`, `/project-edit`.
-  - Onboarded `LAB-005` (Zerobea.ai) and `LAB-006` (Nexus Beacon).
+  - Onboarded `LAB-004` (Zerobea.ai) and `LAB-005` (Nexus Beacon).
 
 ### Sprint 0: Foundation & Initial Archetypes (2026-09-06 to 2026-09-09)
 - **Goal**: Establish central engineering hub, directory conventions, and initial templates.

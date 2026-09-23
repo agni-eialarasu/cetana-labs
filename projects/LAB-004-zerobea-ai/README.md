@@ -1,8 +1,8 @@
-# LAB-005: Zerobea.ai — AI Security Control Plane
+# LAB-004: Zerobea.ai — AI Security Control Plane
 
 | Property | Value |
 | :--- | :--- |
-| **Project ID** | `LAB-005` |
+| **Project ID** | `LAB-004` |
 | **Archetype** | 💻 Mini-App / Coding |
 | **Status** | ⏳ Onboarding Pending |
 | **Owner** | Abishek Singhavi |

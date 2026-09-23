@@ -1,4 +1,4 @@
-# LAB-006: Nexus Beacon — Project Journal & Timeline
+# LAB-005: Nexus Beacon — Project Journal & Timeline
 
 ## 📌 Phase Summary
 
@@ -12,8 +12,11 @@
 
 ## 🗓️ Milestone Log
 
+### [2026-09-23] Milestone: Reindexed to LAB-005
+- **Context**: Reindexed from LAB-006 to LAB-005 to maintain contiguous ID sequence following kernel zero-indexing.
+
 ### [2026-09-23] Milestone: Onboarding into Cetana Labs
-- **Context**: Registered `nexus-beacon` into Cetana Labs registry as `LAB-006` under ownership of Arun Elambaram.
+- **Context**: Registered `nexus-beacon` into Cetana Labs registry as `LAB-005` under ownership of Arun Elambaram.
 - **Key Deliverables**:
   - Remote repository linked at [github.com/eAgni-Technologies/nexus-beacon](https://github.com/eAgni-Technologies/nexus-beacon).
   - Status initialized to `⏳ Onboarding Pending` awaiting lead initialization via `/status-init`.

@@ -2,8 +2,8 @@
 
 | Property | Value |
 | :--- | :--- |
-| **Project ID** | LAB-005 |
-| **Project Name** | Zerobea.ai (AI Security Control Plane) |
+| **Project ID** | LAB-004 |
+| **Project Name** | Zerobea.ai |
 | **Current Health** | ⏳ Onboarding Pending |
 | **Owner / Lead** | Abishek Singhavi |
 | **Last Updated** | 2026-09-23 |

@@ -1,8 +1,8 @@
-# LAB-006: Nexus Beacon
+# LAB-005: Nexus Beacon
 
 | Property | Value |
 | :--- | :--- |
-| **Project ID** | `LAB-006` |
+| **Project ID** | `LAB-005` |
 | **Archetype** | 💻 Mini-App / Coding |
 | **Status** | ⏳ Onboarding Pending |
 | **Owner** | Arun Elambaram |
