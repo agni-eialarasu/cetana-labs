@@ -54,21 +54,46 @@ projects/LAB-XXX-<name>/
 
 ---
 
-## 4. The `STATUS.md` Protocol & Management Broadcasts
+## 4. The AI Command Suite (`/project-*`)
 
-Every project adheres to the **[Project Status Protocol (docs/project-protocol.md)](project-protocol.md)**.
-Whenever leadership asks for an update, you can generate a **WhatsApp-compatible message** in seconds:
+You can execute the following standardized slash commands directly in chat with your AI agent:
 
-- **All Projects Digest**: `/project-status` or `/project-status all`
-- **Specific Project Deep-Dive**: `/project-status LAB-003`
+### 📱 `/project-status [ID]` (Management Broadcast)
+Generates an emoji-rich, mobile-friendly WhatsApp broadcast block for leadership:
+- `/project-status` $\rightarrow$ Portfolio digest of all active projects.
+- `/project-status LAB-003` $\rightarrow$ Deep dive briefing on a single project.
 
-The AI agent parses `STATUS.md` across repositories and formats a scannable, mobile-ready update.
+### ➕ `/project-add <repo_url_or_title>` (Onboard Project)
+Scaffolds the next sequential `LAB-XXX` directory, fetches remote repository metadata, initializes `STATUS.md`, registers the project in the master table, and commits to `main`:
+- `/project-add https://github.com/org/repo`
+- `/project-add "Edge Model Benchmark" research Eialarasu`
+
+### 🔄 `/project-update <ID>` (Log Wins & Health)
+Records delivery wins, health updates, or blockers in `STATUS.md` and appends a milestone entry to `journal.md`:
+- `/project-update LAB-003` (Auto-inspects remote repository commits)
+- `/project-update LAB-001 "Completed MediaPipe multi-person accuracy tuning"`
+- `/project-update LAB-003 --health at-risk --blocker "Awaiting staging API key"`
+
+### ✏️ `/project-edit <ID>` (Administrative Metadata)
+Modifies project ownership, titles, repository links, or archives an initiative:
+- `/project-edit LAB-003 --owner "Hariharasubramanian"`
+- `/project-edit LAB-002 --health completed`
 
 ---
 
-## 5. Commit Guidelines (Trunk-Based / Main Only)
+## 5. Periodic Automated Broadcasts (GitHub Actions)
 
-Since this repository is maintained primarily by one maintainer with read-only collaborators, we follow a simple **direct-to-`main`** commit workflow without branches or PR overhead.
+This repository includes a scheduled GitHub Actions workflow (`.github/workflows/project-status-cron.yml`):
+- **Schedule**: Weekdays (Monday–Friday) at 9:30 AM IST (4:00 AM UTC).
+- **Execution**: Runs `scripts/generate_status.py --github-summary`.
+- **Output (Option A)**: Publishes the WhatsApp-ready text directly on the GitHub Job Summary page for 1-click copy-pasting.
+- **Future Extension (Option B)**: Directly dispatches to a team WhatsApp / Slack webhook once configured.
+
+---
+
+## 6. Commit Guidelines (Trunk-Based / Main Only)
+
+We follow a simple **direct-to-`main`** commit workflow without branches or PR overhead.
 
 ### Commit Message Prefixes
 | Type | Prefix Format | Example |
@@ -76,25 +101,5 @@ Since this repository is maintained primarily by one maintainer with read-only c
 | **New Project** | `feat(<id>): init <name>` | `feat(lab-002): scaffold edge-llm-eval research project` |
 | **Milestone / Journal** | `log(<id>): <summary>` | `log(lab-001): record phase 3 genbi milestone` |
 | **Status Update** | `status(<id>): <summary>` | `status(lab-003): update health to on-track after signals merge` |
-| **Repo / Global Structure** | `docs: <summary>` or `chore: <summary>` | `docs: update user-guide and template schemas` |
-
----
-
-## 6. Working with AI Agents in this Repo
-
-This repository is optimized for AI-assisted maintenance. You can use any AI tool (Antigravity, Cursor, Claude Code, GitHub Copilot, ChatGPT, etc.) to perform clerical and documentation work.
-
-Here are copy-pasteable prompt templates:
-
-### A. Generating WhatsApp Status Updates
-> *"/project-status"*  
-> *"/project-status LAB-003"*
-
-### B. Creating a New Project
-> *"Create a new [Mini-App / Research / Data / Verification] project titled '[Project Name]'. Objective: [Brief summary]. Owner: [Name]. Remote repo: [URL if applicable]."*
-
-### C. Logging a Milestone & Committing
-> *"Add a milestone to project [LAB-XXX]. Title: [Milestone Title]. Context: [What was accomplished]. Please commit the changes directly to main."*
-
-### D. Updating Project Status
-> *"Update STATUS.md for [LAB-XXX] with latest win: [Description]. Health: 🟢 On Track."*
+| **Project Edit** | `chore(<id>): update <attribute>` | `chore(lab-003): update lead to Hari` |
+| **Global Docs & Config** | `docs: <summary>` or `chore: <summary>` | `docs: update user-guide and template schemas` |

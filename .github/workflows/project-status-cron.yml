@@ -1,0 +1,49 @@
+name: Project Status Broadcast (Cron & Dispatch)
+
+on:
+  schedule:
+    # 4:00 AM UTC = 9:30 AM IST, Monday through Friday
+    - cron: '0 4 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: 'Project ID (optional, e.g. LAB-003, or leave blank for ALL)'
+        required: false
+        default: ''
+
+jobs:
+  status-broadcast:
+    name: Generate Executive Status Broadcast
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Cetana Labs
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate WhatsApp Executive Summary
+        id: generate-summary
+        run: |
+          TARGET="${{ github.event.inputs.project_id }}"
+          echo "Generating executive status for target: ${TARGET:-ALL}"
+          python3 scripts/generate_status.py ${TARGET} --github-summary
+
+      # -------------------------------------------------------------
+      # Future Extension (Option B): Direct Webhook Delivery
+      # When you are ready to configure a WhatsApp / Slack / Telegram
+      # webhook, uncomment the step below and set WHATSAPP_WEBHOOK_URL secret.
+      # -------------------------------------------------------------
+      # - name: Dispatch to Team Channel (Option B)
+      #   if: env.WHATSAPP_WEBHOOK_URL != ''
+      #   env:
+      #     WHATSAPP_WEBHOOK_URL: ${{ secrets.WHATSAPP_WEBHOOK_URL }}
+      #   run: |
+      #     python3 -c "
+      #     import os, urllib.request, json
+      #     url = os.environ.get('WHATSAPP_WEBHOOK_URL')
+      #     # payload dispatch logic
+      #     "

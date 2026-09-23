@@ -25,6 +25,10 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 ```text
 cetana-labs/
 ├── README.md                      # Master Dashboard & Project Registry (You are here)
+├── .github/workflows/
+│   └── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
+├── scripts/
+│   └── generate_status.py         # 📱 Standalone WhatsApp executive status generator
 ├── docs/
 │   ├── user-guide.md              # 👤 Human Guide: Navigation, Archetypes, Statuses & AI Prompts
 │   └── project-protocol.md        # 📋 Authoritative STATUS.md specification
@@ -32,7 +36,9 @@ cetana-labs/
 ├── CLAUDE.md                      # 🤖 Agent pointer for Claude Code
 ├── .agents/skills/                # 🤖 Reusable AI playbooks
 │   ├── project-status/            # Generates WhatsApp-ready updates on-demand (/project-status)
-│   ├── create-lab-project/        # Scaffolds new projects & registers in master table
+│   ├── project-add/               # Onboards new initiatives via remote inspection (/project-add)
+│   ├── project-update/            # Logs delivery wins, health & milestones (/project-update)
+│   ├── project-edit/              # Modifies metadata, leads & lifecycle states (/project-edit)
 │   ├── log-milestone/             # Appends milestone entries to journal
 │   └── commit-changes/            # Standardized trunk-based git commits
 ├── templates/                     # Standardized scaffolds for rapid onboarding
