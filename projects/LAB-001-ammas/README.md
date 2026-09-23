@@ -7,7 +7,9 @@
 | **Status** | 🟢 Active |
 | **Owner** | Eialarasu ([@agni-eialarasu](https://github.com/agni-eialarasu)) |
 | **Remote Repository** | [github.com/agni-eialarasu/ammas](https://github.com/agni-eialarasu/ammas) |
-| **Last Updated** | 2026-09-06 |
+| **Authoritative Changelog** | [github.com/agni-eialarasu/ammas/blob/main/CHANGELOG.md](https://github.com/agni-eialarasu/ammas/blob/main/CHANGELOG.md) |
+| **Executive Status** | [STATUS.md](STATUS.md) |
+| **Last Updated** | 2026-09-23 |
 
 ---
 
@@ -44,5 +46,6 @@ flowchart TD
 ---
 
 ## 3. Quick Links & Documentation
-- 📘 [Operational Runbook](runbook.md) — Local setup, test suite, camera run, video ingestion, and web server commands.
+- 📋 [Executive Status (STATUS.md)](STATUS.md) — 30-line executive status, health, and latest deliverables.
 - 🗓️ [Project Journal](journal.md) — Phase history, architectural decisions, and milestone timeline.
+- 📘 [Operational Runbooks](https://github.com/agni-eialarasu/ammas/blob/main/README.md) — Maintained directly in the project codebase.

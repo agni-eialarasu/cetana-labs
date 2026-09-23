@@ -7,7 +7,9 @@
 | **Status** | 🟢 Active |
 | **Owner** | Hariharasubramanian ([@eAgni-Technologies](https://github.com/eAgni-Technologies)) |
 | **Remote Repository** | [github.com/eAgni-Technologies/nexus-pulse](https://github.com/eAgni-Technologies/nexus-pulse) |
-| **Last Updated** | 2026-09-09 |
+| **Authoritative Changelog** | [github.com/eAgni-Technologies/nexus-pulse/blob/main/CHANGELOG.md](https://github.com/eAgni-Technologies/nexus-pulse/blob/main/CHANGELOG.md) |
+| **Executive Status** | [STATUS.md](STATUS.md) |
+| **Last Updated** | 2026-09-23 |
 
 ---
 
@@ -49,5 +51,6 @@ flowchart LR
 ---
 
 ## 4. Documentation Links
-- 📘 [Operational Runbook](runbook.md) — Fast start, testing commands, golden fixture usage, and troubleshooting.
+- 📋 [Executive Status (STATUS.md)](STATUS.md) — 30-line executive status, health, and latest deliverables.
 - 🗓️ [Project Journal](journal.md) — Phase history, completed increments (T-001 through T-016), and milestone timeline.
+- 📘 [Operational Runbooks](https://github.com/eAgni-Technologies/nexus-pulse/tree/main/docs/runbooks) — Maintained directly in the project codebase (`docs/runbooks/SCRUM1_RUNBOOK.md`).

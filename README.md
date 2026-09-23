@@ -1,7 +1,8 @@
 # Cetana Labs (Master Registry & Lab Notebook)
 
-> 📖 **Looking for how to use this repository, navigate projects, or prompt AI agents?**  
-> Check out the **[User Guide & Playbook (docs/user-guide.md)](docs/user-guide.md)**.
+> 📖 **User Guide:** [docs/user-guide.md](docs/user-guide.md)  
+> 📋 **Project Status Protocol (`STATUS.md`):** [docs/project-protocol.md](docs/project-protocol.md)  
+> 💬 **On-Demand Management Broadcasts:** Run `/project-status` or `/project-status <ID>` for WhatsApp-ready executive updates.
 
 ---
 
@@ -11,11 +12,11 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 
 ## 🧭 Master Project Registry
 
-| ID | Project Name | Archetype | Status | Primary Owner | Codebase / Reference | Runbook | Journal |
-| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **`LAB-001`** | **[AAMAS (Autism Activity Monitoring & Alerting System)](projects/LAB-001-ammas/README.md)** | 💻 Mini-App | `🟢 Active` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [Runbook](projects/LAB-001-ammas/runbook.md) | [Journal](projects/LAB-001-ammas/journal.md) |
-| **`LAB-002`** | **[WrenAI Capabilities & GenBI Evaluation](projects/LAB-002-wrenai-eval/README.md)** | 📑 Research | `🟢 Active` | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [Runbook](projects/LAB-002-wrenai-eval/runbook.md) | [Journal](projects/LAB-002-wrenai-eval/journal.md) |
-| **`LAB-003`** | **[Nexus Pulse (Governed Deterministic Vertical Engine)](projects/LAB-003-nexus-pulse/README.md)** | 💻 Mini-App | `🟢 Active` | Hariharasubramanian | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [Runbook](projects/LAB-003-nexus-pulse/runbook.md) | [Journal](projects/LAB-003-nexus-pulse/journal.md) |
+| ID | Project Name | Archetype | Health | Lead | Codebase / Reference | Executive Status (`STATUS.md`) |
+| :---: | :--- | :---: | :---: | :---: | :--- | :---: |
+| **`LAB-001`** | **[AAMAS](projects/LAB-001-ammas/README.md)** (Autism Activity Monitor) | 💻 Mini-App | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [STATUS.md](projects/LAB-001-ammas/STATUS.md) |
+| **`LAB-002`** | **[WrenAI Evaluation](projects/LAB-002-wrenai-eval/README.md)** (Semantic GenBI) | 📑 Research | `🟢 On Track` | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [STATUS.md](projects/LAB-002-wrenai-eval/STATUS.md) |
+| **`LAB-003`** | **[Nexus Pulse](projects/LAB-003-nexus-pulse/README.md)** (Vertical Engine) | 💻 Mini-App | `🟢 On Track` | Hariharasubramanian | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [STATUS.md](projects/LAB-003-nexus-pulse/STATUS.md) |
 
 ---
 
@@ -25,28 +26,20 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 cetana-labs/
 ├── README.md                      # Master Dashboard & Project Registry (You are here)
 ├── docs/
-│   └── user-guide.md              # 👤 Human Guide: Navigation, Archetypes, Statuses & AI Prompts
+│   ├── user-guide.md              # 👤 Human Guide: Navigation, Archetypes, Statuses & AI Prompts
+│   └── project-protocol.md        # 📋 Authoritative STATUS.md specification
 ├── AGENTS.md                      # 🤖 Universal AI Instructions (Rules, Constraints, Workflows)
 ├── CLAUDE.md                      # 🤖 Agent pointer for Claude Code
-├── .agents/skills/                # 🤖 Reusable AI playbooks (create-project, log-milestone, etc.)
+├── .agents/skills/                # 🤖 Reusable AI playbooks
+│   ├── project-status/            # Generates WhatsApp-ready updates on-demand (/project-status)
+│   ├── create-lab-project/        # Scaffolds new projects & registers in master table
+│   ├── log-milestone/             # Appends milestone entries to journal
+│   └── commit-changes/            # Standardized trunk-based git commits
 ├── templates/                     # Standardized scaffolds for rapid onboarding
-│   ├── mini-app/                  # For projects with independent code repos
-│   ├── research/                  # For literature reviews, spikes & tech evaluations
-│   ├── data-collection/           # For data pipelines, datasets & web scraping
-│   └── verification/              # For benchmarks, test harnesses & QA audits
 └── projects/                      # All lab initiatives (flat hierarchy)
     ├── LAB-001-ammas/             # Behavioral CV Edge System & GenBI Analytics
-    │   ├── README.md
-    │   ├── runbook.md
-    │   └── journal.md
     ├── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
-    │   ├── README.md
-    │   ├── runbook.md
-    │   └── journal.md
     └── LAB-003-nexus-pulse/       # Governed Operational & Financial Intelligence Engine
-        ├── README.md
-        ├── runbook.md
-        └── journal.md
 ```
 
 ---
@@ -58,4 +51,4 @@ cetana-labs/
 - 📊 **Data Collection**: Datasets, web scraping pipelines, annotations, and schemas.
 - 🔬 **Verification / Benchmark**: Test rigs, SLA validations, model accuracy benchmarks, and stress tests.
 
-For detailed guidelines, see **[docs/user-guide.md](docs/user-guide.md)**.
+For detailed guidelines, see **[docs/user-guide.md](docs/user-guide.md)** and **[docs/project-protocol.md](docs/project-protocol.md)**.

@@ -10,8 +10,8 @@ This guide is written for both **maintainers** and **read-only collaborators** t
 
 `cetana-labs` is **not a code monorepo**. Instead, it is the single source of truth for:
 - 📌 **Registry**: An indexed catalog of all active, past, and upcoming initiatives.
-- 📘 **Runbooks**: Exact, reproducible setup and operational instructions.
-- 🗓️ **Journals**: High-level milestone timelines, architectural decisions, and phase histories.
+- 📋 **Executive Statuses**: Up-to-date, 30-line `STATUS.md` summaries for instant management updates.
+- 🗓️ **Journals & Milestones**: High-level milestone timelines, architectural decisions, and phase histories.
 - 🔗 **Pointers**: Direct links to external code repositories, datasets, and research papers.
 
 ---
@@ -23,19 +23,19 @@ Every project is organized in a flat structure under `projects/LAB-XXX-<name>/`:
 ```text
 projects/LAB-XXX-<name>/
 ├── README.md       # Project Charter (Summary, architecture, tech stack & remote repo links)
-├── runbook.md      # Operations & Setup (Prerequisites, copy-paste commands, troubleshooting)
+├── STATUS.md       # 📋 Authoritative 30-line Executive Status (for management broadcasts)
 ├── journal.md      # Timeline & Decisions (Phased progress and major milestone logs)
 └── assets/         # (Optional) Small diagrams, configs, reference outputs
 ```
 
 ### Quick Path Finder:
-- **"Where is the source code?"** $\rightarrow$ Open `projects/<ID>/README.md` and check the **Remote Repository** link.
-- **"How do I run or test this project?"** $\rightarrow$ Open `projects/<ID>/runbook.md`.
-- **"Why was a decision made or what's the latest status?"** $\rightarrow$ Open `projects/<ID>/journal.md`.
+- **"Where is the source code & setup guide?"** $\rightarrow$ Open `projects/<ID>/README.md` and check the **Remote Repository** link (operational runbooks live directly inside each project's codebase).
+- **"What is the current business status & health?"** $\rightarrow$ Open `projects/<ID>/STATUS.md`.
+- **"Why was a decision made or what's the latest milestone?"** $\rightarrow$ Open `projects/<ID>/journal.md`.
 
 ---
 
-## 3. Project Archetypes & Status Legend
+## 3. Project Archetypes & Health Legend
 
 ### Archetypes
 | Archetype | Icon | Focus & Description |
@@ -45,16 +45,28 @@ projects/LAB-XXX-<name>/
 | **Data Collection** | 📊 | Data pipelines, web scrapers, schemas, and dataset catalogs. |
 | **Verification / Benchmark** | 🔬 | Test harnesses, performance benchmarks, and SLA validation. |
 
-### Status Badges
-- `🟢 Active` — Actively being developed, tested, or executed.
-- `🟡 In Progress` — Scoped and progressing through planned milestones.
-- `⏸️ Paused` — On hold pending external dependencies or resources.
+### Health Badges (`STATUS.md`)
+- `🟢 On Track` — Milestones progressing smoothly as planned.
+- `🟡 At Risk` — Minor delays or dependencies pending; no escalation yet.
+- `🔴 Blocked` — Hard blocker requiring management intervention.
+- `⏸️ Paused` — Intentionally on hold.
 - `✅ Completed` — Finished, operationalized, or successfully verified.
-- `📦 Archived` — Preserved for historical context; no further work planned.
 
 ---
 
-## 4. Commit Guidelines (Trunk-Based / Main Only)
+## 4. The `STATUS.md` Protocol & Management Broadcasts
+
+Every project adheres to the **[Project Status Protocol (docs/project-protocol.md)](project-protocol.md)**.
+Whenever leadership asks for an update, you can generate a **WhatsApp-compatible message** in seconds:
+
+- **All Projects Digest**: `/project-status` or `/project-status all`
+- **Specific Project Deep-Dive**: `/project-status LAB-003`
+
+The AI agent parses `STATUS.md` across repositories and formats a scannable, mobile-ready update.
+
+---
+
+## 5. Commit Guidelines (Trunk-Based / Main Only)
 
 Since this repository is maintained primarily by one maintainer with read-only collaborators, we follow a simple **direct-to-`main`** commit workflow without branches or PR overhead.
 
@@ -63,45 +75,26 @@ Since this repository is maintained primarily by one maintainer with read-only c
 | :--- | :--- | :--- |
 | **New Project** | `feat(<id>): init <name>` | `feat(lab-002): scaffold edge-llm-eval research project` |
 | **Milestone / Journal** | `log(<id>): <summary>` | `log(lab-001): record phase 3 genbi milestone` |
-| **Runbook / Docs** | `docs(<id>): <summary>` | `docs(lab-001): update local webcam runbook instructions` |
+| **Status Update** | `status(<id>): <summary>` | `status(lab-003): update health to on-track after signals merge` |
 | **Repo / Global Structure** | `docs: <summary>` or `chore: <summary>` | `docs: update user-guide and template schemas` |
 
 ---
 
-## 5. Working with AI Agents in this Repo
+## 6. Working with AI Agents in this Repo
 
 This repository is optimized for AI-assisted maintenance. You can use any AI tool (Antigravity, Cursor, Claude Code, GitHub Copilot, ChatGPT, etc.) to perform clerical and documentation work.
 
 Here are copy-pasteable prompt templates:
 
-### A. Creating a New Project
+### A. Generating WhatsApp Status Updates
+> *"/project-status"*  
+> *"/project-status LAB-003"*
+
+### B. Creating a New Project
 > *"Create a new [Mini-App / Research / Data / Verification] project titled '[Project Name]'. Objective: [Brief summary]. Owner: [Name]. Remote repo: [URL if applicable]."*
 
-### B. Logging a Milestone & Committing
+### C. Logging a Milestone & Committing
 > *"Add a milestone to project [LAB-XXX]. Title: [Milestone Title]. Context: [What was accomplished]. Please commit the changes directly to main."*
 
-### C. Updating an Operational Runbook
-> *"Update the runbook for [LAB-XXX] with the following setup steps: [Paste steps/commands]."*
-
-### D. Cross-Lab Summary
-> *"Provide a summary of all active lab projects, their current phases, and pending milestones."*
-
----
-
-## 6. Manager & Stakeholder Quick-Briefing Prompts
-
-If you are a manager, team lead, or stakeholder reviewing this repository, you can query your AI chat tool directly with these prompts for instant, accurate answers:
-
-### 👔 Executive & Status Briefings
-- **Overall Status**:  
-  > *"Give me an executive briefing of all active lab projects in this repository, including their current phase, owner, and key blockers."*
-- **Recent Progress**:  
-  > *"Summarize the last 2 weeks of milestone achievements and architectural decisions recorded across all lab journals."*
-
-### 🔍 Project-Specific Deep Dives
-- **30-Second Elevator Pitch**:  
-  > *"Give me a concise 3-paragraph summary of project [LAB-XXX]: what problem it solves, its tech stack, and its current status."*
-- **Architecture & Trade-Offs**:  
-  > *"What architectural decisions and trade-offs were made in project [LAB-XXX], and why was this approach selected?"*
-- **Replication / How-To**:  
-  > *"What are the exact prerequisites and steps required for another engineer to run and test [LAB-XXX] locally?"*
+### D. Updating Project Status
+> *"Update STATUS.md for [LAB-XXX] with latest win: [Description]. Health: 🟢 On Track."*

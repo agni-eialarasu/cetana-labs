@@ -8,18 +8,21 @@ Your role is to keep this repository structured, well-documented, clean, and up 
 ## 1. Core Operating Principles & Strict Constraints
 
 1. **Master Control Plane (Not Monorepo)**:
-   - This repo stores project charters, runbooks, milestone journals, and light reference assets.
-   - For coding projects (mini-apps), the actual source code lives in external Git repositories. Never clone full application source trees directly into this repo.
+   - This repo stores project charters, executive statuses (`STATUS.md`), milestone journals, and light reference assets.
+   - For coding projects (mini-apps), the actual source code and operational runbooks live in external Git repositories. Never clone full application source trees directly into this repo.
 2. **Strict Portability (No Absolute Local Paths)**:
    - Never write machine-specific absolute paths (e.g. `/Users/...` or `C:\...`) into project documentation.
    - Use relative repository links, GitHub URLs, or generic commands (e.g. `cd <project-folder>`).
-3. **Flat Directory & Sequential ID Scheme**:
+3. **Mandatory `STATUS.md` Protocol**:
+   - Every project MUST maintain a lightweight, 30-line `STATUS.md` conforming to `docs/project-protocol.md`.
+   - Used to generate instant, WhatsApp-compatible executive broadcasts via `/project-status`.
+4. **Flat Directory & Sequential ID Scheme**:
    - All projects MUST reside in `projects/LAB-XXX-<slug>/`.
    - `XXX` is a zero-padded sequential 3-digit number (e.g. `LAB-001`, `LAB-002`).
    - `<slug>` is lowercase, hyphen-separated, alphanumeric without spaces.
-4. **Synchronized Master Registry**:
-   - Whenever a project is created, renamed, or changes status, the table in [README.md](README.md) MUST be updated immediately.
-5. **Trunk-Based Direct Commits (`main` only)**:
+5. **Synchronized Master Registry**:
+   - Whenever a project is created, renamed, or changes health, the table in [README.md](README.md) MUST be updated immediately.
+6. **Trunk-Based Direct Commits (`main` only)**:
    - No branching or PRs required.
    - Commit directly to `main` using standardized commit message conventions.
 
@@ -30,8 +33,8 @@ Your role is to keep this repository structured, well-documented, clean, and up 
 When making commits on behalf of the user, use structured prefixes:
 - **New Project**: `feat(lab-XXX): init <project-name>`
 - **Milestone / Journal**: `log(lab-XXX): <milestone summary>`
-- **Runbook / Project Docs**: `docs(lab-XXX): <runbook update summary>`
-- **Global Docs & Config**: `docs: <summary>` or `chore: <summary>`
+- **Executive Status**: `status(lab-XXX): <summary of health/win update>`
+- **Docs & Protocol**: `docs: <summary>` or `chore: <summary>`
 
 ---
 
@@ -51,16 +54,16 @@ When scaffolding a new project, use the corresponding template from `templates/`
 ## 4. Workflow Procedures & Playbooks
 
 For detailed step-by-step procedures, refer to `.agents/skills/`:
+- **Executive Status Broadcasts**: See `.agents/skills/project-status/SKILL.md` (`/project-status`)
 - **Scaffolding New Projects**: See `.agents/skills/create-lab-project/SKILL.md`
 - **Logging Milestones & Decisions**: See `.agents/skills/log-milestone/SKILL.md`
-- **Updating Runbooks & Procedures**: See `.agents/skills/update-runbook/SKILL.md`
 - **Committing Changes**: See `.agents/skills/commit-changes/SKILL.md`
 
 ---
 
-## 5. Status Legend
-- `🟢 Active`
-- `🟡 In Progress`
-- `⏸️ Paused`
-- `✅ Completed`
-- `📦 Archived`
+## 5. Health Status Legend
+- `🟢 On Track` — Milestones progressing smoothly as planned.
+- `🟡 At Risk` — Minor delays or dependencies pending; no escalation yet.
+- `🔴 Blocked` — Hard blocker requiring management intervention.
+- `⏸️ Paused` — Intentionally on hold.
+- `✅ Completed` — Finished, operationalized, or successfully verified.

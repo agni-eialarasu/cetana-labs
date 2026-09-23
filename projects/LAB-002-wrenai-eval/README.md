@@ -9,7 +9,8 @@
 | **Target Technology** | [WrenAI](https://www.getwren.ai/) ([GitHub: Canner/WrenAI](https://github.com/Canner/WrenAI)) |
 | **Practical Reference / Proof** | [LAB-001: AAMAS](../LAB-001-ammas/README.md) ([github.com/agni-eialarasu/ammas](https://github.com/agni-eialarasu/ammas)) |
 | **Outcome / Recommendation** | Adopted for GenBI Conversational Analytics in edge/local dashboards |
-| **Last Updated** | 2026-09-06 |
+| **Executive Status** | [STATUS.md](STATUS.md) |
+| **Last Updated** | 2026-09-23 |
 
 ---
 
@@ -44,5 +45,5 @@ The practical proof-of-concept for this evaluation was implemented in **[LAB-001
 
 ## 4. Documentation Links
 
-- 📘 [Research Runbook](runbook.md) — Docker deployment, MDL configuration, and Ollama integration steps.
+- 📋 [Executive Status (STATUS.md)](STATUS.md) — 30-line executive status, health, and latest findings.
 - 🗓️ [Research Journal](journal.md) — Evaluation milestones, architectural discoveries, and benchmark notes.
