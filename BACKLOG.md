@@ -1,6 +1,7 @@
 # Cetana Labs — Sprint Backlog & Roadmap
 
-This document maintains the active sprint plan, prioritized product backlog, and delivered sprint archives for **Cetana Labs Control Hub (`LAB-000`)**.\n
+This document maintains the active sprint plan, prioritized product backlog, and delivered sprint archives for **Cetana Labs Control Hub (`LAB-000`)**.
+
 ---
 
 ## 🎯 Current Sprint: Sprint 4 — Automated Lead Engagement & Ecosystem Integrations
@@ -29,6 +30,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | :---: | :--- | :---: | :---: | :---: | :--- |
 | `BK-005` | PDF Executive Digest Export | P3 | Tooling | Backlog | One-click export for board/investor reporting |
 | `BK-006` | Project Health Trend Telemetry | P3 | Analytics | Backlog | Historical velocity and health transition graphs on dashboard |
+| `BK-007` | On-Demand Git Status Audit Trail & Role-Gated History | P3 | Governance | Backlog | Reconstructs historical sprint baselines & health transitions from Git logs of `STATUS.md`. On-demand CLI initially; plan simple auth / RBAC for future dashboard access to prevent developer surveillance perceptions. |
 
 ---
 
