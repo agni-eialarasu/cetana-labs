@@ -9,7 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- **1-Click AI Onboarding Prompt in Dashboard**: Embedded dynamic, project-specific AI setup prompts directly into each project card on the web dashboard. Project leads on `⏳ Onboarding Pending` cards can click "🤖 Copy AI Onboarding Prompt" for a complete, pre-filled prompt containing their exact project ID, lead, title, and protocol requirements ready to paste into Cursor/Claude Code/Copilot.
+- **Executive Blocker Alerting & Highlighting**: Surface Section 4 blockers directly in the dashboard UI with crimson alert cards, pulsating card borders (`has-blocker`), and dedicated top KPI metric ("Hard Blockers") with 1-click filter.
+- **Executive Attention Sorting**: Implemented multi-tier attention-priority ordering (Blocked/At Risk ➔ Active Products ➔ Pending Onboarding ➔ Completed ➔ Control Plane) with interactive Sort dropdown (Executive Priority, Recently Updated, Project ID).
+- **Default Active Products Landing**: Set default dashboard view to "Active Products" tab so management immediately sees in-flight deliverables without historical noise.
+- **1-Click On-board Prompt in Dashboard**: Embedded dynamic, project-specific AI setup prompts directly into each project card. Project leads on `⏳ Onboarding Pending` cards can click "🚀 Copy On-board Prompt" for a complete, pre-filled prompt containing their exact project ID, lead, title, and protocol requirements ready to paste into Cursor/Claude Code/Copilot.
 - **System / Light / Dark Theme Support**: Added adaptive UI theme toggle defaulting to the host OS color scheme with persistent user preference storage.
 - **Portfolio Web Dashboard (`BK-002`)**: Built standalone generator (`scripts/generate_dashboard.py`) creating an interactive executive dashboard (`docs/index.html`) with real-time text search, status filtering, and 1-click WhatsApp briefings.
 - **Automated GitHub Pages Deployment**: Configured `.github/workflows/deploy-pages.yml` to automatically build and host the dashboard on GitHub Pages on every push to `main`.
@@ -59,8 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Cetana Labs Master Hub**: Initialized control plane, repository registry, and universal AI agent guidelines (`AGENTS.md`, `CLAUDE.md`).
 - **Standardized Archetype Templates**: Scaffolds for `mini-app`, `research`, `data-collection`, and `verification`.
-- **Initial Portfolio Initiatives**:
-  - `LAB-001`: AAMAS (Autism Activity Monitoring & Alerting System).
+- **Initial Portfolio Initiatives**:\n  - `LAB-001`: AAMAS (Autism Activity Monitoring & Alerting System).
   - `LAB-002`: WrenAI Capabilities & Semantic GenBI Evaluation.
   - `LAB-003`: Nexus Pulse (Governed Deterministic Vertical Engine).
 - **Trunk-Based Commit Standard**: Automated commit-changes playbook and linear main branch policy.

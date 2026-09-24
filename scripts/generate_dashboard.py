@@ -3,7 +3,8 @@
 Cetana Labs — Portfolio Web Dashboard Generator
 Generates a zero-dependency, ultra-fast, responsive static HTML dashboard (docs/index.html)
 with real-time client-side search, filtering, theme toggle (System/Light/Dark),
-1-click WhatsApp executive briefing export, and 1-click AI Onboarding Prompt generation.
+executive blocker highlighting, interactive sorting, 1-click WhatsApp briefings,
+and 1-click AI On-board Prompt generation.
 """
 
 import sys
@@ -59,7 +60,6 @@ def generate_onboarding_prompt(data: dict) -> str:
     name = data.get("name", "Project Name")
     lead = data.get("lead", "Engineering Team")
     pitch = data.get("pitch", "") or "Engineering initiative registered in Cetana Labs."
-    repo_url = data.get("repo_url", "")
     now_date = datetime.now().strftime("%Y-%m-%d")
     badge_id = pid.replace("-", "--")
 
@@ -146,9 +146,35 @@ Finally, output the ready-to-paste WhatsApp executive update snippet formatted w
     return prompt.strip()
 
 
+def calculate_priority_score(data: dict) -> int:
+    """
+    Computes Executive Attention Priority score (lower = appears first):
+    - Priority 10: Has active blockers or 🔴 Blocked / 🟡 At Risk
+    - Priority 20: Active in-flight products (🟢 On Track)
+    - Priority 30: Onboarding pending (⏳ Pending)
+    - Priority 40: Completed spikes (✅ Completed)
+    - Priority 50: System control plane (LAB-000)
+    """
+    pid = data.get("id", "")
+    health = data.get("health", "").lower()
+    has_blocker = data.get("has_blocker", False)
+
+    if pid == "LAB-000":
+        return 50
+    if has_blocker or "block" in health:
+        return 10
+    if "risk" in health:
+        return 15
+    if data.get("is_completed"):
+        return 40
+    if data.get("is_onboarding_pending"):
+        return 30
+    return 20
+
+
 def build_dashboard():
     project_dirs = sorted([d for d in PROJECTS_DIR.iterdir() if d.is_dir() and d.name.startswith("LAB-")])
-    projects_data = []
+    raw_projects = []
 
     for pdir in project_dirs:
         status_file = pdir / "STATUS.md"
@@ -164,6 +190,15 @@ def build_dashboard():
         single_briefing = format_single_project(data)
         data["whatsapp_briefing"] = single_briefing
         data["b64_briefing"] = base64.b64encode(single_briefing.encode("utf-8")).decode("utf-8")
+
+        # Determine blocker state
+        blockers_val = data.get("blockers", "").strip()
+        has_blocker = False
+        if blockers_val and blockers_val.lower() not in ["none", "none.", "n/a"]:
+            has_blocker = True
+        if "block" in data.get("health", "").lower():
+            has_blocker = True
+        data["has_blocker"] = has_blocker
 
         # Generate pre-filled AI onboarding prompt
         onboarding_prompt = generate_onboarding_prompt(data)
@@ -182,8 +217,19 @@ def build_dashboard():
                 tags.append("onboarding-pending")
             else:
                 tags.append("on-track")
+        if has_blocker:
+            tags.append("blocked")
         data["tags"] = tags
-        projects_data.append(data)
+
+        # Calculate attention score
+        data["priority_score"] = calculate_priority_score(data)
+        raw_projects.append(data)
+
+    # Sort projects by Executive Attention Priority initially
+    projects_data = sorted(
+        raw_projects,
+        key=lambda p: (p["priority_score"], -(datetime.strptime(p["last_updated"], "%Y-%m-%d").timestamp() if p.get("last_updated") else 0), p["id"])
+    )
 
     portfolio_whatsapp = format_portfolio_digest(projects_data)
     b64_portfolio = base64.b64encode(portfolio_whatsapp.encode("utf-8")).decode("utf-8")
@@ -191,6 +237,7 @@ def build_dashboard():
     # Compute KPI totals
     total_projects = len(projects_data)
     active_count = sum(1 for p in projects_data if "active" in p["tags"])
+    blocker_count = sum(1 for p in projects_data if p.get("has_blocker"))
     onboarding_count = sum(1 for p in projects_data if "onboarding-pending" in p["tags"])
     completed_count = sum(1 for p in projects_data if "completed" in p["tags"])
 
@@ -228,6 +275,7 @@ def build_dashboard():
       --info-bg: rgba(2, 132, 199, 0.12);
       --danger: #ef4444;
       --danger-bg: rgba(239, 68, 68, 0.12);
+      --danger-border: rgba(239, 68, 68, 0.4);
       --btn-bg: #1e293b;
       --btn-hover: #334155;
       --shadow-color: rgba(0, 0, 0, 0.35);
@@ -252,7 +300,8 @@ def build_dashboard():
       --info: #0284c7;
       --info-bg: rgba(2, 132, 199, 0.1);
       --danger: #dc2626;
-      --danger-bg: rgba(220, 38, 38, 0.1);
+      --danger-bg: rgba(220, 38, 38, 0.08);
+      --danger-border: rgba(220, 38, 38, 0.35);
       --btn-bg: #f1f5f9;
       --btn-hover: #e2e8f0;
       --shadow-color: rgba(0, 0, 0, 0.08);
@@ -278,7 +327,8 @@ def build_dashboard():
         --info: #0284c7;
         --info-bg: rgba(2, 132, 199, 0.1);
         --danger: #dc2626;
-        --danger-bg: rgba(220, 38, 38, 0.1);
+        --danger-bg: rgba(220, 38, 38, 0.08);
+        --danger-border: rgba(220, 38, 38, 0.35);
         --btn-bg: #f1f5f9;
         --btn-hover: #e2e8f0;
         --shadow-color: rgba(0, 0, 0, 0.08);
@@ -420,7 +470,7 @@ def build_dashboard():
     /* KPI Bar */
     .kpi-bar {{
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1rem;
     }}
 
@@ -432,10 +482,15 @@ def build_dashboard():
       display: flex;
       flex-direction: column;
       gap: 0.35rem;
-      transition: background-color 0.25s ease, border-color 0.25s ease;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }}
+    .kpi-card:hover {{
+      border-color: var(--accent);
+      transform: translateY(-2px);
     }}
     .kpi-label {{
-      font-size: 0.8rem;
+      font-size: 0.775rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -451,7 +506,7 @@ def build_dashboard():
       color: var(--text-muted);
     }}
 
-    /* Controls: Search & Tabs */
+    /* Controls: Tabs, Sort & Search */
     .controls {{
       display: flex;
       flex-wrap: wrap;
@@ -487,9 +542,46 @@ def build_dashboard():
       border-color: var(--accent);
     }}
 
+    .filter-sort-controls {{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }}
+
+    .sort-box {{
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.35rem 0.75rem;
+    }}
+    .sort-label {{
+      font-size: 0.775rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }}
+    .sort-box select {{
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }}
+    .sort-box select option {{
+      background: var(--card-bg);
+      color: var(--text-main);
+    }}
+
     .search-box {{
       position: relative;
-      min-width: 260px;
+      min-width: 240px;
     }}
     .search-box input {{
       width: 100%;
@@ -538,6 +630,10 @@ def build_dashboard():
       box-shadow: 0 6px 20px var(--shadow-color);
       transform: translateY(-2px);
     }}
+    .project-card.has-blocker {{
+      border-color: var(--danger-border);
+      box-shadow: 0 0 16px rgba(239, 68, 68, 0.15);
+    }}
 
     .card-top {{
       display: flex;
@@ -567,6 +663,7 @@ def build_dashboard():
     .health-on-track {{ background: var(--success-bg); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }}
     .health-pending {{ background: var(--warning-bg); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }}
     .health-completed {{ background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.25); }}
+    .health-blocked {{ background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }}
 
     .card-header-main {{
       display: flex;
@@ -591,6 +688,38 @@ def build_dashboard():
       font-size: 0.875rem;
       color: var(--text-muted);
       line-height: 1.45;
+    }}
+
+    /* Blocker Alert Banner */
+    .blocker-banner {{
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      border-radius: 8px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }}
+    .blocker-header {{
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--danger);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }}
+    .blocker-body {{
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.4;
+    }}
+    .risk-body {{
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      line-height: 1.35;
     }}
 
     .section-title {{
@@ -721,40 +850,56 @@ def build_dashboard():
       </div>
 
       <div class="kpi-bar">
-        <div class="kpi-card">
-          <span class="kpi-label">Total Initiatives</span>
-          <span class="kpi-val" style="color: var(--accent);">{total_projects}</span>
-          <span class="kpi-sub">Registered in Cetana Labs</span>
-        </div>
-        <div class="kpi-card">
-          <span class="kpi-label">Active Projects</span>
+        <div class="kpi-card" onclick="filterByKpi('active')">
+          <span class="kpi-label">Active Products</span>
           <span class="kpi-val" style="color: var(--success);">{active_count}</span>
           <span class="kpi-sub">Client & product initiatives</span>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card" onclick="filterByKpi('blocked')">
+          <span class="kpi-label">Hard Blockers</span>
+          <span class="kpi-val" style="color: {'var(--danger)' if blocker_count > 0 else 'var(--success)'};">{blocker_count}</span>
+          <span class="kpi-sub">{'⚠️ Requires intervention' if blocker_count > 0 else 'All active systems clear'}</span>
+        </div>
+        <div class="kpi-card" onclick="filterByKpi('onboarding-pending')">
           <span class="kpi-label">Onboarding Setup</span>
           <span class="kpi-val" style="color: var(--warning);">{onboarding_count}</span>
           <span class="kpi-sub">Awaiting /status-init baseline</span>
         </div>
-        <div class="kpi-card">
+        <div class="kpi-card" onclick="filterByKpi('completed')">
           <span class="kpi-label">Completed Spikes</span>
           <span class="kpi-val" style="color: var(--text-muted);">{completed_count}</span>
           <span class="kpi-sub">Operationalized & archived</span>
+        </div>
+        <div class="kpi-card" onclick="filterByKpi('all')">
+          <span class="kpi-label">Total Registered</span>
+          <span class="kpi-val" style="color: var(--accent);">{total_projects}</span>
+          <span class="kpi-sub">Full registry footprint</span>
         </div>
       </div>
     </header>
 
     <div class="controls">
       <div class="tabs">
-        <button class="tab active" onclick="setFilter('all', this)">All Projects ({total_projects})</button>
-        <button class="tab" onclick="setFilter('active', this)">Active Products ({active_count})</button>
-        <button class="tab" onclick="setFilter('onboarding-pending', this)">Onboarding Pending ({onboarding_count})</button>
-        <button class="tab" onclick="setFilter('completed', this)">Completed ({completed_count})</button>
-        <button class="tab" onclick="setFilter('control-plane', this)">Control Hub (1)</button>
+        <button class="tab active" id="tab-active" onclick="setFilter('active', this)">Active Products ({active_count})</button>
+        <button class="tab" id="tab-all" onclick="setFilter('all', this)">All Projects ({total_projects})</button>
+        <button class="tab" id="tab-onboarding-pending" onclick="setFilter('onboarding-pending', this)">Onboarding Pending ({onboarding_count})</button>
+        <button class="tab" id="tab-completed" onclick="setFilter('completed', this)">Completed ({completed_count})</button>
+        <button class="tab" id="tab-control-plane" onclick="setFilter('control-plane', this)">Control Hub (1)</button>
       </div>
-      <div class="search-box">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        <input type="text" id="searchInput" placeholder="Search by title, lead, ID..." oninput="handleSearch()">
+
+      <div class="filter-sort-controls">
+        <div class="sort-box">
+          <span class="sort-label">Sort:</span>
+          <select id="sortSelect" onchange="handleSortChange()">
+            <option value="priority" selected>⚡ Executive Priority (Default)</option>
+            <option value="recent">🕒 Recently Updated</option>
+            <option value="id">🔢 Project ID</option>
+          </select>
+        </div>
+        <div class="search-box">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <input type="text" id="searchInput" placeholder="Search by title, lead, ID..." oninput="handleSearch()">
+        </div>
       </div>
     </div>
 
@@ -764,14 +909,17 @@ def build_dashboard():
     for p in projects_data:
         health = p["health"]
         health_class = "health-on-track"
-        if "pending" in health.lower() or "setup" in health.lower():
+        if p.get("has_blocker") or "block" in health.lower():
+            health_class = "health-blocked"
+        elif "pending" in health.lower() or "setup" in health.lower():
             health_class = "health-pending"
         elif "completed" in health.lower():
             health_class = "health-completed"
 
         tags_str = " ".join(p["tags"])
+        card_extra_class = " has-blocker" if p.get("has_blocker") else ""
 
-        html += f"""      <div class="project-card" data-tags="{tags_str}" data-search="{p['id']} {p['name']} {p['lead']} {p['archetype_name']}">
+        html += f"""      <div class="project-card{card_extra_class}" data-tags="{tags_str}" data-search="{p['id']} {p['name']} {p['lead']} {p['archetype_name']}" data-priority="{p['priority_score']}" data-updated="{p['last_updated']}" data-id="{p['id']}">
         <div class="card-top">
           <span class="id-badge">{p['id']}</span>
           <span class="health-pill {health_class}">{health}</span>
@@ -789,6 +937,21 @@ def build_dashboard():
           {p['pitch']}
         </div>
 """
+        # Blocker banner if active
+        if p.get("has_blocker"):
+            risk_snippet = ""
+            if p.get("risks") and p["risks"].lower() not in ["none", "none identified.", "none."]:
+                risk_snippet = f"""<div class="risk-body"><strong>Risk:</strong> {p['risks']}</div>"""
+            html += f"""        <div class="blocker-banner">
+          <div class="blocker-header">
+            <span>🚨</span>
+            <span>Active Blocker</span>
+          </div>
+          <div class="blocker-body">{p['blockers']}</div>
+          {risk_snippet}
+        </div>
+"""
+
         if p.get("is_onboarding_pending"):
             html += f"""        <div class="alert-box">
           <strong>⚠️ Onboarding Protocol Pending</strong>
@@ -850,7 +1013,8 @@ def build_dashboard():
 
   <script>
     const b64Portfolio = "{b64_portfolio}";
-    let currentFilter = 'all';
+    // Option B: Default landing filter is 'active'
+    let currentFilter = 'active';
 
     // Theme Management: System (default), Light, Dark
     function applyTheme(theme) {{
@@ -881,11 +1045,49 @@ def build_dashboard():
     function setFilter(filter, el) {{
       currentFilter = filter;
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
+      if (el) {{
+        el.classList.add('active');
+      }} else {{
+        const targetTab = document.getElementById('tab-' + filter);
+        if (targetTab) targetTab.classList.add('active');
+      }}
       filterCards();
     }}
 
+    function filterByKpi(filter) {{
+      setFilter(filter, document.getElementById('tab-' + filter));
+    }}
+
     function handleSearch() {{
+      filterCards();
+    }}
+
+    function handleSortChange() {{
+      const sortType = document.getElementById('sortSelect').value;
+      const grid = document.getElementById('cardsGrid');
+      const cards = Array.from(grid.querySelectorAll('.project-card'));
+
+      cards.sort((a, b) => {{
+        if (sortType === 'priority') {{
+          const pA = parseInt(a.getAttribute('data-priority') || '100', 10);
+          const pB = parseInt(b.getAttribute('data-priority') || '100', 10);
+          if (pA !== pB) return pA - pB;
+          const uA = a.getAttribute('data-updated') || '';
+          const uB = b.getAttribute('data-updated') || '';
+          return uB.localeCompare(uA);
+        }} else if (sortType === 'recent') {{
+          const uA = a.getAttribute('data-updated') || '';
+          const uB = b.getAttribute('data-updated') || '';
+          return uB.localeCompare(uA);
+        }} else if (sortType === 'id') {{
+          const idA = a.getAttribute('data-id') || '';
+          const idB = b.getAttribute('data-id') || '';
+          return idA.localeCompare(idB);
+        }}
+        return 0;
+      }});
+
+      cards.forEach(card => grid.appendChild(card));
       filterCards();
     }}
 
@@ -907,6 +1109,9 @@ def build_dashboard():
         }}
       }});
     }}
+
+    // Apply default 'active' filter on page load
+    filterCards();
 
     function showToast(msg) {{
       const toast = document.getElementById('toast');
