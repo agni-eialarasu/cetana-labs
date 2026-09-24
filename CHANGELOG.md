@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cloud Dev Onboarding Runbook**: Published `docs/cloud-dev-guide.md` covering the Kiro Web workflow, dashboard preview, and verification checklist.
 - **Reproducible Dev Container**: Added `.devcontainer/` (Python 3.11 + GitHub CLI) for reproducible cloud environments and forward compatibility with the planned web-app (db + server) + RBAC evolution.
 - **Backlog Registration**: Registered `BK-008` (Control Hub Web App Evolution — db + server), the prerequisite platform for `BK-007` RBAC.
+- **Automated Lead Ping Engine (`BK-003`, `TSK-024`)**: Built `scripts/ping_leads.py` to scan portfolio `STATUS.md` files and generate idempotent GitHub issue alerts for stale (> 14 days) and onboarding-pending initiatives (excludes `LAB-000` and completed projects). Supports dry-run, `--json`, and live `--create-issues` modes with duplicate-safe issue routing to each sub-project repo.
+- **Lead Ping Cadence Workflow**: Added `.github/workflows/lead-ping-cron.yml` running a weekly Monday 10:00 AM IST scan plus `workflow_dispatch` (dry-run by default), and registered the `/ping-leads` AI agent skill (`.agents/skills/ping-leads/SKILL.md`, `AGENTS.md`).
 
 ### Changed
 ### Fixed

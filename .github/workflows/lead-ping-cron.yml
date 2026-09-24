@@ -1,0 +1,51 @@
+name: Lead Ping Engine (Stale & Onboarding Alerts)
+
+# Automated Lead Ping Engine (BK-003 / TSK-024).
+# Scans portfolio STATUS.md files and opens idempotent GitHub issues for stale
+# (> 14 days) or onboarding-pending initiatives. Excludes LAB-000 and completed.
+
+on:
+  schedule:
+    # 4:30 AM UTC = 10:00 AM IST every Monday (weekly cadence check).
+    - cron: '30 4 * * 1'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview only (no issues created) — set to false to dispatch'
+        required: false
+        default: 'true'
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  lead-ping:
+    name: Scan Portfolio & Ping Stale Leads
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Cetana Labs
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Portfolio Structural Validator
+        run: python3 scripts/validate_portfolio.py
+
+      - name: Dispatch Lead Pings
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DRY_RUN="${{ github.event.inputs.dry_run }}"
+          # Scheduled runs always dispatch; manual runs honor the dry_run input.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "$DRY_RUN" != "false" ]; then
+            echo "🔍 Manual dry-run preview (no issues will be created):"
+            python3 scripts/ping_leads.py
+          else
+            echo "🔔 Dispatching lead pings (creating/refreshing issues):"
+            python3 scripts/ping_leads.py --create-issues --sync-remote
+          fi

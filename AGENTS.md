@@ -65,6 +65,7 @@ For detailed step-by-step procedures, refer to `.agents/skills/`:
 - **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, and appends a milestone entry to `journal.md`.
 - **`/project-edit <ID>`**: Modifies owner, title, remote URL, or lifecycle health across project files and master registry.
 - **`/sprint-done [sprint_id]`**: Closes sprint, archives delivered tasks, bumps CHANGELOG, and refreshes STATUS.md.
+- **`/ping-leads`**: Scans STATUS.md files and opens idempotent GitHub issue alerts for stale (> 14 days) or onboarding-pending initiatives (excludes `LAB-000` and completed projects).
 - **`log-milestone`**: Appends milestone entries directly to a project's `journal.md`.
 - **`commit-changes`**: Stages and commits changes directly to `main` with standardized semantic commit prefixes.
 

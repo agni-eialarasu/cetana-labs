@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Automated Lead Ping Engine (`BK-003` / `TSK-024`)
+- **Context**: Delivered Sprint 4 P1 item — automated detection and pinging of initiatives that fall behind sprint cadence or never onboard, eliminating manual lead chasing. Per directive, the `LAB-000` control hub is excluded from pinging.
+- **Key Deliverables**:
+  - Built `scripts/ping_leads.py` reusing the authoritative `generate_status.parse_status_file` parser; detects **stale** (`Last Updated` > 14 days, non-completed) and **onboarding-pending** initiatives.
+  - **Exclusions**: `LAB-000` kernel and `✅ Completed` projects are never pinged (mirrors the executive portfolio digest filter).
+  - **Idempotent GitHub issue dispatch** via `gh` — stable `[Cetana Ping] <LAB-ID>` title marker; refreshes existing open issues instead of duplicating; routes to each sub-project repo with a control-hub fallback.
+  - Added scheduled workflow `.github/workflows/lead-ping-cron.yml` (weekly Monday 10:00 AM IST + manual dry-run dispatch) and the `/ping-leads` skill (`.agents/skills/ping-leads/SKILL.md`, registered in `AGENTS.md`).
+  - Closed `TSK-024` in `SPRINT-04`; synchronized `BACKLOG.md` and `CHANGELOG.md`.
+
+---
+
 ### [2026-09-24] Milestone: Cloud-Based Development Migration (`RFC-LAB-000-001`)
 - **Context**: The maintainer ran IntelliJ IDEA + Antigravity for both `LAB-000` and a separate stateful fullstack project on one machine, causing performance degradation. Since `LAB-000` has no local runtime dependency (docs + zero-dependency Python; automation runs in CI), it was migrated to cloud-based development to free the local machine for the fullstack initiative.
 - **Key Deliverables**:

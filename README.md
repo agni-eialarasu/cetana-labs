@@ -39,10 +39,12 @@ cetana-labs/
 ├── CHANGELOG.md                   # 📜 Keep a Changelog Historical Releases
 ├── .github/workflows/
 │   ├── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
+│   ├── lead-ping-cron.yml         # 🔔 Weekly stale/onboarding lead ping alert workflow
 │   └── deploy-pages.yml           # 🌐 Automated GitHub Pages dashboard deployment workflow
 ├── scripts/
 │   ├── generate_status.py         # 📱 Standalone WhatsApp executive status generator
 │   ├── generate_dashboard.py      # 🌐 Static HTML portfolio web dashboard generator
+│   ├── ping_leads.py              # 🔔 Automated lead ping engine (stale & onboarding alerts)
 │   └── validate_portfolio.py      # 🛡️ CI linter & project structure validator
 ├── docs/
 │   ├── index.html                 # 🌐 Live Interactive Portfolio Dashboard (GitHub Pages)
@@ -57,6 +59,7 @@ cetana-labs/
 │   ├── project-update/            # Logs delivery wins, health & milestones (/project-update)
 │   ├── project-edit/              # Modifies metadata, leads & lifecycle states (/project-edit)
 │   ├── sprint-done/               # Closes sprint, archives tasks & bumps changelog (/sprint-done)
+│   ├── ping-leads/                # Pings stale/onboarding-pending leads via GitHub issues (/ping-leads)
 │   ├── log-milestone/             # Appends milestone entries to journal
 │   └── commit-changes/            # Standardized trunk-based git commits
 ├── templates/                     # Standardized scaffolds for rapid onboarding
