@@ -37,3 +37,6 @@ dist/
 build/
 *.log
 shared-folder
+
+# Governance Receipts
+.gemini/governance/

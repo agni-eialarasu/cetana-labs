@@ -21,6 +21,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `TSK-024` | Automated Lead Ping Engine (`BK-003`) — issue/alert generation for stale status (> 14 days) | P1 | Eialarasu | 📋 Planned | 2026-10-01 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-05 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-10-08 |
+| `TSK-027` | Two-Phase Governance Contract (`/project-validate` pre-flight gate & `validation_receipt.json`) | P1 | Eialarasu | ✅ Completed | 2026-09-24 |
 
 ---
 

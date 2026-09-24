@@ -29,7 +29,7 @@ To ensure leadership, management, and cross-functional stakeholders receive **in
 
 ## 3. The Authoritative `STATUS.md` Schema
 
-Every `STATUS.md` MUST adhere to this concise, 5-section markdown template (maximum 30–40 lines):
+Every `STATUS.md` MUST adhere to this concise, 5-section markdown template (strictly capped at `<= 35 lines`):
 
 ```markdown
 # Project Status & Executive Summary
@@ -104,3 +104,21 @@ When `/project-status [project_id]` is executed:
 2. It extracts the Elevator Pitch, Latest Wins, Current Focus, Health, and Blockers.
 3. It evaluates onboarding and cadence health.
 4. It formats a crisp, emoji-rich, WhatsApp-friendly broadcast message ready to copy-paste.
+
+---
+
+## 7. The Pre-Flight Governance Gate (`/project-validate`)
+
+To eliminate metric drift, hallucinated test numbers, and line-budget overflows, Cetana Labs enforces a **Two-Phase Governance Contract**:
+
+```text
+[ /project-validate ]  ──(If GREEN: emits validation_receipt.json)──>  [ /project-status ]
+(Automated Pre-Flight Gate)                                            (Scraper Publish & Broadcast)
+```
+
+### The 5 Core Verification Pillars:
+1. **Scraper Budget**: Root `STATUS.md` is strictly `<= 35 lines` with required metadata keys.
+2. **Registry Lockstep**: `CHANGELOG.md`, `BACKLOG.md` (or `SPRINT_TRACKER.md`), and `journal.md` synchronized.
+3. **Git Hygiene**: Working tree clean and local branch in parity with remote tracking branch.
+4. **Architectural & Math Parity**: AST boundary checks pass and zero absolute path leaks.
+5. **Live Test Suite Verification**: Real test suite executed, extracting certified passed/skipped/failed tallies into `.gemini/governance/validation_receipt.json`.

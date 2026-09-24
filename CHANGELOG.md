@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Two-Phase Governance Contract (`/project-validate`)**: Implemented pre-flight programmatic verification engine (`scripts/project_validate.py`) enforcing the 5 core verification pillars: Scraper Budget (<= 35 lines), Multi-Registry Lockstep, Git Hygiene, Architectural Boundaries/Portability, and Live Test Auto-Count.
+- **Cryptographic Audit Receipt**: Automatically emits `.gemini/governance/validation_receipt.json` certifying verified metrics before `/project-status` or `/status-update` emission.
+- **AI Agent Skill (`.agents/skills/project-validate/SKILL.md`)**: Registered `/project-validate` across all Cetana Labs agent environments and documented in `AGENTS.md`, `docs/project-protocol.md`, and `docs/project-owner-guide.md`.
+
 ### Changed
 ### Fixed
 
@@ -40,8 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0] - 2026-09-23
 ### Added
-- **Constructive Visibility Protocol**: Implemented `⏳ Onboarding Pending` alert to hold project leads accountable for running `/status-init`.
-- **Sprint Cadence Staleness Tracking**: Automated 14-day staleness detection in `scripts/generate_status.py` to maintain bi-weekly update discipline.
+- **Constructive Visibility Protocol**: Implemented `⏳ Onboarding Pending` alert to hold project leads accountable for running `/status-init`.\n- **Sprint Cadence Staleness Tracking**: Automated 14-day staleness detection in `scripts/generate_status.py` to maintain bi-weekly update discipline.
 - **Bare-Minimum Sprint Tracking**: Introduced root `BACKLOG.md` and `CHANGELOG.md` to maintain planned sprint items, prioritized backlogs, and historical releases.
 - **New Initiatives Onboarded**: Registered `LAB-004` (Zerobea.ai) and `LAB-005` (Nexus Beacon) into the portfolio.
 

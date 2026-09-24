@@ -59,6 +59,7 @@ When scaffolding a new project, use the corresponding template from `templates/`
 ## 4. Reusable AI Agent Skills Suite (`.agents/skills/`)
 
 For detailed step-by-step procedures, refer to `.agents/skills/`:
+- **`/project-validate [ID]`**: Pre-flight verification gate running a 5-pillar audit (scraper budget <= 35 lines, registry lockstep, git hygiene, AST boundaries, live test count) emitting `.gemini/governance/validation_receipt.json`.
 - **`/project-status [ID]`**: Generates WhatsApp briefings via `scripts/generate_status.py` (filters out completed initiatives and `LAB-000`).
 - **`/project-add <url_or_title>`**: Scaffolds next project ID, inspects remote repo, assigns `⏳ Onboarding Pending`, registers in `README.md`, and commits.
 - **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, and appends a milestone entry to `journal.md`.
@@ -76,3 +77,18 @@ For detailed step-by-step procedures, refer to `.agents/skills/`:
 - `🔴 Blocked` — Hard blocker requiring management intervention.
 - `⏸️ Paused` — Intentionally on hold.
 - `✅ Completed` — Finished, operationalized, or successfully verified.
+
+---
+
+## 6. Two-Phase Governance Contract
+
+To prevent metric drift, eliminate hallucinated test numbers, and guarantee scraper stability:
+
+```text
+[ /project-validate ]  ──(If GREEN: emits validation_receipt.json)──>  [ /project-status ]
+(Automated Pre-Flight Gate)                                            (Scraper Publish & Broadcast)
+```
+
+1. **Mandatory Pre-Flight**: Never emit executive status updates without running `/project-validate`.
+2. **Deterministic Receipt**: `/project-validate` audits the 5 core pillars and generates `.gemini/governance/validation_receipt.json`.
+3. **Scraper Budget**: Root `STATUS.md` must strictly remain `<= 35 lines` to ensure 100% reliability for the daily 9:30 AM IST automated scraper.

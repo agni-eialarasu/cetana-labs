@@ -11,13 +11,22 @@ To eliminate repetitive status writing, long standup recaps, and management inte
 You **never write this file by hand**. Your AI coding assistant (Cursor, Claude Code, GitHub Copilot, ChatGPT, Antigravity) does it for you in **10 seconds** whenever you complete a sprint or merge major PRs.
 
 ```text
-Developer prompts: "/status-update"
-       │
-       ▼
-AI inspects recent Git commits / PRs
-       │
-       ├──── 1. Updates root STATUS.md & commits
-       └──── 2. Outputs a ready-to-send WhatsApp standup message for your team!
+[ Developer: /project-validate ]
+                │
+                ├──── 1. Checks scraper budget (<= 35 lines) & schema
+                ├──── 2. Asserts registries are in lockstep (CHANGELOG/BACKLOG)
+                ├──── 3. Verifies git worktree is clean
+                ├──── 4. Checks AST architecture & golden math parity
+                └──── 5. Auto-counts live passing tests into validation_receipt.json
+                │
+         (If 5 Pillars Green)
+                │
+                ▼
+[ Developer: /status-update ]
+                │
+                ├──── 1. Synthesizes commits into business wins
+                ├──── 2. Updates STATUS.md with certified test tallies
+                └──── 3. Outputs ready-to-send WhatsApp standup message!
 ```
 
 ---
@@ -55,31 +64,49 @@ Alternatively, paste this generic prompt into your AI chat inside your repo:
 > - Top 2-3 recent deliverable wins with technical and business impact
 > - Current focus for the next sprint
 > - Verified test metrics (e.g. test pass count, boundary gates)
-> - Format strictly with standard markdown table and 5 sections under 35 lines.
+> - Format strictly with standard markdown table and 5 sections strictly under 35 lines.
 > ```
 
 ---
 
-## 🔄 Step 2: Routine Milestone / Sprint Updates
+## 🛡️ Step 2: Pre-Flight Verification Gate (`/project-validate`)
+
+To eliminate metric drift, hallucinated test numbers, and scraper line overflows, always run the pre-flight gate prior to updating status or closing sprints:
+
+> ### 📋 AI Prompt: Pre-Flight Validation (`/project-validate`)
+> ```text
+> Act as our technical delivery assistant. Run the 5-pillar project validation gate:
+> 1. Check root STATUS.md is strictly <= 35 lines with all required headers.
+> 2. Verify CHANGELOG.md and active sprint registries are synchronized in lockstep.
+> 3. Verify git working tree is clean and main branch is up to date with origin/main.
+> 4. Verify AST layer isolation boundaries and golden math calculation datasets.
+> 5. Run the live test suite (pytest -q or npm test) and extract certified counts of passed/skipped/failed tests.
+> 6. Emit receipt to .gemini/governance/validation_receipt.json and report the 5-pillar terminal audit.
+> ```
+
+---
+
+## 🔄 Step 3: Routine Milestone / Sprint Updates (`/status-update`)
 
 Whenever you close a sprint, merge a feature branch, or achieve a milestone, paste:
 
 > ### 📋 AI Prompt: Update Status (`/status-update`)
 > ```text
-> Act as our technical delivery assistant. Run `git log -n 5 --oneline` (and inspect recent PRs).
+> Act as our technical delivery assistant. Read .gemini/governance/validation_receipt.json and run `git log -n 5 --oneline`.
 > 1. Synthesize the top 1-2 deliverables into business-impact bullets.
 > 2. Update root `STATUS.md`:
 >    - Update "Last Updated" to today's date.
 >    - Prepend the new win(s) under "Latest Deliveries & Business Wins" (keep top 3-4).
 >    - Update "Current Focus & Next Milestone".
->    - Update "Verified Quality Metrics" with latest test results.
+>    - Update "Verified Quality Metrics" with certified test counts from validation_receipt.json.
+>    - Ensure file remains strictly <= 35 lines.
 > 3. Commit the change with message: "docs: update STATUS.md for <sprint/milestone>".
 > 4. Output a concise WhatsApp-compatible update (using *bold* and bullet points) that I can send to our team chat.
 > ```
 
 ---
 
-## 📱 Step 3: Instant WhatsApp Standup Snippet (`/project-status`)
+## 📱 Step 4: Instant WhatsApp Standup Snippet (`/project-status`)
 
 Whenever your manager or peer asks for a quick update:
 
@@ -95,24 +122,31 @@ Whenever your manager or peer asks for a quick update:
 
 ## 🤖 Automating This in Your Repo (Optional Drop-in Config)
 
-To make `/status-update` and `/project-status` native slash commands in your favorite AI tool:
+To make `/project-validate` and `/status-update` native slash commands in your favorite AI tool:
 
 ### For Cursor (`.cursorrules` or `.cursor/rules/status.mdc`):
 Add this snippet to your repo:
 ```markdown
-# Status Protocol Rules
-When the user invokes `/status-update` or asks to update status:
-1. Inspect the last 5 commits (`git log -n 5 --oneline`).
-2. Update `STATUS.md` following the 5-section schema (Health, Pitch, Wins, Focus, Blockers, Metrics).
-3. Update "Last Updated" to today's date.
-4. Output a WhatsApp-friendly standup summary using *bold* formatting.
+# Governance & Status Protocol Rules
+When the user invokes `/project-validate`:
+1. Check STATUS.md <= 35 lines.
+2. Verify registry sync, clean git tree, AST boundaries, and run live test suite.
+3. Emit .gemini/governance/validation_receipt.json.
+
+When the user invokes `/status-update`:
+1. Require validation_receipt.json (or run /project-validate first).
+2. Update STATUS.md following the 5-section schema strictly <= 35 lines.
+3. Commit and format a WhatsApp-ready standup summary.
 ```
 
 ### For Claude Code / Antigravity (`AGENTS.md` / `CLAUDE.md`):
 Add this trigger to your existing `AGENTS.md`:
 ```markdown
+## Command: /project-validate
+Execute python3 scripts/project_validate.py to verify scraper budget, lockstep registries, git hygiene, AST boundaries, and live test counts.
+
 ## Command: /status-update
-Inspect recent commits, update root `STATUS.md` (keep under 35 lines), commit to git, and format a WhatsApp-ready status broadcast.
+Ensure validation_receipt.json is GREEN, update root STATUS.md (keep <= 35 lines), commit to git, and format a WhatsApp-ready status broadcast.
 ```
 
 ---
@@ -149,7 +183,7 @@ An enterprise operational and financial intelligence engine executing an authori
 - **Key Risks**: Coordinating cross-domain contract changes during rapid scenario branch evolution.
 
 ### 5. Verified Quality Metrics
-- 126/126 automated test suite passing cleanly.
+- 435 passed, 4 skipped (0 failures) verified via `/project-validate`.
 - 42/42 architectural AST boundary fitness checks verified with zero leaks.
 ```
 
@@ -159,7 +193,7 @@ An enterprise operational and financial intelligence engine executing an authori
 
 Copy and send this to project leads on WhatsApp / Slack / Email:
 
-> *"Team, to simplify executive reporting and eliminate manual status writing, we are adopting a standardized 30-line `STATUS.md` across all projects.*
+> *"Team, to simplify executive reporting and eliminate manual status writing, we are adopting a standardized 30-line `STATUS.md` and pre-flight validation gate (`/project-validate`) across all projects.*
 >
 > *You don't need to write this manually. We've set up an automated 1-click prompt generator on our dashboard:*
 > *1. Open https://agni-eialarasu.github.io/cetana-labs/*

@@ -16,6 +16,16 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Adopted RFC for `/project-validate` & Two-Phase Governance Contract
+- **Context**: Formally ratified and adopted the RFC authored by Agni Eialarasu (LAB-003 Nexus Pulse) establishing the Two-Phase Governance Contract across Cetana Labs initiatives.
+- **Key Deliverables**:
+  - Implemented universal 5-pillar validation engine (`scripts/project_validate.py`) enforcing scraper line budget (<= 35 lines), multi-registry lockstep, git hygiene, architectural boundaries, and live test counts.
+  - Automatically emits immutable `.gemini/governance/validation_receipt.json` pre-flight audit receipt artifact.
+  - Created standardized AI agent skill (`.agents/skills/project-validate/SKILL.md`).
+  - Updated universal protocol guidelines (`AGENTS.md`, `docs/project-protocol.md`, `docs/project-owner-guide.md`).
+
+---
+
 ### [2026-09-24] Milestone: Sprint 3 Closeout & v0.5.0 Release
 - **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 3.
 - **Key Deliverables**:
@@ -45,26 +55,5 @@
 - **Key Deliverables**:
   - Created [`BACKLOG.md`](../../BACKLOG.md) capturing active Sprint 2 tasks, prioritized future backlog, and delivered sprint archives.
   - Created [`CHANGELOG.md`](../../CHANGELOG.md) adhering to Keep a Changelog standards spanning releases v0.1.0, v0.2.0, and v0.3.0.
-  - Synchronized `STATUS.md` and linked resources in master `README.md`.
-
----
-
-### [2026-09-23] Milestone: Reindexed to LAB-000 Kernel Identifier & Constructive Visibility
-- **Context**: Reindexed Cetana Labs control hub to zero-index `LAB-000` to distinguish the core command plane from active portfolio products.
-- **Key Decisions**:
-  - Implemented `⏳ Onboarding Pending` alert to hold project leads accountable for running `/status-init`.
-  - Added automated 14-day sprint cadence staleness detection.
-  - Standardized portfolio broadcast filter to display only active, non-completed product engineering initiatives.
-
----
-
-### [2026-09-23] Milestone: Full Command Suite & Verification
-- **Context**: Executed live end-to-end testing of `/project-status`, `/project-add`, `/project-update`, and `/project-edit`.
-- **Key Deliverables**:
-  - Verified instant single-project and portfolio-level WhatsApp broadcast outputs.
-  - Validated synchronization between local files, status generator, and remote git repository.
-
----
-
-### [2026-09-06] Milestone: Cetana Labs Repository Inception
-- **Context**: Established central engineering hub, universal agent guidelines, and standardized project templates.
+  - Synchronized `STATUS.md` and linked resources in master `README.md`.\n
+---\n
