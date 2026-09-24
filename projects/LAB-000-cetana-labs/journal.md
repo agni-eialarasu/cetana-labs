@@ -16,6 +16,18 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Sprint 4 Closeout & v0.6.0 Release
+- **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 4. Fixed a duplicate `TSK-027` ID (split into `TSK-027` Two-Phase Governance and `TSK-028` Cloud Migration) and captured the dashboard restructure as `TSK-029` prior to archiving.
+- **Delivered Capabilities**:
+  - `TSK-024`: Automated Lead Ping Engine (`BK-003`) — `scripts/ping_leads.py`, weekly `lead-ping-cron.yml`, `/ping-leads` skill; idempotent stale/onboarding GitHub issue alerts (excludes `LAB-000` & completed).
+  - `TSK-027`: Two-Phase Governance Contract — `/project-validate` 5-pillar pre-flight gate with immutable `validation_receipt.json`.
+  - `TSK-028`: Cloud Dev Migration (`RFC-LAB-000-001`) — Kiro Web primary env, `Dev Environment` protocol field, cloud dev guide, reproducible `.devcontainer/`.
+  - `TSK-029`: Owner-first dashboard cards — surfaced project owner, made Project ID internal.
+- **Release**: Promoted CHANGELOG to `v0.6.0`; synchronized root & `LAB-000` `STATUS.md`.
+- **Next Horizon**: Initialized `SPRINT-05` (2026-10-08 → 2026-10-22) carrying forward `TSK-025` (Multi-Repo PR Cross-Referencer, `BK-004`) and `TSK-026` (Slack/WhatsApp webhook dispatch, `BK-001`).
+
+---
+
 ### [2026-09-24] Milestone: Dashboard Card Restructure — Owner-First Identity
 - **Context**: Change request to surface the **project owner** (accountability) instead of the internal Project ID on the face of each dashboard card. The Project ID is valueless to executive viewers and is now kept internal-only.
 - **Key Deliverables**:

@@ -4,13 +4,13 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 ---
 
-## 🎯 Current Sprint: Sprint 4 — Automated Lead Engagement & Ecosystem Integrations
+## 🎯 Current Sprint: Sprint 5 — Ecosystem Integrations & Cross-Referencing
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-04` |
-| **Duration** | 2026-09-24 to 2026-10-08 (2 Weeks) |
-| **Sprint Goal** | Implement automated lead ping engine (`BK-003`) for stale statuses and multi-repo PR cross-referencing (`BK-004`). |
+| **Sprint ID** | `SPRINT-05` |
+| **Duration** | 2026-10-08 to 2026-10-22 (2 Weeks) |
+| **Sprint Goal** | Deliver multi-repo PR cross-referencing (`BK-004`) into the Cetana journal and Slack/WhatsApp incoming webhook dispatch (`BK-001`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -18,11 +18,8 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-024` | Automated Lead Ping Engine (`BK-003`) — issue/alert generation for stale status (> 14 days) | P1 | Eialarasu | ✅ Done | 2026-09-24 |
-| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-05 |
-| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-10-08 |
-| `TSK-027` | Cloud Dev Migration (`RFC-LAB-000-001`) — Kiro Web primary env, Dev Environment protocol field, cloud dev guide & reproducible devcontainer | P1 | Eialarasu | ✅ Done | 2026-09-24 |
-| `TSK-027` | Two-Phase Governance Contract (`/project-validate` pre-flight gate & `validation_receipt.json`) | P1 | Eialarasu | ✅ Completed | 2026-09-24 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-15 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-10-22 |
 
 ---
 
@@ -38,6 +35,15 @@ This document maintains the active sprint plan, prioritized product backlog, and
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 4: Automated Lead Engagement & Ecosystem Integrations (2026-09-24)
+- **Goal**: Mature portfolio governance — pre-flight validation, automated lead engagement, cloud-based development, and executive dashboard refinement.
+- **Deliverables**:
+  - `TSK-024`: Automated Lead Ping Engine (`BK-003`) — `scripts/ping_leads.py` + weekly `lead-ping-cron.yml` workflow + `/ping-leads` skill; idempotent GitHub issue alerts for stale (> 14 days) and onboarding-pending initiatives (excludes `LAB-000` and completed).
+  - `TSK-027`: Two-Phase Governance Contract — `/project-validate` 5-pillar pre-flight gate (`scripts/project_validate.py`) emitting immutable `validation_receipt.json`.
+  - `TSK-028`: Cloud Dev Migration (`RFC-LAB-000-001`) — Kiro Web primary environment, `Dev Environment` protocol field & registry column, `docs/cloud-dev-guide.md`, and reproducible `.devcontainer/`.
+  - `TSK-029`: Dashboard Card Restructure — surfaced the project owner as a top-left identity pill and made the internal Project ID non-visible (retained for search, sort, and hover tooltip).
+- **Carried Forward**: `TSK-025` (Multi-Repo PR Cross-Referencer) and `TSK-026` (Slack/WhatsApp webhook dispatch) → `SPRINT-05`.
 
 ### Sprint 3: Portfolio Visualization & Web Dashboard (2026-09-23 to 2026-09-24)
 - **Goal**: Implement static single-page Portfolio Web Dashboard (`BK-002`) with automated GitHub Pages hosting for visual executive reporting.

@@ -9,10 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- **Two-Phase Governance Contract (`/project-validate`)**: Implemented pre-flight programmatic verification engine (`scripts/project_validate.py`) enforcing the 5 core verification pillars: Scraper Budget (<= 35 lines), Multi-Registry Lockstep, Git Hygiene, Architectural Boundaries/Portability, and Live Test Auto-Count.
+### Changed
+### Fixed
+
+---
+
+## [0.6.0] - 2026-09-24
+### Added
+- **Two-Phase Governance Contract (`/project-validate`, `TSK-027`)**: Implemented pre-flight programmatic verification engine (`scripts/project_validate.py`) enforcing the 5 core verification pillars: Scraper Budget (<= 35 lines), Multi-Registry Lockstep, Git Hygiene, Architectural Boundaries/Portability, and Live Test Auto-Count.
 - **Cryptographic Audit Receipt**: Automatically emits `.gemini/governance/validation_receipt.json` certifying verified metrics before `/project-status` or `/status-update` emission.
 - **AI Agent Skill (`.agents/skills/project-validate/SKILL.md`)**: Registered `/project-validate` across all Cetana Labs agent environments and documented in `AGENTS.md`, `docs/project-protocol.md`, and `docs/project-owner-guide.md`.
-- **Cloud-Based Development Migration (`RFC-LAB-000-001`, `TSK-027`)**: Ratified the decision to develop `LAB-000` entirely in the cloud (primary: **Kiro Web**; fallback: GitHub Codespaces), freeing the local machine for the stateful fullstack initiative. Authored the RFC under a new `docs/rfc/` convention.
+- **Cloud-Based Development Migration (`RFC-LAB-000-001`, `TSK-028`)**: Ratified the decision to develop `LAB-000` entirely in the cloud (primary: **Kiro Web**; fallback: GitHub Codespaces), freeing the local machine for the stateful fullstack initiative. Authored the RFC under a new `docs/rfc/` convention.
 - **Environment Classification Protocol**: Added a first-class `Dev Environment` field to the `STATUS.md` schema (`docs/project-protocol.md` §4a) and a `Dev Env` column to the master registry, plus a reusable ☁️ Cloud vs 💻 Local classification heuristic.
 - **Cloud Dev Onboarding Runbook**: Published `docs/cloud-dev-guide.md` covering the Kiro Web workflow, dashboard preview, and verification checklist.
 - **Reproducible Dev Container**: Added `.devcontainer/` (Python 3.11 + GitHub CLI) for reproducible cloud environments and forward compatibility with the planned web-app (db + server) + RBAC evolution.
@@ -21,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Lead Ping Cadence Workflow**: Added `.github/workflows/lead-ping-cron.yml` running a weekly Monday 10:00 AM IST scan plus `workflow_dispatch` (dry-run by default), and registered the `/ping-leads` AI agent skill (`.agents/skills/ping-leads/SKILL.md`, `AGENTS.md`).
 
 ### Changed
-- **Dashboard Card Restructure — Owner-First Identity**: Replaced the top-left internal Project ID badge on each dashboard card with a prominent **owner-name pill** (`👤 Lead`), surfacing accountability at a glance for executive viewers. Removed the now-duplicate lead line from the card meta row (archetype only). The Project ID is retained internally (search, sort, and hover tooltip) but no longer clutters the card face; empty/generic leads render a `— Unassigned` pill.
+- **Dashboard Card Restructure — Owner-First Identity (`TSK-029`)**: Replaced the top-left internal Project ID badge on each dashboard card with a prominent **owner-name pill** (`👤 Lead`), surfacing accountability at a glance for executive viewers. Removed the now-duplicate lead line from the card meta row (archetype only). The Project ID is retained internally (search, sort, and hover tooltip) but no longer clutters the card face; empty/generic leads render a `— Unassigned` pill.
 ### Fixed
 
 ---
