@@ -6,7 +6,7 @@
 | **Project Name** | Cetana Labs Control Hub & Protocol Engine |
 | **Current Health** | 🟢 On Track |
 | **Owner / Lead** | Eialarasu |
-| **Last Updated** | 2026-09-23 |
+| **Last Updated** | 2026-09-24 |
 
 ---
 
@@ -14,13 +14,13 @@
 The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
 
 ### 2. Latest Deliveries & Business Wins
-- **Sprint 2 Closeout & v0.4.0 Release**: Shipped automated sprint closeout protocol (`/sprint-done`), portfolio validator (`validate_portfolio.py`), and remote status auto-sync (`--sync-remote`).
-- **Portfolio Sequence Compaction**: Normalized registry to contiguous series `LAB-000` through `LAB-005` with zero sequence gaps.
-- **Remote Status Auto-Sync**: Connected status engine directly to external project repos via GitHub API/raw content fallbacks.
-- **Bare-Minimum Sprint Tracking**: Operationalized `BACKLOG.md` and `CHANGELOG.md` for zero-friction project governance.
+- **Sprint 3 Closeout & v0.5.0 Release**: Shipped Portfolio Web Dashboard (`BK-002`) live on GitHub Pages (https://agni-eialarasu.github.io/cetana-labs/) with automated CI/CD deployment.
+- **Executive Blocker Alerting & Attention Sorting**: Implemented automatic Section 4 blocker parsing, crimson highlight banners, "Hard Blockers" KPI card, and multi-tier attention sorting.
+- **1-Click AI On-board Prompts**: Embedded tailor-made setup prompts directly into project cards to eliminate manual onboarding friction for incoming leads.
+- **Adaptive Theme Engine**: Built seamless Light, Dark, and System theme switching with persistent user preferences.
 
 ### 3. Current Focus & Next Milestone
-- Sprint 3 execution: Portfolio Web Dashboard (`BK-002`) architecture, feasibility spike, and static HTML visualization engine.
+- Sprint 4 execution: Automated lead ping engine (`BK-003`) and multi-repo PR cross-referencing (`BK-004`).
 
 ### 4. Blockers & Risks
 - **Blockers**: None.
@@ -28,5 +28,5 @@ The central engineering command plane, lab notebook, and automated management re
 
 ### 5. Verified Quality Metrics
 - 6/6 projects passing portfolio structural integrity and protocol checks (`validate_portfolio.py`).
-- Automated weekday morning GitHub Actions cron broadcast with remote sync active.
+- Automated GitHub Actions deployment pipeline for GitHub Pages active (13s build & deploy).
 - Clean trunk-based git synchronization on `main`.

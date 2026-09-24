@@ -1,16 +1,15 @@
 # Cetana Labs — Sprint Backlog & Roadmap
 
-This document maintains the active sprint plan, prioritized product backlog, and delivered sprint archives for **Cetana Labs Control Hub (`LAB-000`)**.
-
+This document maintains the active sprint plan, prioritized product backlog, and delivered sprint archives for **Cetana Labs Control Hub (`LAB-000`)**.\n
 ---
 
-## 🎯 Current Sprint: Sprint 3 — Portfolio Visualization & Web Dashboard
+## 🎯 Current Sprint: Sprint 4 — Automated Lead Engagement & Ecosystem Integrations
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-03` |
+| **Sprint ID** | `SPRINT-04` |
 | **Duration** | 2026-09-24 to 2026-10-08 (2 Weeks) |
-| **Sprint Goal** | Implement static single-page Portfolio Web Dashboard (`BK-002`) with automated GitHub Pages hosting for visual executive reporting. |
+| **Sprint Goal** | Implement automated lead ping engine (`BK-003`) for stale statuses and multi-repo PR cross-referencing (`BK-004`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -18,9 +17,9 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-017` | Portfolio Web Dashboard architecture & feasibility spike (`BK-002`) | P1 | Eialarasu | ✅ Done | 2026-09-23 |
-| `TSK-018` | Static dashboard generator (`scripts/generate_dashboard.py`) & HTML template (`docs/index.html`) | P1 | Eialarasu | ✅ Done | 2026-09-23 |
-| `TSK-019` | GitHub Pages deployment workflow (`.github/workflows/deploy-pages.yml`) for automated hosting | P1 | Eialarasu | ✅ Done | 2026-09-23 |
+| `TSK-024` | Automated Lead Ping Engine (`BK-003`) — issue/alert generation for stale status (> 14 days) | P1 | Eialarasu | 📋 Planned | 2026-10-01 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-05 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-10-08 |
 
 ---
 
@@ -28,14 +27,23 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Backlog ID | Proposed Initiative / Capability | Priority | Archetype | Target Sprint | Notes |
 | :---: | :--- | :---: | :---: | :---: | :--- |
-| `BK-001` | Option B: Slack / WhatsApp incoming webhook dispatch | P1 | Automation | Backlog | Direct channel POSTing from GitHub Actions cron via secret URL |
-| `BK-003` | Automated Lead Ping Engine | P2 | Automation | Sprint 4 | Auto-creates GitHub issue or alert when status is stale > 14 days |
-| `BK-004` | Multi-Repository PR Cross-Referencer | P3 | Integration | Sprint 4 | Link pull requests across sub-projects directly into Cetana journal |
 | `BK-005` | PDF Executive Digest Export | P3 | Tooling | Backlog | One-click export for board/investor reporting |
+| `BK-006` | Project Health Trend Telemetry | P3 | Analytics | Backlog | Historical velocity and health transition graphs on dashboard |
 
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 3: Portfolio Visualization & Web Dashboard (2026-09-23 to 2026-09-24)
+- **Goal**: Implement static single-page Portfolio Web Dashboard (`BK-002`) with automated GitHub Pages hosting for visual executive reporting.
+- **Deliverables**:
+  - `TSK-017`: Portfolio Web Dashboard architecture & feasibility spike (`BK-002`).
+  - `TSK-018`: Static dashboard generator (`scripts/generate_dashboard.py`) & HTML template (`docs/index.html`).
+  - `TSK-019`: GitHub Pages deployment workflow (`.github/workflows/deploy-pages.yml`) for automated hosting.
+  - `TSK-020`: System / Light / Dark theme toggle with persistent user storage and dynamic OS auto-switching.
+  - `TSK-021`: 1-Click project-tailored AI On-board Prompt generation (`🚀 Copy On-board Prompt`).
+  - `TSK-022`: Executive blocker alerting, crimson highlighting, and top KPI metric ("Hard Blockers").
+  - `TSK-023`: Executive Attention Priority sorting and default Active Products landing tab.
 
 ### Sprint 2: Sprint Tracking & Automation Maturation (2026-09-23)
 - **Goal**: Implement bare-minimum sprint tracking, enhance automated remote sync, portfolio integrity validation, and sprint closeout tooling.
