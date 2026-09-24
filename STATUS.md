@@ -5,6 +5,7 @@
 | **Project ID** | LAB-000 |
 | **Project Name** | Cetana Labs Control Hub & Protocol Engine |
 | **Current Health** | 🟢 On Track |
+| **Dev Environment** | ☁️ Cloud (Kiro Web) |
 | **Owner / Lead** | Eialarasu |
 | **Last Updated** | 2026-09-24 |
 

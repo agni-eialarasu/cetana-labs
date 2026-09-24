@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Two-Phase Governance Contract (`/project-validate`)**: Implemented pre-flight programmatic verification engine (`scripts/project_validate.py`) enforcing the 5 core verification pillars: Scraper Budget (<= 35 lines), Multi-Registry Lockstep, Git Hygiene, Architectural Boundaries/Portability, and Live Test Auto-Count.
 - **Cryptographic Audit Receipt**: Automatically emits `.gemini/governance/validation_receipt.json` certifying verified metrics before `/project-status` or `/status-update` emission.
 - **AI Agent Skill (`.agents/skills/project-validate/SKILL.md`)**: Registered `/project-validate` across all Cetana Labs agent environments and documented in `AGENTS.md`, `docs/project-protocol.md`, and `docs/project-owner-guide.md`.
+- **Cloud-Based Development Migration (`RFC-LAB-000-001`, `TSK-027`)**: Ratified the decision to develop `LAB-000` entirely in the cloud (primary: **Kiro Web**; fallback: GitHub Codespaces), freeing the local machine for the stateful fullstack initiative. Authored the RFC under a new `docs/rfc/` convention.
+- **Environment Classification Protocol**: Added a first-class `Dev Environment` field to the `STATUS.md` schema (`docs/project-protocol.md` §4a) and a `Dev Env` column to the master registry, plus a reusable ☁️ Cloud vs 💻 Local classification heuristic.
+- **Cloud Dev Onboarding Runbook**: Published `docs/cloud-dev-guide.md` covering the Kiro Web workflow, dashboard preview, and verification checklist.
+- **Reproducible Dev Container**: Added `.devcontainer/` (Python 3.11 + GitHub CLI) for reproducible cloud environments and forward compatibility with the planned web-app (db + server) + RBAC evolution.
+- **Backlog Registration**: Registered `BK-008` (Control Hub Web App Evolution — db + server), the prerequisite platform for `BK-007` RBAC.
 
 ### Changed
 ### Fixed

@@ -1,0 +1,23 @@
+{
+  "name": "Cetana Labs Control Hub (LAB-000)",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "postCreateCommand": "python3 --version && gh --version || true",
+  "postAttachCommand": "python3 scripts/validate_portfolio.py || true",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "yzhang.markdown-all-in-one",
+        "github.vscode-github-actions"
+      ],
+      "settings": {
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}

@@ -39,6 +39,7 @@ Every `STATUS.md` MUST adhere to this concise, 5-section markdown template (stri
 | **Project ID** | LAB-XXX |
 | **Project Name** | [Name] |
 | **Current Health** | 🟢 On Track |
+| **Dev Environment** | ☁️ Cloud (Kiro Web) |
 | **Owner / Lead** | [Name] |
 | **Last Updated** | YYYY-MM-DD |
 
@@ -75,6 +76,20 @@ A 2-sentence summary of what this project does and the business value it deliver
 | **Blocked** | `🔴 Blocked` | Hard blocker requiring management intervention. |
 | **Paused** | `⏸️ Paused` | Intentionally on hold. |
 | **Completed** | `✅ Completed` | Deliverables finished or successfully operationalized. |
+
+---
+
+## 4a. Dev Environment Values
+
+The `Dev Environment` metadata field declares where the initiative is developed. Classification follows the reusable heuristic in [`RFC-LAB-000-001`](rfc/RFC-LAB-000-001-cloud-dev-migration.md) (§4).
+
+| Value | Badge | Meaning |
+| :--- | :---: | :--- |
+| **Cloud** | `☁️ Cloud (Kiro Web)` | Browser-based / containerized cloud development. Default for docs, research, static generators, and CI-executed automation. |
+| **Cloud** | `☁️ Cloud (Codespaces)` | Cloud development requiring long-running services (db + server) or port-forwarding. |
+| **Local** | `💻 Local` | Local-required: persistent local services, hardware access (GPU/CV/edge), data-residency, or heavyweight native toolchains. |
+
+> An initiative is **☁️ Cloud-Eligible by default** unless it trips a local-required trigger. See `RFC-LAB-000-001` §4 for the full decision rule.
 
 ---
 

@@ -16,14 +16,14 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 
 ## 🧭 Master Project Registry
 
-| ID | Project Name | Archetype | Health | Lead | Codebase / Reference | Executive Status (`STATUS.md`) |
-| :---: | :--- | :---: | :---: | :---: | :--- | :---: |
-| **`LAB-000`** | **[Cetana Labs Control Hub](projects/LAB-000-cetana-labs/README.md)** (Protocol Engine) | 💻 Control Plane | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/cetana-labs) | [STATUS.md](projects/LAB-000-cetana-labs/STATUS.md) |
-| **`LAB-001`** | **[AAMAS](projects/LAB-001-ammas/README.md)** (Autism Activity Monitor) | 💻 Mini-App | `✅ Completed` | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [STATUS.md](projects/LAB-001-ammas/STATUS.md) |
-| **`LAB-002`** | **[WrenAI Evaluation](projects/LAB-002-wrenai-eval/README.md)** (Semantic GenBI) | 📑 Research | `✅ Completed` | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [STATUS.md](projects/LAB-002-wrenai-eval/STATUS.md) |
-| **`LAB-003`** | **[Nexus Pulse](projects/LAB-003-nexus-pulse/README.md)** (Vertical Engine) | 💻 Mini-App | `🟢 On Track` | Eialarasu | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [STATUS.md](projects/LAB-003-nexus-pulse/STATUS.md) |
-| **`LAB-004`** | **[Zerobea.ai](projects/LAB-004-zerobea-ai/README.md)** (AI Security Control Plane) | 💻 Mini-App | `⏳ Onboarding Pending` | Abishek Singhavi | [GitHub Repo](https://github.com/zerobeadotai/zerobea.ai) | [STATUS.md](projects/LAB-004-zerobea-ai/STATUS.md) |
-| **`LAB-005`** | **[Nexus Beacon](projects/LAB-005-nexus-beacon/README.md)** (Operational Alert Service) | 💻 Mini-App | `⏳ Onboarding Pending` | Arun Elambaram | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-beacon) | [STATUS.md](projects/LAB-005-nexus-beacon/STATUS.md) |
+| ID | Project Name | Archetype | Health | Dev Env | Lead | Codebase / Reference | Executive Status (`STATUS.md`) |
+| :---: | :--- | :---: | :---: | :---: | :---: | :--- | :---: |
+| **`LAB-000`** | **[Cetana Labs Control Hub](projects/LAB-000-cetana-labs/README.md)** (Protocol Engine) | 💻 Control Plane | `🟢 On Track` | ☁️ Cloud | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/cetana-labs) | [STATUS.md](projects/LAB-000-cetana-labs/STATUS.md) |
+| **`LAB-001`** | **[AAMAS](projects/LAB-001-ammas/README.md)** (Autism Activity Monitor) | 💻 Mini-App | `✅ Completed` | 💻 Local | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [STATUS.md](projects/LAB-001-ammas/STATUS.md) |
+| **`LAB-002`** | **[WrenAI Evaluation](projects/LAB-002-wrenai-eval/README.md)** (Semantic GenBI) | 📑 Research | `✅ Completed` | ☁️ Cloud | Eialarasu | [getwren.ai](https://www.getwren.ai/) / [LAB-001 Proof](projects/LAB-001-ammas/README.md) | [STATUS.md](projects/LAB-002-wrenai-eval/STATUS.md) |
+| **`LAB-003`** | **[Nexus Pulse](projects/LAB-003-nexus-pulse/README.md)** (Vertical Engine) | 💻 Mini-App | `🟢 On Track` | 💻 Local | Eialarasu | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [STATUS.md](projects/LAB-003-nexus-pulse/STATUS.md) |
+| **`LAB-004`** | **[Zerobea.ai](projects/LAB-004-zerobea-ai/README.md)** (AI Security Control Plane) | 💻 Mini-App | `⏳ Onboarding Pending` | — | Abishek Singhavi | [GitHub Repo](https://github.com/zerobeadotai/zerobea.ai) | [STATUS.md](projects/LAB-004-zerobea-ai/STATUS.md) |
+| **`LAB-005`** | **[Nexus Beacon](projects/LAB-005-nexus-beacon/README.md)** (Operational Alert Service) | 💻 Mini-App | `⏳ Onboarding Pending` | — | Arun Elambaram | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-beacon) | [STATUS.md](projects/LAB-005-nexus-beacon/STATUS.md) |
 
 > ℹ️ *Note: `LAB-000` is the central control plane kernel. Routine morning portfolio broadcasts report active client/product initiatives (`LAB-003`, `LAB-004`, `LAB-005`). To inspect the Control Hub status specifically, run `/project-status LAB-000`.*
 

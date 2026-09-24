@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Cloud-Based Development Migration (`RFC-LAB-000-001`)
+- **Context**: The maintainer ran IntelliJ IDEA + Antigravity for both `LAB-000` and a separate stateful fullstack project on one machine, causing performance degradation. Since `LAB-000` has no local runtime dependency (docs + zero-dependency Python; automation runs in CI), it was migrated to cloud-based development to free the local machine for the fullstack initiative.
+- **Key Deliverables**:
+  - Authored and ratified [`RFC-LAB-000-001`](../../docs/rfc/RFC-LAB-000-001-cloud-dev-migration.md) under a new `docs/rfc/` convention — **Kiro Web** as primary cloud environment, GitHub Codespaces as fallback for future services.
+  - Defined a reusable **☁️ Cloud vs 💻 Local classification heuristic** (RFC §4) and made `Dev Environment` a first-class field in the `STATUS.md` protocol (`docs/project-protocol.md` §4a) and the master registry (`Dev Env` column).
+  - Published cloud dev onboarding runbook (`docs/cloud-dev-guide.md`) and a reproducible dev container (`.devcontainer/`, Python 3.11 + GitHub CLI).
+  - Registered `BK-008` (Control Hub Web App evolution — db + server) as the platform prerequisite for `BK-007` RBAC; RFC §5 anticipates the cloud env shifting Kiro Web → Codespaces at that point.
+  - Closed `TSK-027` in `SPRINT-04`; synchronized `BACKLOG.md` and `CHANGELOG.md`.
+
+---
+
 ### [2026-09-24] Milestone: Adopted RFC for `/project-validate` & Two-Phase Governance Contract
 - **Context**: Formally ratified and adopted the RFC authored by Agni Eialarasu (LAB-003 Nexus Pulse) establishing the Two-Phase Governance Contract across Cetana Labs initiatives.
 - **Key Deliverables**:

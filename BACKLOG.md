@@ -21,6 +21,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `TSK-024` | Automated Lead Ping Engine (`BK-003`) — issue/alert generation for stale status (> 14 days) | P1 | Eialarasu | 📋 Planned | 2026-10-01 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-05 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-10-08 |
+| `TSK-027` | Cloud Dev Migration (`RFC-LAB-000-001`) — Kiro Web primary env, Dev Environment protocol field, cloud dev guide & reproducible devcontainer | P1 | Eialarasu | ✅ Done | 2026-09-24 |
 | `TSK-027` | Two-Phase Governance Contract (`/project-validate` pre-flight gate & `validation_receipt.json`) | P1 | Eialarasu | ✅ Completed | 2026-09-24 |
 
 ---
@@ -32,6 +33,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `BK-005` | PDF Executive Digest Export | P3 | Tooling | Backlog | One-click export for board/investor reporting |
 | `BK-006` | Project Health Trend Telemetry | P3 | Analytics | Backlog | Historical velocity and health transition graphs on dashboard |
 | `BK-007` | On-Demand Git Status Audit Trail & Role-Gated History | P3 | Governance | Backlog | Reconstructs historical sprint baselines & health transitions from Git logs of `STATUS.md`. On-demand CLI initially; plan simple auth / RBAC for future dashboard access to prevent developer surveillance perceptions. |
+| `BK-008` | Control Hub Web App Evolution (db + server) | P2 | Platform | Backlog | Evolve the static control plane into a full web application (database + backend server). Prerequisite for `BK-007` RBAC. Cloud dev env shifts Kiro Web → Codespaces per `RFC-LAB-000-001` §5; services declared in `.devcontainer/`. |
 
 ---
 
