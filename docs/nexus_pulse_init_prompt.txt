@@ -1,0 +1,79 @@
+Act as our Technical Delivery & Governance Lead for Nexus Pulse.
+
+### 🌐 Context & Objective
+Our engineering organization has established Cetana Labs (our master engineering portfolio and management control plane at https://agni-eialarasu.github.io/cetana-labs/).
+
+Every weekday morning at 9:30 AM IST, an automated cron engine inspects registered repositories to compile an executive status broadcast for leadership. To eliminate manual status paperwork, repetitive standup recaps, and management interruptions, Nexus Pulse is registered as initiative LAB-003 and must follow our organization's 30-line STATUS.md protocol.
+
+The central Cetana Labs engine automatically fetches STATUS.md from the root of https://github.com/eAgni-Technologies/nexus-pulse (on main branch).
+
+---
+
+### 📋 Actions Required in this Repository
+
+#### 1. Initialize Root STATUS.md
+Create or update the root STATUS.md following our strict 5-section schema under 35 lines, reflecting our latest v1.2.0 staging release and verified metrics:
+
+--- START OF STATUS.MD CONTENT ---
+# Project Status & Executive Summary
+
+| Property | Value |
+| :--- | :--- |
+| **Project ID** | LAB-003 |
+| **Project Name** | Nexus Pulse (Governed Deterministic Vertical Engine) |
+| **Current Health** | 🟢 On Track |
+| **Owner / Lead** | Eialarasu |
+| **Last Updated** | 2026-09-24 |
+
+---
+
+### 1. Elevator Pitch (Business Purpose)
+An enterprise operational and financial intelligence engine executing an authoritative deterministic pipeline across Commercial SOWs, Workforce Allocations, Governed Finance Margins, and Automated Risk Signals to protect company profitability.
+
+### 2. Latest Deliveries & Business Wins
+- **Staging Release Baseline (v1.2.0)**: Deployed full-stack multi-tenant platform live on Vercel and Railway with authentic Supabase identity governance.
+- **Deterministic Signals Engine**: Automated rule engine evaluating margin erosion (SIG-01), SOW consumption risk (SIG-02), and workforce conflicts (SIG-03).
+- **Governed Finance Variance**: Immutable baseline-vs-forecast calculations verified against canonical golden dataset NP-GOLDEN-001.
+
+### 3. Current Focus & Next Milestone
+- Active Sprints 6E, 8B & 9: Scenario simulation engine, AST boundaries, and operational frontend workflows.
+
+### 4. Blockers & Risks
+- **Blockers**: None.
+- **Key Risks**: Coordinating cross-domain contract changes during rapid scenario branch evolution.
+
+### 5. Verified Quality Metrics
+- 431/431 automated test suite passing cleanly.
+- 42/42 architectural AST boundary fitness checks verified with zero leaks.
+--- END OF STATUS.MD CONTENT ---
+
+#### 2. Embed the Governance Protocol into AGENTS.md
+Add this section to AGENTS.md under governance so all future AI agents know how to update status during sprint closeouts:
+
+--- START OF AGENTS.MD ADDITION ---
+## Status Protocol & Executive Cadence (`/status-update`)
+
+When the user asks for `/status-update` or completes a sprint milestone:
+1. Inspect the last 5 commits (`git log -n 5 --oneline`) and recent test/sprint outputs.
+2. Update root `STATUS.md`:
+   - Set `Last Updated` to today's date (`YYYY-MM-DD`).
+   - Prepend top 1-2 new deliverable wins under `2. Latest Deliveries & Business Wins` (keep top 3-4 bullets).
+   - Update `3. Current Focus & Next Milestone`.
+   - Update `5. Verified Quality Metrics` with latest test counts.
+   - Ensure the file remains under 35 lines.
+3. Commit with message: `docs: update STATUS.md for <sprint/milestone>`.
+4. Output a concise WhatsApp-compatible update using bold headers and bullet points.
+--- END OF AGENTS.MD ADDITION ---
+
+#### 3. Link Cetana Labs in README.md
+In the top badge row of README.md, add the Cetana Labs portfolio badge:
+[![Cetana Labs: LAB-003](https://img.shields.io/badge/Cetana_Labs-LAB--003-blue.svg)](https://agni-eialarasu.github.io/cetana-labs/)
+
+#### 4. Stage, Commit & Push
+1. Stage STATUS.md, AGENTS.md, and README.md.
+2. Commit with message:
+   docs(governance): initialize Cetana Labs STATUS.md protocol (LAB-003)
+3. Push to origin main.
+
+#### 5. Output Verification Broadcast
+Finally, output the ready-to-paste WhatsApp executive update snippet formatted with bold headers and clean dividers (━━━━━━━━━━━━━━━━━━━━━).

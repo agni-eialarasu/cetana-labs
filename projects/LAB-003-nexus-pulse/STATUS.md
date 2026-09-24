@@ -6,7 +6,7 @@
 | **Project Name** | Nexus Pulse (Governed Deterministic Vertical Engine) |
 | **Current Health** | 🟢 On Track |
 | **Owner / Lead** | Eialarasu |
-| **Last Updated** | 2026-09-23 |
+| **Last Updated** | 2026-09-24 |
 
 ---
 
@@ -14,17 +14,17 @@
 An enterprise operational and financial intelligence engine executing an authoritative deterministic pipeline across Commercial SOWs, Workforce Allocations, Governed Finance Margins, and Automated Risk Signals to protect company profitability.
 
 ### 2. Latest Deliveries & Business Wins
-- **Deterministic Signals Engine (T-014..T-016)**: Real-time automated rule engine detecting margin erosion (SIG-01), SOW consumption risk (SIG-02), and workforce allocation conflicts (SIG-03).
-- **Governed Finance Variance (T-013)**: Immutable baseline-vs-forecast variance calculations verified against golden canonical dataset `NP-GOLDEN-001`.
-- **Tenancy & Scoped RBAC (T-002..T-004)**: Five-role fail-closed permission matrix and tenant-filtered commercial rate resolution.
+- **Staging Release Baseline (v1.2.0)**: Deployed full-stack multi-tenant platform live on Vercel and Railway with authentic Supabase identity governance.
+- **Deterministic Signals Engine**: Automated rule engine evaluating margin erosion (SIG-01), SOW consumption risk (SIG-02), and workforce conflicts (SIG-03).
+- **Governed Finance Variance**: Immutable baseline-vs-forecast calculations verified against canonical golden dataset NP-GOLDEN-001.
 
 ### 3. Current Focus & Next Milestone
-- Scenario simulation engine and Next.js multi-tenant operational frontend.
+- Active Sprints 6E, 8B & 9: Scenario simulation engine, AST boundaries, and operational frontend workflows.
 
 ### 4. Blockers & Risks
 - **Blockers**: None.
 - **Key Risks**: Coordinating cross-domain contract changes during rapid scenario branch evolution.
 
 ### 5. Verified Quality Metrics
-- 126/126 automated test suite passing cleanly.
+- 431/431 automated test suite passing cleanly.
 - 42/42 architectural AST boundary fitness checks verified with zero leaks.
