@@ -405,6 +405,36 @@
       border: 1px solid rgba(56, 189, 248, 0.25);
     }
 
+    /* Owner identity pill (top-left of card) */
+    .owner-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      max-width: 62%;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      background: var(--btn-bg);
+      padding: 0.28rem 0.65rem 0.28rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      cursor: default;
+    }
+    .owner-pill .owner-icon {
+      font-size: 0.85rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .owner-pill .owner-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .owner-pill.unassigned {
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
     .health-pill {
       font-size: 0.75rem;
       font-weight: 600;
@@ -660,14 +690,12 @@
     <div class="cards-grid" id="cardsGrid">
       <div class="project-card" data-tags="active on-track" data-search="LAB-003 Nexus Pulse (Governed Deterministic Vertical Engine) Eialarasu Mini-App" data-priority="20" data-updated="2026-09-24" data-id="LAB-003">
         <div class="card-top">
-          <span class="id-badge">LAB-003</span>
+          <span class="owner-pill" title="LAB-003"><span class="owner-icon">👤</span><span class="owner-name">Eialarasu</span></span>
           <span class="health-pill health-on-track">🟢 On Track</span>
         </div>
         <div class="card-header-main">
           <h2 class="card-title">Nexus Pulse (Governed Deterministic Vertical Engine)</h2>
           <div class="card-meta">
-            <span>👤 Eialarasu</span>
-            <span>•</span>
             <span>💻 Mini-App</span>
           </div>
         </div>
@@ -703,14 +731,12 @@
       </div>
       <div class="project-card" data-tags="active onboarding-pending" data-search="LAB-004 Zerobea.ai Abishek Singhavi Mini-App" data-priority="30" data-updated="2026-09-23" data-id="LAB-004">
         <div class="card-top">
-          <span class="id-badge">LAB-004</span>
+          <span class="owner-pill" title="LAB-004"><span class="owner-icon">👤</span><span class="owner-name">Abishek Singhavi</span></span>
           <span class="health-pill health-pending">⏳ Onboarding Pending</span>
         </div>
         <div class="card-header-main">
           <h2 class="card-title">Zerobea.ai</h2>
           <div class="card-meta">
-            <span>👤 Abishek Singhavi</span>
-            <span>•</span>
             <span>💻 Mini-App</span>
           </div>
         </div>
@@ -741,14 +767,12 @@
       </div>
       <div class="project-card" data-tags="active onboarding-pending" data-search="LAB-005 Nexus Beacon Arun Elambaram Mini-App" data-priority="30" data-updated="2026-09-23" data-id="LAB-005">
         <div class="card-top">
-          <span class="id-badge">LAB-005</span>
+          <span class="owner-pill" title="LAB-005"><span class="owner-icon">👤</span><span class="owner-name">Arun Elambaram</span></span>
           <span class="health-pill health-pending">⏳ Onboarding Pending</span>
         </div>
         <div class="card-header-main">
           <h2 class="card-title">Nexus Beacon</h2>
           <div class="card-meta">
-            <span>👤 Arun Elambaram</span>
-            <span>•</span>
             <span>💻 Mini-App</span>
           </div>
         </div>
@@ -779,14 +803,12 @@
       </div>
       <div class="project-card" data-tags="completed" data-search="LAB-001 AAMAS (Autism Activity Monitoring & Alerting System) Eialarasu Mini-App" data-priority="40" data-updated="2026-09-23" data-id="LAB-001">
         <div class="card-top">
-          <span class="id-badge">LAB-001</span>
+          <span class="owner-pill" title="LAB-001"><span class="owner-icon">👤</span><span class="owner-name">Eialarasu</span></span>
           <span class="health-pill health-completed">✅ Completed</span>
         </div>
         <div class="card-header-main">
           <h2 class="card-title">AAMAS (Autism Activity Monitoring & Alerting System)</h2>
           <div class="card-meta">
-            <span>👤 Eialarasu</span>
-            <span>•</span>
             <span>💻 Mini-App</span>
           </div>
         </div>
@@ -822,14 +844,12 @@
       </div>
       <div class="project-card" data-tags="completed" data-search="LAB-002 WrenAI Capabilities & Semantic GenBI Evaluation Eialarasu Research Spike" data-priority="40" data-updated="2026-09-23" data-id="LAB-002">
         <div class="card-top">
-          <span class="id-badge">LAB-002</span>
+          <span class="owner-pill" title="LAB-002"><span class="owner-icon">👤</span><span class="owner-name">Eialarasu</span></span>
           <span class="health-pill health-completed">✅ Completed</span>
         </div>
         <div class="card-header-main">
           <h2 class="card-title">WrenAI Capabilities & Semantic GenBI Evaluation</h2>
           <div class="card-meta">
-            <span>👤 Eialarasu</span>
-            <span>•</span>
             <span>📑 Research Spike</span>
           </div>
         </div>
@@ -865,14 +885,12 @@
       </div>
       <div class="project-card" data-tags="control-plane" data-search="LAB-000 Cetana Labs Control Hub & Protocol Engine Eialarasu Control Plane" data-priority="50" data-updated="2026-09-24" data-id="LAB-000">
         <div class="card-top">
-          <span class="id-badge">LAB-000</span>
+          <span class="owner-pill" title="LAB-000"><span class="owner-icon">👤</span><span class="owner-name">Eialarasu</span></span>
           <span class="health-pill health-on-track">🟢 On Track</span>
         </div>
         <div class="card-header-main">
           <h2 class="card-title">Cetana Labs Control Hub & Protocol Engine</h2>
           <div class="card-meta">
-            <span>👤 Eialarasu</span>
-            <span>•</span>
             <span>💻 Control Plane</span>
           </div>
         </div>
@@ -883,9 +901,9 @@
         <div>
           <div class="section-title">Latest Deliveries & Wins</div>
           <ul class="wins-list">
+            <li><strong>Cloud Dev Migration (`RFC-LAB-000-001`)</strong>: Moved `LAB-000` to cloud-based development (Kiro Web), freeing the local machine; added `Dev Environment` protocol field, cloud dev guide, and reproducible `.devcontainer/`.</li>
             <li><strong>Sprint 3 Closeout & v0.5.0 Release</strong>: Shipped Portfolio Web Dashboard (`BK-002`) live on GitHub Pages (https://agni-eialarasu.github.io/cetana-labs/) with automated CI/CD deployment.</li>
-            <li><strong>Executive Blocker Alerting & Attention Sorting</strong>: Implemented automatic Section 4 blocker parsing, crimson highlight banners, "Hard Blockers" KPI card, and multi-tier attention sorting.</li>
-            <li><strong>1-Click AI On-board Prompts</strong>: Embedded tailor-made setup prompts directly into project cards to eliminate manual onboarding friction for incoming leads.</li>
+            <li><strong>Two-Phase Governance Contract</strong>: Adopted `/project-validate` 5-pillar pre-flight gate with immutable validation receipts.</li>
           </ul>
         </div>
         <div>
@@ -894,7 +912,7 @@
         </div>
         <div class="card-footer">
           <div class="card-actions">
-            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IENldGFuYSBMYWJzIENvbnRyb2wgSHViICYgUHJvdG9jb2wgRW5naW5lIChMQUItMDAwKSoKX0xlYWQ6IEVpYWxhcmFzdSB8IERhdGU6IDI0LVNlcC0yMDI2XwpfSGVhbHRoOiDwn5+iIE9uIFRyYWNrXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfk4wgKkJVU0lORVNTIFZBTFVFICYgUFVSUE9TRSoKVGhlIGNlbnRyYWwgZW5naW5lZXJpbmcgY29tbWFuZCBwbGFuZSwgbGFiIG5vdGVib29rLCBhbmQgYXV0b21hdGVkIG1hbmFnZW1lbnQgcmVwb3J0aW5nIGVuZ2luZSB0aGF0IGVsaW1pbmF0ZXMgbWFudWFsIHN0YXR1cyBmcmljdGlvbiBhY3Jvc3MgYWxsIGFjdGl2ZSBlbmdpbmVlcmluZyBpbml0aWF0aXZlcy4KCvCfjJ8gKkxBVEVTVCBERUxJVkVSSUVTICYgV0lOUyoK4oCiICpTcHJpbnQgMyBDbG9zZW91dCAmIHYwLjUuMCBSZWxlYXNlKjogU2hpcHBlZCBQb3J0Zm9saW8gV2ViIERhc2hib2FyZCAoYEJLLTAwMmApIGxpdmUgb24gR2l0SHViIFBhZ2VzIChodHRwczovL2FnbmktZWlhbGFyYXN1LmdpdGh1Yi5pby9jZXRhbmEtbGFicy8pIHdpdGggYXV0b21hdGVkIENJL0NEIGRlcGxveW1lbnQuCuKAoiAqRXhlY3V0aXZlIEJsb2NrZXIgQWxlcnRpbmcgJiBBdHRlbnRpb24gU29ydGluZyo6IEltcGxlbWVudGVkIGF1dG9tYXRpYyBTZWN0aW9uIDQgYmxvY2tlciBwYXJzaW5nLCBjcmltc29uIGhpZ2hsaWdodCBiYW5uZXJzLCAiSGFyZCBCbG9ja2VycyIgS1BJIGNhcmQsIGFuZCBtdWx0aS10aWVyIGF0dGVudGlvbiBzb3J0aW5nLgrigKIgKjEtQ2xpY2sgQUkgT24tYm9hcmQgUHJvbXB0cyo6IEVtYmVkZGVkIHRhaWxvci1tYWRlIHNldHVwIHByb21wdHMgZGlyZWN0bHkgaW50byBwcm9qZWN0IGNhcmRzIHRvIGVsaW1pbmF0ZSBtYW51YWwgb25ib2FyZGluZyBmcmljdGlvbiBmb3IgaW5jb21pbmcgbGVhZHMuCuKAoiAqQWRhcHRpdmUgVGhlbWUgRW5naW5lKjogQnVpbHQgc2VhbWxlc3MgTGlnaHQsIERhcmssIGFuZCBTeXN0ZW0gdGhlbWUgc3dpdGNoaW5nIHdpdGggcGVyc2lzdGVudCB1c2VyIHByZWZlcmVuY2VzLgoK8J+OryAqQ1VSUkVOVCBGT0NVUyAmIE5FWFQgTUlMRVNUT05FKgrigKIgU3ByaW50IDQgZXhlY3V0aW9uOiBBdXRvbWF0ZWQgbGVhZCBwaW5nIGVuZ2luZSAoYEJLLTAwM2ApIGFuZCBtdWx0aS1yZXBvIFBSIGNyb3NzLXJlZmVyZW5jaW5nIChgQkstMDA0YCkuCgrwn5uh77iPICpRVUFMSVRZIEFTU1VSQU5DRSAmIE1FVFJJQ1MqCuKAoiA2LzYgcHJvamVjdHMgcGFzc2luZyBwb3J0Zm9saW8gc3RydWN0dXJhbCBpbnRlZ3JpdHkgYW5kIHByb3RvY29sIGNoZWNrcyAoYHZhbGlkYXRlX3BvcnRmb2xpby5weWApLgrigKIgQXV0b21hdGVkIEdpdEh1YiBBY3Rpb25zIGRlcGxveW1lbnQgcGlwZWxpbmUgZm9yIEdpdEh1YiBQYWdlcyBhY3RpdmUgKDEzcyBidWlsZCAmIGRlcGxveSkuCuKAoiBDbGVhbiB0cnVuay1iYXNlZCBnaXQgc3luY2hyb25pemF0aW9uIG9uIGBtYWluYC4KCuKaoO+4jyAqQkxPQ0tFUlMgJiBSSVNLUyoK4oCiICpCbG9ja2VyczoqIE5vbmUK4oCiICpSaXNrczoqIEVuc3VyaW5nIGV4dGVybmFsIHByb2plY3QgbGVhZHMgcmVndWxhcmx5IGludm9rZSBgL3N0YXR1cy11cGRhdGVgIGF0IHNwcmludCBjbG9zZQoK8J+UlyAqUmVwb3NpdG9yeSAmIEFydGlmYWN0czoqCmh0dHBzOi8vZ2l0aHViLmNvbS9hZ25pLWVpYWxhcmFzdS9jZXRhbmEtbGFicw==">
+            <button class="btn" onclick="copySingleBriefing(this)" data-briefing="8J+agCAqUFJPSkVDVCBTVEFUVVMgQlJJRUZJTkc6IENldGFuYSBMYWJzIENvbnRyb2wgSHViICYgUHJvdG9jb2wgRW5naW5lIChMQUItMDAwKSoKX0xlYWQ6IEVpYWxhcmFzdSB8IERhdGU6IDI0LVNlcC0yMDI2XwpfSGVhbHRoOiDwn5+iIE9uIFRyYWNrXwoK4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSB4pSBCvCfk4wgKkJVU0lORVNTIFZBTFVFICYgUFVSUE9TRSoKVGhlIGNlbnRyYWwgZW5naW5lZXJpbmcgY29tbWFuZCBwbGFuZSwgbGFiIG5vdGVib29rLCBhbmQgYXV0b21hdGVkIG1hbmFnZW1lbnQgcmVwb3J0aW5nIGVuZ2luZSB0aGF0IGVsaW1pbmF0ZXMgbWFudWFsIHN0YXR1cyBmcmljdGlvbiBhY3Jvc3MgYWxsIGFjdGl2ZSBlbmdpbmVlcmluZyBpbml0aWF0aXZlcy4KCvCfjJ8gKkxBVEVTVCBERUxJVkVSSUVTICYgV0lOUyoK4oCiICpDbG91ZCBEZXYgTWlncmF0aW9uIChgUkZDLUxBQi0wMDAtMDAxYCkqOiBNb3ZlZCBgTEFCLTAwMGAgdG8gY2xvdWQtYmFzZWQgZGV2ZWxvcG1lbnQgKEtpcm8gV2ViKSwgZnJlZWluZyB0aGUgbG9jYWwgbWFjaGluZTsgYWRkZWQgYERldiBFbnZpcm9ubWVudGAgcHJvdG9jb2wgZmllbGQsIGNsb3VkIGRldiBndWlkZSwgYW5kIHJlcHJvZHVjaWJsZSBgLmRldmNvbnRhaW5lci9gLgrigKIgKlNwcmludCAzIENsb3Nlb3V0ICYgdjAuNS4wIFJlbGVhc2UqOiBTaGlwcGVkIFBvcnRmb2xpbyBXZWIgRGFzaGJvYXJkIChgQkstMDAyYCkgbGl2ZSBvbiBHaXRIdWIgUGFnZXMgKGh0dHBzOi8vYWduaS1laWFsYXJhc3UuZ2l0aHViLmlvL2NldGFuYS1sYWJzLykgd2l0aCBhdXRvbWF0ZWQgQ0kvQ0QgZGVwbG95bWVudC4K4oCiICpUd28tUGhhc2UgR292ZXJuYW5jZSBDb250cmFjdCo6IEFkb3B0ZWQgYC9wcm9qZWN0LXZhbGlkYXRlYCA1LXBpbGxhciBwcmUtZmxpZ2h0IGdhdGUgd2l0aCBpbW11dGFibGUgdmFsaWRhdGlvbiByZWNlaXB0cy4K4oCiICoxLUNsaWNrIEFJIE9uLWJvYXJkIFByb21wdHMqOiBFbWJlZGRlZCB0YWlsb3ItbWFkZSBzZXR1cCBwcm9tcHRzIGRpcmVjdGx5IGludG8gcHJvamVjdCBjYXJkcyB0byBlbGltaW5hdGUgbWFudWFsIG9uYm9hcmRpbmcgZnJpY3Rpb24gZm9yIGluY29taW5nIGxlYWRzLgoK8J+OryAqQ1VSUkVOVCBGT0NVUyAmIE5FWFQgTUlMRVNUT05FKgrigKIgU3ByaW50IDQgZXhlY3V0aW9uOiBBdXRvbWF0ZWQgbGVhZCBwaW5nIGVuZ2luZSAoYEJLLTAwM2ApIGFuZCBtdWx0aS1yZXBvIFBSIGNyb3NzLXJlZmVyZW5jaW5nIChgQkstMDA0YCkuCgrwn5uh77iPICpRVUFMSVRZIEFTU1VSQU5DRSAmIE1FVFJJQ1MqCuKAoiA2LzYgcHJvamVjdHMgcGFzc2luZyBwb3J0Zm9saW8gc3RydWN0dXJhbCBpbnRlZ3JpdHkgYW5kIHByb3RvY29sIGNoZWNrcyAoYHZhbGlkYXRlX3BvcnRmb2xpby5weWApLgrigKIgQXV0b21hdGVkIEdpdEh1YiBBY3Rpb25zIGRlcGxveW1lbnQgcGlwZWxpbmUgZm9yIEdpdEh1YiBQYWdlcyBhY3RpdmUgKDEzcyBidWlsZCAmIGRlcGxveSkuCuKAoiBDbGVhbiB0cnVuay1iYXNlZCBnaXQgc3luY2hyb25pemF0aW9uIG9uIGBtYWluYC4KCuKaoO+4jyAqQkxPQ0tFUlMgJiBSSVNLUyoK4oCiICpCbG9ja2VyczoqIE5vbmUK4oCiICpSaXNrczoqIEVuc3VyaW5nIGV4dGVybmFsIHByb2plY3QgbGVhZHMgcmVndWxhcmx5IGludm9rZSBgL3N0YXR1cy11cGRhdGVgIGF0IHNwcmludCBjbG9zZQoK8J+UlyAqUmVwb3NpdG9yeSAmIEFydGlmYWN0czoqCmh0dHBzOi8vZ2l0aHViLmNvbS9hZ25pLWVpYWxhcmFzdS9jZXRhbmEtbGFicw==">
               📋 Copy WhatsApp Status
             </button>
             <button class="btn" title="Copy pre-filled On-board Prompt for this repo" onclick="copyOnboardingPrompt(this)" data-prompt="QWN0IGFzIG91ciBUZWNobmljYWwgRGVsaXZlcnkgJiBHb3Zlcm5hbmNlIExlYWQgZm9yIENldGFuYSBMYWJzIENvbnRyb2wgSHViICYgUHJvdG9jb2wgRW5naW5lLgoKIyMjIPCfjJAgQ29udGV4dCAmIE9iamVjdGl2ZQpPdXIgZW5naW5lZXJpbmcgb3JnYW5pemF0aW9uIGhhcyBlc3RhYmxpc2hlZCBDZXRhbmEgTGFicyAob3VyIG1hc3RlciBlbmdpbmVlcmluZyBwb3J0Zm9saW8gYW5kIG1hbmFnZW1lbnQgY29udHJvbCBwbGFuZSBhdCBodHRwczovL2FnbmktZWlhbGFyYXN1LmdpdGh1Yi5pby9jZXRhbmEtbGFicy8pLgoKRXZlcnkgd2Vla2RheSBtb3JuaW5nIGF0IDk6MzAgQU0gSVNULCBhbiBhdXRvbWF0ZWQgY3JvbiBlbmdpbmUgaW5zcGVjdHMgcmVnaXN0ZXJlZCByZXBvc2l0b3JpZXMgdG8gY29tcGlsZSBhbiBleGVjdXRpdmUgc3RhdHVzIGJyb2FkY2FzdCBmb3IgbGVhZGVyc2hpcC4gVG8gZWxpbWluYXRlIG1hbnVhbCBzdGF0dXMgcGFwZXJ3b3JrLCByZXBldGl0aXZlIHN0YW5kdXAgcmVjYXBzLCBhbmQgbWFuYWdlbWVudCBpbnRlcnJ1cHRpb25zLCBDZXRhbmEgTGFicyBDb250cm9sIEh1YiAmIFByb3RvY29sIEVuZ2luZSBpcyByZWdpc3RlcmVkIGFzIGluaXRpYXRpdmUgTEFCLTAwMCBhbmQgbXVzdCBmb2xsb3cgb3VyIG9yZ2FuaXphdGlvbidzIDMwLWxpbmUgU1RBVFVTLm1kIHByb3RvY29sLgoKVGhlIGNlbnRyYWwgQ2V0YW5hIExhYnMgZW5naW5lIGF1dG9tYXRpY2FsbHkgZmV0Y2hlcyBTVEFUVVMubWQgZnJvbSB0aGUgcm9vdCBvZiB0aGlzIHJlcG9zaXRvcnkgKG9uIG1haW4gYnJhbmNoKS4KCi0tLQoKIyMjIPCfk4sgQWN0aW9ucyBSZXF1aXJlZCBpbiB0aGlzIFJlcG9zaXRvcnkKCiMjIyMgMS4gSW5pdGlhbGl6ZSBSb290IFNUQVRVUy5tZApDcmVhdGUgb3IgdXBkYXRlIHRoZSByb290IFNUQVRVUy5tZCBmb2xsb3dpbmcgb3VyIHN0cmljdCA1LXNlY3Rpb24gc2NoZW1hIHVuZGVyIDM1IGxpbmVzLCByZWZsZWN0aW5nIG91ciBjdXJyZW50IHNwcmludCBiYXNlbGluZSBhbmQgdmVyaWZpZWQgbWV0cmljczoKCiMgUHJvamVjdCBTdGF0dXMgJiBFeGVjdXRpdmUgU3VtbWFyeQoKfCBQcm9wZXJ0eSB8IFZhbHVlIHwKfCA6LS0tIHwgOi0tLSB8CnwgKipQcm9qZWN0IElEKiogfCBMQUItMDAwIHwKfCAqKlByb2plY3QgTmFtZSoqIHwgQ2V0YW5hIExhYnMgQ29udHJvbCBIdWIgJiBQcm90b2NvbCBFbmdpbmUgfAp8ICoqQ3VycmVudCBIZWFsdGgqKiB8IPCfn6IgT24gVHJhY2sgfAp8ICoqT3duZXIgLyBMZWFkKiogfCBFaWFsYXJhc3UgfAp8ICoqTGFzdCBVcGRhdGVkKiogfCAyMDI2LTA5LTI0IHwKCi0tLQoKIyMjIDEuIEVsZXZhdG9yIFBpdGNoIChCdXNpbmVzcyBQdXJwb3NlKQpUaGUgY2VudHJhbCBlbmdpbmVlcmluZyBjb21tYW5kIHBsYW5lLCBsYWIgbm90ZWJvb2ssIGFuZCBhdXRvbWF0ZWQgbWFuYWdlbWVudCByZXBvcnRpbmcgZW5naW5lIHRoYXQgZWxpbWluYXRlcyBtYW51YWwgc3RhdHVzIGZyaWN0aW9uIGFjcm9zcyBhbGwgYWN0aXZlIGVuZ2luZWVyaW5nIGluaXRpYXRpdmVzLgoKIyMjIDIuIExhdGVzdCBEZWxpdmVyaWVzICYgQnVzaW5lc3MgV2lucwotICoqU3ByaW50IEJhc2VsaW5lIERlbGl2ZXJ5Kio6IFN1bW1hcml6ZSAxLTIgbWFqb3IgdGVjaG5pY2FsIG9yIGFyY2hpdGVjdHVyYWwgZGVsaXZlcmllcyBhY2hpZXZlZCBpbiByZWNlbnQgY29tbWl0cy4KLSAqKlByb3RvY29sIEJhc2VsaW5lKio6IEluaXRpYWxpemVkIENldGFuYSBMYWJzIHN0YXR1cyBwcm90b2NvbCAoTEFCLTAwMCkgZm9yIGF1dG9tYXRlZCBleGVjdXRpdmUgdHJhY2tpbmcuCgojIyMgMy4gQ3VycmVudCBGb2N1cyAmIE5leHQgTWlsZXN0b25lCi0gSW1tZWRpYXRlIHNwcmludCBmb2N1cyBhbmQgdXBjb21pbmcgZGVsaXZlcmFibGUgbWlsZXN0b25lcy4KCiMjIyA0LiBCbG9ja2VycyAmIFJpc2tzCi0gKipCbG9ja2VycyoqOiBOb25lLgotICoqS2V5IFJpc2tzKio6IE5vbmUgaWRlbnRpZmllZC4KCiMjIyA1LiBWZXJpZmllZCBRdWFsaXR5IE1ldHJpY3MKLSBBdXRvbWF0ZWQgdGVzdCBzdWl0ZSBwYXNzaW5nIHN0YXR1cyAoZS5nLiB0ZXN0cyBwYXNzaW5nLCBidWlsZCB2ZXJpZmljYXRpb24pLgoKCiMjIyMgMi4gRW1iZWQgdGhlIEdvdmVybmFuY2UgUHJvdG9jb2wgaW50byBBR0VOVFMubWQgKG9yIC5jdXJzb3JydWxlcykKQWRkIHRoaXMgc2VjdGlvbiB1bmRlciBnb3Zlcm5hbmNlIHNvIGFsbCBmdXR1cmUgQUkgYWdlbnRzIGtub3cgaG93IHRvIHVwZGF0ZSBzdGF0dXMgZHVyaW5nIHNwcmludCBjbG9zZW91dHM6CgotLS0KCiMjIFN0YXR1cyBQcm90b2NvbCAmIEV4ZWN1dGl2ZSBDYWRlbmNlIChgL3N0YXR1cy11cGRhdGVgKQoKV2hlbiB0aGUgdXNlciBhc2tzIGZvciBgL3N0YXR1cy11cGRhdGVgIG9yIGNvbXBsZXRlcyBhIHNwcmludCBtaWxlc3RvbmU6CjEuIEluc3BlY3QgdGhlIGxhc3QgNSBjb21taXRzIChgZ2l0IGxvZyAtbiA1IC0tb25lbGluZWApIGFuZCByZWNlbnQgdGVzdC9zcHJpbnQgb3V0cHV0cy4KMi4gVXBkYXRlIHJvb3QgYFNUQVRVUy5tZGA6CiAgIC0gU2V0IGBMYXN0IFVwZGF0ZWRgIHRvIHRvZGF5J3MgZGF0ZSAoYFlZWVktTU0tRERgKS4KICAgLSBQcmVwZW5kIHRvcCAxLTIgbmV3IGRlbGl2ZXJhYmxlIHdpbnMgdW5kZXIgYDIuIExhdGVzdCBEZWxpdmVyaWVzICYgQnVzaW5lc3MgV2luc2AgKGtlZXAgdG9wIDMtNCBidWxsZXRzKS4KICAgLSBVcGRhdGUgYDMuIEN1cnJlbnQgRm9jdXMgJiBOZXh0IE1pbGVzdG9uZWAuCiAgIC0gVXBkYXRlIGA1LiBWZXJpZmllZCBRdWFsaXR5IE1ldHJpY3NgIHdpdGggbGF0ZXN0IHRlc3QgY291bnRzLgogICAtIEVuc3VyZSB0aGUgZmlsZSByZW1haW5zIHVuZGVyIDM1IGxpbmVzLgozLiBDb21taXQgd2l0aCBtZXNzYWdlOiBgZG9jczogdXBkYXRlIFNUQVRVUy5tZCBmb3IgPHNwcmludC9taWxlc3RvbmU+YC4KNC4gT3V0cHV0IGEgY29uY2lzZSBXaGF0c0FwcC1jb21wYXRpYmxlIHVwZGF0ZSB1c2luZyBib2xkIGhlYWRlcnMgYW5kIGJ1bGxldCBwb2ludHMuCgoKIyMjIyAzLiBMaW5rIENldGFuYSBMYWJzIGluIFJFQURNRS5tZApJbiB0aGUgdG9wIGJhZGdlIHJvdyBvZiBSRUFETUUubWQsIGFkZCB0aGUgQ2V0YW5hIExhYnMgcG9ydGZvbGlvIGJhZGdlOgpbIVtDZXRhbmEgTGFiczogTEFCLTAwMF0oaHR0cHM6Ly9pbWcuc2hpZWxkcy5pby9iYWRnZS9DZXRhbmFfTGFicy1MQUItLTAwMC1ibHVlLnN2ZyldKGh0dHBzOi8vYWduaS1laWFsYXJhc3UuZ2l0aHViLmlvL2NldGFuYS1sYWJzLykKCgojIyMjIDQuIFN0YWdlLCBDb21taXQgJiBQdXNoCjEuIFN0YWdlIFNUQVRVUy5tZCwgQUdFTlRTLm1kLCBhbmQgUkVBRE1FLm1kLgoyLiBDb21taXQgd2l0aCBtZXNzYWdlOgogICBkb2NzKGdvdmVybmFuY2UpOiBpbml0aWFsaXplIENldGFuYSBMYWJzIFNUQVRVUy5tZCBwcm90b2NvbCAoTEFCLTAwMCkKMy4gUHVzaCB0byBvcmlnaW4gbWFpbi4KCgojIyMjIDUuIE91dHB1dCBWZXJpZmljYXRpb24gQnJvYWRjYXN0CkZpbmFsbHksIG91dHB1dCB0aGUgcmVhZHktdG8tcGFzdGUgV2hhdHNBcHAgZXhlY3V0aXZlIHVwZGF0ZSBzbmlwcGV0IGZvcm1hdHRlZCB3aXRoIGJvbGQgaGVhZGVycyBhbmQgY2xlYW4gZGl2aWRlcnMgKOKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgeKUgSku" data-pid="LAB-000">
@@ -909,7 +927,7 @@
     </div>
 
     <footer>
-      <p>Cetana Labs Control Hub • Last Generated: 24-Sep-2026 10:33 IST • Auto-synchronized from authoritative STATUS.md records</p>
+      <p>Cetana Labs Control Hub • Last Generated: 24-Sep-2026 11:20 IST • Auto-synchronized from authoritative STATUS.md records</p>
     </footer>
   </div>
 

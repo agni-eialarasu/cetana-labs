@@ -651,6 +651,36 @@ def build_dashboard():
       border: 1px solid rgba(56, 189, 248, 0.25);
     }}
 
+    /* Owner identity pill (top-left of card) */
+    .owner-pill {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      max-width: 62%;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
+      background: var(--btn-bg);
+      padding: 0.28rem 0.65rem 0.28rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      cursor: default;
+    }}
+    .owner-pill .owner-icon {{
+      font-size: 0.85rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }}
+    .owner-pill .owner-name {{
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }}
+    .owner-pill.unassigned {{
+      color: var(--text-dim);
+      font-weight: 500;
+    }}
+
     .health-pill {{
       font-size: 0.75rem;
       font-weight: 600;
@@ -919,16 +949,31 @@ def build_dashboard():
         tags_str = " ".join(p["tags"])
         card_extra_class = " has-blocker" if p.get("has_blocker") else ""
 
+        # Owner pill: promote the project lead to the top-left; Project ID becomes
+        # internal (retained in data attributes + hover tooltip only).
+        lead_val = (p.get("lead") or "").strip()
+        generic_leads = {"", "engineering team", "n/a", "tbd", "unassigned"}
+        if lead_val.lower() in generic_leads:
+            owner_pill = (
+                f'<span class="owner-pill unassigned" title="{p["id"]}">'
+                f'<span class="owner-icon">👤</span>'
+                f'<span class="owner-name">— Unassigned</span></span>'
+            )
+        else:
+            owner_pill = (
+                f'<span class="owner-pill" title="{p["id"]}">'
+                f'<span class="owner-icon">👤</span>'
+                f'<span class="owner-name">{lead_val}</span></span>'
+            )
+
         html += f"""      <div class="project-card{card_extra_class}" data-tags="{tags_str}" data-search="{p['id']} {p['name']} {p['lead']} {p['archetype_name']}" data-priority="{p['priority_score']}" data-updated="{p['last_updated']}" data-id="{p['id']}">
         <div class="card-top">
-          <span class="id-badge">{p['id']}</span>
+          {owner_pill}
           <span class="health-pill {health_class}">{health}</span>
         </div>
         <div class="card-header-main">
           <h2 class="card-title">{p['name']}</h2>
           <div class="card-meta">
-            <span>👤 {p['lead']}</span>
-            <span>•</span>
             <span>{p['archetype_icon']} {p['archetype_name']}</span>
           </div>
         </div>

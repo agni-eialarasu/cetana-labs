@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Lead Ping Cadence Workflow**: Added `.github/workflows/lead-ping-cron.yml` running a weekly Monday 10:00 AM IST scan plus `workflow_dispatch` (dry-run by default), and registered the `/ping-leads` AI agent skill (`.agents/skills/ping-leads/SKILL.md`, `AGENTS.md`).
 
 ### Changed
+- **Dashboard Card Restructure — Owner-First Identity**: Replaced the top-left internal Project ID badge on each dashboard card with a prominent **owner-name pill** (`👤 Lead`), surfacing accountability at a glance for executive viewers. Removed the now-duplicate lead line from the card meta row (archetype only). The Project ID is retained internally (search, sort, and hover tooltip) but no longer clutters the card face; empty/generic leads render a `— Unassigned` pill.
 ### Fixed
 
 ---

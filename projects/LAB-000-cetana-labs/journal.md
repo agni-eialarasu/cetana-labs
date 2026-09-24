@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Dashboard Card Restructure — Owner-First Identity
+- **Context**: Change request to surface the **project owner** (accountability) instead of the internal Project ID on the face of each dashboard card. The Project ID is valueless to executive viewers and is now kept internal-only.
+- **Key Deliverables**:
+  - Replaced the top-left `id-badge` with an **owner-name pill** (`👤 Lead`) in `scripts/generate_dashboard.py`; health pill remains top-right.
+  - Removed the duplicate lead from the card meta row (now archetype-only) to avoid showing the owner twice.
+  - Retained the Project ID internally — `data-id` (sort), `data-search` (search still matches on ID), and a hover `title` tooltip on the owner pill for traceability.
+  - Added graceful `— Unassigned` fallback (`.owner-pill.unassigned`) for empty/generic leads.
+  - Regenerated `docs/index.html` (6/6 cards) and validated the portfolio.
+
+---
+
 ### [2026-09-24] Milestone: Automated Lead Ping Engine (`BK-003` / `TSK-024`)
 - **Context**: Delivered Sprint 4 P1 item — automated detection and pinging of initiatives that fall behind sprint cadence or never onboard, eliminating manual lead chasing. Per directive, the `LAB-000` control hub is excluded from pinging.
 - **Key Deliverables**:
