@@ -794,7 +794,7 @@ def build_dashboard():
           <strong>⚠️ Onboarding Protocol Pending</strong>
           <span>Initial baseline <code>STATUS.md</code> has not yet been committed to this repository.</span>
           <button class="btn btn-warning" onclick="copyOnboardingPrompt(this)" data-prompt="{p['b64_onboarding']}" data-pid="{p['id']}" style="width: 100%; justify-content: center; font-weight: 700; margin-top: 0.35rem;">
-            🤖 Copy AI Onboarding Prompt (1-Click Setup)
+            🚀 Copy On-board Prompt
           </button>
         </div>
 """
@@ -825,8 +825,8 @@ def build_dashboard():
             <button class="btn" onclick="copySingleBriefing(this)" data-briefing="{p['b64_briefing']}">
               📋 Copy WhatsApp Status
             </button>
-            <button class="btn" title="Copy pre-filled AI Prompt for this repo" onclick="copyOnboardingPrompt(this)" data-prompt="{p['b64_onboarding']}" data-pid="{p['id']}">
-              🤖 AI Prompt
+            <button class="btn" title="Copy pre-filled On-board Prompt for this repo" onclick="copyOnboardingPrompt(this)" data-prompt="{p['b64_onboarding']}" data-pid="{p['id']}">
+              🚀 On-board Prompt
             </button>
 """
         if p.get("repo_url"):
@@ -948,7 +948,7 @@ def build_dashboard():
         const rawB64 = btn.getAttribute('data-prompt') || '';
         const text = decodeURIComponent(escape(window.atob(rawB64)));
         navigator.clipboard.writeText(text).then(() => {{
-          showToast('🤖 AI Onboarding Prompt for ' + pid + ' copied! Ready to paste into Cursor/Claude/Copilot.');
+          showToast('🚀 On-board Prompt for ' + pid + ' copied! Ready to paste into Cursor/Claude/Copilot.');
         }}).catch(err => {{
           console.error('Failed to copy', err);
         }});
