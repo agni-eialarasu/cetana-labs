@@ -3,7 +3,7 @@
 Cetana Labs — Portfolio Web Dashboard Generator
 Generates a zero-dependency, ultra-fast, responsive static HTML dashboard (docs/index.html)
 with real-time client-side search, filtering, theme toggle (System/Light/Dark),
-and 1-click WhatsApp executive briefing export.
+1-click WhatsApp executive briefing export, and 1-click AI Onboarding Prompt generation.
 """
 
 import sys
@@ -53,6 +53,99 @@ def extract_archetype(readme_path: Path) -> tuple[str, str]:
     return "Mini-App", "💻"
 
 
+def generate_onboarding_prompt(data: dict) -> str:
+    """Generates a tailor-made, zero-friction AI onboarding prompt for this project."""
+    pid = data.get("id", "LAB-XXX")
+    name = data.get("name", "Project Name")
+    lead = data.get("lead", "Engineering Team")
+    pitch = data.get("pitch", "") or "Engineering initiative registered in Cetana Labs."
+    repo_url = data.get("repo_url", "")
+    now_date = datetime.now().strftime("%Y-%m-%d")
+    badge_id = pid.replace("-", "--")
+
+    prompt = f"""Act as our Technical Delivery & Governance Lead for {name}.
+
+### 🌐 Context & Objective
+Our engineering organization has established Cetana Labs (our master engineering portfolio and management control plane at https://agni-eialarasu.github.io/cetana-labs/).
+
+Every weekday morning at 9:30 AM IST, an automated cron engine inspects registered repositories to compile an executive status broadcast for leadership. To eliminate manual status paperwork, repetitive standup recaps, and management interruptions, {name} is registered as initiative {pid} and must follow our organization's 30-line STATUS.md protocol.
+
+The central Cetana Labs engine automatically fetches STATUS.md from the root of this repository (on main branch).
+
+---
+
+### 📋 Actions Required in this Repository
+
+#### 1. Initialize Root STATUS.md
+Create or update the root STATUS.md following our strict 5-section schema under 35 lines, reflecting our current sprint baseline and verified metrics:
+
+# Project Status & Executive Summary
+
+| Property | Value |
+| :--- | :--- |
+| **Project ID** | {pid} |
+| **Project Name** | {name} |
+| **Current Health** | 🟢 On Track |
+| **Owner / Lead** | {lead} |
+| **Last Updated** | {now_date} |
+
+---
+
+### 1. Elevator Pitch (Business Purpose)
+{pitch}
+
+### 2. Latest Deliveries & Business Wins
+- **Sprint Baseline Delivery**: Summarize 1-2 major technical or architectural deliveries achieved in recent commits.
+- **Protocol Baseline**: Initialized Cetana Labs status protocol ({pid}) for automated executive tracking.
+
+### 3. Current Focus & Next Milestone
+- Immediate sprint focus and upcoming deliverable milestones.
+
+### 4. Blockers & Risks
+- **Blockers**: None.
+- **Key Risks**: None identified.
+
+### 5. Verified Quality Metrics
+- Automated test suite passing status (e.g. tests passing, build verification).
+
+
+#### 2. Embed the Governance Protocol into AGENTS.md (or .cursorrules)
+Add this section under governance so all future AI agents know how to update status during sprint closeouts:
+
+---
+
+## Status Protocol & Executive Cadence (`/status-update`)
+
+When the user asks for `/status-update` or completes a sprint milestone:
+1. Inspect the last 5 commits (`git log -n 5 --oneline`) and recent test/sprint outputs.
+2. Update root `STATUS.md`:
+   - Set `Last Updated` to today's date (`YYYY-MM-DD`).
+   - Prepend top 1-2 new deliverable wins under `2. Latest Deliveries & Business Wins` (keep top 3-4 bullets).
+   - Update `3. Current Focus & Next Milestone`.
+   - Update `5. Verified Quality Metrics` with latest test counts.
+   - Ensure the file remains under 35 lines.
+3. Commit with message: `docs: update STATUS.md for <sprint/milestone>`.
+4. Output a concise WhatsApp-compatible update using bold headers and bullet points.
+
+
+#### 3. Link Cetana Labs in README.md
+In the top badge row of README.md, add the Cetana Labs portfolio badge:
+[![Cetana Labs: {pid}](https://img.shields.io/badge/Cetana_Labs-{badge_id}-blue.svg)](https://agni-eialarasu.github.io/cetana-labs/)
+
+
+#### 4. Stage, Commit & Push
+1. Stage STATUS.md, AGENTS.md, and README.md.
+2. Commit with message:
+   docs(governance): initialize Cetana Labs STATUS.md protocol ({pid})
+3. Push to origin main.
+
+
+#### 5. Output Verification Broadcast
+Finally, output the ready-to-paste WhatsApp executive update snippet formatted with bold headers and clean dividers (━━━━━━━━━━━━━━━━━━━━━).
+"""
+    return prompt.strip()
+
+
 def build_dashboard():
     project_dirs = sorted([d for d in PROJECTS_DIR.iterdir() if d.is_dir() and d.name.startswith("LAB-")])
     projects_data = []
@@ -71,6 +164,11 @@ def build_dashboard():
         single_briefing = format_single_project(data)
         data["whatsapp_briefing"] = single_briefing
         data["b64_briefing"] = base64.b64encode(single_briefing.encode("utf-8")).decode("utf-8")
+
+        # Generate pre-filled AI onboarding prompt
+        onboarding_prompt = generate_onboarding_prompt(data)
+        data["onboarding_prompt"] = onboarding_prompt
+        data["b64_onboarding"] = base64.b64encode(onboarding_prompt.encode("utf-8")).decode("utf-8")
 
         # Categorization tags
         tags = []
@@ -125,6 +223,7 @@ def build_dashboard():
       --success-bg: rgba(16, 185, 129, 0.12);
       --warning: #f59e0b;
       --warning-bg: rgba(245, 158, 11, 0.12);
+      --warning-border: rgba(245, 158, 11, 0.35);
       --info: #0284c7;
       --info-bg: rgba(2, 132, 199, 0.12);
       --danger: #ef4444;
@@ -149,6 +248,7 @@ def build_dashboard():
       --success-bg: rgba(5, 150, 105, 0.1);
       --warning: #d97706;
       --warning-bg: rgba(217, 119, 6, 0.1);
+      --warning-border: rgba(217, 119, 6, 0.35);
       --info: #0284c7;
       --info-bg: rgba(2, 132, 199, 0.1);
       --danger: #dc2626;
@@ -174,6 +274,7 @@ def build_dashboard():
         --success-bg: rgba(5, 150, 105, 0.1);
         --warning: #d97706;
         --warning-bg: rgba(217, 119, 6, 0.1);
+        --warning-border: rgba(217, 119, 6, 0.35);
         --info: #0284c7;
         --info-bg: rgba(2, 132, 199, 0.1);
         --danger: #dc2626;
@@ -305,6 +406,15 @@ def build_dashboard():
     .btn-primary:hover {{
       background: #0369a1;
       border-color: #7dd3fc;
+    }}
+    .btn-warning {{
+      background: rgba(245, 158, 11, 0.15);
+      border-color: var(--warning-border);
+      color: var(--warning);
+    }}
+    .btn-warning:hover {{
+      background: rgba(245, 158, 11, 0.25);
+      border-color: var(--warning);
     }}
 
     /* KPI Bar */
@@ -515,14 +625,14 @@ def build_dashboard():
 
     .alert-box {{
       background: var(--warning-bg);
-      border: 1px dashed rgba(245, 158, 11, 0.35);
+      border: 1px dashed var(--warning-border);
       border-radius: 8px;
-      padding: 0.85rem;
-      font-size: 0.8rem;
+      padding: 0.95rem;
+      font-size: 0.825rem;
       color: var(--warning);
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.5rem;
     }}
 
     .card-footer {{
@@ -530,8 +640,7 @@ def build_dashboard():
       padding-top: 1rem;
       border-top: 1px solid var(--card-border);
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
       gap: 0.5rem;
     }}
 
@@ -681,9 +790,12 @@ def build_dashboard():
         </div>
 """
         if p.get("is_onboarding_pending"):
-            html += """        <div class="alert-box">
+            html += f"""        <div class="alert-box">
           <strong>⚠️ Onboarding Protocol Pending</strong>
-          <span>Run <code>/status-init</code> in repo root to establish verified sprint deliverables and metrics.</span>
+          <span>Initial baseline <code>STATUS.md</code> has not yet been committed to this repository.</span>
+          <button class="btn btn-warning" onclick="copyOnboardingPrompt(this)" data-prompt="{p['b64_onboarding']}" data-pid="{p['id']}" style="width: 100%; justify-content: center; font-weight: 700; margin-top: 0.35rem;">
+            🤖 Copy AI Onboarding Prompt (1-Click Setup)
+          </button>
         </div>
 """
         else:
@@ -712,6 +824,9 @@ def build_dashboard():
           <div class="card-actions">
             <button class="btn" onclick="copySingleBriefing(this)" data-briefing="{p['b64_briefing']}">
               📋 Copy WhatsApp Status
+            </button>
+            <button class="btn" title="Copy pre-filled AI Prompt for this repo" onclick="copyOnboardingPrompt(this)" data-prompt="{p['b64_onboarding']}" data-pid="{p['id']}">
+              🤖 AI Prompt
             </button>
 """
         if p.get("repo_url"):
@@ -797,7 +912,7 @@ def build_dashboard():
       const toast = document.getElementById('toast');
       toast.textContent = msg || 'Copied to clipboard!';
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
+      setTimeout(() => toast.classList.remove('show'), 3000);
     }}
 
     function copyPortfolioBriefing() {{
@@ -819,6 +934,21 @@ def build_dashboard():
         const text = decodeURIComponent(escape(window.atob(rawB64)));
         navigator.clipboard.writeText(text).then(() => {{
           showToast('📋 Project WhatsApp update copied to clipboard!');
+        }}).catch(err => {{
+          console.error('Failed to copy', err);
+        }});
+      }} catch (e) {{
+        console.error('Decoding failed', e);
+      }}
+    }}
+
+    function copyOnboardingPrompt(btn) {{
+      try {{
+        const pid = btn.getAttribute('data-pid') || 'Project';
+        const rawB64 = btn.getAttribute('data-prompt') || '';
+        const text = decodeURIComponent(escape(window.atob(rawB64)));
+        navigator.clipboard.writeText(text).then(() => {{
+          showToast('🤖 AI Onboarding Prompt for ' + pid + ' copied! Ready to paste into Cursor/Claude/Copilot.');
         }}).catch(err => {{
           console.error('Failed to copy', err);
         }});
