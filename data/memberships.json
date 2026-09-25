@@ -1,0 +1,38 @@
+[
+  {
+    "id": "mem-lab000-eialarasu",
+    "user_id": "usr-eialarasu",
+    "project_id": "LAB-000",
+    "role": "owner"
+  },
+  {
+    "id": "mem-lab001-eialarasu",
+    "user_id": "usr-eialarasu",
+    "project_id": "LAB-001",
+    "role": "owner"
+  },
+  {
+    "id": "mem-lab002-eialarasu",
+    "user_id": "usr-eialarasu",
+    "project_id": "LAB-002",
+    "role": "owner"
+  },
+  {
+    "id": "mem-lab003-eialarasu",
+    "user_id": "usr-eialarasu",
+    "project_id": "LAB-003",
+    "role": "owner"
+  },
+  {
+    "id": "mem-lab004-abishek-singhavi",
+    "user_id": "usr-abishek-singhavi",
+    "project_id": "LAB-004",
+    "role": "owner"
+  },
+  {
+    "id": "mem-lab005-arun-elambaram",
+    "user_id": "usr-arun-elambaram",
+    "project_id": "LAB-005",
+    "role": "owner"
+  }
+]

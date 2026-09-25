@@ -1,0 +1,74 @@
+[
+  {
+    "id": "LAB-000",
+    "slug": "cetana-labs",
+    "name": "Cetana Labs Control Hub",
+    "descriptor": "Protocol Engine",
+    "archetype": "control-plane",
+    "owner_id": "usr-eialarasu",
+    "repo_url": "https://github.com/agni-eialarasu/cetana-labs",
+    "reference_url": "https://github.com/agni-eialarasu/cetana-labs",
+    "dev_environment": "cloud",
+    "status_source": "local"
+  },
+  {
+    "id": "LAB-001",
+    "slug": "ammas",
+    "name": "AAMAS",
+    "descriptor": "Autism Activity Monitor",
+    "archetype": "mini-app",
+    "owner_id": "usr-eialarasu",
+    "repo_url": "https://github.com/agni-eialarasu/ammas",
+    "reference_url": "https://github.com/agni-eialarasu/ammas",
+    "dev_environment": "local",
+    "status_source": "remote"
+  },
+  {
+    "id": "LAB-002",
+    "slug": "wrenai-eval",
+    "name": "WrenAI Evaluation",
+    "descriptor": "Semantic GenBI",
+    "archetype": "research",
+    "owner_id": "usr-eialarasu",
+    "repo_url": null,
+    "reference_url": "https://www.getwren.ai/",
+    "dev_environment": "cloud",
+    "status_source": "local"
+  },
+  {
+    "id": "LAB-003",
+    "slug": "nexus-pulse",
+    "name": "Nexus Pulse",
+    "descriptor": "Vertical Engine",
+    "archetype": "mini-app",
+    "owner_id": "usr-eialarasu",
+    "repo_url": "https://github.com/eAgni-Technologies/nexus-pulse",
+    "reference_url": "https://github.com/eAgni-Technologies/nexus-pulse",
+    "dev_environment": "local",
+    "status_source": "remote"
+  },
+  {
+    "id": "LAB-004",
+    "slug": "zerobea-ai",
+    "name": "Zerobea.ai",
+    "descriptor": "AI Security Control Plane",
+    "archetype": "mini-app",
+    "owner_id": "usr-abishek-singhavi",
+    "repo_url": "https://github.com/zerobeadotai/zerobea.ai",
+    "reference_url": "https://github.com/zerobeadotai/zerobea.ai",
+    "dev_environment": "local",
+    "status_source": "remote"
+  },
+  {
+    "id": "LAB-005",
+    "slug": "nexus-beacon",
+    "name": "Nexus Beacon",
+    "descriptor": "Operational Alert Service",
+    "archetype": "mini-app",
+    "owner_id": "usr-arun-elambaram",
+    "repo_url": "https://github.com/eAgni-Technologies/nexus-beacon",
+    "reference_url": "https://github.com/eAgni-Technologies/nexus-beacon",
+    "dev_environment": "local",
+    "status_source": "remote"
+  }
+]

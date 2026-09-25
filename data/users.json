@@ -1,0 +1,29 @@
+[
+  {
+    "id": "usr-eialarasu",
+    "name": "Eialarasu",
+    "email": null,
+    "github_handle": "agni-eialarasu",
+    "role": "lead",
+    "org": "eAgni Technologies",
+    "active": true
+  },
+  {
+    "id": "usr-abishek-singhavi",
+    "name": "Abishek Singhavi",
+    "email": null,
+    "github_handle": "zerobeadotai",
+    "role": "lead",
+    "org": "Zerobea.ai",
+    "active": true
+  },
+  {
+    "id": "usr-arun-elambaram",
+    "name": "Arun Elambaram",
+    "email": null,
+    "github_handle": null,
+    "role": "lead",
+    "org": "eAgni Technologies",
+    "active": true
+  }
+]

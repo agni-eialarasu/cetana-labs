@@ -185,6 +185,14 @@ def parse_status_file(status_path: Path, sync_remote: bool = False) -> dict:
 
     data = parse_status_content(content, readme_content)
 
+    # Overlay the relational data/ layer (BK-009 / RFC-LAB-000-002): prefer the
+    # structured JSON masters for repo_url/owner/archetype, with README fallback.
+    try:
+        from portfolio_data import enrich_project_data
+        enrich_project_data(data.get("id", ""), data)
+    except Exception:
+        pass  # data/ layer optional; fall back to README-parsed values
+
     if sync_remote and data.get("repo_url"):
         remote_status = fetch_remote_status(data["repo_url"])
         if remote_status and len(remote_status.strip()) > 50:

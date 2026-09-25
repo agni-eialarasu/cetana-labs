@@ -16,6 +16,18 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Relational JSON Data Layer (`BK-009` / `RFC-LAB-000-002`)
+- **Context**: Portfolio metadata was fragmented across Markdown (per-project READMEs, STATUS.md, and a hand-maintained root registry table) and owner identity was free text. Introduced a relational `data/` layer as the structural source of truth and the seed schema for the future PocketBase web app (`BK-008`) and RBAC (`BK-007`).
+- **Key Deliverables**:
+  - Authored [`RFC-LAB-000-002`](../../docs/rfc/RFC-LAB-000-002-relational-data-model.md) — Option A model (JSON = structural source of truth; `STATUS.md` = live status; README table generated).
+  - Created `data/users.json` (user master), `data/portfolio.json` (project master, 1:1 `owner_id`), and `data/memberships.json` (many-to-many join with roles) + Draft-07 JSON Schemas mapped to PocketBase field types.
+  - Added `scripts/generate_registry.py` to render the README master table from `data/` (marker-delimited, `--check` staleness gate) and `scripts/portfolio_data.py` shared accessor.
+  - Wired `generate_dashboard.py` / `generate_status.py` to prefer the `data/` layer (owner names now resolve from the user master; the `.ai` TLD regex bug is moot).
+  - Added a referential-integrity validator pillar (owner_id resolution, dir↔record lockstep, membership FKs, STATUS name-drift) — verified it catches orphaned FKs.
+  - Registered `TSK-030` (Done) in `SPRINT-05` and `BK-009` (Delivered) in the backlog; synchronized `CHANGELOG.md`.
+
+---
+
 ### [2026-09-24] Milestone: Sprint 4 Closeout & v0.6.0 Release
 - **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 4. Fixed a duplicate `TSK-027` ID (split into `TSK-027` Two-Phase Governance and `TSK-028` Cloud Migration) and captured the dashboard restructure as `TSK-029` prior to archiving.
 - **Delivered Capabilities**:

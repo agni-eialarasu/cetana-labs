@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Relational JSON Data Layer (`BK-009`, `RFC-LAB-000-002`, `TSK-030`)**: Introduced a `data/` relational layer as the source of truth for structural portfolio metadata — `users.json` (user master), `portfolio.json` (project master with 1:1 `owner_id`), and `memberships.json` (many-to-many user↔project join with roles), each with a Draft-07 JSON Schema authored to PocketBase field types.
+- **Generated Master Registry**: Added `scripts/generate_registry.py`, which renders the root `README.md` registry table from `data/` (owner resolved via the user master, live health from `STATUS.md`) inside `<!-- BEGIN:registry -->` / `<!-- END:registry -->` markers. The table is no longer hand-maintained; `--check` mode gates staleness.
+- **Referential-Integrity Validator Pillar**: Extended `scripts/validate_portfolio.py` to enforce `owner_id` resolution, `data/`↔`projects/` directory lockstep, membership FK resolution (incl. a matching `owner` membership per project), and `STATUS.md` owner-name drift detection.
+- **Shared Data Accessor**: Added `scripts/portfolio_data.py` and wired `generate_dashboard.py` / `generate_status.py` to prefer the structured `data/` layer for archetype, repo URL, and owner (with Markdown fallback), eliminating a class of regex-parsing fragility.
 ### Changed
 ### Fixed
 

@@ -23,6 +23,7 @@ OUTPUT_HTML = DOCS_DIR / "index.html"
 # Add scripts directory to path to import generate_status helpers
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from generate_status import parse_status_file, format_single_project, format_portfolio_digest
+from portfolio_data import enrich_project_data
 
 
 def extract_archetype(readme_path: Path) -> tuple[str, str]:
@@ -183,9 +184,12 @@ def build_dashboard():
         if not data:
             continue
 
+        # Prefer the relational data/ layer (BK-009 / RFC-LAB-000-002) for
+        # archetype, repo URL, and owner; fall back to README regex extraction.
         arch_name, arch_icon = extract_archetype(readme_file)
         data["archetype_name"] = arch_name
         data["archetype_icon"] = arch_icon
+        enrich_project_data(data.get("id", ""), data)
         data["folder_name"] = pdir.name
         single_briefing = format_single_project(data)
         data["whatsapp_briefing"] = single_briefing

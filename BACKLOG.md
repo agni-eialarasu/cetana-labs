@@ -18,6 +18,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
+| `TSK-030` | Relational JSON Data Layer (`BK-009`, `RFC-LAB-000-002`) — user & project masters + memberships join; generated README registry; PocketBase-ready schema | P1 | Eialarasu | ✅ Done | 2026-09-24 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-15 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-10-22 |
 
@@ -30,7 +31,8 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `BK-005` | PDF Executive Digest Export | P3 | Tooling | Backlog | One-click export for board/investor reporting |
 | `BK-006` | Project Health Trend Telemetry | P3 | Analytics | Backlog | Historical velocity and health transition graphs on dashboard |
 | `BK-007` | On-Demand Git Status Audit Trail & Role-Gated History | P3 | Governance | Backlog | Reconstructs historical sprint baselines & health transitions from Git logs of `STATUS.md`. On-demand CLI initially; plan simple auth / RBAC for future dashboard access to prevent developer surveillance perceptions. |
-| `BK-008` | Control Hub Web App Evolution (db + server) | P2 | Platform | Backlog | Evolve the static control plane into a full web application (database + backend server). Prerequisite for `BK-007` RBAC. Cloud dev env shifts Kiro Web → Codespaces per `RFC-LAB-000-001` §5; services declared in `.devcontainer/`. |
+| `BK-008` | Control Hub Web App Evolution (db + server) | P2 | Platform | Backlog | Evolve the static control plane into a full web application (database + backend server). Prerequisite for `BK-007` RBAC. Cloud dev env shifts Kiro Web → Codespaces per `RFC-LAB-000-001` §5; services declared in `.devcontainer/`. Consumes the `BK-009` relational data layer as its seed schema. |
+| `BK-009` | Relational JSON Data Layer (`RFC-LAB-000-002`) | P1 | Data | ✅ Delivered (SPRINT-05, `TSK-030`) | User & project masters + many-to-many memberships join under `data/`; generated README registry; referential-integrity validator pillar. PocketBase-ready schema; foundation for `BK-008` + `BK-007` RBAC. |
 
 ---
 
