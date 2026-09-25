@@ -18,7 +18,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-036` | Sleek UI GitHub Pages deployment workflow (`app/web/` build → Pages, dual-run alongside static dashboard) | P1 | Eialarasu | 🚧 In Progress | 2026-11-12 |
+| `TSK-036` | Sleek UI GitHub Pages deployment workflow (`app/web/` build → Pages, dual-run alongside static dashboard) | P1 | Eialarasu | ✅ Done | 2026-11-12 |
 | `TSK-037` | BK-008 Phase 3 Scoping — Auth & RBAC (`BK-007`): PocketBase OAuth + per-collection API rules | P1 | Eialarasu | 📋 Planned | 2026-11-14 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-17 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-11-19 |
