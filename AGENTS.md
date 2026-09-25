@@ -24,9 +24,12 @@ Your role is to keep this repository structured, well-documented, clean, and up 
 5. **Synchronized Master Registry & Backlog**:
    - Whenever a project is created, edited, or changes health, the table in [README.md](README.md) MUST be updated immediately.
    - When a sprint task is completed, update [`BACKLOG.md`](BACKLOG.md) and [`CHANGELOG.md`](CHANGELOG.md).
-6. **Trunk-Based Direct Commits (`main` only)**:
-   - No branching or PRs required.
-   - Commit directly to `main` using standardized commit message conventions.
+6. **Branch-Based Development (Hybrid Path-Scoped)** — see [`RFC-LAB-000-004`](docs/rfc/RFC-LAB-000-004-branching-model.md):
+   - **Application code, migrations, and `data/`** (relational masters/schemas) MUST land via a **pull request** on a short-lived `feat/`|`fix/`|`chore/`|`refactor/` branch, with **green CI** (portfolio validator + `/project-validate` 5-pillar gate + registry `--check`) before **squash-merge** into protected `main`.
+   - **Governance / documentation** (`STATUS.md`, `journal.md`, `BACKLOG.md`, `CHANGELOG.md`, `README.md`, `docs/**`) MAY still fast-path directly to `main`; automated skills (`/project-update`, `/sprint-done`, `/ping-leads`, `log-milestone`) retain their direct-commit path.
+   - Branch naming: `<type>/<scope>-<slug>` (type mirrors the commit prefixes below). Delete branches after merge; never force-push `main`; roll back via revert PR.
+   - In this environment, open PRs via `gh api repos/{owner}/{repo}/pulls` (REST), not `gh pr create`.
+   - Tag `vX.Y.0` releases on `main` at each `/sprint-done`.
 
 ---
 

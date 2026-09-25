@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Adopted Branch-Based Development (`RFC-LAB-000-004`)
+- **Context**: With `BK-008` introducing runnable code, a database, and migrations, trunk-based direct commits are no longer appropriate for application changes. Moved to industry-standard branch-based development ahead of P1.
+- **Key Deliverables**:
+  - Authored [`RFC-LAB-000-004`](../../docs/rfc/RFC-LAB-000-004-branching-model.md) — GitHub Flow, protected `main`, short-lived feature branches, squash-merge, hybrid path-scoping (app code/`data/`/migrations → PR; governance/docs → fast-path).
+  - Added `pull_request` CI workflow (`.github/workflows/ci-validate.yml`) running the portfolio validator, registry `--check`, and the 5-pillar gate as required status checks, plus a PR template.
+  - Updated `AGENTS.md` §1.6 from trunk-based to the hybrid branch model.
+  - **Dogfooded**: this change was landed as the repository's first pull request.
+- **Next Horizon**: Enable branch protection on `main`; begin `BK-008` Phase 1 (PocketBase stand-up + `data/` importer) on a `feat/` branch via PR.
+
+---
+
 ### [2026-09-24] Milestone: Sprint 5 Closeout & v0.7.0 Release
 - **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 5.
 - **Delivered Capabilities**:
