@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Fixed
+
+---
+
+## [0.8.0] - 2026-09-24
+### Added
 - **BK-008 Phase 2 Build — Sleek UI (`TSK-035`)**: Built the SvelteKit 5 + pnpm + Tailwind static SPA under `app/web/`, styled with the Nexus Pulse design tokens (blue accent, IBM Plex Sans/Mono, dark-first theme toggle) and responsive across small/medium/large. Reaches read-parity with the static dashboard — KPI bar, filter tabs, Executive-Priority/Recent/ID sort, live search, and owner-first project cards (owner pill, health pill, blocker banner) — driven by the bundled `data/` snapshot. Added `scripts/generate_status_json.py` (interim live-status export → `data/status.json`, reusing the authoritative parser) and a Node `web-build` CI job (pnpm install + type-check + static build); wired `generate_status_json.py --check` into CI.
 - **BK-008 Phase 2 Scoping — Sleek UI (`RFC-LAB-000-005`, `TSK-034`)**: Scoped the read-parity frontend — decided on **SvelteKit in static-SPA mode** consuming the PocketBase JS SDK client-side (per PocketBase's own SPA-first guidance), served from `pb_public/` with GitHub Pages dual-run. Includes the architecture, a read-parity checklist against `docs/index.html`, deploy plan, and phased build steps. **Open questions resolved:** interim `data/status.json` live-status source; split hosting (Pages UI + container PocketBase); **Svelte 5 (Runes) + pnpm**; and adoption of the org **Nexus Pulse Design System**.
 - **Design System Adoption**: Added the org design system verbatim at [`docs/DESIGN.md`](docs/DESIGN.md) (authoritative visual source of truth — blue accent, IBM Plex Sans/Mono, dark-first, `--np-*` tokens) plus [`docs/design-system-lab000.md`](docs/design-system-lab000.md) mapping it to the SvelteKit + Tailwind stack with sm/md/lg responsive targets and a token/framework split.

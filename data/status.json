@@ -5,12 +5,10 @@
     "last_updated": "2026-09-24",
     "pitch": "The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.",
     "wins": [
-      "**Sprint 5 Closeout & v0.7.0 Release**: Shipped the relational data layer (`BK-009`) — user & project masters plus a many-to-many memberships join, forming the PocketBase-ready schema for the coming web app.",
-      "**Generated Master Registry**: README portfolio table is now rendered from `data/` (owner resolved via the user master); no longer hand-maintained.",
-      "**Referential Integrity Enforced**: New validator pillar checks owner/membership FKs and `data/`↔`projects/` lockstep.",
-      "**Automated Lead Ping Engine (`BK-003`)**: Weekly idempotent GitHub issue alerts for stale and onboarding-pending initiatives."
+      "**Sprint 6 Closeout & v0.8.0 Release**: Shipped the web-app foundation (`BK-008` P1–P2) — PocketBase backend scaffolding and a new SvelteKit \"Sleek UI\" at read-parity, styled with the org design system.",
+      "**Branch-Based Development**: Adopted GitHub Flow (`RFC-LAB-000-004`) with PR + CI gates; delivered via PRs"
     ],
-    "focus": "Sprint 6 execution: Scope the PocketBase Control Hub web app (`BK-008`, `RFC-LAB-000-003`) and deliver multi-repo PR cross-referencing (`BK-004`).",
+    "focus": "Sprint 7 execution: Deploy the Sleek UI to GitHub Pages (dual-run), scope Phase 3 auth/RBAC (`BK-007`), and deliver multi-repo PR cross-referencing (`BK-004`).",
     "blockers": "None",
     "risks": "Ensuring external project leads regularly invoke `/status-update` at sprint close",
     "metrics": [

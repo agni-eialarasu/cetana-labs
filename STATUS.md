@@ -15,13 +15,13 @@
 The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
 
 ### 2. Latest Deliveries & Business Wins
-- **Sprint 5 Closeout & v0.7.0 Release**: Shipped the relational data layer (`BK-009`) — user & project masters plus a many-to-many memberships join, forming the PocketBase-ready schema for the coming web app.
-- **Generated Master Registry**: README portfolio table is now rendered from `data/` (owner resolved via the user master); no longer hand-maintained.
-- **Referential Integrity Enforced**: New validator pillar checks owner/membership FKs and `data/`↔`projects/` lockstep.
-- **Automated Lead Ping Engine (`BK-003`)**: Weekly idempotent GitHub issue alerts for stale and onboarding-pending initiatives.
+- **Sprint 6 Closeout & v0.8.0 Release**: Shipped the web-app foundation (`BK-008` P1–P2) — PocketBase backend scaffolding and a new SvelteKit "Sleek UI" at read-parity, styled with the org design system.
+- **Branch-Based Development**: Adopted GitHub Flow (`RFC-LAB-000-004`) with PR + CI gates; delivered via PRs #1–#3.
+- **Sleek UI (`app/web/`)**: SvelteKit 5 + pnpm + Tailwind dashboard — blue-accent Nexus Pulse tokens, IBM Plex, dark-first, responsive.
+- **PocketBase Backend Scaffold**: Collections schema + idempotent seed importer generated from the `data/` relational masters.
 
 ### 3. Current Focus & Next Milestone
-- Sprint 6 execution: Scope the PocketBase Control Hub web app (`BK-008`, `RFC-LAB-000-003`) and deliver multi-repo PR cross-referencing (`BK-004`).
+- Sprint 7 execution: Deploy the Sleek UI to GitHub Pages (dual-run), scope Phase 3 auth/RBAC (`BK-007`), and deliver multi-repo PR cross-referencing (`BK-004`).
 
 ### 4. Blockers & Risks
 - **Blockers**: None.

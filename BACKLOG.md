@@ -4,13 +4,13 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 ---
 
-## 🎯 Current Sprint: Sprint 6 — Web App Foundation & Ecosystem Integrations
+## 🎯 Current Sprint: Sprint 7 — Sleek UI Deployment & Auth Foundations
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-06` |
-| **Duration** | 2026-10-22 to 2026-11-05 (2 Weeks) |
-| **Sprint Goal** | Scope the PocketBase Control Hub web app (`BK-008`, `RFC-LAB-000-003`) on the `BK-009` data layer, and deliver multi-repo PR cross-referencing (`BK-004`). |
+| **Sprint ID** | `SPRINT-07` |
+| **Duration** | 2026-11-05 to 2026-11-19 (2 Weeks) |
+| **Sprint Goal** | Deploy the Sleek UI (`app/web/`) to GitHub Pages (dual-run), begin BK-008 Phase 3 auth/RBAC scoping (`BK-007`), and deliver multi-repo PR cross-referencing (`BK-004`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -18,13 +18,10 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-031` | Web App Evolution Scoping Spike (`BK-008`, `RFC-LAB-000-003`) — PocketBase architecture, collection mapping from `data/`, auth/RBAC, migration & phased plan | P1 | Eialarasu | ✅ Done | 2026-10-29 |
-| `TSK-032` | Branch-Based Development Model (`RFC-LAB-000-004`) — GitHub Flow, hybrid path-scoping, PR CI gate, PR #1 dogfood | P1 | Eialarasu | ✅ Done | 2026-09-24 |
-| `TSK-033` | BK-008 Phase 1 — PocketBase stand-up scaffolding: collections schema (`pb_schema.json`), seed importer (`pb_import.py`), devcontainer service | P1 | Eialarasu | ✅ Done | 2026-11-05 |
-| `TSK-034` | BK-008 Phase 2 Scoping (`RFC-LAB-000-005`) — Sleek UI framework decision (SvelteKit static-SPA), read-parity checklist, deploy/dual-run plan | P1 | Eialarasu | ✅ Done | 2026-11-05 |
-| `TSK-035` | BK-008 Phase 2 Build — SvelteKit 5 + pnpm + Tailwind Sleek UI (`app/web/`): Nexus Pulse tokens, IBM Plex, dark-first theme, read-parity dashboard, `status.json` exporter, Node CI job | P1 | Eialarasu | 🚧 In Progress | 2026-11-05 |
-| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-31 |
-| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-11-05 |
+| `TSK-036` | Sleek UI GitHub Pages deployment workflow (`app/web/` build → Pages, dual-run alongside static dashboard) | P1 | Eialarasu | 📋 Planned | 2026-11-12 |
+| `TSK-037` | BK-008 Phase 3 Scoping — Auth & RBAC (`BK-007`): PocketBase OAuth + per-collection API rules | P1 | Eialarasu | 📋 Planned | 2026-11-14 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-17 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-11-19 |
 
 ---
 
@@ -41,6 +38,16 @@ This document maintains the active sprint plan, prioritized product backlog, and
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 6: Web App Foundation (BK-008 P1–P2) & Branch-Based Development (2026-09-24)
+- **Goal**: Stand up the PocketBase web-app foundation on the `BK-009` data layer and adopt industry-standard branch-based development.
+- **Deliverables**:
+  - `TSK-031`: Web App scoping RFC (`RFC-LAB-000-003`) — PocketBase architecture, collection mapping, phased plan.
+  - `TSK-032`: Branch-based development model (`RFC-LAB-000-004`) — GitHub Flow, hybrid path-scoping, PR CI gate; dogfooded as PR #1.
+  - `TSK-033`: BK-008 Phase 1 — PocketBase backend scaffolding (`app/pocketbase/pb_schema.json`, `pb_import.py`, devcontainer service) [PR #2].
+  - `TSK-034`: BK-008 Phase 2 scoping (`RFC-LAB-000-005`) — SvelteKit static-SPA decision + org design-system adoption (`docs/DESIGN.md`).
+  - `TSK-035`: BK-008 Phase 2 build — SvelteKit 5 + pnpm + Tailwind Sleek UI (`app/web/`) at read-parity; `status.json` exporter; Node CI job [PR #3].
+- **Carried Forward**: `TSK-025` (Multi-Repo PR Cross-Referencer) and `TSK-026` (Slack/WhatsApp webhook dispatch) → `SPRINT-07`.
 
 ### Sprint 5: Ecosystem Integrations & Relational Data Layer (2026-09-24)
 - **Goal**: Establish a relational data foundation for the portfolio and prepare the ground for the web-app evolution.

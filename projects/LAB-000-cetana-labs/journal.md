@@ -16,6 +16,19 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Sprint 6 Closeout & v0.8.0 Release
+- **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 6 — the web-app foundation sprint, delivered end-to-end under the new branch-based model (PRs #1–#3).
+- **Delivered Capabilities**:
+  - `TSK-031`: Web App scoping RFC (`RFC-LAB-000-003`).
+  - `TSK-032`: Branch-based development model (`RFC-LAB-000-004`) — GitHub Flow + PR CI gate.
+  - `TSK-033`: BK-008 Phase 1 — PocketBase backend scaffolding (`app/pocketbase/`).
+  - `TSK-034`: BK-008 Phase 2 scoping (`RFC-LAB-000-005`) + org design-system adoption.
+  - `TSK-035`: BK-008 Phase 2 build — SvelteKit 5 Sleek UI (`app/web/`) at read-parity.
+- **Release**: Promoted CHANGELOG to `v0.8.0`; synchronized root & `LAB-000` `STATUS.md`.
+- **Next Horizon**: Initialized `SPRINT-07` (2026-11-05 → 2026-11-19): deploy the Sleek UI to GitHub Pages (`TSK-036`), scope Phase 3 auth/RBAC (`TSK-037`, `BK-007`), and carry forward `TSK-025`/`TSK-026`.
+
+---
+
 ### [2026-09-24] Milestone: BK-008 Phase 2 Build — Sleek UI (`TSK-035`)
 - **Context**: First application build under the branch-based model — the SvelteKit "Sleek UI" reaching read-only parity with the static dashboard, styled by the org design system.
 - **Key Deliverables**:
