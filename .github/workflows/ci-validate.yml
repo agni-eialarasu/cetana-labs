@@ -35,5 +35,43 @@ jobs:
       - name: PocketBase schema in sync with data/ model
         run: python3 scripts/generate_pb_schema.py --check
 
+      - name: Live status snapshot in sync with STATUS.md
+        run: python3 scripts/generate_status_json.py --check
+
       - name: Two-Phase Governance pre-flight gate (5 pillars)
         run: python3 scripts/project_validate.py --allow-dirty
+
+  web-build:
+    name: Build Sleek UI (SvelteKit)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Refresh data snapshots (data/ -> status.json)
+        run: python3 scripts/generate_status_json.py
+        working-directory: .
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: app/web/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type-check
+        run: pnpm check
+
+      - name: Build static SPA
+        run: pnpm build

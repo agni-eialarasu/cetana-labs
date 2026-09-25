@@ -1,0 +1,109 @@
+@import '@fontsource/ibm-plex-sans/400.css';
+@import '@fontsource/ibm-plex-sans/500.css';
+@import '@fontsource/ibm-plex-sans/600.css';
+@import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Canonical design tokens — Nexus Pulse Design System (docs/DESIGN.md).
+ * CSS wins as the runtime source of truth. Dark-first: light values live under
+ * [data-theme="light"]; the default :root is dark.
+ */
+:root,
+[data-theme='dark'] {
+  --np-bg: #13151f;
+  --np-bg-elevated: #1b1e2b;
+  --np-bg-subtle: #242839;
+  --np-text: #f1f2fa;
+  --np-text-secondary: #c2c7d9;
+  --np-text-muted: #9aa3bb;
+  --np-border: #2b3043;
+  --np-border-strong: #414a63;
+  --np-accent: #60a5fa;
+  --np-accent-hover: #93c5fd;
+  --np-accent-ink: #bfdbfe;
+  --np-accent-soft: #1e3a5f;
+  --np-accent-line: #1e4a7a;
+  --np-accent-mark: #60a5fa;
+  --np-on-accent: #0b1220;
+
+  /* Severity (soft/ink pairs — always paired with a text label) */
+  --live: #34d399;
+  --live-soft: #10331f;
+  --warn: #fbbf24;
+  --warn-ink: #fcd34d;
+  --warn-soft: #3a2f0c;
+  --critical: #f87171;
+  --critical-soft: #3a1414;
+  --info: #60a5fa;
+  --info-soft: #1e3a5f;
+}
+
+[data-theme='light'] {
+  --np-bg: #f5f7fc;
+  --np-bg-elevated: #ffffff;
+  --np-bg-subtle: #edf0f7;
+  --np-text: #202436;
+  --np-text-secondary: #50596d;
+  --np-text-muted: #667086;
+  --np-border: #e3e7f0;
+  --np-border-strong: #cbd2e2;
+  --np-accent: #2563eb;
+  --np-accent-hover: #1d4ed8;
+  --np-accent-ink: #1e40af;
+  --np-accent-soft: #eff6ff;
+  --np-accent-line: #bfdbfe;
+  --np-accent-mark: #3b82f6;
+  --np-on-accent: #ffffff;
+
+  --live: #059669;
+  --live-soft: #e7f6ee;
+  --warn: #b45309;
+  --warn-ink: #92400e;
+  --warn-soft: #fef3e2;
+  --critical: #dc2626;
+  --critical-soft: #fdeaea;
+  --info: #2563eb;
+  --info-soft: #eff6ff;
+}
+
+/* System preference honored when no explicit choice (theme.ts sets data-theme). */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--np-bg);
+  color: var(--np-text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.tabular {
+  font-family: 'IBM Plex Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
