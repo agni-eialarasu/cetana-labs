@@ -877,6 +877,9 @@ def build_dashboard():
           <button class="btn btn-primary" onclick="copyPortfolioBriefing()">
             📋 Copy Executive WhatsApp Digest
           </button>
+          <a href="app/" class="btn" title="New SvelteKit interface (read-only preview)">
+            ✨ Open Sleek UI (beta)
+          </a>
           <a href="https://github.com/agni-eialarasu/cetana-labs" target="_blank" class="btn">
             GitHub Repository ↗
           </a>

@@ -1,4 +1,4 @@
-name: Deploy Portfolio Web Dashboard to GitHub Pages
+name: Deploy Portfolio Dashboard + Sleek UI to GitHub Pages
 
 on:
   push:
@@ -8,6 +8,8 @@ on:
       - 'projects/**'
       - 'scripts/**'
       - 'docs/**'
+      - 'data/**'
+      - 'app/web/**'
       - 'README.md'
       - 'STATUS.md'
       - '.github/workflows/deploy-pages.yml'
@@ -25,6 +27,13 @@ concurrency:
   group: "pages"
   cancel-in-progress: false
 
+# Site layout (dual-run per RFC-LAB-000-005 §6):
+#   /            -> classic static dashboard (docs/index.html)
+#   /app/        -> SvelteKit "Sleek UI" (app/web build)
+env:
+  # GitHub Pages project site is served under /cetana-labs/; the app lives at /cetana-labs/app.
+  APP_BASE_PATH: /cetana-labs/app
+
 jobs:
   build-and-deploy:
     environment:
@@ -41,12 +50,45 @@ jobs:
           python-version: '3.11'
 
       - name: Run Portfolio Integrity Validator
-        run: |
-          python3 scripts/validate_portfolio.py
+        run: python3 scripts/validate_portfolio.py
+
+      - name: Refresh live status snapshot (data/status.json)
+        run: python3 scripts/generate_status_json.py
 
       - name: Generate Static Portfolio Dashboard
+        run: python3 scripts/generate_dashboard.py
+
+      # --- Sleek UI (SvelteKit) build ---
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: app/web/pnpm-lock.yaml
+
+      - name: Install web dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: app/web
+
+      - name: Build Sleek UI (subpath base)
+        run: pnpm build
+        working-directory: app/web
+        env:
+          BASE_PATH: ${{ env.APP_BASE_PATH }}
+
+      # --- Assemble the combined site artifact ---
+      - name: Assemble site (root dashboard + /app SvelteKit)
         run: |
-          python3 scripts/generate_dashboard.py
+          mkdir -p _site
+          cp -r docs/. _site/
+          mkdir -p _site/app
+          cp -r app/web/build/. _site/app/
+          echo "Assembled site:" && ls -la _site && echo "app/:" && ls -la _site/app | head
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -54,7 +96,7 @@ jobs:
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs/'
+          path: '_site'
 
       - name: Deploy to GitHub Pages
         id: deployment

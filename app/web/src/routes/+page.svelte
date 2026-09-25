@@ -156,7 +156,8 @@
     </p>
   {/if}
 
-  <footer class="mt-12 border-t border-line pt-5 text-center text-xs text-muted">
-    Cetana Labs Control Hub • Synchronized from authoritative STATUS.md records
+  <footer class="mt-12 flex flex-col items-center gap-2 border-t border-line pt-5 text-center text-xs text-muted">
+    <span>Cetana Labs Control Hub • Sleek UI (beta) • read-only preview</span>
+    <a href="../" class="font-semibold text-brand hover:text-brand-hover">← Classic dashboard</a>
   </footer>
 </div>
