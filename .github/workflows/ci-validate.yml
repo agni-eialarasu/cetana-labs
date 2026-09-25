@@ -1,0 +1,36 @@
+name: CI — Portfolio & Governance Validation
+
+# Runs the Cetana Labs validators on every pull request (and on push to main as a
+# backstop). Registered as a required status check on `main` per RFC-LAB-000-004.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Portfolio, Pillars & Registry
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Portfolio structural & protocol integrity
+        run: python3 scripts/validate_portfolio.py
+
+      - name: Master registry in sync with data/
+        run: python3 scripts/generate_registry.py --check
+
+      - name: Two-Phase Governance pre-flight gate (5 pillars)
+        run: python3 scripts/project_validate.py --allow-dirty
