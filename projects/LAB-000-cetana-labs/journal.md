@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: BK-008 Phase 2 Scoping — Sleek UI (`RFC-LAB-000-005` / `TSK-034`)
+- **Context**: Scoped the Phase 2 frontend — a "Sleek UI" SPA reaching read-only feature parity with `docs/index.html`, driven by the Phase 1 PocketBase backend.
+- **Key Deliverables**:
+  - Authored [`RFC-LAB-000-005`](../../docs/rfc/RFC-LAB-000-005-web-app-phase2-ui.md).
+  - **Framework decision: SvelteKit static-SPA** (`adapter-static`, `ssr=false`) consuming the PocketBase JS SDK **client-side** — aligns with PocketBase's SPA-first guidance and keeps the cheap-static-artifact property (deployable to `pb_public/` or GitHub Pages during dual-run).
+  - Defined the read-parity checklist (KPIs, filters, sort, search, owner-pill cards, theme toggle), deploy/dual-run story, and phased build steps.
+  - Registered `TSK-034` (Done); marked `TSK-033` (P1) done.
+- **Next Horizon**: Build Phase 2 on a `feat/` branch via PR — scaffold `app/web/`, wire the PB read client, port components to parity.
+
+---
+
 ### [2026-09-24] Milestone: BK-008 Phase 1 — PocketBase Backend Scaffolding (`TSK-033`)
 - **Context**: First implementation phase of the PocketBase web app (`RFC-LAB-000-003` P1), delivered on a `feat/` branch via PR under the new branch-based model.
 - **Key Deliverables**:
