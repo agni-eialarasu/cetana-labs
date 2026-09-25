@@ -16,6 +16,16 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Sleek UI GitHub Pages Deployment — Dual-Run (`TSK-036`)
+- **Context**: Made the Phase 2 Sleek UI publicly visible by deploying it alongside the existing static dashboard (dual-run, `RFC-LAB-000-005` §6) — no hard cutover while the app is still read-only.
+- **Key Deliverables**:
+  - Extended `.github/workflows/deploy-pages.yml` into a single combined-artifact deploy: root (`/`) = classic dashboard, `/app/` = SvelteKit build (`BASE_PATH=/cetana-labs/app`). One Pages deployment avoids the concurrency race of two workflows.
+  - Cross-links: "✨ Open Sleek UI (beta)" on the classic dashboard; "← Classic dashboard" in the app footer.
+  - Verified locally over HTTP under the exact subpath layout: `/cetana-labs/app/`, `/cetana-labs/app/data/*.json`, and `/cetana-labs/` all return 200.
+- **Next Horizon**: Phase 3 auth/RBAC scoping (`TSK-037`, `BK-007`); eventual cutover once auth + write paths land.
+
+---
+
 ### [2026-09-24] Milestone: Sprint 6 Closeout & v0.8.0 Release
 - **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 6 — the web-app foundation sprint, delivered end-to-end under the new branch-based model (PRs #1–#3).
 - **Delivered Capabilities**:

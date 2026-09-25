@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Sleek UI GitHub Pages Deployment (`TSK-036`)**: Extended `deploy-pages.yml` to build the SvelteKit Sleek UI (with a `/cetana-labs/app` base path) and publish a **single combined site artifact** — the classic static dashboard at root (`/`) and the Sleek UI at `/app/` — enabling dual-run per `RFC-LAB-000-005` §6 (one Pages deployment, no race). Added cross-links: an "✨ Open Sleek UI (beta)" action on the classic dashboard and a "← Classic dashboard" link in the app footer.
 ### Changed
 ### Fixed
 
