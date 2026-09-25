@@ -15,13 +15,13 @@
 The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
 
 ### 2. Latest Deliveries & Business Wins
-- **Sprint 4 Closeout & v0.6.0 Release**: Shipped automated lead ping engine (`BK-003`), Two-Phase `/project-validate` governance gate, cloud dev migration, and owner-first dashboard cards.
-- **Automated Lead Ping Engine (`BK-003`)**: Weekly idempotent GitHub issue alerts for stale (> 14 days) and onboarding-pending initiatives (excludes `LAB-000` and completed).
-- **Cloud Dev Migration (`RFC-LAB-000-001`)**: Moved `LAB-000` to cloud-based development (Kiro Web); added `Dev Environment` protocol field and reproducible `.devcontainer/`.
-- **Owner-First Dashboard**: Restructured project cards to surface the owner and keep the internal Project ID off the card face.
+- **Sprint 5 Closeout & v0.7.0 Release**: Shipped the relational data layer (`BK-009`) — user & project masters plus a many-to-many memberships join, forming the PocketBase-ready schema for the coming web app.
+- **Generated Master Registry**: README portfolio table is now rendered from `data/` (owner resolved via the user master); no longer hand-maintained.
+- **Referential Integrity Enforced**: New validator pillar checks owner/membership FKs and `data/`↔`projects/` lockstep.
+- **Automated Lead Ping Engine (`BK-003`)**: Weekly idempotent GitHub issue alerts for stale and onboarding-pending initiatives.
 
 ### 3. Current Focus & Next Milestone
-- Sprint 5 execution: Multi-repo PR cross-referencing (`BK-004`) and Slack/WhatsApp incoming webhook dispatch (`BK-001`).
+- Sprint 6 execution: Scope the PocketBase Control Hub web app (`BK-008`, `RFC-LAB-000-003`) and deliver multi-repo PR cross-referencing (`BK-004`).
 
 ### 4. Blockers & Risks
 - **Blockers**: None.

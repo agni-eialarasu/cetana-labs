@@ -16,6 +16,15 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Sprint 5 Closeout & v0.7.0 Release
+- **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 5.
+- **Delivered Capabilities**:
+  - `TSK-030`: Relational JSON Data Layer (`BK-009`) — user & project masters, many-to-many memberships join, generated README registry, referential-integrity validator pillar, and PocketBase-ready JSON Schemas.
+- **Release**: Promoted CHANGELOG to `v0.7.0`; synchronized root & `LAB-000` `STATUS.md`.
+- **Next Horizon**: Initialized `SPRINT-06` (2026-10-22 → 2026-11-05). Added `TSK-031` to scope the PocketBase Control Hub web app (`BK-008`, `RFC-LAB-000-003`) atop the new data layer; carried forward `TSK-025` (Multi-Repo PR Cross-Referencer) and `TSK-026` (Slack/WhatsApp webhook dispatch).
+
+---
+
 ### [2026-09-24] Milestone: Relational JSON Data Layer (`BK-009` / `RFC-LAB-000-002`)
 - **Context**: Portfolio metadata was fragmented across Markdown (per-project READMEs, STATUS.md, and a hand-maintained root registry table) and owner identity was free text. Introduced a relational `data/` layer as the structural source of truth and the seed schema for the future PocketBase web app (`BK-008`) and RBAC (`BK-007`).
 - **Key Deliverables**:
