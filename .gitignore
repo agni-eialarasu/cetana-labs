@@ -40,3 +40,9 @@ shared-folder
 
 # Governance Receipts
 .gemini/governance/
+
+
+# PocketBase (BK-008): runtime data + downloaded binary (never committed)
+app/pocketbase/pocketbase
+app/pocketbase/pb_data/
+app/pocketbase/pb_migrations/

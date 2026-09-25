@@ -1,0 +1,212 @@
+[
+  {
+    "name": "users",
+    "type": "auth",
+    "schema": [
+      {
+        "name": "seed_id",
+        "type": "text",
+        "required": true,
+        "options": {
+          "pattern": "^usr-[a-z0-9-]+$"
+        }
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "github_handle",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "required": true,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "owner",
+            "lead",
+            "contributor",
+            "stakeholder",
+            "reviewer"
+          ]
+        }
+      },
+      {
+        "name": "org",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "active",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX idx_users_seed_id ON users (seed_id)"
+    ],
+    "listRule": "@request.auth.id != \"\"",
+    "viewRule": "@request.auth.id != \"\"",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
+  },
+  {
+    "name": "projects",
+    "type": "base",
+    "schema": [
+      {
+        "name": "lab_id",
+        "type": "text",
+        "required": true,
+        "options": {
+          "pattern": "^LAB-\\d{3}$"
+        }
+      },
+      {
+        "name": "slug",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "descriptor",
+        "type": "text",
+        "required": false
+      },
+      {
+        "name": "archetype",
+        "type": "select",
+        "required": true,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "control-plane",
+            "mini-app",
+            "research",
+            "data-collection",
+            "verification"
+          ]
+        }
+      },
+      {
+        "name": "owner",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "users",
+          "maxSelect": 1,
+          "cascadeDelete": false
+        }
+      },
+      {
+        "name": "repo_url",
+        "type": "url",
+        "required": false
+      },
+      {
+        "name": "reference_url",
+        "type": "url",
+        "required": false
+      },
+      {
+        "name": "dev_environment",
+        "type": "select",
+        "required": true,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "cloud",
+            "local"
+          ]
+        }
+      },
+      {
+        "name": "status_source",
+        "type": "select",
+        "required": true,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "local",
+            "remote"
+          ]
+        }
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX idx_projects_lab_id ON projects (lab_id)"
+    ],
+    "listRule": "@request.auth.id != \"\"",
+    "viewRule": "@request.auth.id != \"\"",
+    "createRule": null,
+    "updateRule": "@request.auth.id != \"\" && owner = @request.auth.id",
+    "deleteRule": null
+  },
+  {
+    "name": "memberships",
+    "type": "base",
+    "schema": [
+      {
+        "name": "seed_id",
+        "type": "text",
+        "required": true,
+        "options": {
+          "pattern": "^mem-[a-z0-9-]+$"
+        }
+      },
+      {
+        "name": "user",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "users",
+          "maxSelect": 1,
+          "cascadeDelete": true
+        }
+      },
+      {
+        "name": "project",
+        "type": "relation",
+        "required": true,
+        "options": {
+          "collectionId": "projects",
+          "maxSelect": 1,
+          "cascadeDelete": true
+        }
+      },
+      {
+        "name": "role",
+        "type": "select",
+        "required": true,
+        "options": {
+          "maxSelect": 1,
+          "values": [
+            "owner",
+            "lead",
+            "contributor",
+            "stakeholder",
+            "reviewer"
+          ]
+        }
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX idx_membership ON memberships (user, project)"
+    ],
+    "listRule": "@request.auth.id != \"\"",
+    "viewRule": "@request.auth.id != \"\"",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
+  }
+]
