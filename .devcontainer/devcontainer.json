@@ -4,7 +4,11 @@
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  "postCreateCommand": "python3 --version && gh --version || true",
+  "forwardPorts": [8090],
+  "portsAttributes": {
+    "8090": { "label": "PocketBase", "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "bash .devcontainer/setup-pocketbase.sh || true",
   "postAttachCommand": "python3 scripts/validate_portfolio.py || true",
   "customizations": {
     "vscode": {

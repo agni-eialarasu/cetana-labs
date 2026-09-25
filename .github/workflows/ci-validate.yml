@@ -32,5 +32,8 @@ jobs:
       - name: Master registry in sync with data/
         run: python3 scripts/generate_registry.py --check
 
+      - name: PocketBase schema in sync with data/ model
+        run: python3 scripts/generate_pb_schema.py --check
+
       - name: Two-Phase Governance pre-flight gate (5 pillars)
         run: python3 scripts/project_validate.py --allow-dirty

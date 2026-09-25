@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: BK-008 Phase 1 — PocketBase Backend Scaffolding (`TSK-033`)
+- **Context**: First implementation phase of the PocketBase web app (`RFC-LAB-000-003` P1), delivered on a `feat/` branch via PR under the new branch-based model.
+- **Key Deliverables**:
+  - `app/pocketbase/pb_schema.json` — PocketBase collections (`users` auth, `projects`, `memberships`) generated from the `data/` masters by `scripts/generate_pb_schema.py`; owner/membership FKs become native relation fields.
+  - `scripts/pb_import.py` — idempotent, stdlib-only seed importer (dry-run default; `--apply` upserts by natural `seed_id`/`lab_id`) mapping `data/` → PocketBase records.
+  - `.devcontainer/setup-pocketbase.sh` + port 8090 forwarding — provisions PocketBase in Codespaces (best-effort; not required in the Kiro Web sandbox).
+  - CI now enforces `generate_pb_schema.py --check` so the backend schema stays derived from `data/`; `pb_data/` + binary gitignored.
+- **Next Horizon**: Run the server in Codespaces, apply the import, then Phase 2 (read-UI parity).
+
+---
+
 ### [2026-09-24] Milestone: Adopted Branch-Based Development (`RFC-LAB-000-004`)
 - **Context**: With `BK-008` introducing runnable code, a database, and migrations, trunk-based direct commits are no longer appropriate for application changes. Moved to industry-standard branch-based development ahead of P1.
 - **Key Deliverables**:

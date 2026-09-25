@@ -18,7 +18,9 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-031` | Web App Evolution Scoping Spike (`BK-008`, `RFC-LAB-000-003`) — PocketBase architecture, collection mapping from `data/`, auth/RBAC, migration & phased plan | P1 | Eialarasu | 📋 Planned | 2026-10-29 |
+| `TSK-031` | Web App Evolution Scoping Spike (`BK-008`, `RFC-LAB-000-003`) — PocketBase architecture, collection mapping from `data/`, auth/RBAC, migration & phased plan | P1 | Eialarasu | ✅ Done | 2026-10-29 |
+| `TSK-032` | Branch-Based Development Model (`RFC-LAB-000-004`) — GitHub Flow, hybrid path-scoping, PR CI gate, PR #1 dogfood | P1 | Eialarasu | ✅ Done | 2026-09-24 |
+| `TSK-033` | BK-008 Phase 1 — PocketBase stand-up scaffolding: collections schema (`pb_schema.json`), seed importer (`pb_import.py`), devcontainer service | P1 | Eialarasu | 🚧 In Progress | 2026-11-05 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-10-31 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-11-05 |
 
