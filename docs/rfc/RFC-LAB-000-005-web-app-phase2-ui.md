@@ -5,7 +5,7 @@
 | **RFC ID** | `RFC-LAB-000-005` |
 | **Title** | Control Hub Web App — Phase 2 Frontend ("Sleek UI") Scoping |
 | **Author** | Eialarasu (LAB-000 Control Hub) |
-| **Status** | 🟡 Proposed (Scoping — `BK-008` Phase 2) |
+| **Status** | ✅ Accepted (Scoping — `BK-008` Phase 2; open questions resolved §9) |
 | **Date** | 2026-09-24 |
 | **Builds On** | `RFC-LAB-000-003` (PocketBase web app, §7 P2), `RFC-LAB-000-002` (data layer), `RFC-LAB-000-004` (branch model) |
 | **Precedes** | Phase 3 (Auth & RBAC / `BK-007`) |
@@ -101,9 +101,11 @@ The Phase 2 UI must replicate, from PocketBase data:
 | Framework second-guessing later | Thin read client over a framework-agnostic REST contract; low reskin cost. |
 | Scope creep into auth/write | Hard phase boundary: Phase 2 is **read-only, no auth**. |
 
-## 9. Open Questions (resolve at build start)
+## 9. Resolved Decisions (open questions closed)
 
-1. Live-status read source for Phase 2: interim parsed-status endpoint vs. early `status_snapshots` seed.
-2. Hosting target once parity is reached (PocketBase host vs. keeping Pages for the public view).
-3. Svelte 5 (Runes) — adopt now (current) vs. Svelte 4 stability. _Leaning current (Svelte 5)._
-4. Component styling: port the existing hand-rolled CSS tokens vs. adopt a lightweight component kit.
+1. **Live-status read source → interim `data/status.json` export.** A script reuses the existing `generate_status.py` parser to emit a committed `data/status.json` snapshot; the SPA reads structural data from PocketBase and live status (health/wins/focus/blockers/metrics) from `status.json`. `STATUS.md` remains canonical until Phase 4; the JSON shape previews the future `status_snapshots` collection.
+2. **Hosting → split hosting (committed target).** SvelteKit static UI on **GitHub Pages** (free, public, unchanged); **PocketBase on a lightweight container host** (Fly/Railway/Render-class) with a persistent SQLite volume. Requires CORS config (UI origin → PB origin). Phase 2 dev runs against Codespaces/local PocketBase; the container host is finalized at deploy time.
+3. **Framework version → Svelte 5 (Runes) + pnpm.** Greenfield app on the current, on-default SvelteKit (`$state`/`$derived` suit the filter/sort/search state); **pnpm** is the package manager (`pnpm-lock.yaml` committed; CI uses `pnpm install --frozen-lockfile`).
+4. **Styling → adopt the org design system (Nexus Pulse), Tailwind-based.** [`docs/DESIGN.md`](../DESIGN.md) is the authoritative visual SoT (verbatim); [`docs/design-system-lab000.md`](../design-system-lab000.md) maps it to SvelteKit + Tailwind. Blue accent, IBM Plex Sans/Mono, dark-first, `--np-*` tokens, sm/md/lg responsive; banned anti-patterns enforced.
+
+> These supersede the framework-agnostic styling assumption in §2/§3; the SvelteKit static-SPA + client-side PocketBase SDK decisions stand, now styled by the org design system with Tailwind mapping the `--np-*` tokens.

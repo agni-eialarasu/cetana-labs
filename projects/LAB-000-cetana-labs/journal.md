@@ -16,6 +16,21 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Phase 2 Design Decisions & Org Design System Adopted
+- **Context**: Resolved the four `RFC-LAB-000-005` open questions and brought the org design system into the repo ahead of the Phase 2 build.
+- **Decisions**:
+  - **Q1 Live status** → interim `data/status.json` export (reuse `generate_status.py` parser; `STATUS.md` stays canonical until Phase 4).
+  - **Q2 Hosting** → split hosting: SvelteKit static UI on GitHub Pages + PocketBase on a container host with a persistent SQLite volume.
+  - **Q3 Framework** → **Svelte 5 (Runes) + pnpm**.
+  - **Q4 Styling** → adopt the org **Nexus Pulse Design System** (Tailwind-based).
+- **Key Deliverables**:
+  - Stored the org design system verbatim at `docs/DESIGN.md` (authoritative visual SoT).
+  - Authored `docs/design-system-lab000.md` mapping it to SvelteKit + Tailwind — token/framework split, IBM Plex via `@fontsource`, `--np-*` Tailwind token map, sm/md/lg responsive tiers, and LAB-000-specific IA (not Nexus Pulse's nav).
+  - Marked `RFC-LAB-000-005` Accepted with resolutions recorded.
+- **Next Horizon**: Build Phase 2 on a `feat/` branch via PR — scaffold `app/web/` (SvelteKit 5 + pnpm + Tailwind), wire tokens/fonts, port components to read-parity.
+
+---
+
 ### [2026-09-24] Milestone: BK-008 Phase 2 Scoping — Sleek UI (`RFC-LAB-000-005` / `TSK-034`)
 - **Context**: Scoped the Phase 2 frontend — a "Sleek UI" SPA reaching read-only feature parity with `docs/index.html`, driven by the Phase 1 PocketBase backend.
 - **Key Deliverables**:
