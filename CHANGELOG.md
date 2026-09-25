@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Web App Evolution Scoping (`BK-008`, `RFC-LAB-000-003`, `TSK-031`)**: Authored the scoping RFC for evolving `LAB-000` into a full **PocketBase** web application (single Go binary + embedded SQLite) atop the `BK-009` relational data layer — covering collection mapping (`users`/`projects`/`memberships`/`status_snapshots`/`sprints`), auth & RBAC via per-collection API rules (seeding `BK-007`), a file→DB migration strategy with `data/` export-on-write, and a phased P0–P5 delivery plan.
 ### Changed
 ### Fixed
 
