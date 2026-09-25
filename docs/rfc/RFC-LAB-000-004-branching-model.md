@@ -98,6 +98,18 @@ The existing validators run as a **`pull_request`-triggered** workflow (`.github
 4. Enable branch protection on `main` (require PR + the CI status check).
 5. All `BK-008` phase work proceeds on `feat/*` branches via PRs.
 
+## 10a. Branch Protection — Manual Setup (Environment Note)
+
+The cloud dev sandbox's GitHub gateway does not expose the branch-protection admin API (`PUT/GET /repos/{owner}/{repo}/branches/main/protection` returns 403/404 despite `admin: true`), so protection must be enabled once from the GitHub web UI:
+
+**Settings → Branches → Add branch ruleset / protection rule for `main`:**
+- ✅ Require a pull request before merging
+- ✅ Require status checks to pass → select **`Validate Portfolio, Pillars & Registry`**
+- ✅ Require branches to be up to date before merging
+- (Optional at this team size) Require approvals: 0–1
+
+Until enabled, the model is enforced by convention (this RFC + `AGENTS.md` §1.6). PR creation/merge and CI checks already function through the gateway.
+
 ## 11. Risks & Mitigations
 
 | Risk | Mitigation |
