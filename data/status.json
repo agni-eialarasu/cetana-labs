@@ -1,0 +1,129 @@
+[
+  {
+    "id": "LAB-000",
+    "health": "🟢 On Track",
+    "last_updated": "2026-09-24",
+    "pitch": "The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.",
+    "wins": [
+      "**Sprint 5 Closeout & v0.7.0 Release**: Shipped the relational data layer (`BK-009`) — user & project masters plus a many-to-many memberships join, forming the PocketBase-ready schema for the coming web app.",
+      "**Generated Master Registry**: README portfolio table is now rendered from `data/` (owner resolved via the user master); no longer hand-maintained.",
+      "**Referential Integrity Enforced**: New validator pillar checks owner/membership FKs and `data/`↔`projects/` lockstep.",
+      "**Automated Lead Ping Engine (`BK-003`)**: Weekly idempotent GitHub issue alerts for stale and onboarding-pending initiatives."
+    ],
+    "focus": "Sprint 6 execution: Scope the PocketBase Control Hub web app (`BK-008`, `RFC-LAB-000-003`) and deliver multi-repo PR cross-referencing (`BK-004`).",
+    "blockers": "None",
+    "risks": "Ensuring external project leads regularly invoke `/status-update` at sprint close",
+    "metrics": [
+      "6/6 projects passing portfolio integrity checks; `/project-validate` 5-pillar pre-flight gate all green.",
+      "Automated GitHub Actions deployment pipeline for GitHub Pages active (13s build & deploy).",
+      "Clean trunk-based git synchronization on `main`."
+    ],
+    "days_ago": 1,
+    "is_onboarding_pending": false,
+    "is_completed": false,
+    "is_stale": false
+  },
+  {
+    "id": "LAB-001",
+    "health": "✅ Completed",
+    "last_updated": "2026-09-23",
+    "pitch": "A lightweight, privacy-first edge computer vision system for real-time behavioral monitoring (stimming and physical avoidance) that instantly alerts caregivers via Webhooks/SMS and offers interactive 3D skeleton replays with conversational GenBI analytics.",
+    "wins": [
+      "**Edge Vision & Privacy Core**: In-memory frame processing (~30 FPS MediaPipe) purging video frames each loop—storing only numeric 3D skeleton trajectories.",
+      "**Offline Ingestion & Replay**: Batch video ingest CLI coupled with a zero-dependency web server and HTML5 Canvas 3D skeleton replay player.",
+      "**Conversational GenBI Layer**: Integrated WrenAI semantic modeling with local Ollama LLMs for conversational queries over behavior events."
+    ],
+    "focus": "Operationalized and verified; transitioned to maintenance and reference baseline.",
+    "blockers": "None",
+    "risks": "None",
+    "metrics": [
+      "69/69 unit and integration tests passing across 14 modules.",
+      "Strict linter and style compliance."
+    ],
+    "days_ago": 2,
+    "is_onboarding_pending": false,
+    "is_completed": true,
+    "is_stale": false
+  },
+  {
+    "id": "LAB-002",
+    "health": "✅ Completed",
+    "last_updated": "2026-09-23",
+    "pitch": "A research spike evaluating WrenAI's semantic Modeling Definition Language (MDL) to power on-premise Conversational GenBI, enabling stakeholders to query operational databases in natural language with zero cloud data leaks and zero SQL hallucinations.",
+    "wins": [
+      "**Hallucination Elimination**: Confirmed declarative MDL manifests ground schema definitions and aggregations reliably, outperforming direct prompt engineering.",
+      "**100% On-Premise Execution**: Verified seamless integration with local Ollama endpoints (Qwen/Llama 3) without external API dependencies.",
+      "**Production Proof in LAB-001**: Successfully wired into AAMAS SQLite database (`data/outbox.db`) to answer real-time behavioral queries."
+    ],
+    "focus": "Evaluation successfully concluded and documented; established as approved reference architecture for on-premise GenBI.",
+    "blockers": "None",
+    "risks": "None",
+    "metrics": [
+      "100% accuracy on tested temporal, aggregation, and event outbox SQL test cases."
+    ],
+    "days_ago": 2,
+    "is_onboarding_pending": false,
+    "is_completed": true,
+    "is_stale": false
+  },
+  {
+    "id": "LAB-003",
+    "health": "🟢 On Track",
+    "last_updated": "2026-09-24",
+    "pitch": "An enterprise operational and financial intelligence engine executing an authoritative deterministic pipeline across Commercial SOWs, Workforce Allocations, Governed Finance Margins, and Automated Risk Signals to protect company profitability.",
+    "wins": [
+      "**Staging Release Baseline (v1.2.0)**: Deployed full-stack multi-tenant platform live on Vercel and Railway with authentic Supabase identity governance.",
+      "**Deterministic Signals Engine**: Automated rule engine evaluating margin erosion (SIG-01), SOW consumption risk (SIG-02), and workforce conflicts (SIG-03).",
+      "**Governed Finance Variance**: Immutable baseline-vs-forecast calculations verified against canonical golden dataset NP-GOLDEN-001."
+    ],
+    "focus": "Active Sprints 6E, 8B & 9: Scenario simulation engine, AST boundaries, and operational frontend workflows.",
+    "blockers": "None",
+    "risks": "Coordinating cross-domain contract changes during rapid scenario branch evolution",
+    "metrics": [
+      "431/431 automated test suite passing cleanly.",
+      "42/42 architectural AST boundary fitness checks verified with zero leaks."
+    ],
+    "days_ago": 1,
+    "is_onboarding_pending": false,
+    "is_completed": false,
+    "is_stale": false
+  },
+  {
+    "id": "LAB-004",
+    "health": "⏳ Onboarding Pending",
+    "last_updated": "2026-09-23",
+    "pitch": "A multi-tenant AI security control plane and governed gateway platform providing runtime policy enforcement, gateway auth frontiers, and evidence-grade auditability for generative AI systems.",
+    "wins": [
+      "Initial onboarding protocol pending from project lead. Run `/status-init` in repo root to establish baseline."
+    ],
+    "focus": "Initial project status onboarding and establishing sprint baseline.",
+    "blockers": "None",
+    "risks": "None identified",
+    "metrics": [
+      "Pending initial baseline setup."
+    ],
+    "days_ago": 2,
+    "is_onboarding_pending": true,
+    "is_completed": false,
+    "is_stale": false
+  },
+  {
+    "id": "LAB-005",
+    "health": "⏳ Onboarding Pending",
+    "last_updated": "2026-09-23",
+    "pitch": "A real-time telemetry, notification, and event broadcast beacon service that delivers operational risk signals and workflow alerts across the Nexus platform.",
+    "wins": [
+      "Initial onboarding protocol pending from project lead. Run `/status-init` in repo root to establish baseline."
+    ],
+    "focus": "Initial project status onboarding and establishing sprint baseline.",
+    "blockers": "None",
+    "risks": "None identified",
+    "metrics": [
+      "Pending initial baseline setup."
+    ],
+    "days_ago": 2,
+    "is_onboarding_pending": true,
+    "is_completed": false,
+    "is_stale": false
+  }
+]

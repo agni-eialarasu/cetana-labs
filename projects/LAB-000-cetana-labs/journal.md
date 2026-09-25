@@ -16,6 +16,18 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: BK-008 Phase 2 Build — Sleek UI (`TSK-035`)
+- **Context**: First application build under the branch-based model — the SvelteKit "Sleek UI" reaching read-only parity with the static dashboard, styled by the org design system.
+- **Key Deliverables**:
+  - Scaffolded `app/web/` — **SvelteKit 5 (Runes) + pnpm + Tailwind + adapter-static**, PocketBase JS SDK, IBM Plex via `@fontsource`.
+  - Wired the **Nexus Pulse `--np-*` tokens** (light/dark), Tailwind token map, and a dark-first System/Light/Dark theme toggle; responsive sm/md/lg.
+  - Read-parity dashboard: header, KPI bar, filter tabs, 3 sort modes, live search, owner-first project cards (owner pill, health pill, blocker banner) — merging structural `data/` + interim `data/status.json`.
+  - Added `scripts/generate_status_json.py` (reuses `generate_status.py` parser) and a Node `web-build` CI job; both `status.json --check` and the SvelteKit build now gate PRs.
+  - Verified: `svelte-check` 0 errors/0 warnings; static build succeeds; all Python validators green.
+- **Next Horizon**: Land via PR; then Phase 3 (auth + RBAC / `BK-007`) or wire the SPA to a live PocketBase instance.
+
+---
+
 ### [2026-09-24] Milestone: Phase 2 Design Decisions & Org Design System Adopted
 - **Context**: Resolved the four `RFC-LAB-000-005` open questions and brought the org design system into the repo ahead of the Phase 2 build.
 - **Decisions**:
