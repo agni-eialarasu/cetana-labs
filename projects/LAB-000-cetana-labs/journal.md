@@ -16,6 +16,19 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: BK-008 Phase 3 Scoping — Auth & RBAC (`RFC-LAB-000-006` / `TSK-037`)
+- **Context**: Scoped authentication and RBAC for the Control Hub web app — the delivery vehicle for `BK-007` (role-gated history), governed by explicit, auditable rules to avoid a surveillance perception.
+- **Key Deliverables**:
+  - Authored [`RFC-LAB-000-006`](../../docs/rfc/RFC-LAB-000-006-auth-rbac.md).
+  - **Identity**: GitHub OAuth2 on the PocketBase `users` collection, linked by `github_handle`; superuser + email/password fallback.
+  - **Roles**: per-project via the `memberships` join (owner/lead/contributor/reviewer/stakeholder) — activating the M2M model built in `RFC-LAB-000-002`.
+  - **Enforcement**: per-collection PocketBase API rules (verified syntax; membership-gated write example); public summary tier stays open, RBAC gates detail/history.
+  - **Audit + non-surveillance safeguards**: access-only audit, version-controlled human-readable rules, no per-user productivity metrics.
+  - Marked `BK-007` scoped; `TSK-037` done.
+- **Next Horizon**: Build Phase 3 (OAuth wiring, rule matrix, `audit` collection, UI sign-in) once a live PocketBase instance is stood up — or continue with `TSK-025`/`TSK-026`.
+
+---
+
 ### [2026-09-24] Milestone: Sleek UI GitHub Pages Deployment — Dual-Run (`TSK-036`)
 - **Context**: Made the Phase 2 Sleek UI publicly visible by deploying it alongside the existing static dashboard (dual-run, `RFC-LAB-000-005` §6) — no hard cutover while the app is still read-only.
 - **Key Deliverables**:

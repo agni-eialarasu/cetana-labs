@@ -19,7 +19,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | `TSK-036` | Sleek UI GitHub Pages deployment workflow (`app/web/` build → Pages, dual-run alongside static dashboard) | P1 | Eialarasu | ✅ Done | 2026-11-12 |
-| `TSK-037` | BK-008 Phase 3 Scoping — Auth & RBAC (`BK-007`): PocketBase OAuth + per-collection API rules | P1 | Eialarasu | 📋 Planned | 2026-11-14 |
+| `TSK-037` | BK-008 Phase 3 Scoping — Auth & RBAC (`BK-007`, `RFC-LAB-000-006`): GitHub OAuth identity, per-project role model via memberships, per-collection API rules, audit trail, non-surveillance safeguards | P1 | Eialarasu | ✅ Done | 2026-11-14 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-17 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-11-19 |
 
@@ -31,7 +31,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | :---: | :--- | :---: | :---: | :---: | :--- |
 | `BK-005` | PDF Executive Digest Export | P3 | Tooling | Backlog | One-click export for board/investor reporting |
 | `BK-006` | Project Health Trend Telemetry | P3 | Analytics | Backlog | Historical velocity and health transition graphs on dashboard |
-| `BK-007` | On-Demand Git Status Audit Trail & Role-Gated History | P3 | Governance | Backlog | Reconstructs historical sprint baselines & health transitions from Git logs of `STATUS.md`. On-demand CLI initially; plan simple auth / RBAC for future dashboard access to prevent developer surveillance perceptions. |
+| `BK-007` | On-Demand Git Status Audit Trail & Role-Gated History | P2 | Governance | SPRINT-07 (scoped) | Role-gated history & audit trail. Auth/RBAC scoped in [`RFC-LAB-000-006`](docs/rfc/RFC-LAB-000-006-auth-rbac.md) (`TSK-037`) — GitHub OAuth, per-project roles via `memberships`, per-collection API rules, access-only audit (non-surveillance). Delivered as BK-008 Phase 3 atop the web app. |
 | `BK-008` | Control Hub Web App Evolution (PocketBase, db + server) | P2 | Platform | SPRINT-06 (scoping) | Evolve the static control plane into a full PocketBase web application (database + backend server). Scoped in [`RFC-LAB-000-003`](docs/rfc/RFC-LAB-000-003-pocketbase-web-app.md) (`TSK-031`). Prerequisite for `BK-007` RBAC. Cloud dev env shifts Kiro Web → Codespaces per `RFC-LAB-000-001` §5; services declared in `.devcontainer/`. Consumes the `BK-009` relational data layer as its seed schema. |
 | `BK-009` | Relational JSON Data Layer (`RFC-LAB-000-002`) | P1 | Data | ✅ Delivered (SPRINT-05, `TSK-030`) | User & project masters + many-to-many memberships join under `data/`; generated README registry; referential-integrity validator pillar. PocketBase-ready schema; foundation for `BK-008` + `BK-007` RBAC. |
 

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **BK-008 Phase 3 Scoping — Auth & RBAC (`RFC-LAB-000-006`, `TSK-037`, `BK-007`)**: Authored the Phase 3 scoping RFC — **GitHub OAuth2** identity on the PocketBase `users` collection (linked by `github_handle`), a **per-project role model** resolved through the `memberships` join, and access enforced by **per-collection PocketBase API rules** (verified 5-rule-type + filter syntax with a membership-gated write example). Includes the UI auth flow (public summary tier + member-scoped detail), an access-only **audit trail**, and explicit **non-surveillance safeguards** — directly delivering the `BK-007` role-gated-history intent.
 - **Sleek UI GitHub Pages Deployment (`TSK-036`)**: Extended `deploy-pages.yml` to build the SvelteKit Sleek UI (with a `/cetana-labs/app` base path) and publish a **single combined site artifact** — the classic static dashboard at root (`/`) and the Sleek UI at `/app/` — enabling dual-run per `RFC-LAB-000-005` §6 (one Pages deployment, no race). Added cross-links: an "✨ Open Sleek UI (beta)" action on the classic dashboard and a "← Classic dashboard" link in the app footer.
 ### Changed
 ### Fixed
