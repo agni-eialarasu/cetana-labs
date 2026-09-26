@@ -37,6 +37,7 @@ dist/
 build/
 *.log
 shared-folder
+my-kiro
 
 # Governance Receipts
 .gemini/governance/
