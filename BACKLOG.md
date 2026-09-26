@@ -24,6 +24,9 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `TSK-042` | MVP scoping (`RFC-LAB-000-008`, `BK-011`) — MVP definition, minimum RBAC (owner-or-not), phase breakdown M1–M5; `make setup` staleness-guard | P1 | Eialarasu | ✅ Done | 2026-11-26 |
 | `TSK-043` | Decision Journal (`docs/DECISION-JOURNAL.md`) — curated decision-narrative log (thinking/rationale showcase); inaugural whole-session entry | P2 | Eialarasu | ✅ Done | 2026-11-28 |
 | `TSK-044` | `/brainstorm-save` project skill + AI-collaboration model (`docs/ai-collaboration-model.md`) — decision-capture skill (contributor-attributed) + methodology one-pager; Entry 002 | P2 | Eialarasu | ✅ Done | 2026-11-28 |
+| `TSK-045` | Sprint lifecycle & AIDLC engine (`RFC-LAB-000-009`, `BK-011`) — five-phase human-gated lifecycle on Kiro Specs + Autonomous mode; §3.1 state machine (`brainstorm→implement→verify→done`), merge-first rule, phase-aware guards; Decision Journal Entry 003 | P1 | Eialarasu | 🚧 In Progress | 2026-12-03 |
+| `TSK-046` | Lifecycle command suite (`.kiro/skills/`) — `/spec-run` (IDE one-liner Spec executor), `/plan-start`+`/plan-done` (Scope, merge-first), `/review-pr` gate, state guards on `/sprint-start`+`/sprint-done`; `REPORT.md` template; `AGENTS.md` §4 verb map | P1 | Eialarasu | 🚧 In Progress | 2026-12-03 |
+| `TSK-047` | First AIDLC Spec + lifecycle guide — M1 Kiro Spec (`.kiro/specs/mvp-m1-live-pocketbase/`, wire UI→live PocketBase) with preflight + Execution header; `docs/sprint-lifecycle.md` visual guide (state + sequence diagrams, both paths) | P1 | Eialarasu | 🚧 In Progress | 2026-12-03 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-28 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-12-03 |
 
