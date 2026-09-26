@@ -16,6 +16,14 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Programmatic PocketBase Provisioning (`TSK-041`)
+- **Context**: The local run proved the hand-written `pb_schema.json` **fails to import** on PocketBase v0.40 ("Invalid collections configuration" — relations need real generated collection ids, not names). Switched to Option B: create collections via the REST API.
+- **Deliverable**: `scripts/pb_provision.py` (`make provision`) creates `users` → `projects` → `memberships` in dependency order, resolving real relation ids at create time; idempotent (updates in place). Wired into `make setup` and `make seed` — first-run local setup now has **zero manual UI steps**.
+- **Reframe**: `pb_schema.json` demoted to a human-readable reference (CI still drift-checks it vs `data/`); provisioning is the source of truth for collection creation; export-from-instance remains the option for a captured schema.
+- **Next Horizon**: User re-runs `make setup` to verify end-to-end (provision + seed), then MVP scoping (`RFC-LAB-000-008`).
+
+---
+
 ### [2026-09-24] Milestone: One-Time Local Setup Script (`TSK-040`)
 - **Context**: After the first local run surfaced manual friction (superuser creation, password rules, env + sequencing), added a one-command bootstrap.
 - **Deliverable**: `scripts/setup-local.sh` (`make setup`) — idempotent: toolchain check → `.env` defaults → web deps → PocketBase superuser upsert → schema-import guidance → optional `data/` seed. Sensible defaults (`admin@cetana.local` / `CetanaLocal2026!`, overridable); BSD/macOS-`sed` compatible; re-runnable. Documented in `docs/work-environment.md` §3.

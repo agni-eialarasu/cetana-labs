@@ -20,7 +20,9 @@ Every command exists as both a Kiro `/command` and a `make` target (identical be
 | **Local stack** | `make start-local` | `/start-local` | Start PocketBase (:8090) + SvelteKit dev (:5173) |
 | | `make stop-local` | `/stop-local` | Stop dev servers (preserves data) |
 | | `make status-local` | `/status-local` | Are the servers up? |
-| **Data** | `make seed` | — | Seed PocketBase from `data/` (`pb_import.py --apply`) |
+| **Setup** | `make setup` | — | One-time bootstrap: env, deps, superuser, provision, seed |
+| **Data** | `make provision` | — | Create collections via API (version-robust) |
+| | `make seed` | — | Provision + seed PocketBase from `data/` |
 | | `make clean-data` | — | Reset local DB to a clean slate |
 | **Containers** | `make pb-image` | — | Build PocketBase image (Podman-first) for staging parity |
 | **Sprint** | — | `/sprint-start`, `/sprint-done` | Open / close a sprint |
@@ -92,11 +94,11 @@ Starts PocketBase (`:8090`, admin `/_/`) and SvelteKit dev (`:5173`) with an emp
 
 ### State B — Seeded from `data/`
 ```bash
-make start-local            # in one terminal
+make start-local            # in one terminal (PB + web)
 # then, with PB_ADMIN_* set in .env:
-make seed                    # imports users/projects/memberships from data/
+make seed                    # provisions collections (API) + seeds users/projects/memberships
 ```
-Seeds the 3 users, 6 projects, and memberships from the relational masters (`RFC-LAB-000-002`).
+`make seed` runs `pb_provision.py` (creates collections via the API — version-robust, no manual schema import) then `pb_import.py` (seeds the 3 users, 6 projects, memberships from the relational masters, `RFC-LAB-000-002`). `make setup` does this end-to-end on first run.
 
 ### Stop
 ```bash

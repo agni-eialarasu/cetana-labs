@@ -94,23 +94,25 @@ if curl -sf "${PB_URL}/api/health" >/dev/null 2>&1; then
 else
   die "PocketBase did not become healthy — see /tmp/cetana-pb.log"
 fi
-warn "Import collections in the Admin UI: ${PB_URL}/_/  →  Settings → Import collections → paste app/pocketbase/pb_schema.json"
-warn "(Programmatic schema import varies by version; the Admin UI import is the reliable path.)"
+# Provision collections programmatically via the API (version-robust; no manual UI import).
+export PB_URL PB_ADMIN_EMAIL PB_ADMIN_PASSWORD
+if python3 scripts/pb_provision.py --apply; then
+  ok "collections provisioned (users, projects, memberships)"
+else
+  warn "collection provisioning reported issues — see output above"
+fi
 
 # ---------------------------------------------------------------------------
-say "6/6  Seed data from data/ (dry-run, then apply)"
+say "6/6  Seed data from data/"
 if [ "$DO_SEED" = "1" ]; then
-  export PB_URL PB_ADMIN_EMAIL PB_ADMIN_PASSWORD
-  python3 scripts/pb_import.py || warn "dry-run reported issues"
-  echo ""
-  read -r -p "  Apply the seed now? (requires collections imported above) [y/N] " ans
-  if [ "${ans:-N}" = "y" ] || [ "${ans:-N}" = "Y" ]; then
-    python3 scripts/pb_import.py --apply && ok "seeded users/projects/memberships" || warn "seed --apply failed (import collections first?)"
+  # Collections now exist (step 5), so the seed can apply directly.
+  if python3 scripts/pb_import.py --apply; then
+    ok "seeded users/projects/memberships from data/"
   else
-    warn "skipped apply — run later: python3 scripts/pb_import.py --apply"
+    warn "seed --apply failed — inspect output; re-run: python3 scripts/pb_import.py --apply"
   fi
 else
-  warn "seed skipped (--no-seed)"
+  warn "seed skipped (--no-seed) — run later: make seed"
 fi
 
 # ---------------------------------------------------------------------------

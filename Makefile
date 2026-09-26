@@ -14,7 +14,7 @@ PB := $(shell command -v pocketbase 2>/dev/null || echo ./pocketbase)
 CONTAINER := $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
 
 .PHONY: help setup validate-local validate-staging status-local start-local stop-local \
-        seed clean-data web-dev web-build pb-serve pb-image env-doctor
+        provision seed clean-data web-dev web-build pb-serve pb-image env-doctor
 
 help: ## Show this cheat-sheet
 	@echo ""
@@ -27,7 +27,7 @@ help: ## Show this cheat-sheet
 	@echo ""
 
 # ---- One-time setup ----
-setup: ## One-time local bootstrap (env, deps, PocketBase superuser, schema hint, seed)
+setup: ## One-time local bootstrap (env, deps, superuser, provision collections, seed) — zero manual steps
 	bash scripts/setup-local.sh
 
 # ---- Validation (mirror /validate-local, /validate-staging) ----
@@ -59,8 +59,12 @@ status-local: ## /status-local — is the local stack up?
 	@pgrep -fl "pocketbase serve" >/dev/null && echo "PocketBase (:8090): ● ONLINE" || echo "PocketBase (:8090): ○ OFFLINE"
 	@curl -s -o /dev/null -w "PocketBase health: %{http_code}\n" http://127.0.0.1:8090/api/health 2>/dev/null || echo "PocketBase: unreachable"
 
-# ---- Data (seed / clean) — maps to the data/ relational layer ----
-seed: ## Seed PocketBase from data/ (requires PB_ADMIN_* env; runs pb_import --apply)
+# ---- Data (provision / seed / clean) — maps to the data/ relational layer ----
+provision: ## Create PocketBase collections via API (requires PB_ADMIN_* env; version-robust)
+	python3 scripts/pb_provision.py --apply
+
+seed: ## Provision collections + seed PocketBase from data/ (requires PB_ADMIN_* env)
+	python3 scripts/pb_provision.py --apply
 	python3 scripts/pb_import.py --apply
 
 clean-data: ## Reset local PocketBase data to a clean slate (removes pb_data/)
