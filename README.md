@@ -4,6 +4,7 @@
 > 📖 **User Guide:** [docs/user-guide.md](docs/user-guide.md)  
 > 🛠️ **Work Environment & Commands (Kiro Web + IDE):** [docs/work-environment.md](docs/work-environment.md)  
 > 🧠 **Decision Journal (how key decisions were reached):** [docs/DECISION-JOURNAL.md](docs/DECISION-JOURNAL.md)  
+> 🤝 **AI Collaboration Model (how we work with AI):** [docs/ai-collaboration-model.md](docs/ai-collaboration-model.md)  
 > 👥 **Project Owner Guide & AI Prompts:** [docs/project-owner-guide.md](docs/project-owner-guide.md)  
 > 📋 **Project Status Protocol (`STATUS.md`):** [docs/project-protocol.md](docs/project-protocol.md)  
 > 🎯 **Sprint Backlog & Roadmap:** [BACKLOG.md](BACKLOG.md)  

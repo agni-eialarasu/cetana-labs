@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: `/brainstorm-save` Skill + AI Collaboration Model (`TSK-044`)
+- **Context**: Made the Decision Journal self-sustaining and documented the working methodology as a showcase artifact.
+- **Key Deliverables**:
+  - `/brainstorm-save` **project** skill (`.kiro/skills/`) — curated, contributor-attributed decision capture → `DECISION-JOURNAL.md` (resolves the earlier personal-skill-writing-to-repo-doc inconsistency: journal is a project artifact, so the skill is too).
+  - `docs/ai-collaboration-model.md` — human-directed/AI-assisted/human-gated methodology (Web plan ↔ IDE execute, Kiro Specs as contracts, progressive formality, AIDLC).
+  - Contributor attribution added to Journal entries; appended **Entry 002**.
+  - Decided `/sign-off` **prompts** (never auto-runs) `/brainstorm-save` — protects journal credibility.
+- **Next Horizon**: `RFC-LAB-000-009` (sprint lifecycle on Kiro Specs + Autonomous); run MVP M1 as the first Spec.
+
+---
+
 ### [2026-09-24] Milestone: Decision Journal Established (`TSK-043`)
 - **Context**: Added a durable, curated record of *how* decisions are reached — a "thinking pattern" showcase for engineering leadership, complementing the CHANGELOG (what) and RFCs (formal decision).
 - **Deliverable**: `docs/DECISION-JOURNAL.md` with an inaugural whole-session entry (D1–D11) documenting the arc from static control plane → governed AI-driven web-app foundation, the options/trade-offs/rationale per decision, the human-directed/AI-assisted method, and honest failure/recovery notes. Linked from README.
