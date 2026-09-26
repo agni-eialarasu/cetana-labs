@@ -69,7 +69,9 @@ Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; com
 - **`/project-add <url_or_title>`**: Scaffolds next project ID, inspects remote repo, assigns `⏳ Onboarding Pending`, registers in `README.md`.
 - **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, appends a `journal.md` milestone.
 - **`/project-edit <ID>`**: Modifies owner, title, remote URL, or lifecycle health across project files and registry.
-- **`/sprint-start [goal]`** / **`/sprint-done [sprint_id]`**: Open / close a sprint in `BACKLOG.md` (id, window, goal, carry-forward) and sync `STATUS.md` / `CHANGELOG.md`.
+- **`/sprint-start [goal]`** / **`/sprint-done [sprint_id]`**: Open / close a sprint in `BACKLOG.md` (id, window, goal, carry-forward) and sync `STATUS.md` / `CHANGELOG.md`. *(Kiro Web / plan — the Scope bookend.)*
+- **`/spec-run <spec-id>`**: **IDE one-liner** that executes a self-describing Kiro Spec (`.kiro/specs/<id>/`) — runs the Spec's preflight, creates the branch it names, works `tasks.md` in order, self-validates against the `requirements.md` EARS DoD, and opens a PR — then STOP-and-holds. **Never merges** (hands off to `/review-pr`). The Build phase of the sprint lifecycle (`RFC-LAB-000-009`).
+- **`/review-pr [PR]`**: The human PR gate (`RFC-LAB-000-009` Phase 4) — surfaces CI, diff scope/hygiene, the Spec's EARS DoD per-criterion, and governance lockstep as a checklist, then STOP-and-holds. Surfaces; never merges or auto-approves.
 - **`/ping-leads`**: Idempotent GitHub issue alerts for stale (> 14 days) / onboarding-pending initiatives (excludes `LAB-000` and completed).
 - **`/audit-doc <file>`** / **`/audit-project [ID]`**: Single-file doc review / whole-project (or portfolio) health sweep.
 - **`log-milestone`** / **`commit-changes`**: Append journal milestones / standardized commits.
