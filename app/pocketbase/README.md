@@ -35,32 +35,40 @@ use the `fields` format; admins are `_superusers` auth records — no `/api/admi
 If you have a system PocketBase via Homebrew (`pb`, e.g. v0.28+), use it directly.
 The JS SDK in `app/web` is pinned `>=0.26` for compatibility.
 
-## Running (local — macOS Homebrew `pb`, Codespaces, or fetched binary)
+## Setup (one command)
+
+From the **repo root**:
+```bash
+make setup     # env + deps + superuser + PROVISION collections + seed — zero manual UI steps
+```
+
+## Manual equivalent
 
 ```bash
 # 1. Start PocketBase on :8090
-pb serve --http=0.0.0.0:8090          # macOS Homebrew alias (WORK_MACHINE guide)
-# or:  ./pocketbase serve --http=0.0.0.0:8090   (fetched binary)
+pb serve --http=0.0.0.0:8090          # macOS Homebrew (WORK_MACHINE guide); or ./pocketbase ...
 
-# 2. Create the superuser (first run only)
-pb superuser upsert admin@cetana.local <password>
+# 2. Superuser (first run)
+pb superuser upsert admin@cetana.local 'CetanaLocal2026!'
 
-# 3. Import collections: Admin UI (http://127.0.0.1:8090/_/) > Settings >
-#    Import collections > paste app/pocketbase/pb_schema.json.
+# 3. Provision collections VIA API (version-robust — no schema-file import)
+export PB_URL=http://127.0.0.1:8090 PB_ADMIN_EMAIL=admin@cetana.local PB_ADMIN_PASSWORD='CetanaLocal2026!'
+python3 scripts/pb_provision.py            # dry-run: show the create plan
+python3 scripts/pb_provision.py --apply     # create users -> projects -> memberships
 
-# 4. Seed data from the relational masters:
-export PB_URL=http://127.0.0.1:8090
-export PB_ADMIN_EMAIL=admin@cetana.local
-export PB_ADMIN_PASSWORD=<password>
-python3 ../../scripts/pb_import.py            # dry-run preview
-python3 ../../scripts/pb_import.py --apply     # perform the import
+# 4. Seed from the relational masters
+python3 scripts/pb_import.py --apply
 ```
 
-> **Authoritative schema = the EXPORT from your running instance.** `pb_schema.json`
-> here is a version-tracked starting point generated from `data/`. After importing
-> and letting PocketBase assign real collection ids, re-export (Admin UI > Settings >
-> Export collections) and commit that as the source of truth. Regenerate the starter
-> anytime with `python3 scripts/generate_pb_schema.py`.
+> **Why provisioning, not schema import?** PocketBase's collections-import JSON format
+> is version-sensitive and relations must reference real generated collection ids —
+> a hand-written `pb_schema.json` fails to import cleanly (confirmed on v0.40).
+> `scripts/pb_provision.py` creates collections through the REST API in dependency
+> order, resolving real relation ids at create time. It is **idempotent** (re-runnable).
+>
+> `app/pocketbase/pb_schema.json` is retained as a **human-readable reference** of the
+> intended shape (generated from `data/`). The **authoritative** on-disk schema, if you
+> want one, is the **export** from a provisioned instance (Admin UI > Settings > Export).
 
 > **Containers are optional.** Local dev runs the bare binary (fast, ~0 extra RAM).
 > Use the `Containerfile` (Podman-first) only for staging/GCP parity. On the MBP work

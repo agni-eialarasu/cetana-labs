@@ -50,10 +50,11 @@ def collections() -> list:
     PocketBase collections snapshot derived from data/ (RFC-LAB-000-003 §4),
     emitted in the v0.23+ `fields` format (PocketBase >= 0.23 refactor).
 
-    NOTE: The authoritative schema is the one EXPORTED from a running PocketBase
-    instance (Admin UI > Settings > Export collections). This generated file is a
-    version-tracked starting point kept in sync with the data/ model; import it,
-    then re-export to capture instance-assigned ids. See app/pocketbase/README.md.
+    NOTE: Collections are created programmatically by `scripts/pb_provision.py`
+    (version-robust REST API creation) — NOT by importing this file. This generated
+    JSON is a human-readable REFERENCE of the intended shape, kept in sync with the
+    data/ model and CI-checked for drift. The authoritative on-disk schema, if
+    needed, is the EXPORT from a provisioned instance. See app/pocketbase/README.md.
     """
     users = {
         "name": "users",
