@@ -138,7 +138,11 @@ def run(dry_run=True):
             f_text("org"),
             f_bool("active"),
         ],
-        "indexes": ["CREATE UNIQUE INDEX `idx_users_seed_id` ON `users` (`seed_id`)"],
+        # NOTE: `users` is PocketBase's pre-existing default auth collection. We EXTEND
+        # it with custom fields; `seed_id` is a plain matching field (NO unique index —
+        # forcing one on a pre-populated system collection fails). Upsert keys on seed_id
+        # via a filter query (see pb_import.py), and email uniqueness is enforced natively.
+        "indexes": [],
         "listRule": RULE_AUTHED, "viewRule": RULE_AUTHED,
         "createRule": None, "updateRule": None, "deleteRule": None,
     }

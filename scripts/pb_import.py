@@ -72,15 +72,32 @@ def find_by(token, collection, field, value):
     return items[0]["id"] if items else None
 
 
-def upsert(token, collection, natural_field, natural_value, payload, dry_run):
-    """Create or update a record keyed by a natural field. Returns record id."""
+def upsert(token, collection, natural_field, natural_value, payload, dry_run,
+           fallback_field=None, fallback_value=None, create_only_keys=None):
+    """
+    Create or update a record, matching first on `natural_field`, then on an optional
+    `fallback_field` (e.g. email) so re-runs UPDATE instead of hitting a unique
+    conflict. `create_only_keys` (e.g. password) are sent only on create, never on
+    update. Idempotent and re-runnable. Returns the record id.
+    """
     if dry_run:
-        print(f"  [dry-run] upsert {collection} where {natural_field}={natural_value!r} -> {payload}")
+        print(f"  [dry-run] upsert {collection} where {natural_field}={natural_value!r}")
         return f"<{collection}:{natural_value}>"
+
     existing = find_by(token, collection, natural_field, natural_value)
+    if not existing and fallback_field and fallback_value:
+        existing = find_by(token, collection, fallback_field, fallback_value)
+
+    create_only_keys = create_only_keys or []
+
     if existing:
-        _req("PATCH", f"/api/collections/{collection}/records/{existing}", token=token, body=payload)
+        update_payload = {k: v for k, v in payload.items() if k not in create_only_keys}
+        status, resp = _req("PATCH", f"/api/collections/{collection}/records/{existing}",
+                            token=token, body=update_payload)
+        if status != 200:
+            raise SystemExit(f"ERROR: update {collection}/{existing} failed ({status}): {resp}")
         return existing
+
     status, resp = _req("POST", f"/api/collections/{collection}/records", token=token, body=payload)
     if status not in (200, 201):
         raise SystemExit(f"ERROR: create {collection} failed (status {status}): {resp}")
@@ -98,15 +115,21 @@ def run(dry_run=True):
     print(f"→ Importing {len(users)} users")
     user_id_map = {}
     for u in users:
+        email = u.get("email") or f'{u["id"]}@cetana.local'
+        pw = os.urandom(9).hex() + "A1!"   # meet auth password rules on create
         payload = {
-            "seed_id": u["id"], "name": u["name"], "email": u.get("email") or f'{u["id"]}@cetana.local',
+            "seed_id": u["id"], "name": u["name"], "email": email,
             "github_handle": u.get("github_handle") or "", "role": u.get("role", "contributor"),
             "org": u.get("org") or "", "active": bool(u.get("active", True)),
-            # auth collections require a password on create; seed a random one to be reset.
-            "password": os.urandom(9).hex(), "passwordConfirm": None,
+            # password fields are create-only (never re-sent on update).
+            "password": pw, "passwordConfirm": pw,
         }
-        payload["passwordConfirm"] = payload["password"]
-        user_id_map[u["id"]] = upsert(token, "users", "seed_id", u["id"], payload, dry_run)
+        # Match on seed_id, then fall back to email so re-runs update (no unique conflict).
+        user_id_map[u["id"]] = upsert(
+            token, "users", "seed_id", u["id"], payload, dry_run,
+            fallback_field="email", fallback_value=email,
+            create_only_keys=["password", "passwordConfirm"],
+        )
 
     # 2. Projects (owner relation resolved via user_id_map)
     print(f"→ Importing {len(projects)} projects")

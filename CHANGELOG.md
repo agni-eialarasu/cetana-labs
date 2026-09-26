@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Work-Environment Alignment to the MBP Toolchain**: Reconciled the repo with the reference macOS work machine — removed `.nvmrc` (Node is Homebrew-native; `nvm` intentionally absent), aligned the pnpm pin to `10.27.0`, and dropped unconditional `nvm` sourcing from the Makefile / `/env-doctor` (nvm fallback only in cloud sandboxes). `pb-serve`/`start-local` now prefer a system `pocketbase` (Homebrew `pb`).
 - **PocketBase v0.23+ Compatibility**: Regenerated `pb_schema.json` in the PocketBase **v0.23+ `fields` format** (the old `schema` format no longer applies), bumped the `Containerfile`/setup PocketBase version to a current release, and pinned the web `pocketbase` JS SDK to `>=0.26`. Documented that the authoritative schema is the **export from a running instance**; the generated file is a version-tracked starter.
 ### Fixed
+- **Idempotent PocketBase provisioning/seeding**: Fixed two re-run failures found in local testing — (1) dropped the `seed_id` UNIQUE index on the pre-existing default `users` auth collection (it failed against existing rows; `seed_id` is now a plain matching field), and (2) hardened the seed importer's upsert to match users on `seed_id` **then fall back to `email`**, and to send password fields **only on create** — so re-running `make setup`/`make seed` updates records instead of hitting unique-constraint errors.
 
 ---
 
