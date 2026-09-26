@@ -2,6 +2,20 @@
 
 > Ordered implementation plan for Autonomous mode / a delegated agent (`RFC-LAB-000-009` §3 Build). Each task cites the requirement(s) it satisfies. Execute on **Kiro IDE** (stateful — needs the running local stack). Do NOT merge; open a PR for the human gate (Phase 4).
 
+## Execution header (self-describing — read by `/spec-run`)
+
+| Field | Value |
+| :--- | :--- |
+| **Spec id** | `mvp-m1-live-pocketbase` |
+| **Kickoff (IDE one-liner)** | `/spec-run mvp-m1-live-pocketbase` |
+| **Surface** | Kiro **IDE** (stateful — runs PocketBase `:8090` + SvelteKit `:5173`); NOT Kiro Web |
+| **Branch to create** | `feat/mvp-m1-live-pocketbase` (off up-to-date `main`, per `RFC-LAB-000-004`) |
+| **Base for PR** | `main` |
+| **Preflight** | Requirements §0 (P1–P6) + task **T0** — STOP on any ❌ |
+| **Self-validation target** | `requirements.md` EARS acceptance criteria R1–R6 |
+| **On completion** | Open PR via `gh api`, then STOP-and-hold → `/review-pr <PR>` (never merge) |
+| **Executor role** | Delegated-agent / onboarded-dev (full Spec — `RFC-LAB-000-009` §5) |
+
 ---
 
 - [ ] **T0 — Preflight / pre-checks (gate — STOP if any fail; see requirements §0)**
