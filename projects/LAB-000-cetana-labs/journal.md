@@ -16,6 +16,14 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Decision Journal Established (`TSK-043`)
+- **Context**: Added a durable, curated record of *how* decisions are reached — a "thinking pattern" showcase for engineering leadership, complementing the CHANGELOG (what) and RFCs (formal decision).
+- **Deliverable**: `docs/DECISION-JOURNAL.md` with an inaugural whole-session entry (D1–D11) documenting the arc from static control plane → governed AI-driven web-app foundation, the options/trade-offs/rationale per decision, the human-directed/AI-assisted method, and honest failure/recovery notes. Linked from README.
+- **Companion (personal)**: a `/brainstorm-save` personal skill will append future curated entries (drafted separately for `~/.kiro/`).
+- **Next Horizon**: `RFC-LAB-000-009` (sprint lifecycle on Kiro-native Specs + Autonomous mode); run MVP task M1 as the first Spec.
+
+---
+
 ### [2026-09-24] Milestone: MVP Scoping & Local Stack Verified (`RFC-LAB-000-008` / `TSK-042`)
 - **Context**: The local stack is now **proven end-to-end** — `make setup` provisions collections via the API and seeds 3 users / 6 projects / 6 memberships into PocketBase v0.40 (verified on the MBP). With a working foundation, scoped the MVP.
 - **Key Deliverables**:

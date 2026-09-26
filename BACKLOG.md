@@ -22,6 +22,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `TSK-040` | One-time local setup script (`scripts/setup-local.sh` / `make setup`) — idempotent bootstrap: toolchain check, `.env` defaults, web deps, PocketBase superuser, schema-import hint, seed | P2 | Eialarasu | ✅ Done | 2026-11-26 |
 | `TSK-041` | Programmatic PocketBase collection provisioning (`scripts/pb_provision.py` / `make provision`) — API-based, version-robust; replaces fragile schema-JSON import (v0.40 import failed) | P1 | Eialarasu | ✅ Done | 2026-11-26 |
 | `TSK-042` | MVP scoping (`RFC-LAB-000-008`, `BK-011`) — MVP definition, minimum RBAC (owner-or-not), phase breakdown M1–M5; `make setup` staleness-guard | P1 | Eialarasu | ✅ Done | 2026-11-26 |
+| `TSK-043` | Decision Journal (`docs/DECISION-JOURNAL.md`) — curated decision-narrative log (thinking/rationale showcase); inaugural whole-session entry | P2 | Eialarasu | ✅ Done | 2026-11-28 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-28 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-12-03 |
 
