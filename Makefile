@@ -13,7 +13,7 @@ PB := $(shell command -v pocketbase 2>/dev/null || echo ./pocketbase)
 # Podman-first, Docker fallback (RFC-LAB-000-007 §2.3).
 CONTAINER := $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
 
-.PHONY: help validate-local validate-staging status-local start-local stop-local \
+.PHONY: help setup validate-local validate-staging status-local start-local stop-local \
         seed clean-data web-dev web-build pb-serve pb-image env-doctor
 
 help: ## Show this cheat-sheet
@@ -25,6 +25,10 @@ help: ## Show this cheat-sheet
 	@echo ""
 	@echo "  Governance runs on any surface; server targets need Kiro IDE / local."
 	@echo ""
+
+# ---- One-time setup ----
+setup: ## One-time local bootstrap (env, deps, PocketBase superuser, schema hint, seed)
+	bash scripts/setup-local.sh
 
 # ---- Validation (mirror /validate-local, /validate-staging) ----
 validate-local: ## /validate-local — full local pre-flight (Python validators + web build)

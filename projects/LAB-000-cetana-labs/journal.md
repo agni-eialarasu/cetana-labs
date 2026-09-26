@@ -16,6 +16,13 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: One-Time Local Setup Script (`TSK-040`)
+- **Context**: After the first local run surfaced manual friction (superuser creation, password rules, env + sequencing), added a one-command bootstrap.
+- **Deliverable**: `scripts/setup-local.sh` (`make setup`) — idempotent: toolchain check → `.env` defaults → web deps → PocketBase superuser upsert → schema-import guidance → optional `data/` seed. Sensible defaults (`admin@cetana.local` / `CetanaLocal2026!`, overridable); BSD/macOS-`sed` compatible; re-runnable. Documented in `docs/work-environment.md` §3.
+- **Next Horizon**: Continue the local run (schema import + seed verification), then MVP scoping (`RFC-LAB-000-008`).
+
+---
+
 ### [2026-09-24] Milestone: Environment Alignment to MBP + PocketBase v0.23+ Compatibility
 - **Context**: Reconciled the repo with the reference macOS work machine (WORK_MACHINE guide) after a local `make env-doctor` surfaced real mismatches — and caught a PocketBase major-version gap before it bit the local run.
 - **Key Corrections**:
