@@ -146,3 +146,52 @@ Follows Entry 001. This session shifted from *building* to *standardizing how bu
 - **Theme:** meta-work — designing *how* the team (human + agents) will build, and how reasoning is recorded.
 - **Notable judgment:** repeatedly chose "adapt/adopt-native, don't reinvent" (Nexus Pulse discipline over its org apparatus; Kiro Specs over custom PROMPT.md; project skill over inconsistent personal placement).
 - **Method:** human set intent and made every call; AI verified Kiro capabilities against docs, surfaced the placement inconsistency's resolution options, and executed.
+
+
+---
+
+## Entry 003 — Sprint lifecycle as a phase-aware state machine (great-DX AIDLC one-liners)
+
+**Date:** 2026-09-26 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `RFC-LAB-000-009` (+§3.1 state machine), `/spec-run` `/plan-start` `/plan-done` skills + state guards on `/review-pr` `/sprint-done`, first AIDLC Spec (M1); PRs #14–#17
+
+> _Decisions D18–D22 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+Follows Entries 001–002. Where 002 *chose* Kiro Specs + Autonomous mode as the AIDLC engine, this session **operationalized** it: turning the sprint lifecycle into a small, phase-aware state machine of `/commands` optimized for a great AIDLC developer experience — and stress-testing the design against an external reference (the Nexus Pulse Sprint Lifecycle) without copying it.
+
+---
+
+### D18 — Frame the lifecycle as ordered `/commands`: `brainstorm → implement → verify → done`
+- **Trigger:** Having authored RFC-009 (the lifecycle) and the M1 Spec, the human asked how to actually *kickstart* the next items in the IDE — and, seeing the runbook, pushed back that it still had too many manual steps. The goal was crystallized as: **a one-liner with args, where I only worry about the functional change and its verification; everything else is repeatable and should be owned by the commands.**
+- **Options:** (A) keep a documented multi-step runbook; (B) a single monolithic command (à la Nexus Pulse `/sprint-start <id>` doing register+build+PR); (C) a small set of ordered, phase-aware commands, each owning its repeatable boilerplate.
+- **Decision & rationale:** **Option C** — a four-verb flow `brainstorm → implement → verify → done`. Monolithic (B) was rejected because it would collapse the deliberate Web(plan)/IDE(execute) surface split (`RFC-LAB-000-007`) and the phase gates into one verb. The human's DX bar — *attention spent only on function + verification* — became the design's north star. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-009` §3.1 (state machine + verb map); the command set below.
+
+### D19 — `/spec-run <spec-id>` owns everything repeatable; the "extra checkout" is a workflow smell, fixed by merge-first
+- **Trigger:** The first `/spec-run` draft still told the user to `git checkout` the spec branch before running — the human caught this as a leaky abstraction ("the extra step is still there").
+- **The realization (agent-surfaced, human-decided):** the checkout only existed because the Spec sat on an *unmerged* branch. If the Spec is **merged to `main` during planning** (the human's own LAB-003 pattern: "drafted the spec as doc changes and merged"), then `/spec-run <id>` can sync `main`, find the Spec, and self-create the branch — needing **only the id**.
+- **Decision & rationale:** Adopt the **merge-first rule** and make `/spec-run` **own all repeatable steps** (git sync, branch, preflight, PR), with **silent-unless-broken preflight** so green checks don't cost attention. The Spec is the single source of truth — **no inline arg overrides** (avoids two drifting contracts). Chosen over cleverer arg-passing because the friction was a *workflow* problem, not a command-surface one. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `/spec-run` rewritten (PR #17); self-describing **Execution header** on the M1 Spec (PR #15); merge-first codified in RFC-009 §3.1/§9.
+
+### D20 — Verb granularity: a sprint *contains many* plans (`/sprint-start` ⊃ `/plan-start`)
+- **Trigger:** The human proposed `/plan-start` / `/plan-done` for brainstorming/backlog/doc work, with `/plan-start` **optional and implicit** (any free-form topic *is* a plan-start). The agent flagged an overlap: this collides conceptually with the existing `/sprint-start` (also a Scope/Web opener).
+- **Options:** (a) **nest** — `/sprint-start` = the sprint container (once), `/plan-start` = a per-feature planning session within it (many → one Spec each); (b) generalize `/plan-start` and make `/sprint-start` an alias; (c) no distinct `/plan-start`.
+- **Decision & rationale:** **Option (a) — nesting.** Because the AIDLC *unit of work is the Spec*, and a sprint naturally holds several, sprint-⊃-plans-⊃-Spec is the honest hierarchy. `/plan-start` stays **optional/implicit** for zero-ceremony brainstorming; `/plan-done` performs the merge-first Spec merge. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `/plan-start` + `/plan-done` skills (PR #17); documented in RFC-009 §3.1 verb map and `AGENTS.md` §4.
+
+### D21 — State guards: "skip if redundant, HOLD if a gate/prereq is missing" — never a silent bypass
+- **Trigger:** The human wanted issuing a command **at the wrong state** to "alert, skip, and proceed." The agent pushed back that "skip and proceed" is only safe for *redundant* work — for a *missing prerequisite or gate* it must **stop**, not fabricate the missing step.
+- **Decision & rationale:** Split the semantics: **redundant/already-done ⇒ skip + continue**; **missing prerequisite or gate ⇒ alert + HOLD** (name the exact next action). This preserves the intent (wrong-order tolerance) while guaranteeing a wrong-order command can **never quietly skip a gate** — the human review, the merge-first requirement, or recording only-merged work. The guard is a **tripwire, not a shortcut.** The human accepted the refinement. _(Contributor: Agni Eialarasu; refinement surfaced by AI, human-approved)_
+- **Outcome:** state guards added to `/plan-start`, `/plan-done`, `/spec-run`, `/review-pr`, `/sprint-done` (PRs #16, #17); semantics in RFC-009 §3.1.
+
+### D22 — Adapt Nexus Pulse's one-liner DX; keep LAB-000's decisions (don't copy)
+- **Trigger:** The human shared the Nexus Pulse Engineering Sprint Lifecycle (5-verb pipeline, `/sprint-start <id>` one-liner, Track A/B roster, `gh pr create`, "42/42 AST checks") as the DX reference.
+- **Decision & rationale:** **Adopt the one-liner-kickoff DX and the ordered-pipeline discipline; translate everything else to LAB-000's prior decisions** — Kiro **Specs** (not `PROMPT.md`), **`gh api`** (the `gh pr create`/GraphQL path fails in this environment), **5-pillar `make validate-local`** (not "42/42 AST checks"), and **no Track-A/B roster** (deferred until real contributors — consistent with D12). Same reason as before: adopt the *discipline*, not the *org apparatus*. _(Contributor: Agni Eialarasu)_
+- **Outcome:** the lifecycle command set is Nexus-Pulse-inspired but LAB-000-native; noted in RFC-009 §8 (deferred scope) and the `/spec-run` PR.
+
+---
+
+### Session meta
+- **Theme:** operationalizing the AIDLC lifecycle into a great-DX, phase-aware command set — the "how you drive it" layer atop 002's "what the engine is."
+- **Notable judgment:** the human repeatedly optimized for a single thing — *spend attention only on function + verification* — and used it to reject leaky abstractions (the manual checkout) and over-collapsed designs (a monolithic verb).
+- **Course-corrections that changed outcomes (human):** killed the extra-checkout step (→ merge-first, D19); chose nesting over a colliding `/plan-start` (D20); tightened "skip and proceed" so gates can't be silently skipped (D21).
+- **Honest note:** the commands are *skill specifications* (procedures the IDE agent follows), not yet executable code — so their first real exercise is the M1 run, which also remains the spike for the still-undocumented Autonomous-over-existing-Spec chaining (RFC-009 §7). Recorded so the credibility bar (design-vs-proven) stays explicit.
