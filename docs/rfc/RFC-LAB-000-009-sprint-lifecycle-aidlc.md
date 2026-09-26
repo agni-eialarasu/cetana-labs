@@ -59,6 +59,38 @@ Adapted from the Nexus Pulse five-verb pipeline; each phase names its **surface*
        └──────────────────── iterate on rejection ◀─────────────────┘
 ```
 
+## 3.1 The lifecycle as a state machine (verb map + ordering discipline)
+
+The five phases are driven by four ordered `/commands`, forming a **brainstorm → implement → verify → done** flow. **Order is the contract** — the commands are *phase-aware*: each detects the current state and self-corrects rather than executing blindly.
+
+```
+State:   PLANNING ──(Spec merged)──▶ READY_TO_BUILD ──(/spec-run → PR)──▶ IN_REVIEW ──(approve+merge)──▶ RECORDED
+Phase:   brainstorm                    implement                          verify                          done
+Command: /plan-start* → /plan-done     /spec-run <spec-id>                /review-pr <PR>                 /sprint-done
+Surface: Web (Scope)                   IDE (Build)                        Web (Review)                    Record
+```
+
+**Verb map:**
+
+| Command | Phase | Surface | Role | Nesting |
+| :--- | :--- | :--- | :--- | :--- |
+| **`/sprint-start`** | Scope (container) | Web | Opens the **sprint** (SPRINT-XX, window, goal) — once per sprint | Contains many plans |
+| **`/plan-start`** *(optional, implicit)* | Scope (brainstorm) | Web | Opens a **planning session** for one feature; **any free-form topic is implicitly a plan-start** | Nested in a sprint; → one Spec |
+| **`/plan-done`** | Scope (close) | Web | Finalizes + **merges the Spec** as a doc PR (the merge-first rule) → `READY_TO_BUILD` | — |
+| **`/spec-run <spec-id>`** | Build (implement) | IDE | **One-liner** executor: owns git/preflight/branch, runs `tasks.md`, self-validates EARS DoD, opens PR, STOPs | Executes one merged Spec |
+| **`/review-pr <PR>`** | Review (verify) | Web | Human gate — surfaces + STOP-and-holds; never merges | — |
+| **`/sprint-done`** | Record (done) | Record | Merge lockstep + release; refuses to close undelivered work | Closes the sprint container |
+
+**Sprint ⊃ plans ⊃ Spec (decided — option a):** a `/sprint-start` sprint **contains many** `/plan-start`→`/plan-done` planning sessions; each produces **one merged Spec** that `/spec-run` executes. `/plan-start` does not open a sprint; `/spec-run` does not open a plan.
+
+**The merge-first rule (why the one-liner is clean):** `/plan-done` **merges the Spec to `main`** during Scope. So by the time you reach the IDE, `main` already has `.kiro/specs/<id>/` — and `/spec-run <spec-id>` needs *only the id*: it syncs `main`, finds the Spec, and self-creates the branch. **No manual checkout.** The only things the human supplies/cares about per task are the **functional change and its verification** (the Spec's `tasks.md` + EARS DoD); everything else (env/toolchain/git/branch/PR mechanics) is repeatable boilerplate the commands own.
+
+**State-guard semantics (issuing at the wrong state):** each command inspects state and responds by one of two rules — never a silent bypass:
+- **Redundant / already-done ⇒ skip + continue** (e.g. `/plan-start` while already planning; `/review-pr` on an already-merged PR). The command notes it and moves on.
+- **Missing prerequisite or gate ⇒ alert + HOLD** (e.g. `/spec-run` when the Spec isn't merged to `main`; `/review-pr` with no open PR; `/sprint-done` while a sprint item's PR is still open). The command names the exact next action and stops.
+
+This split is deliberate: a wrong-order command can **skip redundant work** but can **never quietly skip a gate** (the human review, the merge-first requirement, or recording only-merged work). The guard is a tripwire, not a shortcut — preserving the governance guarantees of §6.
+
 ## 4. The Contract: Kiro Specs (not a custom PROMPT.md)
 
 A delegated unit of work is specified as a **Kiro Spec** — the native artifact that carries the full brief for an executor with no conversational context:
@@ -129,7 +161,9 @@ These are captured here so scope stays honest and the team ceremony can be switc
 - **This RFC.**
 - (Follow-on, separate PRs — not this docs RFC):
   - **`/spec-run <spec-id>`** skill (`.kiro/skills/`) — the **Kiro IDE one-liner** that executes the Build phase (§3): reads a self-describing Spec, runs its preflight/pre-checks, creates the branch the Spec names, works `tasks.md` in order, self-validates against the EARS DoD, opens a PR, and STOP-and-holds. Never merges. Keyed on the **spec id** (the AIDLC unit of work, §4). Deliberately distinct from `/sprint-start` (Web/plan — the Scope bookend), honoring the surface split (`RFC-LAB-000-007` §2.1).
+  - **`/plan-start`** *(optional, implicit)* and **`/plan-done`** skills (`.kiro/skills/`) — the Scope/brainstorm bookends (§3.1). `/plan-done` enforces the **merge-first rule** (merges the Spec to `main`) that makes `/spec-run` a clean one-liner. Nested under `/sprint-start` (a sprint contains many plans).
   - **`/review-pr`** skill (`.kiro/skills/`) — the human PR gate (§3 Phase 4).
+  - **Phase-aware state guards** added to `/plan-start`, `/plan-done`, `/spec-run`, `/review-pr`, and `/sprint-done` (§3.1) — redundant ⇒ skip+continue; missing prerequisite/gate ⇒ alert+HOLD.
   - A **`REPORT.md` template** — the Phase 5 sign-off artifact (§10.2).
   - The **M1 Spec** (`.kiro/specs/mvp-m1-live-pocketbase/`) as the first AIDLC artifact, with a self-describing **Execution header** (kickoff command, surface, branch, preflight, EARS target) so `/spec-run` needs no extra arguments.
 
