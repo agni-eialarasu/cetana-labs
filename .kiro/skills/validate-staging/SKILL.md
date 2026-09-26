@@ -27,3 +27,6 @@ When implemented, `/validate-staging` will:
 
 ## Current Response
 State clearly that staging validation is unavailable until the GCP (and/or Vercel) staging environment is provisioned post org-transfer. Do not fabricate results.
+
+## Scope boundary (RFC-LAB-000-007 §2.5)
+This validates *remote staging health* only. Local environment readiness → `/env-doctor`; local work correctness → `/validate-local`.
