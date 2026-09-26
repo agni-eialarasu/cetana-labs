@@ -27,5 +27,5 @@ A brief summary of what this mini-app does, the problem it solves, and its prima
 - **External Integrations**:
 
 ## 4. Documentation Links
-- 📘 [Operational Runbook](runbook.md) — Local setup, testing, and deployment commands.
+- 📘 [Operational Runbook](../../docs/work-environment.md) — Local setup, testing, and deployment commands.
 - 🗓️ [Project Journal](journal.md) — Phased progress, architecture decisions, and milestones.
