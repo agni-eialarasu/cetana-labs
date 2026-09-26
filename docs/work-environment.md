@@ -59,19 +59,24 @@ Kiro Web needs none of the server tooling — it's for stateless work.
 
 ## 3. Initial Setup (first time, local)
 
+**One command** (recommended) — idempotent bootstrap with sensible local defaults:
+
 ```bash
-# 1. Environment config
-cp .env.example .env          # fill in PB_ADMIN_* etc.
+make setup            # env + web deps + PocketBase superuser + schema hint + seed
+# equivalently: bash scripts/setup-local.sh
+```
+Defaults: superuser `admin@cetana.local` / `CetanaLocal2026!` (override via `PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD` env or `.env`). The script prints the Admin UI import step for `pb_schema.json`, then offers to seed from `data/`. Re-runnable any time.
 
-# 2. Node deps (Node/pnpm are Homebrew-native; no nvm)
+<details><summary>Manual steps (if you prefer)</summary>
+
+```bash
+cp .env.example .env                                   # set PB_ADMIN_*
 cd app/web && pnpm install --frozen-lockfile && cd ../..
-
-# 3. PocketBase — use the Homebrew `pb` binary (or fetch in cloud/CI)
-pb --version                   # confirm >= 0.23; else: bash .devcontainer/setup-pocketbase.sh
-
-# 4. Sanity check
+pb superuser upsert admin@cetana.local 'CetanaLocal2026!'   # >= 8 chars
+pb --version                                            # confirm >= 0.23
 make env-doctor
 ```
+</details>
 
 ---
 

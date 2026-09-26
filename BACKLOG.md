@@ -19,6 +19,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | `TSK-039` | Work-Environment Standardization (`RFC-LAB-000-007`) — Kiro Web + IDE surface roles, `.nvmrc`/`.env.example`, Makefile cheat-sheet, Podman-first Containerfile, `/env-doctor`, work-environment guide | P1 | Eialarasu | ✅ Done | 2026-11-26 |
+| `TSK-040` | One-time local setup script (`scripts/setup-local.sh` / `make setup`) — idempotent bootstrap: toolchain check, `.env` defaults, web deps, PocketBase superuser, schema-import hint, seed | P2 | Eialarasu | ✅ Done | 2026-11-26 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-28 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-12-03 |
 
