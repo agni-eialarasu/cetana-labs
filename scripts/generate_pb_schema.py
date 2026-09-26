@@ -24,53 +24,76 @@ OUT = REPO_ROOT / "app" / "pocketbase" / "pb_schema.json"
 RULE_AUTHED = '@request.auth.id != ""'
 
 
+ROLE_VALUES = ["owner", "lead", "contributor", "stakeholder", "reviewer"]
+
+
+def _text(name, required=False, pattern=""):
+    return {"name": name, "type": "text", "required": required, "hidden": False,
+            "presentable": False, "pattern": pattern}
+
+
+def _select(name, values, required=True):
+    return {"name": name, "type": "select", "required": required, "hidden": False,
+            "presentable": False, "maxSelect": 1, "values": values}
+
+
+def _relation(name, collection_ref, required=True, cascade=False):
+    # collectionId is resolved to the real id on import against a live instance;
+    # the human-readable ref name is used here for portability.
+    return {"name": name, "type": "relation", "required": required, "hidden": False,
+            "presentable": False, "collectionId": collection_ref, "maxSelect": 1,
+            "minSelect": 0, "cascadeDelete": cascade}
+
+
 def collections() -> list:
-    """PocketBase collections import payload derived from data/ (RFC-LAB-000-003 §4)."""
+    """
+    PocketBase collections snapshot derived from data/ (RFC-LAB-000-003 §4),
+    emitted in the v0.23+ `fields` format (PocketBase >= 0.23 refactor).
+
+    NOTE: The authoritative schema is the one EXPORTED from a running PocketBase
+    instance (Admin UI > Settings > Export collections). This generated file is a
+    version-tracked starting point kept in sync with the data/ model; import it,
+    then re-export to capture instance-assigned ids. See app/pocketbase/README.md.
+    """
     users = {
         "name": "users",
         "type": "auth",
-        "schema": [
-            {"name": "seed_id", "type": "text", "required": True, "options": {"pattern": "^usr-[a-z0-9-]+$"}},
-            {"name": "name", "type": "text", "required": True},
-            {"name": "github_handle", "type": "text", "required": False},
-            {"name": "role", "type": "select", "required": True,
-             "options": {"maxSelect": 1, "values": ["owner", "lead", "contributor", "stakeholder", "reviewer"]}},
-            {"name": "org", "type": "text", "required": False},
-            {"name": "active", "type": "bool", "required": False},
+        "fields": [
+            _text("seed_id", required=True, pattern="^usr-[a-z0-9-]+$"),
+            _text("name", required=True),
+            _text("github_handle"),
+            _select("role", ROLE_VALUES),
+            _text("org"),
+            {"name": "active", "type": "bool", "required": False, "hidden": False, "presentable": False},
         ],
-        "indexes": ["CREATE UNIQUE INDEX idx_users_seed_id ON users (seed_id)"],
-        # email/password + auth fields are provided by the auth collection type.
+        "indexes": ["CREATE UNIQUE INDEX `idx_users_seed_id` ON `users` (`seed_id`)"],
         "listRule": RULE_AUTHED,
         "viewRule": RULE_AUTHED,
-        "createRule": None,   # superuser only
-        "updateRule": None,   # superuser only (self-update refined in Phase 3)
+        "createRule": None,
+        "updateRule": None,
         "deleteRule": None,
     }
 
     projects = {
         "name": "projects",
         "type": "base",
-        "schema": [
-            {"name": "lab_id", "type": "text", "required": True, "options": {"pattern": "^LAB-\\d{3}$"}},
-            {"name": "slug", "type": "text", "required": True},
-            {"name": "name", "type": "text", "required": True},
-            {"name": "descriptor", "type": "text", "required": False},
-            {"name": "archetype", "type": "select", "required": True,
-             "options": {"maxSelect": 1, "values": ["control-plane", "mini-app", "research", "data-collection", "verification"]}},
-            {"name": "owner", "type": "relation", "required": True,
-             "options": {"collectionId": "users", "maxSelect": 1, "cascadeDelete": False}},
-            {"name": "repo_url", "type": "url", "required": False},
-            {"name": "reference_url", "type": "url", "required": False},
-            {"name": "dev_environment", "type": "select", "required": True,
-             "options": {"maxSelect": 1, "values": ["cloud", "local"]}},
-            {"name": "status_source", "type": "select", "required": True,
-             "options": {"maxSelect": 1, "values": ["local", "remote"]}},
+        "fields": [
+            _text("lab_id", required=True, pattern="^LAB-\\d{3}$"),
+            _text("slug", required=True),
+            _text("name", required=True),
+            _text("descriptor"),
+            _select("archetype", ["control-plane", "mini-app", "research", "data-collection", "verification"]),
+            _relation("owner", "users", required=True, cascade=False),
+            {"name": "repo_url", "type": "url", "required": False, "hidden": False, "presentable": False},
+            {"name": "reference_url", "type": "url", "required": False, "hidden": False, "presentable": False},
+            _select("dev_environment", ["cloud", "local"]),
+            _select("status_source", ["local", "remote"]),
         ],
-        "indexes": ["CREATE UNIQUE INDEX idx_projects_lab_id ON projects (lab_id)"],
+        "indexes": ["CREATE UNIQUE INDEX `idx_projects_lab_id` ON `projects` (`lab_id`)"],
         "listRule": RULE_AUTHED,
         "viewRule": RULE_AUTHED,
-        # Draft: owner or superuser writes. Refined in Phase 3 via memberships.
         "createRule": None,
+        # MVP minimum-RBAC: owner-or-not write on their own project (RFC-LAB-000-006 §4).
         "updateRule": '@request.auth.id != "" && owner = @request.auth.id',
         "deleteRule": None,
     }
@@ -78,16 +101,13 @@ def collections() -> list:
     memberships = {
         "name": "memberships",
         "type": "base",
-        "schema": [
-            {"name": "seed_id", "type": "text", "required": True, "options": {"pattern": "^mem-[a-z0-9-]+$"}},
-            {"name": "user", "type": "relation", "required": True,
-             "options": {"collectionId": "users", "maxSelect": 1, "cascadeDelete": True}},
-            {"name": "project", "type": "relation", "required": True,
-             "options": {"collectionId": "projects", "maxSelect": 1, "cascadeDelete": True}},
-            {"name": "role", "type": "select", "required": True,
-             "options": {"maxSelect": 1, "values": ["owner", "lead", "contributor", "stakeholder", "reviewer"]}},
+        "fields": [
+            _text("seed_id", required=True, pattern="^mem-[a-z0-9-]+$"),
+            _relation("user", "users", required=True, cascade=True),
+            _relation("project", "projects", required=True, cascade=True),
+            _select("role", ROLE_VALUES),
         ],
-        "indexes": ["CREATE UNIQUE INDEX idx_membership ON memberships (user, project)"],
+        "indexes": ["CREATE UNIQUE INDEX `idx_membership` ON `memberships` (`user`, `project`)"],
         "listRule": RULE_AUTHED,
         "viewRule": RULE_AUTHED,
         "createRule": None,

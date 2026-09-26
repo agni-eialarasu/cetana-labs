@@ -5,7 +5,7 @@
 # scaffolding (schema + importer) does not require the binary to be present.
 set -u
 
-PB_VERSION="${PB_VERSION:-0.22.21}"
+PB_VERSION="${PB_VERSION:-0.28.4}"
 TARGET_DIR="app/pocketbase"
 BIN="${TARGET_DIR}/pocketbase"
 

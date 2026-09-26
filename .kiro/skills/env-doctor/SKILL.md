@@ -35,13 +35,13 @@ git rev-list --left-right --count @{u}...HEAD 2>/dev/null || echo "no upstream"
 
 **Kiro IDE / local (stateful — servers):**
 ```bash
-export NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-node --version; pnpm --version                 # match .nvmrc / packageManager
-[ -x app/pocketbase/pocketbase ] && echo "pb binary: present" || echo "pb binary: missing (bash .devcontainer/setup-pocketbase.sh)"
+node --version; pnpm --version                 # Homebrew-native on the MBP (no nvm); pnpm should match packageManager (10.27)
+command -v pocketbase && pocketbase --version || echo "pb: not on PATH (Homebrew `pb`, or bash .devcontainer/setup-pocketbase.sh)"
 command -v podman || command -v docker || echo "container engine: none (podman recommended)"
 [ -f .env ] && echo ".env: present" || echo ".env: missing (cp .env.example .env)"
 [ -d app/web/node_modules ] && echo "web deps: installed" || echo "web deps: run pnpm install"
 ```
+> Node/pnpm are Homebrew-native on the reference work machine — `nvm` is intentionally absent. Do NOT instruct the user to run `nvm use`; if `node` is missing, they install via Homebrew (or, in a cloud sandbox only, source nvm).
 
 ### 4. Report
 - A per-check ✅ / ⚠️ / ❌ table, headed by the detected surface.

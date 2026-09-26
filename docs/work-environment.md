@@ -45,10 +45,13 @@ Not a hard wall — Web can edit anything, it just can't run persistent servers.
 
 ## 2. Prerequisites (Kiro IDE / local)
 
-- **Python 3.11+** (governance scripts are zero-dependency; no venv needed).
-- **Node 22** & **pnpm 10** — pinned by `.nvmrc` + `package.json` `packageManager`. With nvm: `nvm use`.
-- **Podman** (preferred) or **Docker** — only for containerized workflows (staging parity); local dev runs the PocketBase binary directly.
-- **PocketBase** binary — fetched by `.devcontainer/setup-pocketbase.sh` (not committed).
+Toolchain is **Homebrew-native** on the reference MBP work machine (nvm/pyenv shell
+hooks are intentionally disabled for fast terminal startup — do **not** rely on `nvm`).
+
+- **Python 3.11+** (governance scripts are zero-dependency; no venv needed). `uv` is the standard if deps are ever added.
+- **Node** & **pnpm 10.27** via Homebrew (`/opt/homebrew/bin/node`, `/opt/homebrew/bin/pnpm`). `package.json` pins `packageManager: pnpm@10.27.0`; Corepack keeps it consistent. No per-project Node switching.
+- **PocketBase >= 0.23** — system binary via Homebrew (`pb`), or fetched by `.devcontainer/setup-pocketbase.sh` in cloud/CI.
+- **Podman** (preferred; `pod-start`/`pod-stop` manage the VM) or Docker context — only for containerized workflows; local dev runs the `pb` binary directly.
 
 Kiro Web needs none of the server tooling — it's for stateless work.
 
@@ -60,12 +63,11 @@ Kiro Web needs none of the server tooling — it's for stateless work.
 # 1. Environment config
 cp .env.example .env          # fill in PB_ADMIN_* etc.
 
-# 2. Node toolchain
-nvm use                        # respects .nvmrc (Node 22)
+# 2. Node deps (Node/pnpm are Homebrew-native; no nvm)
 cd app/web && pnpm install --frozen-lockfile && cd ../..
 
-# 3. PocketBase binary
-bash .devcontainer/setup-pocketbase.sh
+# 3. PocketBase — use the Homebrew `pb` binary (or fetch in cloud/CI)
+pb --version                   # confirm >= 0.23; else: bash .devcontainer/setup-pocketbase.sh
 
 # 4. Sanity check
 make env-doctor

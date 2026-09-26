@@ -5,8 +5,11 @@
 .DEFAULT_GOAL := help
 SHELL := /bin/bash
 
-# Node/pnpm are provided via nvm and may not be on PATH; source it for web targets.
-NVM := export NVM_DIR="$$HOME/.nvm"; [ -s "$$NVM_DIR/nvm.sh" ] && . "$$NVM_DIR/nvm.sh";
+# Node/pnpm are expected on PATH (Homebrew-native on the MBP work machine; nvm is
+# intentionally not used). In cloud sandboxes where Node lives under nvm, source it.
+NVM := if ! command -v node >/dev/null 2>&1; then export NVM_DIR="$$HOME/.nvm"; [ -s "$$NVM_DIR/nvm.sh" ] && . "$$NVM_DIR/nvm.sh"; fi;
+# PocketBase: prefer a system binary (Homebrew `pocketbase`/`pb`), else the fetched local one.
+PB := $(shell command -v pocketbase 2>/dev/null || echo ./pocketbase)
 # Podman-first, Docker fallback (RFC-LAB-000-007 §2.3).
 CONTAINER := $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
 
@@ -38,8 +41,8 @@ validate-staging: ## /validate-staging — probe staging health (PLACEHOLDER: GC
 # ---- Local stack lifecycle (mirror /start-local, /stop-local, /status-local) ----
 start-local: ## /start-local — start PocketBase (:8090) + SvelteKit dev (:5173)
 	@echo "Starting local stack — see .kiro/skills/start-local for the full procedure."
-	@[ -x app/pocketbase/pocketbase ] || bash .devcontainer/setup-pocketbase.sh || true
-	@cd app/pocketbase && ./pocketbase serve --http=0.0.0.0:8090 & echo "PocketBase → http://127.0.0.1:8090 (admin /_/)"
+	@command -v pocketbase >/dev/null 2>&1 || [ -x app/pocketbase/pocketbase ] || bash .devcontainer/setup-pocketbase.sh || true
+	@cd app/pocketbase && $(PB) serve --http=0.0.0.0:8090 & echo "PocketBase → http://127.0.0.1:8090 (admin /_/)"
 	$(NVM) cd app/web && pnpm install --frozen-lockfile && pnpm dev
 
 stop-local: ## /stop-local — stop dev servers (frees :5173 and :8090)
@@ -69,7 +72,7 @@ web-build: ## SvelteKit production build
 
 # ---- Containers (Podman-first, Docker fallback — RFC-LAB-000-007 §2.3) ----
 pb-serve: ## Run PocketBase directly (binary, no container — the local default)
-	cd app/pocketbase && ./pocketbase serve --http=0.0.0.0:8090
+	cd app/pocketbase && $(PB) serve --http=0.0.0.0:8090
 
 pb-image: ## Build the PocketBase container image (Podman-first) for staging/GCP parity
 	@[ -n "$(CONTAINER)" ] || { echo "No podman/docker found."; exit 1; }

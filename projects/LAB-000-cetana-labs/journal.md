@@ -16,6 +16,19 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Environment Alignment to MBP + PocketBase v0.23+ Compatibility
+- **Context**: Reconciled the repo with the reference macOS work machine (WORK_MACHINE guide) after a local `make env-doctor` surfaced real mismatches — and caught a PocketBase major-version gap before it bit the local run.
+- **Key Corrections**:
+  - Removed `.nvmrc` (Node is **Homebrew-native**; nvm intentionally disabled for fast shell startup) and dropped unconditional `nvm` sourcing from the Makefile / `/env-doctor`.
+  - Aligned pnpm pin → **10.27.0** (matches the machine + Nexus Pulse `LAB-003`).
+  - **PocketBase v0.23+**: regenerated `pb_schema.json` in the new `fields` format (was the removed 0.22 `schema` format), bumped Containerfile/setup versions, pinned web JS SDK `>=0.26`. Documented export-from-instance as the authoritative schema.
+  - `pb-serve`/`start-local` prefer the system `pocketbase` (`pb`); docs reference `pod-start`/`pod-stop` VM budget.
+  - Fixed archetype-template `runbook.md` links → `docs/work-environment.md`.
+- **Why it matters**: prevents confusing local-run failures (0.22 schema against a 0.40 server; nvm advice on a machine without nvm). Local run is now aligned to how the machine actually works.
+- **Next Horizon**: MVP scoping (`RFC-LAB-000-008`) — connect UI↔live PocketBase + minimum owner-or-not RBAC.
+
+---
+
 ### [2026-09-24] Milestone: Work-Environment Standardization (`RFC-LAB-000-007` / `TSK-039`)
 - **Context**: Standardized the two-surface (Kiro Web + IDE) developer experience and adopted relevant patterns from the Nexus Pulse (`LAB-003`) developer guide — Podman-first, `make` cheat-sheet, clean/seeded states.
 - **Key Deliverables**:
