@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Work-Environment Standardization (`RFC-LAB-000-007`, `TSK-039`)**: Standardized the Kiro Web + IDE developer experience — explicit **surface roles** (Web = stateless governance/docs; IDE = stateful servers), toolchain pinning (`.nvmrc` Node 22), `.env.example`, and a one-way personal config-sync protocol. Added a **`Makefile`** (`make help` cheat-sheet mirroring the `/commands`), a **Podman-first `Containerfile`** for PocketBase (Docker fallback; staging/GCP parity — local dev stays binary-first), the **`/env-doctor`** surface-aware readiness skill (diagnostic-only, delegates to `/validate-local`), and `docs/work-environment.md` (adapted from the Nexus Pulse `LAB-003` guide). `/validate-local` and `/validate-staging` cross-reference the `/env-doctor` boundary.
+### Changed
+### Fixed
+
+---
+
+## [0.9.0] - 2026-09-24
+### Added
 - **Kiro-Native Project Skillset — Phase A (`TSK-038`)**: Migrated the skill suite from `.agents/skills/` to the Kiro-native **`.kiro/skills/`** (via `git mv`, history preserved) so each becomes a real `/command` shared automatically across **Kiro Web** and **Kiro IDE**. Added infra commands (`/start-local`, `/stop-local`, `/status-local`, `/validate-local`) and staging placeholders (`/status-staging`, `/validate-staging` — GCP + optional Vercel, pending org transfer), lifecycle commands (`/sprint-start`, `/audit-doc`, `/audit-project`), and a `.kiro/steering/` foundation (`product.md`, `tech.md`, `structure.md`). Updated `AGENTS.md` §4, `README.md`, `CLAUDE.md`, and left a redirect at the old path. Personal commands (`/sign-in`, `/sign-off`, `/session-save`, `/session-resume`) will live in `~/.kiro/skills/` (Phase B).
 - **BK-008 Phase 3 Scoping — Auth & RBAC (`RFC-LAB-000-006`, `TSK-037`, `BK-007`)**: Authored the Phase 3 scoping RFC — **GitHub OAuth2** identity on the PocketBase `users` collection (linked by `github_handle`), a **per-project role model** resolved through the `memberships` join, and access enforced by **per-collection PocketBase API rules** (verified 5-rule-type + filter syntax with a membership-gated write example). Includes the UI auth flow (public summary tier + member-scoped detail), an access-only **audit trail**, and explicit **non-surveillance safeguards** — directly delivering the `BK-007` role-gated-history intent.
 - **Sleek UI GitHub Pages Deployment (`TSK-036`)**: Extended `deploy-pages.yml` to build the SvelteKit Sleek UI (with a `/cetana-labs/app` base path) and publish a **single combined site artifact** — the classic static dashboard at root (`/`) and the Sleek UI at `/app/` — enabling dual-run per `RFC-LAB-000-005` §6 (one Pages deployment, no race). Added cross-links: an "✨ Open Sleek UI (beta)" action on the classic dashboard and a "← Classic dashboard" link in the app footer.

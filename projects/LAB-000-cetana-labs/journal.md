@@ -16,6 +16,30 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Work-Environment Standardization (`RFC-LAB-000-007` / `TSK-039`)
+- **Context**: Standardized the two-surface (Kiro Web + IDE) developer experience and adopted relevant patterns from the Nexus Pulse (`LAB-003`) developer guide — Podman-first, `make` cheat-sheet, clean/seeded states.
+- **Key Deliverables**:
+  - Authored [`RFC-LAB-000-007`](../../docs/rfc/RFC-LAB-000-007-work-environment.md): surface roles (Web = stateless governance; IDE = stateful servers), toolchain pinning, one-way config-sync protocol, and the `/env-doctor` vs `/validate-*` boundary.
+  - Added `.nvmrc` (Node 22), `.env.example`, and a **`Makefile`** (`make help`) mirroring the `/commands`.
+  - Added a **Podman-first `Containerfile`** for PocketBase (Docker fallback) for staging/GCP parity — local dev stays binary-first.
+  - Added the **`/env-doctor`** skill (surface-aware, diagnostic-only) and cross-referenced `/validate-local` + `/validate-staging`.
+  - Authored `docs/work-environment.md` (adapted from the Nexus Pulse guide, translated to PocketBase/SQLite/SvelteKit).
+  - `.gitignore`: `.env` + the developer-only `my-kiro` symlink.
+- **Next Horizon**: Sprint 8 continues with `TSK-025` (PR cross-referencer) and `TSK-026` (webhook dispatch).
+
+---
+
+### [2026-09-24] Milestone: Sprint 7 Closeout & v0.9.0 Release
+- **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 7.
+- **Delivered Capabilities**:
+  - `TSK-036`: Sleek UI deployed live to GitHub Pages (dual-run at `/app`) [PR #4].
+  - `TSK-037`: BK-008 Phase 3 auth/RBAC scoping (`RFC-LAB-000-006`).
+  - `TSK-038`: Kiro-native project skillset (Phase A) + steering foundation [PR #5]; personal skillset (Phase B) drafted for `~/.kiro/`.
+- **Release**: Promoted CHANGELOG to `v0.9.0`; synchronized root & `LAB-000` `STATUS.md`.
+- **Next Horizon**: Initialized `SPRINT-08` (2026-11-19 → 2026-12-03): work-environment standardization (`TSK-039`, `RFC-LAB-000-007`), plus carried-forward `TSK-025` (PR cross-referencer) and `TSK-026` (webhook dispatch).
+
+---
+
 ### [2026-09-24] Milestone: Kiro-Native Project Skillset — Phase A (`TSK-038`)
 - **Context**: Standardized the day-to-day developer experience by moving the skill suite to the Kiro-native location so `/commands` work identically across Kiro Web and Kiro IDE, addressing DX friction.
 - **Key Deliverables**:

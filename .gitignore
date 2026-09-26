@@ -47,3 +47,11 @@ my-kiro
 app/pocketbase/pocketbase
 app/pocketbase/pb_data/
 app/pocketbase/pb_migrations/
+
+
+# Environment (RFC-LAB-000-007) — never commit real secrets
+.env
+.env.local
+
+# Local convenience symlink to ~/.kiro (developer-only; never commit)
+my-kiro
