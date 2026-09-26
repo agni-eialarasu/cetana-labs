@@ -21,6 +21,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `TSK-039` | Work-Environment Standardization (`RFC-LAB-000-007`) — Kiro Web + IDE surface roles, `.nvmrc`/`.env.example`, Makefile cheat-sheet, Podman-first Containerfile, `/env-doctor`, work-environment guide | P1 | Eialarasu | ✅ Done | 2026-11-26 |
 | `TSK-040` | One-time local setup script (`scripts/setup-local.sh` / `make setup`) — idempotent bootstrap: toolchain check, `.env` defaults, web deps, PocketBase superuser, schema-import hint, seed | P2 | Eialarasu | ✅ Done | 2026-11-26 |
 | `TSK-041` | Programmatic PocketBase collection provisioning (`scripts/pb_provision.py` / `make provision`) — API-based, version-robust; replaces fragile schema-JSON import (v0.40 import failed) | P1 | Eialarasu | ✅ Done | 2026-11-26 |
+| `TSK-042` | MVP scoping (`RFC-LAB-000-008`, `BK-011`) — MVP definition, minimum RBAC (owner-or-not), phase breakdown M1–M5; `make setup` staleness-guard | P1 | Eialarasu | ✅ Done | 2026-11-26 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-28 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-12-03 |
 
@@ -35,6 +36,7 @@ This document maintains the active sprint plan, prioritized product backlog, and
 | `BK-007` | On-Demand Git Status Audit Trail & Role-Gated History | P2 | Governance | SPRINT-07 (scoped) | Role-gated history & audit trail. Auth/RBAC scoped in [`RFC-LAB-000-006`](docs/rfc/RFC-LAB-000-006-auth-rbac.md) (`TSK-037`) — GitHub OAuth, per-project roles via `memberships`, per-collection API rules, access-only audit (non-surveillance). Delivered as BK-008 Phase 3 atop the web app. |
 | `BK-008` | Control Hub Web App Evolution (PocketBase, db + server) | P2 | Platform | SPRINT-06 (scoping) | Evolve the static control plane into a full PocketBase web application (database + backend server). Scoped in [`RFC-LAB-000-003`](docs/rfc/RFC-LAB-000-003-pocketbase-web-app.md) (`TSK-031`). Prerequisite for `BK-007` RBAC. Cloud dev env shifts Kiro Web → Codespaces per `RFC-LAB-000-001` §5; services declared in `.devcontainer/`. Consumes the `BK-009` relational data layer as its seed schema. |
 | `BK-009` | Relational JSON Data Layer (`RFC-LAB-000-002`) | P1 | Data | ✅ Delivered (SPRINT-05, `TSK-030`) | User & project masters + many-to-many memberships join under `data/`; generated README registry; referential-integrity validator pillar. PocketBase-ready schema; foundation for `BK-008` + `BK-007` RBAC. |
+| `BK-011` | Control Hub Web App MVP (`RFC-LAB-000-008`) | P1 | Platform | Scoped (`TSK-042`) | MVP: logged-in user sees live portfolio from PocketBase; **owner edits own project's status**; deployed. **Minimum RBAC** = 3 tiers (public / authenticated / owner via `owner_id`), deferring the full 5-role `memberships` model + audit. Phases M1 (wire UI→PB) → M5 (deploy). Foundation verified: provisioning + seed live on PocketBase v0.40. |
 
 ---
 

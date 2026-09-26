@@ -34,6 +34,21 @@ warn() { printf "  \033[1;33m!\033[0m %s\n" "$*"; }
 die()  { printf "  \033[1;31m✗ %s\033[0m\n" "$*"; exit 1; }
 
 # ---------------------------------------------------------------------------
+say "0/6  Repo state"
+if command -v git >/dev/null 2>&1 && git rev-parse --git-dir >/dev/null 2>&1; then
+  HEAD_SHA="$(git log --oneline -1 2>/dev/null)"
+  ok "running at: ${HEAD_SHA}"
+  # Non-blocking staleness check: warn (don't auto-pull) if origin is ahead.
+  git fetch --quiet origin 2>/dev/null || true
+  BEHIND="$(git rev-list --count HEAD..@{u} 2>/dev/null || echo 0)"
+  if [ "${BEHIND:-0}" -gt 0 ]; then
+    warn "you are ${BEHIND} commit(s) BEHIND origin — run 'git pull' to avoid running stale code, then re-run 'make setup'."
+  else
+    ok "up to date with origin"
+  fi
+fi
+
+# ---------------------------------------------------------------------------
 say "1/6  Toolchain check"
 command -v python3 >/dev/null || die "python3 not found"
 ok "python3 $(python3 --version 2>&1 | awk '{print $2}')"
