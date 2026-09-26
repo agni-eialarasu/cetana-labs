@@ -22,6 +22,17 @@ The PocketBase backend is live and seeded (3 users, 6 projects, 6 memberships on
 
 **Read-parity is the success bar:** the UI must render the same portfolio (same cards, ordering, severity, tags, owner pills) whether it read from PocketBase or the snapshot, because both derive from the same seeded `data/` masters.
 
+## 0. Preconditions (preflight — verify BEFORE any change; enforced by `tasks.md` T0)
+
+These are gating conditions. If any fails, the executor STOPs and reports rather than proceeding — this protects an autonomous/delegated run from acting in the wrong surface, on the wrong branch, or against an unready stack.
+
+- **P1 — Surface:** execution is on **Kiro IDE / local (stateful)**, not Kiro Web. M1 requires running PocketBase (`:8090`) and the SvelteKit dev server (`:5173`), which the Web surface cannot host (`RFC-LAB-000-007` §2.1). `/env-doctor` reports the IDE surface **ready**.
+- **P2 — Toolchain:** Node 22 + pnpm ~10.27 (`packageManager` pin), Python 3.11+, and the `pocketbase` binary on PATH.
+- **P3 — Branch:** work happens on a feature branch `feat/mvp-m1-live-pocketbase` (`RFC-LAB-000-004` naming) branched from an up-to-date `main`; the working tree is clean and the current branch is **not** `main`/`master`.
+- **P4 — Dependencies:** `app/web/node_modules` is installed; `pocketbase@^0.26.0` is present in `app/web/package.json` (already a dependency — no add needed).
+- **P5 — Env & data:** a `.env` exists (from `.env.example`); the repo `data/` masters (`users.json`/`portfolio.json`/`status.json`) are present — they are both the PocketBase seed source and the M1 status source / fallback.
+- **P6 — Freshness:** the checkout is not stale (`make setup`'s staleness-guard, `TSK-042`); `git pull` if warned.
+
 ## 2. Glossary / Field Mapping (of record — verified against `scripts/pb_provision.py`)
 
 The PocketBase `projects` collection field names differ from the UI's `ProjectRecord` type. The data layer MUST translate:

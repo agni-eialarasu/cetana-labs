@@ -4,6 +4,30 @@
 
 ---
 
+- [ ] **T0 — Preflight / pre-checks (gate — STOP if any fail; see requirements §0)**
+  Verify the working conditions *before* changing anything. If any check fails, STOP and report — do not proceed to T1.
+  - **Surface:** confirm this is **Kiro IDE / local (stateful)**, not Kiro Web. M1 needs to run PocketBase + the dev server; Web cannot (`RFC-LAB-000-007` §2.1). Run `/env-doctor` (or `make env-doctor`) and confirm it reports the IDE surface **ready**.
+    ```bash
+    node --version && pnpm --version        # Node 22, pnpm ~10.27 (packageManager)
+    command -v pocketbase && pocketbase --version
+    ```
+  - **Repo state / branch:** on a clean tree, sync `main`, then create/checkout the feature branch — do **not** work on `main` (`RFC-LAB-000-004`).
+    ```bash
+    git status --short                       # expect clean; stash/commit unrelated changes first
+    git fetch origin && git checkout main && git pull --ff-only
+    git checkout -b feat/mvp-m1-live-pocketbase   # or checkout if it already exists
+    git branch --show-current                # must NOT be main/master
+    ```
+  - **Dependencies:** web deps installed and the PB SDK present.
+    ```bash
+    [ -d app/web/node_modules ] || pnpm --dir app/web install
+    grep -q '"pocketbase"' app/web/package.json    # SDK is already a dependency (^0.26.0)
+    ```
+  - **Env & data:** `.env` exists (`cp .env.example .env` if not); repo `data/` masters present (the seed + snapshot source of truth).
+  - **Freshness:** ensure no stale checkout (`make setup` has a staleness-guard — `TSK-042`); if it warns, `git pull` first.
+  - **Report** a ✅/❌ preflight table and only then continue. On any ❌: STOP-and-hold.
+  - _Refs: requirements §0 (Preconditions), `RFC-LAB-000-007` §2.1, `RFC-LAB-000-004`._
+
 - [ ] **T1 — Prepare & verify the local stack (baseline)**
   - Run `make setup` (provision collections + seed 3 users / 6 projects / 6 memberships) and `make start-local` (PocketBase `:8090`, SvelteKit `:5173`).
   - Confirm the dashboard currently renders from the **snapshot** (baseline for the parity comparison in T7).
