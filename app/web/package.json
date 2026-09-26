@@ -29,7 +29,7 @@
   "dependencies": {
     "@fontsource/ibm-plex-sans": "^5.1.0",
     "@fontsource/ibm-plex-mono": "^5.1.0",
-    "pocketbase": "^0.22.0"
+    "pocketbase": "^0.26.0"
   },
-  "packageManager": "pnpm@10.28.1"
+  "packageManager": "pnpm@10.27.0"
 }
