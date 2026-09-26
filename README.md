@@ -60,7 +60,7 @@ cetana-labs/
 │   └── project-protocol.md        # 📋 Authoritative STATUS.md specification
 ├── AGENTS.md                      # 🤖 Universal AI Instructions (Rules, Constraints, Workflows)
 ├── CLAUDE.md                      # 🤖 Agent pointer for Claude Code
-├── .agents/skills/                # 🤖 Reusable AI playbooks
+├── .kiro/skills/                  # 🤖 Kiro-native project /commands (shared across Web + IDE)
 │   ├── project-status/            # Generates WhatsApp-ready updates on-demand (/project-status)
 │   ├── project-add/               # Onboards new initiatives via remote inspection (/project-add)
 │   ├── project-update/            # Logs delivery wins, health & milestones (/project-update)
