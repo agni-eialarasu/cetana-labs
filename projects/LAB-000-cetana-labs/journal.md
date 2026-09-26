@@ -16,6 +16,19 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Kiro-Native Project Skillset — Phase A (`TSK-038`)
+- **Context**: Standardized the day-to-day developer experience by moving the skill suite to the Kiro-native location so `/commands` work identically across Kiro Web and Kiro IDE, addressing DX friction.
+- **Key Deliverables**:
+  - Migrated 9 skills `.agents/skills/` → `.kiro/skills/` (`git mv`, history preserved); left a redirect README at the old path.
+  - Added infra `/commands`: `/start-local`, `/stop-local`, `/status-local`, `/validate-local`; staging placeholders `/status-staging`, `/validate-staging` (GCP + optional Vercel, pending org transfer).
+  - Added lifecycle `/commands`: `/sprint-start`, `/audit-doc`, `/audit-project`.
+  - Added `.kiro/steering/` foundation (`product.md`, `tech.md`, `structure.md`) capturing conventions.
+  - Updated `AGENTS.md` §4, `README.md`, `CLAUDE.md`.
+- **Portability model**: project skillset committed in `.kiro/` (auto-shared Web + IDE); personal skillset (`/sign-in`, `/sign-off`, `/session-save`, `/session-resume`) to live in `~/.kiro/skills/` and sync to Web (Phase B).
+- **Next Horizon**: Phase B — draft the personal skills for the user to place in local `~/.kiro/` and push via Configuration Sync.
+
+---
+
 ### [2026-09-24] Milestone: BK-008 Phase 3 Scoping — Auth & RBAC (`RFC-LAB-000-006` / `TSK-037`)
 - **Context**: Scoped authentication and RBAC for the Control Hub web app — the delivery vehicle for `BK-007` (role-gated history), governed by explicit, auditable rules to avoid a surveillance perception.
 - **Key Deliverables**:

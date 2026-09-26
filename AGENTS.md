@@ -59,18 +59,25 @@ When scaffolding a new project, use the corresponding template from `templates/`
 
 ---
 
-## 4. Reusable AI Agent Skills Suite (`.agents/skills/`)
+## 4. Reusable AI Agent Skills Suite (`.kiro/skills/`)
 
-For detailed step-by-step procedures, refer to `.agents/skills/`:
-- **`/project-validate [ID]`**: Pre-flight verification gate running a 5-pillar audit (scraper budget <= 35 lines, registry lockstep, git hygiene, AST boundaries, live test count) emitting `.gemini/governance/validation_receipt.json`.
-- **`/project-status [ID]`**: Generates WhatsApp briefings via `scripts/generate_status.py` (filters out completed initiatives and `LAB-000`).
-- **`/project-add <url_or_title>`**: Scaffolds next project ID, inspects remote repo, assigns `⏳ Onboarding Pending`, registers in `README.md`, and commits.
-- **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, and appends a milestone entry to `journal.md`.
-- **`/project-edit <ID>`**: Modifies owner, title, remote URL, or lifecycle health across project files and master registry.
-- **`/sprint-done [sprint_id]`**: Closes sprint, archives delivered tasks, bumps CHANGELOG, and refreshes STATUS.md.
-- **`/ping-leads`**: Scans STATUS.md files and opens idempotent GitHub issue alerts for stale (> 14 days) or onboarding-pending initiatives (excludes `LAB-000` and completed projects).
-- **`log-milestone`**: Appends milestone entries directly to a project's `journal.md`.
-- **`commit-changes`**: Stages and commits changes directly to `main` with standardized semantic commit prefixes.
+Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; committed → shared automatically across Kiro Web + Kiro IDE). Personal commands (`/sign-in`, `/sign-off`, `/session-save`, `/session-resume`) live in the developer's local `~/.kiro/skills/` and sync to Web via Configuration Sync.
+
+**Project lifecycle & governance:**
+- **`/project-validate [ID]`**: Pre-flight 5-pillar audit (scraper budget ≤ 35 lines, registry lockstep, git hygiene, AST boundaries, live test count) emitting `.gemini/governance/validation_receipt.json`.
+- **`/project-status [ID]`**: WhatsApp briefings via `scripts/generate_status.py` (filters completed initiatives and `LAB-000`).
+- **`/project-add <url_or_title>`**: Scaffolds next project ID, inspects remote repo, assigns `⏳ Onboarding Pending`, registers in `README.md`.
+- **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, appends a `journal.md` milestone.
+- **`/project-edit <ID>`**: Modifies owner, title, remote URL, or lifecycle health across project files and registry.
+- **`/sprint-start [goal]`** / **`/sprint-done [sprint_id]`**: Open / close a sprint in `BACKLOG.md` (id, window, goal, carry-forward) and sync `STATUS.md` / `CHANGELOG.md`.
+- **`/ping-leads`**: Idempotent GitHub issue alerts for stale (> 14 days) / onboarding-pending initiatives (excludes `LAB-000` and completed).
+- **`/audit-doc <file>`** / **`/audit-project [ID]`**: Single-file doc review / whole-project (or portfolio) health sweep.
+- **`log-milestone`** / **`commit-changes`**: Append journal milestones / standardized commits.
+
+**Local & staging infra:**
+- **`/start-local`** / **`/stop-local`** / **`/status-local`**: Bring up / shut down / inspect the local dev stack (PocketBase `:8090` + SvelteKit `:5173`).
+- **`/validate-local`**: Full local pre-flight — Python governance validators + SvelteKit type-check/build (mirrors CI).
+- **`/status-staging`** / **`/validate-staging`**: PLACEHOLDERS — staging targets **GCP** (backend + frontend), optional **Vercel** (frontend), pending the org-account transfer.
 
 ---
 

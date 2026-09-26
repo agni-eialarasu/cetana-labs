@@ -16,7 +16,7 @@
       "Automated GitHub Actions deployment pipeline for GitHub Pages active (13s build & deploy).",
       "Clean trunk-based git synchronization on `main`."
     ],
-    "days_ago": 1,
+    "days_ago": 2,
     "is_onboarding_pending": false,
     "is_completed": false,
     "is_stale": false
@@ -38,7 +38,7 @@
       "69/69 unit and integration tests passing across 14 modules.",
       "Strict linter and style compliance."
     ],
-    "days_ago": 2,
+    "days_ago": 3,
     "is_onboarding_pending": false,
     "is_completed": true,
     "is_stale": false
@@ -59,7 +59,7 @@
     "metrics": [
       "100% accuracy on tested temporal, aggregation, and event outbox SQL test cases."
     ],
-    "days_ago": 2,
+    "days_ago": 3,
     "is_onboarding_pending": false,
     "is_completed": true,
     "is_stale": false
@@ -81,7 +81,7 @@
       "431/431 automated test suite passing cleanly.",
       "42/42 architectural AST boundary fitness checks verified with zero leaks."
     ],
-    "days_ago": 1,
+    "days_ago": 2,
     "is_onboarding_pending": false,
     "is_completed": false,
     "is_stale": false
@@ -100,7 +100,7 @@
     "metrics": [
       "Pending initial baseline setup."
     ],
-    "days_ago": 2,
+    "days_ago": 3,
     "is_onboarding_pending": true,
     "is_completed": false,
     "is_stale": false
@@ -119,7 +119,7 @@
     "metrics": [
       "Pending initial baseline setup."
     ],
-    "days_ago": 2,
+    "days_ago": 3,
     "is_onboarding_pending": true,
     "is_completed": false,
     "is_stale": false
