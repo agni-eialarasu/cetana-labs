@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: MVP Scoping & Local Stack Verified (`RFC-LAB-000-008` / `TSK-042`)
+- **Context**: The local stack is now **proven end-to-end** — `make setup` provisions collections via the API and seeds 3 users / 6 projects / 6 memberships into PocketBase v0.40 (verified on the MBP). With a working foundation, scoped the MVP.
+- **Key Deliverables**:
+  - Authored [`RFC-LAB-000-008`](../../docs/rfc/RFC-LAB-000-008-mvp-minimum-rbac.md) and registered `BK-011` (MVP epic).
+  - **MVP**: logged-in user sees live PocketBase portfolio; **owner edits own project status**; deployed. **Minimum RBAC** = public / authenticated / owner-via-`owner_id` (3 tiers), deferring the 5-role `memberships` model + audit + `status_snapshots`.
+  - Phase plan M1 (wire UI→PocketBase) → M5 (deploy); acceptance criteria + open questions.
+  - Added a `make setup` staleness-guard (shows commit, warns if behind origin) after the "ran stale code" trap cost a cycle.
+- **Next Horizon**: M1 — flip `app/web/src/lib/data.ts` from the static snapshot to the live PocketBase SDK (highest-leverage, fully local-testable).
+
+---
+
 ### [2026-09-24] Milestone: Programmatic PocketBase Provisioning (`TSK-041`)
 - **Context**: The local run proved the hand-written `pb_schema.json` **fails to import** on PocketBase v0.40 ("Invalid collections configuration" — relations need real generated collection ids, not names). Switched to Option B: create collections via the REST API.
 - **Deliverable**: `scripts/pb_provision.py` (`make provision`) creates `users` → `projects` → `memberships` in dependency order, resolving real relation ids at create time; idempotent (updates in place). Wired into `make setup` and `make seed` — first-run local setup now has **zero manual UI steps**.
