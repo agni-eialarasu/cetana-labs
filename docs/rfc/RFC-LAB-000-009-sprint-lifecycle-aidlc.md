@@ -44,7 +44,7 @@ Adapted from the Nexus Pulse five-verb pipeline; each phase names its **surface*
 | # | Phase | Surface | What happens | Human gate |
 | :---: | :--- | :--- | :--- | :--- |
 | 1 | **Scope** | Kiro **Web** | Turn intent into a plan: RFC (if a formal decision), backlog rows (`BK-`/`TSK-` IDs), and — for delegated work — a **Spec** (`requirements.md`/`design.md`/`tasks.md`). | Human approves scope before build starts (`/sprint-start`). |
-| 2 | **Build** | Kiro **IDE** | Executor implements on a `feat/` branch. **Delegated-agent** work runs in **Autonomous mode** off the Spec's `tasks.md`; **lead-paired** work is interactive. | — (self-validated) |
+| 2 | **Build** | Kiro **IDE** | Executor implements on a `feat/` branch. **Delegated-agent** work is kicked off with the one-liner **`/spec-run <spec-id>`** (§9) — which runs the Spec's preflight, creates the branch, and executes `tasks.md` (via Autonomous mode / sub-agents); **lead-paired** work is interactive. | — (self-validated) |
 | 3 | **Validate** | Kiro **IDE** | `make validate-local` / 5-pillar governance gate + build; agent self-checks against the EARS acceptance criteria (the Spec's DoD). | — (gate is machine-enforced; CI mirrors on PR) |
 | 4 | **Review** | Kiro **Web** | Agent opens a PR (`gh api`, per `RFC-LAB-000-004`). Human reviews via `/review-pr` (planned); **STOP-and-hold** on any unresolved concern. CI must be green. | **The gate.** Human approves → squash-merge; else iterate. |
 | 5 | **Record** | Kiro **Web** | Governance lockstep (CHANGELOG / BACKLOG / journal / `data/`); Decision Journal entry for decisions (`/brainstorm-save`); `REPORT.md` for sign-off; release tag at `/sprint-done`. | Human curates the journal (never auto-run, per D17). |
@@ -127,7 +127,11 @@ These are captured here so scope stays honest and the team ceremony can be switc
 ## 9. Deliverables
 
 - **This RFC.**
-- (Follow-on, separate PRs — not this docs RFC) `/review-pr` skill (`.kiro/skills/`, planned in `ai-collaboration-model.md`); a `REPORT.md` template; the M1 Spec (`.kiro/specs/`) as the first AIDLC artifact.
+- (Follow-on, separate PRs — not this docs RFC):
+  - **`/spec-run <spec-id>`** skill (`.kiro/skills/`) — the **Kiro IDE one-liner** that executes the Build phase (§3): reads a self-describing Spec, runs its preflight/pre-checks, creates the branch the Spec names, works `tasks.md` in order, self-validates against the EARS DoD, opens a PR, and STOP-and-holds. Never merges. Keyed on the **spec id** (the AIDLC unit of work, §4). Deliberately distinct from `/sprint-start` (Web/plan — the Scope bookend), honoring the surface split (`RFC-LAB-000-007` §2.1).
+  - **`/review-pr`** skill (`.kiro/skills/`) — the human PR gate (§3 Phase 4).
+  - A **`REPORT.md` template** — the Phase 5 sign-off artifact (§10.2).
+  - The **M1 Spec** (`.kiro/specs/mvp-m1-live-pocketbase/`) as the first AIDLC artifact, with a self-describing **Execution header** (kickoff command, surface, branch, preflight, EARS target) so `/spec-run` needs no extra arguments.
 
 ## 10. Open Questions
 
