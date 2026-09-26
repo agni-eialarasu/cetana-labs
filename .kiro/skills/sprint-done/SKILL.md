@@ -22,6 +22,13 @@ Activate this skill whenever the user invokes:
 
 ## 2. Step-by-Step Execution Procedure
 
+### Step 0: State guard (phase-aware — `RFC-LAB-000-009` state machine)
+`/sprint-done` is the **Record / done** phase — it closes a sprint whose work has been **verified and merged**. Before archiving, confirm the lifecycle state:
+- **Any Spec work still IN_REVIEW (open, unmerged PR for a sprint item) ⇒ ALERT + HOLD:** "PR #NN for `<spec/task>` is still open — closing the sprint now would record undelivered work. Merge via `/review-pr` first, or confirm you're intentionally deferring it (carry-forward)." *(A missing gate — the PR hasn't passed review/merge — is a HOLD, never a silent skip.)*
+- **Items marked `✅ Done` with merged PRs ⇒ proceed.**
+- **No active sprint / already closed (redundant) ⇒ skip + continue:** report "no open sprint to close" rather than fabricating a closeout. *(Redundant ⇒ skip.)*
+- Never mark a sprint `DELIVERED` for work that isn't merged to `main` — the human gate (`/review-pr`) is upstream of this step.
+
 ### Step 1: Inspect `BACKLOG.md`
 1. Read the **Current Sprint** section in `BACKLOG.md`.
 2. Identify all tasks marked `✅ Done`.
