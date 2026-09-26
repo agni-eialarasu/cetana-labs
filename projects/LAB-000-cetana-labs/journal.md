@@ -16,6 +16,17 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Sprint 7 Closeout & v0.9.0 Release
+- **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 7.
+- **Delivered Capabilities**:
+  - `TSK-036`: Sleek UI deployed live to GitHub Pages (dual-run at `/app`) [PR #4].
+  - `TSK-037`: BK-008 Phase 3 auth/RBAC scoping (`RFC-LAB-000-006`).
+  - `TSK-038`: Kiro-native project skillset (Phase A) + steering foundation [PR #5]; personal skillset (Phase B) drafted for `~/.kiro/`.
+- **Release**: Promoted CHANGELOG to `v0.9.0`; synchronized root & `LAB-000` `STATUS.md`.
+- **Next Horizon**: Initialized `SPRINT-08` (2026-11-19 → 2026-12-03): work-environment standardization (`TSK-039`, `RFC-LAB-000-007`), plus carried-forward `TSK-025` (PR cross-referencer) and `TSK-026` (webhook dispatch).
+
+---
+
 ### [2026-09-24] Milestone: Kiro-Native Project Skillset — Phase A (`TSK-038`)
 - **Context**: Standardized the day-to-day developer experience by moving the skill suite to the Kiro-native location so `/commands` work identically across Kiro Web and Kiro IDE, addressing DX friction.
 - **Key Deliverables**:

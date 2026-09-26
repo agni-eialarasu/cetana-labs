@@ -15,13 +15,13 @@
 The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
 
 ### 2. Latest Deliveries & Business Wins
-- **Sprint 6 Closeout & v0.8.0 Release**: Shipped the web-app foundation (`BK-008` P1–P2) — PocketBase backend scaffolding and a new SvelteKit "Sleek UI" at read-parity, styled with the org design system.
-- **Branch-Based Development**: Adopted GitHub Flow (`RFC-LAB-000-004`) with PR + CI gates; delivered via PRs #1–#3.
-- **Sleek UI (`app/web/`)**: SvelteKit 5 + pnpm + Tailwind dashboard — blue-accent Nexus Pulse tokens, IBM Plex, dark-first, responsive.
-- **PocketBase Backend Scaffold**: Collections schema + idempotent seed importer generated from the `data/` relational masters.
+- **Sprint 7 Closeout & v0.9.0 Release**: Sleek UI deployed live to GitHub Pages (dual-run at `/app`), Phase 3 auth/RBAC scoped (`RFC-LAB-000-006`), and the developer command experience standardized.
+- **Live Sleek UI**: SvelteKit dashboard published alongside the classic one — [/cetana-labs/app/](https://agni-eialarasu.github.io/cetana-labs/app/).
+- **Kiro-Native Skillset**: Project `/commands` in `.kiro/skills/` (shared across Kiro Web + IDE) + `.kiro/steering/` foundation; personal skillset synced separately.
+- **Auth & RBAC Scoped**: GitHub OAuth + per-project roles via `memberships` + PocketBase API rules, ready to build.
 
 ### 3. Current Focus & Next Milestone
-- Sprint 7 execution: Deploy the Sleek UI to GitHub Pages (dual-run), scope Phase 3 auth/RBAC (`BK-007`), and deliver multi-repo PR cross-referencing (`BK-004`).
+- Sprint 8 execution: Multi-repo PR cross-referencing (`BK-004`), Slack/WhatsApp webhook dispatch (`BK-001`), and Kiro Web + IDE work-environment standardization (`RFC-LAB-000-007`).
 
 ### 4. Blockers & Risks
 - **Blockers**: None.

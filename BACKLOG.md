@@ -4,13 +4,13 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 ---
 
-## 🎯 Current Sprint: Sprint 7 — Sleek UI Deployment & Auth Foundations
+## 🎯 Current Sprint: Sprint 8 — Ecosystem Integrations & Work-Environment Standardization
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-07` |
-| **Duration** | 2026-11-05 to 2026-11-19 (2 Weeks) |
-| **Sprint Goal** | Deploy the Sleek UI (`app/web/`) to GitHub Pages (dual-run), begin BK-008 Phase 3 auth/RBAC scoping (`BK-007`), and deliver multi-repo PR cross-referencing (`BK-004`). |
+| **Sprint ID** | `SPRINT-08` |
+| **Duration** | 2026-11-19 to 2026-12-03 (2 Weeks) |
+| **Sprint Goal** | Deliver multi-repo PR cross-referencing (`BK-004`) and Slack/WhatsApp webhook dispatch (`BK-001`); standardize the Kiro Web + IDE work-environment (`RFC-LAB-000-007`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -18,11 +18,9 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-036` | Sleek UI GitHub Pages deployment workflow (`app/web/` build → Pages, dual-run alongside static dashboard) | P1 | Eialarasu | ✅ Done | 2026-11-12 |
-| `TSK-037` | BK-008 Phase 3 Scoping — Auth & RBAC (`BK-007`, `RFC-LAB-000-006`): GitHub OAuth identity, per-project role model via memberships, per-collection API rules, audit trail, non-surveillance safeguards | P1 | Eialarasu | ✅ Done | 2026-11-14 |
-| `TSK-038` | Kiro-native skillset (Phase A) — migrate skills to `.kiro/skills/`, add infra/lifecycle/audit `/commands`, steering foundation; standardize DX across Kiro Web + IDE | P1 | Eialarasu | ✅ Done | 2026-11-17 |
-| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-17 |
-| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-11-19 |
+| `TSK-039` | Work-Environment Standardization (`RFC-LAB-000-007`) — Kiro Web + IDE parity, config-sync protocol, onboarding | P1 | Eialarasu | 📋 Planned | 2026-11-26 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-28 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-12-03 |
 
 ---
 
@@ -39,6 +37,15 @@ This document maintains the active sprint plan, prioritized product backlog, and
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 7: Sleek UI Deployment, Auth Scoping & Kiro-Native DX (2026-09-24)
+- **Goal**: Make the Sleek UI publicly visible, scope auth/RBAC, and standardize the developer command experience.
+- **Deliverables**:
+  - `TSK-036`: Sleek UI deployed to GitHub Pages at `/app` (dual-run with the classic dashboard via a combined-artifact `deploy-pages.yml`) [PR #4].
+  - `TSK-037`: BK-008 Phase 3 auth/RBAC scoping (`RFC-LAB-000-006`) — GitHub OAuth, per-project roles via `memberships`, per-collection API rules, non-surveillance safeguards.
+  - `TSK-038`: Kiro-native project skillset (Phase A) — migrated to `.kiro/skills/`, added infra/lifecycle/audit `/commands` + `.kiro/steering/` foundation [PR #5]. CI caught & fixed a stale `data/status.json`.
+  - Personal skillset (Phase B): drafted `/sign-in`, `/sign-off`, `/session-save`, `/session-resume` for the developer's `~/.kiro/` + Configuration Sync (not committed to the shared repo).
+- **Carried Forward**: `TSK-025` (Multi-Repo PR Cross-Referencer) and `TSK-026` (Slack/WhatsApp webhook dispatch) → `SPRINT-08`.
 
 ### Sprint 6: Web App Foundation (BK-008 P1–P2) & Branch-Based Development (2026-09-24)
 - **Goal**: Stand up the PocketBase web-app foundation on the `BK-009` data layer and adopt industry-standard branch-based development.
