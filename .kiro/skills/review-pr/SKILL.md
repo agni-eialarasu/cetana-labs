@@ -18,6 +18,13 @@ This is the AIDLC safety rail: Autonomous mode / a delegated agent opens the PR,
 
 ## Steps
 
+### 0. State guard (phase-aware — `RFC-LAB-000-009` state machine)
+`/review-pr` is the **verify** phase — it gates a PR that a Build (`/spec-run`) produced. Confirm the lifecycle state first:
+- **An open PR exists (IN_REVIEW) ⇒ proceed.**
+- **No open PR yet (missing prerequisite) ⇒ ALERT + HOLD:** "Nothing to review — no open PR. Implement the Spec first: `/spec-run <spec-id>` (which opens the PR), then `/review-pr`." *(Missing prerequisite ⇒ HOLD, never fabricate a review.)*
+- **PR already merged/closed (redundant) ⇒ skip + continue:** "PR #NN is already merged — proceed to `/sprint-done` (Record)." Do not re-review. *(Redundant ⇒ skip.)*
+- The state-guard is a tripwire, never a bypass: this skill still **never merges or auto-approves** regardless of state (§Rules).
+
 ### 1. Identify the PR
 - If a number is given, use it. Else find the open PR for the current branch:
   ```bash
