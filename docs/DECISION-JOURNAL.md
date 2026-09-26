@@ -14,7 +14,9 @@
 
 ## Entry 001 — Foundational Session: from static control plane to governed, AI-driven web app
 
-**Date:** 2026-09-24 · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** RFC-LAB-000-001 → -008, 11 PRs, releases v0.5.0 → v0.9.0
+**Date:** 2026-09-24 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** RFC-LAB-000-001 → -008, 11 PRs, releases v0.5.0 → v0.9.0
+
+> _Decisions D1–D11 in this entry were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
 
 This inaugural entry captures a single extended working session that took Cetana Labs
 (`LAB-000`) from a static, file-based control plane to a governed web-app foundation with a
@@ -97,3 +99,50 @@ scoped MVP and an AI-driven delivery process. Each sub-section is a discrete dec
 - **Governance throughput:** 9 RFCs, 11 PRs (all CI-gated, squash-merged), releases v0.5.0 → v0.9.0 — high volume *with* discipline.
 - **Course-corrections by the human that changed outcomes:** Svelte 5 (not 4); defer TSK-025/026; check the work-machine guide (caught the nvm/version mismatches); minimum-RBAC scoping; Specs over custom PROMPT.md.
 - **Honest failures & recovery:** agent gave wrong nvm advice and wrongly assumed the schema import would work on v0.40; local verification (human-insisted) caught both; fixes shipped. This is the human gate functioning as designed — and is recorded here deliberately, because credible decision-making includes the misses.
+
+
+---
+
+## Entry 002 — Standardizing the dev process: sprint lifecycle, AIDLC, and decision capture
+
+**Date:** 2026-09-24 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `/brainstorm-save` skill, `DECISION-JOURNAL.md`, AI-collaboration model; RFC-LAB-000-009 planned
+
+Follows Entry 001. This session shifted from *building* to *standardizing how building happens* — reviewing an external team's sprint protocol, aligning on Kiro-native tooling, and establishing a record of engineering reasoning.
+
+### D12 — Adopt a sprint lifecycle protocol, adapted from Nexus Pulse (LAB-003) — not copied
+- **Trigger:** The human shared the Nexus Pulse Engineering Sprint Lifecycle (5-verb pipeline, PROMPT/REPORT envelopes, Track A/B, roster, role-based broadcasts) and asked to "adapt best and needed."
+- **Options:** (A) adopt wholesale; (B) adopt the delivery *discipline*, defer the multi-dev *org structure*; (C) minimal.
+- **Decision & rationale:** Option B. Nexus Pulse's protocol targets a multi-contributor team (human devs + AI agents, roster, tracks); `LAB-000` is solo+AI today. Adopt the **5-phase pipeline, `/review-pr` gate, STOP-and-hold, consolidated Golden Rules, lightweight REPORT**; **defer** roster/Track-A-B until real contributors join. Avoids premature team ceremony while capturing the discipline. _(Contributor: Agni Eialarasu)_
+- **Outcome:** RFC-LAB-000-009 (planned).
+
+### D13 — Progressive-formality contracts (right-sized by executor)
+- **Trigger:** The human noted per-sprint PROMPT.md feels heavy now, but is valuable long-run as a clear ask + Definition of Done for another developer/agent picking up cold. Proposed a hybrid.
+- **Decision & rationale:** Contract **depth scales with executor autonomy** — solo-pairing stays light; delegated agent / onboarded dev gets a full contract. Reframed PROMPT.md not as ceremony but as *the interface* for an agent that has no conversational context. Same structure, dialed up/down. _(Contributor: Agni Eialarasu)_
+- **Outcome:** folded into the AIDLC model (superseded by D15's Kiro-Specs decision).
+
+### D14 — Trajectory & AIDLC intent (solo → team; multi-agent, human-gated)
+- **Trigger:** The human clarified: solo to MVP, then developers onboard; wants to experiment with multi-agent work (AIDLC), human-gated throughout; Kiro Web for brainstorm/plan, Kiro IDE for execute/verify.
+- **Decision & rationale:** Design the process to **scale up without a rewrite** — define **executor roles** (Lead-paired / Delegated-agent / Onboarded-dev) rather than named people; human gate is the non-negotiable safety rail for AIDLC. _(Contributor: Agni Eialarasu)_
+- **Outcome:** informs RFC-LAB-000-009 framing.
+
+### D15 — Use Kiro-native Specs + Autonomous mode as the AIDLC engine (don't reinvent)
+- **Trigger:** The human asked how Kiro's spec-driven development and Autonomous mode fit — before committing to a custom PROMPT.md.
+- **Key realization (verified against Kiro docs):** a **Kiro Spec** (`requirements.md` EARS acceptance criteria + `design.md` + `tasks.md`, agent-executed → PR) *is* the contract; **Autonomous mode** (plan → sub-agent execute → PR, human-gated at review) *is* the AIDLC executor.
+- **Decision & rationale:** **Adopt Kiro Specs as the delegated/agent contract instead of a homegrown PROMPT.md**; keep a lightweight REPORT.md for sign-off (the genuine gap). Don't rebuild what the tool provides; EARS is a more testable DoD than prose; Specs live in `.kiro/` (same portability as skills). Honest caveat: "Autonomous over an existing Spec's tasks" is undocumented — the AIDLC spike will determine best chaining. _(Contributor: Agni Eialarasu)_
+- **Outcome:** RFC-LAB-000-009 framed on Kiro-native features; first experiment = run MVP task M1 as a Spec.
+
+### D16 — Establish a Decision Journal (this document) as a project showcase artifact
+- **Trigger:** The human wanted the brainstorming reasoning captured "in structured format" to showcase thinking pattern/experience to a Manager/Architect/CTO (and any co-reviewer).
+- **Options for placement:** (A) repo `docs/`; (B) personal `~/` folder; (C) hybrid.
+- **Decision & rationale:** **Repo (`docs/DECISION-JOURNAL.md`)** — reframed as a *project governance artifact* (not personal), because its value is contextual: it references repo RFCs/PRs and is read in-repo alongside them. Format = decision narrative (problem → options → rationale → outcome), curated for credibility (includes honest failures). Contributor attribution added per section for multi-author readiness. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `docs/DECISION-JOURNAL.md` (PR #12); this entry.
+
+### D17 — `/brainstorm-save` is a project skill; `/sign-off` prompts (not auto-runs) it
+- **Trigger:** The human spotted an inconsistency — a *personal* skill writing to a *repo* doc — and asked whether `/session-save` or `/sign-off` should internally trigger capture.
+- **Decision & rationale:** Since the journal is a **project** artifact (D16), **`/brainstorm-save` is a project skill** (`.kiro/skills/`), reusable by future contributors — resolving the inconsistency. Chaining: `/sign-off` should **prompt** to run it *when the session had decisions*, **never auto-run** — auto-capturing every session would pollute the journal with noise and destroy its credibility. Curation stays human-controlled. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `.kiro/skills/brainstorm-save/SKILL.md`; `/sign-off` (personal) to prompt, documented in the skill.
+
+### Session meta
+- **Theme:** meta-work — designing *how* the team (human + agents) will build, and how reasoning is recorded.
+- **Notable judgment:** repeatedly chose "adapt/adopt-native, don't reinvent" (Nexus Pulse discipline over its org apparatus; Kiro Specs over custom PROMPT.md; project skill over inconsistent personal placement).
+- **Method:** human set intent and made every call; AI verified Kiro capabilities against docs, surfaced the placement inconsistency's resolution options, and executed.
