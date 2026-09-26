@@ -16,6 +16,19 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-24] Milestone: Work-Environment Standardization (`RFC-LAB-000-007` / `TSK-039`)
+- **Context**: Standardized the two-surface (Kiro Web + IDE) developer experience and adopted relevant patterns from the Nexus Pulse (`LAB-003`) developer guide — Podman-first, `make` cheat-sheet, clean/seeded states.
+- **Key Deliverables**:
+  - Authored [`RFC-LAB-000-007`](../../docs/rfc/RFC-LAB-000-007-work-environment.md): surface roles (Web = stateless governance; IDE = stateful servers), toolchain pinning, one-way config-sync protocol, and the `/env-doctor` vs `/validate-*` boundary.
+  - Added `.nvmrc` (Node 22), `.env.example`, and a **`Makefile`** (`make help`) mirroring the `/commands`.
+  - Added a **Podman-first `Containerfile`** for PocketBase (Docker fallback) for staging/GCP parity — local dev stays binary-first.
+  - Added the **`/env-doctor`** skill (surface-aware, diagnostic-only) and cross-referenced `/validate-local` + `/validate-staging`.
+  - Authored `docs/work-environment.md` (adapted from the Nexus Pulse guide, translated to PocketBase/SQLite/SvelteKit).
+  - `.gitignore`: `.env` + the developer-only `my-kiro` symlink.
+- **Next Horizon**: Sprint 8 continues with `TSK-025` (PR cross-referencer) and `TSK-026` (webhook dispatch).
+
+---
+
 ### [2026-09-24] Milestone: Sprint 7 Closeout & v0.9.0 Release
 - **Context**: Executed formal sprint closeout (`/sprint-done`) for Sprint 7.
 - **Delivered Capabilities**:

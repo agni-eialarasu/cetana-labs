@@ -1,0 +1,35 @@
+# Cetana Labs — PocketBase container image (RFC-LAB-000-007)
+# Podman-first (OCI); also builds with Docker. Used for staging/GCP parity and the
+# forward datastore path. Local dev normally runs the bare binary (`make pb-serve`).
+#
+# Build:  podman build -t cetana-pocketbase -f app/pocketbase/Containerfile app/pocketbase
+#         (or: docker build ... — identical, OCI image)
+# Run:    podman run -p 8090:8090 -v cetana_pb_data:/pb/pb_data cetana-pocketbase
+#
+# PocketBase is a single static binary; a minimal base keeps the image tiny.
+
+ARG PB_VERSION=0.22.21
+
+FROM docker.io/library/alpine:3.20
+
+ARG PB_VERSION
+ARG TARGETARCH=amd64
+
+RUN apk add --no-cache ca-certificates unzip wget
+
+WORKDIR /pb
+
+# Fetch the PocketBase release binary for the target arch.
+RUN wget -q "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${TARGETARCH}.zip" -O /tmp/pb.zip \
+    && unzip /tmp/pb.zip -d /pb \
+    && rm /tmp/pb.zip \
+    && chmod +x /pb/pocketbase
+
+# Collections schema is imported at first boot / via the admin UI or pb_import.py.
+COPY pb_schema.json /pb/pb_schema.json
+
+EXPOSE 8090
+VOLUME ["/pb/pb_data"]
+
+# Bind to all interfaces so the container is reachable via the mapped port.
+ENTRYPOINT ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]

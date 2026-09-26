@@ -42,3 +42,4 @@ cd -
 ## Notes
 - This is the pre-flight gate before `/sprint-done` or opening any PR (RFC-LAB-000-004).
 - Governance-only changes still run step 1; app changes run both steps.
+- **Scope boundary (RFC-LAB-000-007 §2.5):** this validates *work correctness*. If the toolchain/binary isn't set up (e.g. `node`/`pnpm` missing), don't diagnose the environment here — point the user to **`/env-doctor`** and stop.

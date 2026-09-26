@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Work-Environment Standardization (`RFC-LAB-000-007`, `TSK-039`)**: Standardized the Kiro Web + IDE developer experience — explicit **surface roles** (Web = stateless governance/docs; IDE = stateful servers), toolchain pinning (`.nvmrc` Node 22), `.env.example`, and a one-way personal config-sync protocol. Added a **`Makefile`** (`make help` cheat-sheet mirroring the `/commands`), a **Podman-first `Containerfile`** for PocketBase (Docker fallback; staging/GCP parity — local dev stays binary-first), the **`/env-doctor`** surface-aware readiness skill (diagnostic-only, delegates to `/validate-local`), and `docs/work-environment.md` (adapted from the Nexus Pulse `LAB-003` guide). `/validate-local` and `/validate-staging` cross-reference the `/env-doctor` boundary.
 ### Changed
 ### Fixed
 
