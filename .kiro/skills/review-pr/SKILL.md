@@ -61,12 +61,19 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 - **No verification record / verdict not PASS ⇒ HOLD:** "Human functional verification isn't recorded/passed — run `/verification-done` in the IDE after verifying (or finish the loop) before this gate." *(This turns the gate from CI+DoD-on-paper into CI+DoD+**evidence the human exercised it**.)*
 - Lead-paired PRs may satisfy this with a lighter note in the PR body; delegated/AIDLC PRs require the `REPORT.md` Verification Log.
 
-### 5. Governance lockstep (`RFC-LAB-000-004`, Pillar 2)
-- Application-code PR: is CHANGELOG / BACKLOG updated in step, and `data/` consistent if touched?
-- Confirm `make validate-local` (or CI's mirror) is green (ties to Step 2).
+### 5. Governance lockstep (`RFC-LAB-000-004`, Pillar 2) — verify FIRSTHAND, do not assert
+> **Lesson learned:** this step has twice been marked ✅ on the Verification Log's word while the CHANGELOG entry was actually missing. **Check the repo directly** — never infer lockstep from the PR body or the REPORT.
+- **CHANGELOG entry present?** Firsthand grep for the PR's task id in `CHANGELOG.md` (on the PR branch):
+  ```bash
+  git show <branch>:CHANGELOG.md | grep -c "TSK-0XX"   # expect >= 1
+  # or, on the PR files: gh api repos/.../pulls/<n>/files --jq '.[].filename' | grep -x CHANGELOG.md
+  ```
+- **Tracker status coherent?** The item's `SPRINT_TRACKER.md` status matches its lifecycle state (e.g. not still `📋 Backlog` for a PR in review).
+- **`data/` consistent** if touched; `make validate-local` (or CI's mirror) green (ties to Step 2).
+- **Timing nuance (don't over-HOLD):** the CHANGELOG entry and the `Done` status are legitimately **Record-phase (post-merge)** steps in some flows — so a *missing* CHANGELOG entry at review time is a **⚠️ reviewer note + an explicit item in the merge instructions** ("add the CHANGELOG entry + flip the tracker in the post-merge tidy"), **not automatically a HOLD**. But it MUST be surfaced firsthand and MUST be closed in the tidy — never silently marked ✅. If the PR *claims* lockstep is already done and it isn't, that discrepancy **is** a HOLD (the record is untrustworthy).
 
 ### 6. Present the review + STOP-and-hold
-- Emit a checklist table: **CI · Scope/hygiene · EARS DoD (per-criterion) · Human verification record · Governance**, each ✅ / ⚠️ / ❌ with a one-line note.
+- Emit a checklist table: **CI · Scope/hygiene · EARS DoD (per-criterion) · Human verification record · Governance (CHANGELOG entry firsthand-checked + tracker status)**, each ✅ / ⚠️ / ❌ with a one-line note. For Governance, state the *evidence* (e.g. "CHANGELOG grep: 1 hit for TSK-0XX ✅" or "⚠️ no CHANGELOG entry yet — add in post-merge tidy").
 - Give a clear **reviewer recommendation**: `READY (human approval required to merge)` or `HOLD — <reasons>`.
 - **STOP.** Ask the human to explicitly approve or request changes. Do **not** merge, approve via API, or push.
 
@@ -78,5 +85,6 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 - **Never merge and never post an approving review via the API.** This skill surfaces; the human decides.
 - **STOP-and-hold is mandatory** — always end at a human decision point.
 - A failing/pending check, an unverifiable EARS criterion, or a missing/failed human-verification record ⇒ **HOLD**, not a soft pass.
+- **Verify governance lockstep FIRSTHAND (§5) — never assert it from the PR body or Verification Log.** A missing CHANGELOG entry at review time is a ⚠️ note carried into the post-merge tidy (not auto-HOLD); a *false claim* that lockstep is done **is** a HOLD.
 - Read-only against the repo except for reporting; make no commits.
 - Reads use `gh api` (REST) — the `gh pr`/GraphQL subcommands are unavailable in this environment.
