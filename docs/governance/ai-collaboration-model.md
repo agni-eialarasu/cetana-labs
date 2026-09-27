@@ -29,14 +29,26 @@ happen where the running system lives (IDE). The same repo config (`.kiro/`) tra
 
 ## 3. The loop
 
-```
-  Human intent  ─▶  Spec / plan (the contract, DoD)  ─▶  Agent executes on a feature branch
-        ▲                                                          │
-        │                                                          ▼
-  Human gate  ◀──  PR review (CI + pillars green)  ◀──  Agent opens PR, self-validates
-        │
-        ▼
-  Merge to main  ─▶  Governance lockstep (CHANGELOG / BACKLOG / journal)  ─▶  Decision Journal (why)
+```mermaid
+flowchart TB
+    HI["🧭 <b>Human intent</b><br/>sets direction"]
+    SP["📋 <b>Spec / plan</b><br/>the contract · DoD"]
+    EX["🔨 <b>Agent executes</b><br/>on a feat/ branch"]
+    PR["🔎 <b>Agent opens PR</b><br/>self-validates · CI + 5 pillars"]
+    HG{"👤 <b>Human gate</b><br/>approve?"}
+    MG["✅ <b>Merge to main</b><br/>squash"]
+    LS["🔗 <b>Governance lockstep</b><br/>CHANGELOG · SPRINT_TRACKER · journal"]
+    DJ["📔 <b>Decision Journal</b><br/>the why"]
+
+    HI --> SP --> EX --> PR --> HG
+    HG -- "request changes" --> EX
+    HG -- "approve" --> MG --> LS --> DJ
+    DJ -. "next unit of work" .-> HI
+
+    classDef human fill:#1e3a5f,stroke:#3b82f6,color:#fff;
+    classDef agent fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    class HI,HG,DJ human;
+    class EX,PR agent;
 ```
 
 - **Contract:** for delegated/agent work, a **Kiro Spec** (`requirements.md` EARS acceptance criteria = Definition of Done, `design.md`, `tasks.md`). For solo-pairing, a lighter ask.
