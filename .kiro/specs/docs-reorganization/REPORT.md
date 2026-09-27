@@ -49,13 +49,29 @@ Reorganized the flat `docs/` folder into a grouped, navigable doc system — `gu
 - **Audit note (guides + reference + governance):** other content was reviewed and deliberately left as-is — file trees (user-guide §2), reference/lookup tables (archetypes, health legend, commit prefixes, surface roles, cheat-sheet, STATUS schema/badge tables), copy-paste AI-prompt blocks, the design-token reference docs (`DESIGN.md`, `design-system-lab000.md`), and the chronological Decision Journal are already in their optimal form; converting them would reduce clarity or break their purpose. The `project-protocol.md` two-phase text block was left as canonical text (its flow is already visualized in `project-owner-guide.md`, avoiding duplicate diagrams).
 
 ## 5. Verification Log — human functional verification (appended by `/verification-done`)
-> To be appended when the human runs the §4b Human Verification Plan (V1–V8). Append-only.
 
-_(pending `/verification-done`)_
+### Verification Log — 2026-09-27 (PR #27)
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| V1 — Grouping | ✅ | `docs/` shows `guides/ reference/ governance/ rfc/ templates/` (+ `index.html` untouched); each loose `.md` moved to the right category. |
+| V2 — Index works | ✅ | `docs/README.md` indexes every doc with working links + links back to root README. |
+| V3 — Breadcrumbs | ❌→✅ | Reviewing the rendered docs surfaced a **Mermaid parse error** in `sprint-lifecycle.md` §3.2 (semicolon in a sequence-diagram message). Fixed `;`→`,` (`6972f4f`); diagram renders. |
+| V4 — Rename / cloud-dev fate | ✅ | `work-environment.md` → `developer-guide.md` with scope header; referrers updated. **OQ-1 resolved:** human confirmed `cloud-dev-guide.md` redundant → folded into `developer-guide.md` and deleted (`d2dd0f2`). |
+| V5 — No broken links | ✅ | Link-check: zero reorg-introduced breaks (incl. after the cloud-dev deletion); only 3 pre-existing `templates/*/runbook.md` placeholders remain (out of scope). |
+| V6 — README tree accurate | ✅ | Repository-Structure block matches real `docs/` subfolders + `.kiro/skills/`; refreshed again after the fold. |
+| V7 — index.html untouched | ✅ | `docs/index.html` and `deploy-pages.yml` not in the diff. |
+| V8 — Validators green | ✅ | `validate_portfolio` + `generate_status_json --check` + `project_validate --allow-dirty` all pass; CI green (Validate Portfolio ✅, Build Sleek UI ✅). |
+| *(enhancement)* Visual pass | ✅ | On request, converted ASCII flows to Mermaid across 5 docs and folded the redundant guide (`dfc5cfb`, `2a44c5d`, `82677b7`, `6e22a24`, `d2dd0f2`). |
+
+- **Iterations:** 6 fixups/enhancements pushed to this PR during verification: `6972f4f` (mermaid fix), `dfc5cfb` `2a44c5d` `82677b7` `6e22a24` (diagram conversions across sprint-lifecycle / project-owner / cloud-dev+developer / ai-collaboration), `d2dd0f2` (cloud-dev fold, OQ-1).
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu · **Surface:** Kiro IDE
+
+> **Note (Mermaid rendering caveat):** the executing agent could not render Mermaid locally (no `mmdc` in the toolchain); diagrams were validated for parser-safe syntax by construction and confirmed visually by the human during this verification loop.
 
 ## 6. Human gate
-- PR: #27 — pending verification then `/review-pr` · CI green (Validate Portfolio ✅, Build Sleek UI ✅) · squash-merged: no.
+- PR: #27 — verification PASS recorded; state **IN_REVIEW**, ready for `/review-pr 27` · CI green (Validate Portfolio ✅, Build Sleek UI ✅) · squash-merged: no (awaiting gate).
 
 ## 7. Sign-off
-- **Signed:** _(pending — after V1–V8 pass)_
+- **Signed:** Agni Eialarasu (Lead) — 2026-09-27 — human functional verification PASS (V1–V8).
 - Release tagged? n/a — `/sprint-done` (SPRINT-09) will tag at sprint close.
