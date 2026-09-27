@@ -353,3 +353,31 @@ Resumed the parked `/plan-start RFC-011`. With org approval granted (Entry 006, 
 - **Notable judgment:** the human chose **operational simplicity over cloud-native sophistication** (VM over Cloud Run) appropriate to scale, while explicitly preserving the forward path; and kept the RFC a *decision* separate from *execution* (M5 Specs).
 - **Process note (honest, from this session):** the preceding lockstep tidy caught that the docs-reorg run never added its CHANGELOG entry — and that `/review-pr` had marked lockstep green without verifying the CHANGELOG firsthand. Flagged for a `/review-pr` tightening (check the TSK id is actually in CHANGELOG). Recorded because credible process improvement includes catching the gate's own misses.
 - **Honest note:** nothing is deployed — `RFC-LAB-000-011` decides; `TSK-054` (M5 execution) is shelved for the lifecycle. Authenticated deploy still depends on M2 (OAuth), not yet built.
+
+
+---
+
+## Entry 008 — RBAC engine and status storage for the MVP owner-write path
+
+**Date:** 2026-09-27 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `mvp-m3-m4-rbac-owner-writes` Spec (TSK-050)
+
+> _Decisions D36–D37 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+Planning M3 (minimum RBAC) + M4 (owner write path). Two decisions settled before authoring the Spec.
+
+### D36 — RBAC engine = PocketBase API rules; no RBAC library
+- **Trigger:** The human asked directly, "what RBAC library are we going to use?" before planning M3.
+- **Options:** (a) an RBAC library (Casbin/oso/etc.) layered on the app; (b) PocketBase'"'"'s built-in per-collection API rules.
+- **Decision & rationale:** **(b) — no library.** RBAC is enforced by **PocketBase per-collection API rules** (server-side filter expressions), already in use since M1/M2 and the owner `updateRule` already provisioned. A library would **duplicate what the datastore enforces and split the source of truth** — and PocketBase-with-built-in-rules was *the reason* PocketBase was chosen over bespoke FastAPI+Postgres (`RFC-LAB-000-003`, D4). Key framing captured: **enforcement = the rule (server, authoritative); UI show/hide = UX only, never the security boundary** — so M3 must *test* a non-owner 403, not trust a hidden button. The 5-role `memberships` model stays deferred (`RFC-LAB-000-008` §4); richer future RBAC is still *rules* (joining `memberships`), not a library. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `mvp-m3-m4-rbac-owner-writes` §2/§R1/§R5.
+
+### D37 — MVP status storage = a minimal field on `projects` (§9.1 option a), dual-track with `status.json`
+- **Trigger:** M4 ("owner edits status") needs a *place* to write — but `projects` has no status field today; status lives in `status.json`.
+- **Options:** (a) a minimal owner-editable status field on `projects`; (b) bring the deferred `status_snapshots` history collection forward.
+- **Decision & rationale:** **(a)** — matches `RFC-LAB-000-008` §9.1'"'"'s own lean. The owner `updateRule` already covers new fields, so M4 is "add a field + wire one write"; `status_snapshots` history is deferred (option b would balloon M4). Honest wrinkle surfaced + accepted: this creates **two status sources** for MVP — the PB `status_*` field (owner-editable, in-app) and `status.json` (the executive-broadcast cadence). Chosen to **run them dual-track for MVP** (the UI reads the PB field back so edits are visible; the broadcast cadence stays untouched), with **reconciliation deferred post-MVP**. Combined into **one Spec** (M3+M4 ship together — the owner rule is meaningless without the write UI). _(Contributor: Agni Eialarasu)_
+- **Outcome:** `mvp-m3-m4-rbac-owner-writes` §R2/§R4/§R6; two-source reality documented dual-track.
+
+### Session meta
+- **Theme:** settling the *architecture* questions M3–M4 hinge on (enforcement engine, status home) before scoping — so the Spec implements decisions rather than discovering them mid-build.
+- **Notable judgment:** "don'"'"'t reinvent" again (built-in rules over a library, echoing D11/D15 on Specs-over-PROMPT.md); and choosing the minimal status field while *honestly naming* the two-source tension rather than hiding it.
+- **Honest note:** nothing built — the Spec is authored (merge-first pending). M3–M4 completes the MVP'"'"'s *local* auth loop; only M5 (deploy) then remains.
