@@ -164,6 +164,23 @@ make stop-local              # frees :5173 and :8090; pb_data preserved
 
 **Test personas & RBAC (forward — Phase 3, `RFC-LAB-000-006`):** once GitHub OAuth + roles land, personas map to the `memberships` roles (`owner`/`lead`/`contributor`/`reviewer`/`stakeholder`). Provisioning steps will be added here when auth is built.
 
+### 5.1 GitHub OAuth setup (PocketBase v0.40+)
+
+> **Version note (verified on v0.40.4):** OAuth2 providers are configured **per auth collection**, *not* in a global "Settings → Auth providers" menu (that path was removed after PocketBase ≤0.22). This tripped us once — documented here so it doesn't again. Applies to local dev **and** the deployed backend (`RFC-LAB-000-011`).
+
+**1. Create a GitHub OAuth app** — GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App:
+- **Homepage URL:** `http://localhost:5173` (local) / your Vercel URL (deployed).
+- **Authorization callback URL:** `http://127.0.0.1:8090/api/oauth2-redirect` (local) / your GCP PocketBase URL + `/api/oauth2-redirect` (deployed).
+- Copy the **Client ID** and generate a **Client Secret**.
+
+**2. Enable it in PocketBase** — admin UI (`http://127.0.0.1:8090/_/`):
+- **Collections → `users` → edit (gear) → Options tab → OAuth2 → Enable → `+ Add provider` → GitHub** → paste Client ID + Secret → Save.
+- (This is where the earlier "Settings → Auth providers" instruction now lives.)
+
+**3. Secrets discipline (`RFC-LAB-000-011` §4.3):** the client id/secret live in the **PocketBase admin**, never in the repo. The frontend needs only `VITE_PB_URL`. For the deployed backend, secrets go in the VM env / GCP Secret Manager; update the callback URL to the production PocketBase domain.
+
+**4. Superuser escape hatch:** the PB superuser (admin UI) login is independent of OAuth — if OAuth is misconfigured, you are not locked out.
+
 ---
 
 ## 6. Full Clean Reset
