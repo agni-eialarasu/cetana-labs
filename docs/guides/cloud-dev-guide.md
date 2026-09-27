@@ -25,8 +25,20 @@ This runbook explains how to develop the Cetana Labs Control Hub **entirely in t
 
 The entire loop runs in the browser:
 
-```text
-edit files  ─▶  /project-validate  ─▶  commit to main  ─▶  push  ─▶  CI deploys
+```mermaid
+flowchart LR
+    E["✏️ <b>Edit</b><br/>Markdown / Python<br/>in Kiro Web"]
+    V["🛡️ <b>/project-validate</b><br/>+ validate_portfolio<br/><i>pre-flight gate</i>"]
+    C["💾 <b>Commit to main</b><br/>semantic prefix"]
+    P["⬆️ <b>Push</b>"]
+    CI["🤖 <b>CI takes over</b><br/>deploy-pages · status-cron"]
+
+    E --> V --> C --> P --> CI
+
+    classDef dev fill:#1e3a5f,stroke:#3b82f6,color:#fff;
+    classDef auto fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    class E,V,C,P dev;
+    class CI auto;
 ```
 
 1. **Edit** Markdown / Python directly in Kiro Web.

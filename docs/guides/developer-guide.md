@@ -90,6 +90,20 @@ make env-doctor
 
 ## 4. Starting the Local Stack
 
+The `make` targets move the local stack between states:
+
+```mermaid
+stateDiagram-v2
+    [*] --> Fresh : git clone
+    Fresh --> Ready : make setup (env, deps, superuser, provision, seed)
+    Ready --> Running : make start-local (PB :8090 + web :5173)
+    Running --> Seeded : make seed (users/projects/memberships)
+    Seeded --> Running : iterate
+    Running --> Ready : make stop-local (pb_data preserved)
+    Running --> Fresh : make clean-data (wipe pb_data)
+    Seeded --> Fresh : make clean-data
+```
+
 Two modes, mirroring Nexus Pulse's State A / State B:
 
 ### State A — Clean slate (recommended default)
