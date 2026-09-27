@@ -32,6 +32,11 @@ PB_ADMIN_EMAIL = os.environ.get("PB_ADMIN_EMAIL", "")
 PB_ADMIN_PASSWORD = os.environ.get("PB_ADMIN_PASSWORD", "")
 
 RULE_AUTHED = '@request.auth.id != ""'
+# M1 (RFC-LAB-000-008 §4): the eventual public-summary tier. `projects` (and the
+# non-sensitive `users` display fields the owner-expand needs) are readable by
+# anonymous clients so the Sleek UI can read the live portfolio before auth exists
+# (M2). Field-level public-vs-authenticated granularity is refined in M3.
+RULE_PUBLIC = ""
 ROLE_VALUES = ["owner", "lead", "contributor", "stakeholder", "reviewer"]
 
 
@@ -143,7 +148,10 @@ def run(dry_run=True):
         # forcing one on a pre-populated system collection fails). Upsert keys on seed_id
         # via a filter query (see pb_import.py), and email uniqueness is enforced natively.
         "indexes": [],
-        "listRule": RULE_AUTHED, "viewRule": RULE_AUTHED,
+        # M1: view is public so `projects` owner-expand resolves the non-sensitive
+        # display fields (name/github_handle) for anonymous reads (RFC-LAB-000-008 §4).
+        # list stays authed-only (no anonymous user enumeration); M3 refines field granularity.
+        "listRule": RULE_AUTHED, "viewRule": RULE_PUBLIC,
         "createRule": None, "updateRule": None, "deleteRule": None,
     }
     users_id = upsert_collection(token, users_spec, dry_run)
@@ -164,7 +172,9 @@ def run(dry_run=True):
             f_select("status_source", ["local", "remote"]),
         ],
         "indexes": ["CREATE UNIQUE INDEX `idx_projects_lab_id` ON `projects` (`lab_id`)"],
-        "listRule": RULE_AUTHED, "viewRule": RULE_AUTHED,
+        # M1: public read = the planned public-summary tier (RFC-LAB-000-008 §4). This lets the
+        # Sleek UI read the live portfolio anonymously before auth (M2); M3 refines field granularity.
+        "listRule": RULE_PUBLIC, "viewRule": RULE_PUBLIC,
         "createRule": None,
         # MVP minimum-RBAC: owner-or-not write on their own project (RFC-LAB-000-006 §4).
         "updateRule": '@request.auth.id != "" && owner = @request.auth.id',
