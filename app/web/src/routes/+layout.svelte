@@ -17,8 +17,12 @@
 </script>
 
 <!-- Global auth bar (M2, R4). Present on every route; never gates the public dashboard. -->
-<div class="flex justify-end border-b border-line bg-panel/40 px-4 py-2">
-  <AuthControl />
+<!-- Full-bleed border/background; inner container matches the page body width so the -->
+<!-- control aligns to the body's right edge (not the browser edge). -->
+<div class="border-b border-line bg-panel/40">
+  <div class="mx-auto flex max-w-content justify-end px-4 py-2 sm:px-6 lg:px-8">
+    <AuthControl />
+  </div>
 </div>
 
 {@render children()}
