@@ -68,7 +68,7 @@ export function requireAuth() { if (!auth.isAuthenticated) redirectToSignIn(); }
 
 ## 7. Config & secrets (R7 / `RFC-LAB-000-011` §4.3)
 
-- GitHub OAuth **client id/secret live in the PocketBase admin** (Settings → Auth providers → GitHub), not the frontend. Local dev: a dev GitHub OAuth app with callback = the PB OAuth2 redirect.
+- GitHub OAuth **client id/secret live in the PocketBase admin**, not the frontend. **PocketBase v0.40+ (verified):** OAuth2 is configured **per auth collection**, not in a global Settings menu — go to **Collections → `users` → edit → Options → OAuth2 → enable → Add provider → GitHub**. (The pre-0.23 "Settings → Auth providers" path no longer exists.) Local dev: a dev GitHub OAuth app with callback = the PB OAuth2 redirect. **See the step-by-step in [`docs/guides/developer-guide.md` → GitHub OAuth setup](../../docs/guides/developer-guide.md).**
 - Frontend uses only `VITE_PB_URL` (already present).
 - `.env.example` documents `GITHUB_OAUTH_CLIENT_ID`/`_SECRET` as **PB-admin-configured** (keys/comment only; already stubbed from RFC-006). No secrets committed.
 

@@ -26,7 +26,7 @@ M1 wired the UI to live PocketBase (read). **M2 adds identity:** a user can **si
 - **P3 — Branch:** feature branch `feat/mvp-m2-github-auth` off up-to-date `main`; clean tree; not `main`/`master`.
 - **P4 — Merge-first:** this Spec merged to `main` before `/spec-run`.
 - **P5 — Baseline green:** `validate_portfolio.py`, `generate_status_json.py --check`, `project_validate.py --allow-dirty`, and `pnpm --dir app/web check && build` all pass before changes.
-- **P6 — Local stack + GitHub OAuth app:** `make setup` + `make start-local` (PocketBase `:8090`, SvelteKit `:5173`); a **GitHub OAuth app** (dev) exists with client id/secret and callback set to the PocketBase redirect — configured in the PB admin UI. *(Secrets stay local/uncommitted — `RFC-LAB-000-011` §4.3.)*
+- **P6 — Local stack + GitHub OAuth app:** `make setup` + `make start-local` (PocketBase `:8090`, SvelteKit `:5173`); a **GitHub OAuth app** (dev) exists with client id/secret, and OAuth2 is enabled on the PB **`users` collection** (v0.40+: **Collections → `users` → Options → OAuth2 → GitHub** — *not* a global Settings menu). Follow **[`docs/guides/developer-guide.md` → GitHub OAuth setup](../../docs/guides/developer-guide.md)**. *(Secrets stay local/uncommitted — `RFC-LAB-000-011` §4.3.)*
 
 ## 2. Current-state facts (of record — verified against the repo)
 
