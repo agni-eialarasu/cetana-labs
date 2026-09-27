@@ -103,11 +103,27 @@ def upsert_collection(token, spec, dry_run):
 
     if existing:
         # Merge our custom fields into the existing collection (preserve system fields).
-        existing_names = {f.get("name") for f in existing.get("fields", [])}
-        merged = list(existing.get("fields", []))
+        # For fields we manage (matched by name), UPDATE their definition in place so
+        # property changes (e.g. `required`, `pattern`) converge on re-provision — while
+        # keeping PocketBase's system fields (id/email/verified/…) that we don't declare.
+        # Preserve each existing field's `id` when overwriting so PB treats it as an update,
+        # not a drop+recreate.
+        spec_by_name = {f["name"]: f for f in spec["fields"]}
+        seen = set()
+        merged = []
+        for ef in existing.get("fields", []):
+            nm = ef.get("name")
+            if nm in spec_by_name:
+                updated = dict(spec_by_name[nm])
+                if ef.get("id"):
+                    updated["id"] = ef["id"]  # keep field id → in-place update
+                merged.append(updated)
+                seen.add(nm)
+            else:
+                merged.append(ef)  # system / undeclared field — preserve as-is
         for fld in spec["fields"]:
-            if fld["name"] not in existing_names:
-                merged.append(fld)
+            if fld["name"] not in seen:
+                merged.append(fld)  # genuinely new custom field
         body = {"fields": merged,
                 "listRule": spec.get("listRule"), "viewRule": spec.get("viewRule"),
                 "createRule": spec.get("createRule"), "updateRule": spec.get("updateRule"),
@@ -136,10 +152,15 @@ def run(dry_run=True):
     users_spec = {
         "name": "users", "type": "auth",
         "fields": [
-            f_text("seed_id", required=True, pattern="^usr-[a-z0-9-]+$"),
-            f_text("name", required=True),
+            # M2: seed_id/name are NOT required so a GitHub OAuth2 sign-in can create an
+            # auth record for an unlinked identity (OAuth maps only name/avatar, not seed_id).
+            # Seeded portfolio users still get a seed_id via pb_import.py; the pattern only
+            # validates non-empty values, so an OAuth-created record with no seed_id is valid.
+            f_text("seed_id", required=False, pattern="^usr-[a-z0-9-]+$"),
+            f_text("name", required=False),
             f_text("github_handle"),
-            f_select("role", ROLE_VALUES),
+            # role optional too — an OAuth-created (unlinked) record has no seeded role.
+            f_select("role", ROLE_VALUES, required=False),
             f_text("org"),
             f_bool("active"),
         ],
@@ -151,8 +172,16 @@ def run(dry_run=True):
         # M1: view is public so `projects` owner-expand resolves the non-sensitive
         # display fields (name/github_handle) for anonymous reads (RFC-LAB-000-008 §4).
         # list stays authed-only (no anonymous user enumeration); M3 refines field granularity.
+        #
+        # M2 (RFC-LAB-000-008 §6): createRule = "" so the GitHub OAuth2 flow can create
+        # an auth record for a new identity. Without it, auth-with-oauth2 returns
+        # "403 Only superusers can perform this action" (record creation is superuser-only
+        # when createRule is null). This is the standard public-OAuth-sign-in setting: a new
+        # OAuth identity gets an auth record, but that grants NO portfolio ownership —
+        # ownership is resolved separately by `github_handle` against the seeded data
+        # (authenticated-but-unlinked, R3.2). updateRule/deleteRule stay superuser-only.
         "listRule": RULE_AUTHED, "viewRule": RULE_PUBLIC,
-        "createRule": None, "updateRule": None, "deleteRule": None,
+        "createRule": RULE_PUBLIC, "updateRule": None, "deleteRule": None,
     }
     users_id = upsert_collection(token, users_spec, dry_run)
 
