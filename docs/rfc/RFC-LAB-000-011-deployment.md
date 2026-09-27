@@ -1,0 +1,98 @@
+# RFC-LAB-000-011: Deployment Architecture (Vercel + GCP)
+
+| Property | Value |
+| :--- | :--- |
+| **RFC ID** | `RFC-LAB-000-011` |
+| **Title** | Production Deployment — SvelteKit on Vercel, PocketBase on GCP; retire the GitHub-Pages stopgap |
+| **Author** | Eialarasu (LAB-000 Control Hub) |
+| **Status** | 🟡 Proposed |
+| **Date** | 2026-09-27 |
+| **Backlog** | `TSK-053` (SPRINT-09) |
+| **Builds On** | `RFC-LAB-000-008` (MVP — unblocks M5), `RFC-LAB-000-007` (work-env / staging placeholders), `RFC-LAB-000-003` (PocketBase), `RFC-LAB-000-001` (cloud dev) |
+| **Amends** | `RFC-LAB-000-007` §2.3/§6 (staging + secret-management open questions) · `RFC-LAB-000-008` §6/§9 (M5 target + deploy sequencing) |
+| **Decision Journal** | Entry 006 (deployment unblock), Entry 007 (this RFC) |
+
+---
+
+## 1. Context & Problem Statement
+
+The MVP's final phase **M5 (deploy)** was explicitly **blocked on the org-account transfer** (`RFC-LAB-000-008` §10; `RFC-LAB-000-007` staging placeholders "pending org transfer"). **That approval is now granted** for this repo. This RFC resolves the deployment architecture the prior RFCs deferred, and decides the target: **SvelteKit frontend → Vercel; PocketBase backend → GCP**. It also decides the fate of the interim **GitHub-Pages** dashboard.
+
+This is the **decision of record** (the *what/why* + topology). The actual provisioning is **execution** — delivered afterward as M5 Kiro Spec(s) via the AIDLC lifecycle. This RFC does not deploy anything.
+
+## 2. Decision (summary)
+
+1. **Frontend → Vercel.** The SvelteKit static SPA (`app/web`, `adapter-static`, `ssr=false`) deploys to Vercel.
+2. **PocketBase → a small always-on GCP VM** (e.g. `e2-micro`) running the PocketBase binary on a **persistent disk** — the model closest to local (single binary + SQLite file). The containerized path (`RFC-LAB-000-007` Podman `Containerfile`) remains the **forward option** if the datastore outgrows SQLite.
+3. **Dual-run, then cut over.** Deploy to Vercel and verify *alongside* the existing GitHub-Pages dashboard; once Vercel is proven, **retire the Pages stopgap** (`docs/index.html` + `.github/workflows/deploy-pages.yml` + `scripts/generate_dashboard.py` as applicable).
+4. **Secrets split by surface:** Vercel **environment variables** for the frontend (`VITE_PB_URL` → the GCP PocketBase URL); **VM environment / GCP Secret Manager** for backend secrets (PocketBase superuser, GitHub OAuth client id/secret).
+5. **Custom domain deferred to branding** (`BK-013`): deploy domain-ready on Vercel's default domain now; wire the client custom domain when white-labeling lands.
+
+## 3. Topology
+
+```
+                 ┌──────────────────────────┐         ┌─────────────────────────────┐
+   Browser  ───▶ │  Vercel (frontend)       │  HTTPS  │  GCP VM (backend)            │
+                 │  SvelteKit static SPA    │ ──────▶ │  PocketBase binary + SQLite  │
+                 │  env: VITE_PB_URL        │  REST/  │  on a persistent disk        │
+                 │  default domain (→custom │  SDK    │  env/Secret Manager:         │
+                 │  when branding lands)    │         │  PB superuser, GitHub OAuth  │
+                 └──────────────────────────┘         └─────────────────────────────┘
+```
+
+- The SPA already reads `VITE_PB_URL` (delivered in M1); production simply points it at the GCP PocketBase URL. The M1 snapshot fallback remains a safety net.
+- GitHub OAuth (M2) is configured in the PocketBase admin UI; redirect URLs updated to the Vercel domain.
+
+## 4. Decisions in detail (with rationale)
+
+### 4.1 PocketBase → small GCP VM (not Cloud Run) — for the MVP
+- **Why:** PocketBase is a **single binary + a SQLite file**; it is happiest as **one always-on process with a persistent disk**. Cloud Run's scale-to-zero + mounted-volume story adds operational complexity (cold starts, volume semantics, single-writer SQLite) for little gain at this scale.
+- **Trade-off accepted:** always-on cost (an `e2-micro` is minimal) in exchange for operational simplicity and local↔prod parity.
+- **Forward path preserved:** if the datastore grows (e.g. Postgres), the containerized `Containerfile` (`RFC-LAB-000-007` §2.3) + Cloud Run/managed DB is the documented next step — this RFC doesn't burn that bridge.
+
+### 4.2 Frontend → Vercel, dual-run then retire Pages
+- **Why Vercel:** first-class SvelteKit support, env-var management, preview deploys per PR, trivial custom-domain path later. The app is already a static SPA, so it's a near-drop-in.
+- **Dual-run:** deploy Vercel, verify against live GCP PocketBase, keep Pages up as fallback during transition. **Then retire** the Pages stopgap (`index.html`, `deploy-pages.yml`, and the dashboard generator if unused elsewhere) — this completes the "retire the obsolete build artifact" decision (Entry 006).
+- **Trade-off:** a brief window of two live frontends; mitigated by making Vercel authoritative and Pages clearly "legacy" during the window.
+
+### 4.3 Secrets split by surface
+- **Frontend (Vercel env vars):** only `VITE_PB_URL` (+ optional `VITE_PB_SOURCE`) — non-secret, but env-managed for per-environment config.
+- **Backend (VM env / GCP Secret Manager):** PocketBase superuser credentials, GitHub OAuth client id/secret. Resolves `RFC-LAB-000-007` §6 OQ-2. Lean: VM env file for MVP simplicity, Secret Manager as the hardening step.
+- **Never committed:** all real secrets stay out of the repo (`.env` gitignored; `.env.example` documents the keys only).
+
+### 4.4 Custom domain deferred to branding
+- Deploy on Vercel's default domain now (usable, HTTPS). The **custom domain is a white-labeling concern** (`BK-013`) — wiring it per-client belongs with branding, not this MVP deploy. Keeps M5 shippable without waiting on domain/DNS decisions.
+
+## 5. Amendments to prior RFCs
+- **`RFC-LAB-000-007`**: the staging placeholders (`/validate-staging`, `STAGING_*` env vars) and §6 OQ-2 (secret management) are **resolved** here — GCP VM backend + Vercel frontend + the §4.3 secret split.
+- **`RFC-LAB-000-008`**: §6 M5 target is fixed to **Vercel + GCP VM**; §9.3 sequencing OQ resolved — **backend (GCP) first** (the frontend needs a live `VITE_PB_URL`), then frontend (Vercel), then Pages retirement.
+
+## 6. Execution plan (delivered later as Spec(s), not in this RFC)
+
+M5 becomes one or more Kiro Specs, run via the lifecycle (merge-first → `/spec-run` → verify → gate):
+1. **Provision GCP** — VM + persistent disk + PocketBase binary + firewall/HTTPS; seed via existing `pb_provision.py`/`pb_import.py`.
+2. **Provision Vercel** — connect repo, build the SPA, set `VITE_PB_URL` → GCP; preview + production.
+3. **Wire auth (depends on M2)** — GitHub OAuth redirect URLs → Vercel domain; secrets in place.
+4. **Cutover** — verify Vercel against live GCP; **retire Pages** (`index.html`, `deploy-pages.yml`, generator).
+
+> **Dependency:** the *authenticated* deploy needs **M2 (OAuth)**; a *read-only public* deploy can precede M2. Sequencing decided at M5 Spec authoring.
+
+## 7. Scope & Non-Goals
+- **In scope:** the deployment topology, hosting choices, secret strategy, cutover plan, and the Pages retirement decision.
+- **Non-goals:** the actual provisioning (execution Specs); multi-client/multi-tenant hosting; the custom domain (→ `BK-013`); CDN/caching tuning; autoscaling (single VM suffices at this scale); CI/CD beyond Vercel's native Git integration + the existing GitHub Actions.
+
+## 8. Open Questions (resolve at M5 build)
+1. **GCP region / project** — which GCP project + region (latency to primary users). *(Decide at provisioning.)*
+2. **Backend HTTPS** — Caddy/nginx reverse proxy + Let's Encrypt on the VM, or a GCP load balancer. *(Leaning: lightweight reverse proxy on the VM for MVP.)*
+3. **Backups** — SQLite file backup cadence to GCS. *(Leaning: a simple scheduled snapshot; define at provisioning.)*
+4. **Public-read-before-auth** — deploy a public read-only tier before M2 lands, or wait for auth? *(Leaning: could ship read-only early since M1 read rules are already public-tier.)*
+
+## 9. Risks & Mitigations
+| Risk | Mitigation |
+| :--- | :--- |
+| SQLite single-writer on a VM under load | Fine at control-hub scale; Postgres + container path is the documented forward option (§4.1). |
+| Secrets leakage | §4.3 split; nothing committed; Secret Manager as hardening. |
+| Dual-run confusion (two live frontends) | Vercel authoritative; Pages explicitly legacy; retire promptly post-verify. |
+| Deploy coupled to M2 auth | §6 dependency note — a public read-only deploy can precede auth. |
+| VM ops burden (patching, uptime) | Minimal single instance; documented runbook in `developer-guide`; container/managed path if it grows. |
+| Data loss on VM failure | §8.3 backup cadence to GCS decided at provisioning. |

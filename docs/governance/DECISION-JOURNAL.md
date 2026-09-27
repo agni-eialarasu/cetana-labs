@@ -313,3 +313,43 @@ A `/plan-start` brainstorm surfacing five items (doc org, project CRUD, branding
 - **Notable judgment:** the human's "this is the blueprint" lens repeatedly raised the bar (docs → a documented standard, not a tidy); the agent surfaced that "retire index.html" and "deploy to Vercel/GCP" are the same decision and that it unblocks M5.
 - **Process note:** confirmed the `/brainstorm-save` trigger heuristic in practice — this session had real decisions (D29–D31), so it's captured; pure Spec-authoring sessions (e.g. the refactor Spec) were correctly skipped.
 - **Honest note:** none of D29–D31 is built yet — the docs Spec is authored (merge-first pending), the deployment RFC is only *queued*, and BK-012–015 are shelf items. Scope stays honest: decisions + plan, not delivery.
+
+
+---
+
+## Entry 007 — Deployment architecture: Vercel + GCP, and retiring the Pages stopgap
+
+**Date:** 2026-09-27 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `RFC-LAB-000-011` (deployment); TSK-053 (RFC) + TSK-054 (M5 execution)
+
+> _Decisions D32–D35 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+Resumed the parked `/plan-start RFC-011`. With org approval granted (Entry 006, D30), MVP **M5 is unblocked**; this session decided the deployment topology the prior RFCs deferred (`RFC-LAB-000-007` §6, `RFC-LAB-000-008` §9).
+
+---
+
+### D32 — PocketBase on a small always-on GCP VM (not Cloud Run) for the MVP
+- **Trigger:** Where/how to host PocketBase on GCP — it's a single binary + a SQLite file, so *state* is the crux.
+- **Options:** (a) Cloud Run + mounted persistent volume (the containerized path RFC-007 provisioned); (b) a small always-on VM (`e2-micro`) + persistent disk running the binary.
+- **Decision & rationale:** **(b) the VM.** SQLite + a single binary is happiest as one always-on process on a persistent disk; Cloud Run's scale-to-zero + volume + single-writer-SQLite semantics add complexity for no real gain at control-hub scale. Trade-off accepted: minimal always-on cost for operational simplicity and local↔prod parity. The container/Cloud Run + managed-DB path stays the documented **forward option** if the datastore grows. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-011` §4.1.
+
+### D33 — Frontend on Vercel; dual-run then retire the GitHub-Pages stopgap
+- **Trigger:** The SvelteKit SPA needs a real host; the Pages dashboard (`index.html`) is the interim artifact to retire (Entry 006, D30).
+- **Decision & rationale:** **Vercel** (first-class SvelteKit, env vars, preview deploys, easy custom-domain later; near-drop-in for a static SPA). **Dual-run** Vercel alongside Pages during transition, verify against live GCP PocketBase, **then retire** Pages (`index.html` + `deploy-pages.yml` + generator) — completing the artifact-retirement decision safely (no gap with no live dashboard). _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-011` §4.2.
+
+### D34 — Secrets split by surface (resolves RFC-007 §6 OQ-2)
+- **Decision & rationale:** **Vercel env vars** for the frontend (`VITE_PB_URL` → GCP PocketBase; non-secret but env-managed per environment); **VM env / GCP Secret Manager** for backend secrets (PocketBase superuser, GitHub OAuth id/secret). VM env for MVP simplicity, Secret Manager as the hardening step. Nothing real committed. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-011` §4.3; amends `RFC-LAB-000-007` §6.
+
+### D35 — Custom domain deferred to branding (`BK-013`); RFC decides, Spec deploys
+- **Decision & rationale:** Ship M5 on Vercel's default domain (usable, HTTPS); the **custom domain is a white-labeling concern** — wire it per-client when branding lands, so M5 isn't gated on domain/DNS decisions. And a scoping call: **`RFC-LAB-000-011` is the decision of record only** — the actual provisioning is **execution** delivered as M5 Kiro Spec(s) (`TSK-054`) via the lifecycle, keeping the RFC a clean, mergeable planning artifact. Sequencing resolved: **backend (GCP) first** (frontend needs a live `VITE_PB_URL`), then Vercel, then Pages retirement; authenticated deploy depends on M2, but a public read-only deploy could precede it. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-011` §4.4/§5/§6; amends `RFC-LAB-000-008` §9.3.
+
+---
+
+### Session meta
+- **Theme:** resolving the long-deferred deployment architecture the moment its blocker (org approval) cleared — turning "GCP/Vercel someday" into concrete, rationale-backed choices.
+- **Notable judgment:** the human chose **operational simplicity over cloud-native sophistication** (VM over Cloud Run) appropriate to scale, while explicitly preserving the forward path; and kept the RFC a *decision* separate from *execution* (M5 Specs).
+- **Process note (honest, from this session):** the preceding lockstep tidy caught that the docs-reorg run never added its CHANGELOG entry — and that `/review-pr` had marked lockstep green without verifying the CHANGELOG firsthand. Flagged for a `/review-pr` tightening (check the TSK id is actually in CHANGELOG). Recorded because credible process improvement includes catching the gate's own misses.
+- **Honest note:** nothing is deployed — `RFC-LAB-000-011` decides; `TSK-054` (M5 execution) is shelved for the lifecycle. Authenticated deploy still depends on M2 (OAuth), not yet built.
