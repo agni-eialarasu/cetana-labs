@@ -2,23 +2,22 @@
   {
     "id": "LAB-000",
     "health": "🟢 On Track",
-    "last_updated": "2026-09-24",
+    "last_updated": "2026-09-27",
     "pitch": "The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.",
     "wins": [
-      "**Sprint 7 Closeout & v0.9.0 Release**: Sleek UI deployed live to GitHub Pages (dual-run at `/app`), Phase 3 auth/RBAC scoped (`RFC-LAB-000-006`), and the developer command experience standardized.",
-      "**Live Sleek UI**: SvelteKit dashboard published alongside the classic one — [/cetana-labs/app/](https://agni-eialarasu.github.io/cetana-labs/app/).",
-      "**Kiro-Native Skillset**: Project `/commands` in `.kiro/skills/` (shared across Kiro Web + IDE) + `.kiro/steering/` foundation; personal skillset synced separately.",
-      "**Auth & RBAC Scoped**: GitHub OAuth + per-project roles via `memberships` + PocketBase API rules, ready to build."
+      "**Sprint 8 Closeout & v0.10.0 Release**: Standardized the Kiro Web + IDE work-environment, defined and tooled the **AIDLC sprint lifecycle** (`RFC-LAB-000-009`), and delivered the first MVP feature.",
+      "**AIDLC Lifecycle Live**: `brainstorm → implement → verify → done` as phase-aware `/commands` (`/plan-*`, `/spec-run`, `/verification-done`, `/review-pr`, `/sprint-done`) with a human functional-verification loop; visual guide at `docs/sprint-lifecycle.md`.",
+      "**MVP M1 Delivered (`BK-011`)**: Sleek UI now reads the **live PocketBase** portfolio (SDK), with a snapshot fallback — the first feature shipped end-to-end via the lifecycle.",
+      "**Decision Journal**: Entries 003–004 capture the lifecycle + verification-loop reasoning."
     ],
-    "focus": "Sprint 8 execution: Multi-repo PR cross-referencing (`BK-004`), Slack/WhatsApp webhook dispatch (`BK-001`), and Kiro Web + IDE work-environment standardization (`RFC-LAB-000-007`).",
+    "focus": "Sprint 9: Advance the MVP (`BK-011`) — GitHub OAuth sign-in (M2), minimum RBAC + owner write path (M3–M4) via the AIDLC lifecycle; carried-forward ecosystem integrations (`BK-004`, `BK-001`).",
     "blockers": "None",
-    "risks": "Ensuring external project leads regularly invoke `/status-update` at sprint close",
+    "risks": "Deploy (M5) awaits the org-account transfer; MVP M1–M4 remain fully local",
     "metrics": [
       "6/6 projects passing portfolio integrity checks; `/project-validate` 5-pillar pre-flight gate all green.",
-      "Automated GitHub Actions deployment pipeline for GitHub Pages active (13s build & deploy).",
-      "Clean trunk-based git synchronization on `main`."
+      "MVP M1 read-parity + graceful-fallback verified (human functional verification, PR"
     ],
-    "days_ago": 3,
+    "days_ago": 0,
     "is_onboarding_pending": false,
     "is_completed": false,
     "is_stale": false

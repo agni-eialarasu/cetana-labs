@@ -4,13 +4,13 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 ---
 
-## 🎯 Current Sprint: Sprint 8 — Ecosystem Integrations & Work-Environment Standardization
+## 🎯 Current Sprint: Sprint 9 — MVP Delivery (Auth → Owner Writes → Deploy)
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-08` |
-| **Duration** | 2026-11-19 to 2026-12-03 (2 Weeks) |
-| **Sprint Goal** | Deliver multi-repo PR cross-referencing (`BK-004`) and Slack/WhatsApp webhook dispatch (`BK-001`); standardize the Kiro Web + IDE work-environment (`RFC-LAB-000-007`). |
+| **Sprint ID** | `SPRINT-09` |
+| **Duration** | 2026-12-03 to 2026-12-17 (2 Weeks) |
+| **Sprint Goal** | Advance the Control Hub Web App MVP (`BK-011`) beyond M1 — GitHub OAuth sign-in (M2), minimum RBAC + owner write path (M3–M4) — via the AIDLC lifecycle; land the carried-forward ecosystem integrations (`BK-004`, `BK-001`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -18,18 +18,10 @@ This document maintains the active sprint plan, prioritized product backlog, and
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-039` | Work-Environment Standardization (`RFC-LAB-000-007`) — Kiro Web + IDE surface roles, `.nvmrc`/`.env.example`, Makefile cheat-sheet, Podman-first Containerfile, `/env-doctor`, work-environment guide | P1 | Eialarasu | ✅ Done | 2026-11-26 |
-| `TSK-040` | One-time local setup script (`scripts/setup-local.sh` / `make setup`) — idempotent bootstrap: toolchain check, `.env` defaults, web deps, PocketBase superuser, schema-import hint, seed | P2 | Eialarasu | ✅ Done | 2026-11-26 |
-| `TSK-041` | Programmatic PocketBase collection provisioning (`scripts/pb_provision.py` / `make provision`) — API-based, version-robust; replaces fragile schema-JSON import (v0.40 import failed) | P1 | Eialarasu | ✅ Done | 2026-11-26 |
-| `TSK-042` | MVP scoping (`RFC-LAB-000-008`, `BK-011`) — MVP definition, minimum RBAC (owner-or-not), phase breakdown M1–M5; `make setup` staleness-guard | P1 | Eialarasu | ✅ Done | 2026-11-26 |
-| `TSK-043` | Decision Journal (`docs/DECISION-JOURNAL.md`) — curated decision-narrative log (thinking/rationale showcase); inaugural whole-session entry | P2 | Eialarasu | ✅ Done | 2026-11-28 |
-| `TSK-044` | `/brainstorm-save` project skill + AI-collaboration model (`docs/ai-collaboration-model.md`) — decision-capture skill (contributor-attributed) + methodology one-pager; Entry 002 | P2 | Eialarasu | ✅ Done | 2026-11-28 |
-| `TSK-045` | Sprint lifecycle & AIDLC engine (`RFC-LAB-000-009`, `BK-011`) — five-phase human-gated lifecycle on Kiro Specs + Autonomous mode; §3.1 state machine (`brainstorm→implement→verify→done`), merge-first rule, phase-aware guards; Decision Journal Entry 003 | P1 | Eialarasu | 🚧 In Progress | 2026-12-03 |
-| `TSK-046` | Lifecycle command suite (`.kiro/skills/`) — `/spec-run` (IDE one-liner Spec executor), `/plan-start`+`/plan-done` (Scope, merge-first), `/review-pr` gate, state guards on `/sprint-start`+`/sprint-done`; `REPORT.md` template; `AGENTS.md` §4 verb map | P1 | Eialarasu | 🚧 In Progress | 2026-12-03 |
-| `TSK-047` | First AIDLC Spec + lifecycle guide — M1 Kiro Spec (`.kiro/specs/mvp-m1-live-pocketbase/`, wire UI→live PocketBase) with preflight + Execution header; `docs/sprint-lifecycle.md` visual guide (state + sequence diagrams, both paths) | P1 | Eialarasu | 🚧 In Progress | 2026-12-03 |
-| `TSK-048` | Human functional-verification loop (`RFC-LAB-000-009` §3.2) — `IN_VERIFICATION` state + `/verification-done` skill; Human Verification Plan authored in Spec (emitted by `/spec-run`); Verification Log in `REPORT.md`; `/review-pr` consumes it; Single-PR rule; `[phase]-[start\|done]` naming; Decision Journal Entry 004 | P1 | Eialarasu | 🚧 In Progress | 2026-12-03 |
-| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-11-28 |
-| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-12-03 |
+| `TSK-049` | MVP M2 — GitHub OAuth sign-in (`RFC-LAB-000-008` §6) authored as a Kiro Spec and run via the AIDLC lifecycle | P1 | Eialarasu | 📋 Planned | 2026-12-10 |
+| `TSK-050` | MVP M3–M4 — minimum RBAC (`owner_id` rule matrix) + owner write path for project status | P1 | Eialarasu | 📋 Planned | 2026-12-17 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Planned | 2026-12-12 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Planned | 2026-12-17 |
 
 ---
 
@@ -47,6 +39,20 @@ This document maintains the active sprint plan, prioritized product backlog, and
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 8: Work-Environment Standardization, AIDLC Sprint Lifecycle & MVP M1 (2026-09-27) — `v0.10.0`
+- **Goal**: Standardize the Kiro Web + IDE work-environment, define and tool an AIDLC sprint lifecycle, and deliver the first MVP feature.
+- **Deliverables**:
+  - `TSK-039`: Work-Environment Standardization (`RFC-LAB-000-007`) — surface roles, `.env.example`, Makefile cheat-sheet, Podman-first Containerfile, `/env-doctor`, `docs/work-environment.md`.
+  - `TSK-040`/`TSK-041`: One-command local bootstrap (`make setup`) + programmatic PocketBase provisioning (`scripts/pb_provision.py`), version-robust and idempotent (fixes for v0.40).
+  - `TSK-042`: MVP scoping (`RFC-LAB-000-008`, `BK-011`) — MVP definition + minimum RBAC + phase breakdown M1–M5.
+  - `TSK-043`/`TSK-044`: Decision Journal (`docs/DECISION-JOURNAL.md`, Entries 001–002) + `/brainstorm-save` skill + `docs/ai-collaboration-model.md`.
+  - `TSK-045`: Sprint lifecycle & AIDLC engine (`RFC-LAB-000-009`) — five-phase human-gated lifecycle on Kiro Specs + Autonomous mode; §3.1 state machine; first AIDLC Spec + `docs/sprint-lifecycle.md` [PRs #14, #15, #18, #19, #20].
+  - `TSK-046`: Lifecycle command suite — `/spec-run`, `/plan-start`, `/plan-done`, `/review-pr`, state guards; `REPORT.md` template [PRs #16, #17].
+  - `TSK-047`: **MVP M1 delivered (`BK-011`)** — Sleek UI wired to live PocketBase via the AIDLC lifecycle [PR #21].
+  - `TSK-048`: Human functional-verification loop (`RFC-LAB-000-009` §3.2) — `IN_VERIFICATION` + `/verification-done`; Decision Journal Entries 003–004 [PR #22].
+- **Milestone**: First feature (`M1`) delivered end-to-end via the new AIDLC lifecycle; the run itself surfaced and closed the human-verification gap same-cycle.
+- **Carried Forward**: `TSK-025` (Multi-Repo PR Cross-Referencer) and `TSK-026` (Slack/WhatsApp webhook dispatch) → `SPRINT-09`.
 
 ### Sprint 7: Sleek UI Deployment, Auth Scoping & Kiro-Native DX (2026-09-24)
 - **Goal**: Make the Sleek UI publicly visible, scope auth/RBAC, and standardize the developer command experience.

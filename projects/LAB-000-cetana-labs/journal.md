@@ -16,6 +16,13 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-27] Milestone: Sprint 8 Closeout & v0.10.0 Release — AIDLC Lifecycle + MVP M1
+- **Delivered Capabilities**: Standardized the Kiro Web + IDE work-environment (`RFC-LAB-000-007`); defined and tooled the **AIDLC sprint lifecycle** (`RFC-LAB-000-009`) — `brainstorm → implement → verify → done` as phase-aware `/commands` (`/plan-start`, `/plan-done`, `/spec-run`, `/verification-done`, `/review-pr`, `/sprint-done`) with the merge-first rule, state guards, and a human functional-verification loop (`IN_VERIFICATION`); authored the first AIDLC **Kiro Spec** and the visual `docs/sprint-lifecycle.md` guide; and **delivered MVP M1** (`BK-011`) — Sleek UI wired to live PocketBase — as the first feature shipped end-to-end via the lifecycle. Decision Journal Entries 003–004.
+- **Method note**: the first `/spec-run` (M1) both proved the AIDLC path *and* surfaced the missing human-verification phase, which was folded back the same cycle — the lifecycle improving itself from evidence.
+- **Next Horizon**: Sprint 9 — advance the MVP (M2 GitHub OAuth, M3–M4 minimum RBAC + owner writes) via the lifecycle; land carried-forward `BK-004`/`BK-001`.
+
+---
+
 ### [2026-09-24] Milestone: `/brainstorm-save` Skill + AI Collaboration Model (`TSK-044`)
 - **Context**: Made the Decision Journal self-sustaining and documented the working methodology as a showcase artifact.
 - **Key Deliverables**:
