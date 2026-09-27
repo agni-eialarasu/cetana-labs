@@ -137,7 +137,7 @@ sequenceDiagram
     Web-->>Human: quick plan / backlog row (no full Spec needed)
 
     Note over Human,IDE: PHASE 2 — implement / Build (interactive)
-    Human->>IDE: create feat/ branch; pair on the change live
+    Human->>IDE: create feat/ branch, pair on the change live
     IDE-->>Human: edits, run local stack, iterate together
     Human->>IDE: run gates (make validate-local)
     Human->>IDE: verify the feature works (you exercised it as you built it)
