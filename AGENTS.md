@@ -8,7 +8,7 @@ Your role is to keep this repository structured, well-documented, clean, and up 
 ## 1. Core Operating Principles & Strict Constraints
 
 1. **Master Control Plane (Not Monorepo)**:
-   - This repo stores project charters, executive statuses (`STATUS.md`), sprint backlogs ([`BACKLOG.md`](BACKLOG.md)), historical releases ([`CHANGELOG.md`](CHANGELOG.md)), and milestone journals.
+   - This repo stores project charters, executive statuses (`STATUS.md`), the sprint tracker ([`SPRINT_TRACKER.md`](SPRINT_TRACKER.md) — committed/in-flight work) and idea backlog ([`BACKLOG.md`](BACKLOG.md) — `BK-` ideas), historical releases ([`CHANGELOG.md`](CHANGELOG.md)), and milestone journals. The three-tier tracking funnel is defined in [`RFC-LAB-000-010`](docs/rfc/RFC-LAB-000-010-tracking-model.md).
    - For coding projects (mini-apps), the actual source code and operational runbooks live in external Git repositories. Never clone full application source trees directly into this repo.
 2. **Strict Portability (No Absolute Local Paths)**:
    - Never write machine-specific absolute paths (e.g. `/Users/...` or `C:\...`) into project documentation.
@@ -23,10 +23,10 @@ Your role is to keep this repository structured, well-documented, clean, and up 
    - `<slug>` is lowercase, hyphen-separated, alphanumeric without spaces.
 5. **Synchronized Master Registry & Backlog**:
    - Whenever a project is created, edited, or changes health, the table in [README.md](README.md) MUST be updated immediately.
-   - When a sprint task is completed, update [`BACKLOG.md`](BACKLOG.md) and [`CHANGELOG.md`](CHANGELOG.md).
+   - When a sprint task is completed, update [`SPRINT_TRACKER.md`](SPRINT_TRACKER.md) (sprint state) and [`CHANGELOG.md`](CHANGELOG.md); [`BACKLOG.md`](BACKLOG.md) holds only `BK-` ideas.
 6. **Branch-Based Development (Hybrid Path-Scoped)** — see [`RFC-LAB-000-004`](docs/rfc/RFC-LAB-000-004-branching-model.md):
    - **Application code, migrations, and `data/`** (relational masters/schemas) MUST land via a **pull request** on a short-lived `feat/`|`fix/`|`chore/`|`refactor/` branch, with **green CI** (portfolio validator + `/project-validate` 5-pillar gate + registry `--check`) before **squash-merge** into protected `main`.
-   - **Governance / documentation** (`STATUS.md`, `journal.md`, `BACKLOG.md`, `CHANGELOG.md`, `README.md`, `docs/**`) MAY still fast-path directly to `main`; automated skills (`/project-update`, `/sprint-done`, `/ping-leads`, `log-milestone`) retain their direct-commit path.
+   - **Governance / documentation** (`STATUS.md`, `journal.md`, `SPRINT_TRACKER.md`, `BACKLOG.md`, `CHANGELOG.md`, `README.md`, `docs/**`) MAY still fast-path directly to `main`; automated skills (`/project-update`, `/sprint-done`, `/ping-leads`, `log-milestone`) retain their direct-commit path.
    - Branch naming: `<type>/<scope>-<slug>` (type mirrors the commit prefixes below). Delete branches after merge; never force-push `main`; roll back via revert PR.
    - In this environment, open PRs via `gh api repos/{owner}/{repo}/pulls` (REST), not `gh pr create`.
    - Tag `vX.Y.0` releases on `main` at each `/sprint-done`.
@@ -70,7 +70,7 @@ Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; com
 - **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, appends a `journal.md` milestone.
 - **`/project-edit <ID>`**: Modifies owner, title, remote URL, or lifecycle health across project files and registry.
 **Sprint lifecycle (`RFC-LAB-000-009`) — `brainstorm → implement → verify → done`, phase-aware (order is the contract):**
-- **`/sprint-start [goal]`** / **`/sprint-done [sprint_id]`**: Open / close the **sprint container** in `BACKLOG.md` (id, window, goal, carry-forward) and sync `STATUS.md` / `CHANGELOG.md`. *(Web — Scope/Record.)* A sprint **contains many plans**. `/sprint-done` refuses to close undelivered (still-in-review) work.
+- **`/sprint-start [goal]`** / **`/sprint-done [sprint_id]`**: Open / close the **sprint container** in `SPRINT_TRACKER.md` (id, window, goal, carry-forward) and sync `STATUS.md` / `CHANGELOG.md`. *(Web — Scope/Record.)* A sprint **contains many plans**. `/sprint-done` refuses to close undelivered (still-in-review) work.
 - **`/plan-start [topic]`** *(optional, implicit — any free-form topic is a plan-start)* / **`/plan-done`**: Open / close a **planning session** within a sprint (brainstorm, backlog prep, RFC/doc, author a Spec). `/plan-done` finalizes and **merges the Spec** to `main` as a doc PR (the merge-first rule) → state `READY_TO_BUILD`. *(Web — Scope.)*
 - **`/spec-run <spec-id>`**: **IDE one-liner** — the *implement* phase. You supply only the spec id; it owns all repeatable steps (syncs `main`, silent preflight, self-creates the branch the Spec names), executes `tasks.md`, self-validates against the `requirements.md` EARS DoD, opens a PR — then STOP-and-holds. **Never merges.** Requires the Spec merged to `main` (merge-first).
 - **`/review-pr [PR]`**: The human PR gate (*verify*) — surfaces CI, diff scope/hygiene, the Spec's EARS DoD per-criterion, and governance lockstep as a checklist, then STOP-and-holds. Never merges or auto-approves.

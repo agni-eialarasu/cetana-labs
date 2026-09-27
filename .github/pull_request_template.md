@@ -13,7 +13,7 @@
 ## Checklist
 - [ ] Branch name follows `<type>/<scope>-<slug>` (RFC-LAB-000-004)
 - [ ] CI green: `validate_portfolio.py`, `generate_registry.py --check`, `project_validate.py`
-- [ ] Registries in lockstep where relevant (`BACKLOG.md`, `CHANGELOG.md`, journal)
+- [ ] Registries in lockstep where relevant (`SPRINT_TRACKER.md` sprint state, `BACKLOG.md` ideas, `CHANGELOG.md`, journal)
 - [ ] Will **squash-merge**; PR title is the intended semantic commit
 
 ## Notes / Rollback

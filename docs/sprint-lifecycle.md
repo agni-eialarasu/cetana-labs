@@ -3,6 +3,7 @@
 > 📋 **Decision of record:** [`RFC-LAB-000-009`](rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) (the *why* + formal state machine).
 > 🤝 **Method:** [`ai-collaboration-model.md`](ai-collaboration-model.md) (human-directed / AI-assisted / human-gated).
 > 🛠️ **Surfaces & commands:** [`work-environment.md`](work-environment.md) (Kiro Web vs Kiro IDE).
+> 🗂️ **Tracking funnel:** [`RFC-LAB-000-010`](rfc/RFC-LAB-000-010-tracking-model.md) — ideas ([`BACKLOG.md`](../BACKLOG.md)) → committed work ([`SPRINT_TRACKER.md`](../SPRINT_TRACKER.md)) → shipped ([`CHANGELOG.md`](../CHANGELOG.md)); status vocab = the state machine below.
 > Adapted from the Nexus Pulse (`LAB-003`) Engineering Sprint Lifecycle — the *discipline*, translated to LAB-000's Kiro-native decisions (Specs not `PROMPT.md`, `gh api` not `gh pr create`, 5-pillar `make validate-local`, no Track-A/B roster).
 
 This is the **operational guide** for how a unit of work travels from idea to merged in Cetana Labs. The RFC records the decision; this guide shows you how to *run* it, visually. It covers **both delivery paths**:
@@ -114,7 +115,7 @@ sequenceDiagram
     end
 
     Note over Human,GH: PHASE 5 — done / Record
-    Human->>Web: /sprint-done — CHANGELOG/BACKLOG lockstep, REPORT sign-off, release
+    Human->>Web: /sprint-done — CHANGELOG/SPRINT_TRACKER lockstep, REPORT sign-off, release
     Human->>Web: /brainstorm-save (if decisions) — curated journal entry
 ```
 
@@ -160,7 +161,7 @@ sequenceDiagram
 | **2. implement** | `/spec-run <id>` *(delegated)* · interactive *(lead-paired)* | IDE | Delegated: type the one-liner. Lead-paired: pair on the code | Delegated: preflight → branch → run tasks → self-validate → open PR → **emit Human Verification Plan** → STOP | — (self-validated) |
 | **3. verify — human loop** | run the Human Verification Plan; `/verification-done` | IDE | **Exercise the feature**; report findings; re-verify after each fix | Fixes ride the **same PR** (Single-PR rule); `/verification-done` **records the Verification Log** in `REPORT.md` → `IN_REVIEW` | You confirm it works |
 | **4. verify — gate** | `/review-pr <PR>` | Web | Review the checklist; approve or request changes | Surfaces CI, scope, **EARS DoD per-criterion**, **the verification record**, lockstep; STOP-and-holds | **The human gate** |
-| **5. done** | `/sprint-done`, `/brainstorm-save` | Record | Confirm close; curate decisions | Merge lockstep (CHANGELOG/BACKLOG/journal), `REPORT.md`, release tag | You curate the journal |
+| **5. done** | `/sprint-done`, `/brainstorm-save` | Record | Confirm close; curate decisions | Merge lockstep (CHANGELOG/SPRINT_TRACKER/journal), `REPORT.md`, release tag | You curate the journal |
 
 `*` `/plan-start` is **optional and implicit** — any free-form topic you raise is treated as a plan-start.
 
@@ -192,7 +193,7 @@ The guard is a **tripwire, not a shortcut**: a wrong-order command can skip busy
 - **Human verification before the gate** (Phase 3) — you exercise the feature per the Spec's plan; the Verification Log records it (`/verification-done`). Under AIDLC this is where trust is earned.
 - **Human gate on every merge** (Phase 4) — `/review-pr` + STOP-and-hold; nothing reaches `main` unapproved.
 - **CI-gated** — portfolio + 5-pillar + build checks green before merge (`RFC-LAB-000-004`).
-- **Lockstep** — CHANGELOG / BACKLOG / journal / `data/` stay synchronized (validator-enforced) in Record.
+- **Lockstep** — CHANGELOG / SPRINT_TRACKER / BACKLOG / journal / `data/` stay synchronized (validator-enforced) in Record.
 - **Auditable reasoning** — `/brainstorm-save` appends curated (never auto-run) entries to the Decision Journal.
 - **Linear history** — squash-merge, branch deletion, no force-push to `main`.
 
