@@ -38,7 +38,7 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-051` | Tracking-model refactor (`RFC-LAB-000-010`) — split `SPRINT_TRACKER.md` from `BACKLOG.md`; status vocab = state machine; Definition-of-Ready = Spec merged; traceability chain; update skills + validators. Authored as a Kiro Spec, run via the AIDLC lifecycle (dogfood) | P1 | Eialarasu | 🔨 In Progress | 2026-12-10 |
+| `TSK-051` | Tracking-model refactor (`RFC-LAB-000-010`) — split `SPRINT_TRACKER.md` from `BACKLOG.md`; status vocab = state machine; Definition-of-Ready = Spec merged; traceability chain; update skills + validators. Authored as a Kiro Spec, run via the AIDLC lifecycle (dogfood) | P1 | Eialarasu | ✅ Done | 2026-09-27 |
 | `TSK-049` | MVP M2 — GitHub OAuth sign-in (`RFC-LAB-000-008` §6) authored as a Kiro Spec and run via the AIDLC lifecycle | P1 | Eialarasu | 📋 Backlog | 2026-12-10 |
 | `TSK-050` | MVP M3–M4 — minimum RBAC (`owner_id` rule matrix) + owner write path for project status | P1 | Eialarasu | 📋 Backlog | 2026-12-17 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Backlog | 2026-12-12 |

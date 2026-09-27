@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Three-Tier Tracking Model (`RFC-LAB-000-010`, `TSK-051`)**: Split `SPRINT_TRACKER.md` (committed/in-flight sprint state + delivered archive) from `BACKLOG.md` (the `BK-` idea bucket), with `CHANGELOG.md` as shipped history — the standard Product-Backlog → Sprint-Backlog → Release funnel. Aligned the tracker status vocabulary to the `RFC-LAB-000-009` state machine (`Ready`=`READY_TO_BUILD` … `Done`=`RECORDED`), documented the Definition of Ready (backlog→sprint = the Spec is merged to `main`), and established the traceability chain (`BK → TSK → Spec → PR → CHANGELOG → tag`). Retargeted `/sprint-start` + `/sprint-done` to the tracker (behavior unchanged), updated `scripts/project_validate.py` to read the delivered-archive markers from `SPRINT_TRACKER.md` (backward-compatible fallback to `BACKLOG.md`), and updated `AGENTS.md`, `docs/sprint-lifecycle.md`, `docs/work-environment.md`, `README.md`, and the PR template. **Delivered via the AIDLC lifecycle (2nd `/spec-run`; first to complete the human-verification loop live)** [PR #25]. Decision Journal Entry 005.
 ### Changed
 ### Fixed
 
