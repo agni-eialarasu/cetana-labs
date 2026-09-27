@@ -1,7 +1,11 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Cloud Dev Guide**
+
 # Cloud Development Guide — Cetana Labs (`LAB-000`)
 
-> 📋 **Decision of record:** [`RFC-LAB-000-001`](rfc/RFC-LAB-000-001-cloud-dev-migration.md) — Cloud-Based Development Migration & Environment Classification.
-> 🤖 **Agent rules:** [AGENTS.md](../AGENTS.md) (trunk-based, direct commits to `main`).
+> ⚠️ **Possibly superseded.** Much of this is now covered by the surface-aware [`developer-guide.md`](developer-guide.md) (Kiro Web + IDE, `RFC-LAB-000-007`). Retained pending human confirmation of supersession (docs-reorganization `TSK-052`, V-review). If confirmed redundant, this guide will be folded into the developer guide.
+>
+> 📋 **Decision of record:** [`RFC-LAB-000-001`](../rfc/RFC-LAB-000-001-cloud-dev-migration.md) — Cloud-Based Development Migration & Environment Classification.
+> 🤖 **Agent rules:** [AGENTS.md](../../AGENTS.md) (trunk-based, direct commits to `main`).
 
 This runbook explains how to develop the Cetana Labs Control Hub **entirely in the cloud**, with no local machine footprint. It exists because `LAB-000` is a documentation + zero-dependency Python control plane whose automation already executes in GitHub Actions — the local machine was only ever an editor.
 
@@ -70,7 +74,7 @@ Then review by either:
 
 ## 5. Environment Classification (for future projects)
 
-When onboarding a new initiative, classify its `Dev Environment` using the heuristic in [`RFC-LAB-000-001` §4](rfc/RFC-LAB-000-001-cloud-dev-migration.md):
+When onboarding a new initiative, classify its `Dev Environment` using the heuristic in [`RFC-LAB-000-001` §4](../rfc/RFC-LAB-000-001-cloud-dev-migration.md):
 
 - **☁️ Cloud (default)** — docs, research, static generators, CI-executed automation.
 - **💻 Local** — needs persistent local services, hardware (GPU/CV/edge), data-residency, or a heavyweight native toolchain.

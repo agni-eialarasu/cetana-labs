@@ -1,3 +1,5 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Reference / **Design System (Nexus Pulse)**
+
 # Design System — Nexus Pulse
 
 **Authority:** This file is the single design source of truth for visual and UI

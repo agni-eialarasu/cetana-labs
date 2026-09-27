@@ -1,3 +1,5 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Governance / **Decision Journal**
+
 # Decision Journal — Cetana Labs
 
 > **Purpose.** This journal records *how* key engineering decisions were reached — the

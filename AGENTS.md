@@ -9,12 +9,13 @@ Your role is to keep this repository structured, well-documented, clean, and up 
 
 1. **Master Control Plane (Not Monorepo)**:
    - This repo stores project charters, executive statuses (`STATUS.md`), the sprint tracker ([`SPRINT_TRACKER.md`](SPRINT_TRACKER.md) — committed/in-flight work) and idea backlog ([`BACKLOG.md`](BACKLOG.md) — `BK-` ideas), historical releases ([`CHANGELOG.md`](CHANGELOG.md)), and milestone journals. The three-tier tracking funnel is defined in [`RFC-LAB-000-010`](docs/rfc/RFC-LAB-000-010-tracking-model.md).
+   - Documentation lives under [`docs/`](docs/README.md), grouped into `guides/` · `reference/` · `governance/` · `rfc/` · `templates/`. Every `docs/**` markdown file MUST open with the **breadcrumb nav standard** documented in [`docs/README.md`](docs/README.md) (`[🏠 Repo](../../README.md) / [📚 Docs](../README.md) / <Category> / **This Doc**`).
    - For coding projects (mini-apps), the actual source code and operational runbooks live in external Git repositories. Never clone full application source trees directly into this repo.
 2. **Strict Portability (No Absolute Local Paths)**:
    - Never write machine-specific absolute paths (e.g. `/Users/...` or `C:\...`) into project documentation.
    - Use relative repository links, GitHub URLs, or generic commands (e.g. `cd <project-folder>`).
 3. **Mandatory `STATUS.md` Protocol**:
-   - Every project MUST maintain a lightweight, 30-line `STATUS.md` conforming to [`docs/project-protocol.md`](docs/project-protocol.md).
+   - Every project MUST maintain a lightweight, 30-line `STATUS.md` conforming to [`docs/reference/project-protocol.md`](docs/reference/project-protocol.md).
    - Used by `scripts/generate_status.py` to generate instant, WhatsApp-compatible executive broadcasts via `/project-status`.
 4. **Flat Directory & Sequential ID Scheme**:
    - Central control hub is indexed as system kernel **`LAB-000`** (`projects/LAB-000-cetana-labs/`).

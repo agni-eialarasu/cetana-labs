@@ -1,3 +1,5 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Governance / **AI Collaboration Model**
+
 # AI Collaboration Model — Cetana Labs
 
 > How engineering work is done here: a **human-directed, AI-assisted, human-gated** method.
@@ -75,4 +77,4 @@ The forward experiment: delegate a well-scoped sprint to an agent, human-gated t
 
 The method is dogfooded here: a portfolio control plane evolving into a governed web app, via
 **9+ RFCs**, **12+ CI-gated PRs**, and staged releases — every decision recorded, every merge
-gated. See [`DECISION-JOURNAL.md`](DECISION-JOURNAL.md) and [`docs/rfc/`](rfc/).
+gated. See [`DECISION-JOURNAL.md`](DECISION-JOURNAL.md) and [`docs/rfc/`](../rfc/).

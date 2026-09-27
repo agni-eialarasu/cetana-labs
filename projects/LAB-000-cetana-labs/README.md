@@ -41,5 +41,5 @@ flowchart TD
 ## 3. Quick Links & Documentation
 - 📋 [Executive Status (STATUS.md)](STATUS.md) — 30-line executive status, health, and latest deliverables.
 - 🗓️ [Project Journal](journal.md) — Phase history, architectural decisions, and milestone timeline.
-- 📘 [Authoritative STATUS Protocol](../../docs/project-protocol.md) — Schema specification.
-- 👥 [Project Owner Guide](../../docs/project-owner-guide.md) — Developer AI prompt pack.
+- 📘 [Authoritative STATUS Protocol](../../docs/reference/project-protocol.md) — Schema specification.
+- 👥 [Project Owner Guide](../../docs/guides/project-owner-guide.md) — Developer AI prompt pack.

@@ -1,3 +1,5 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Project Owner Guide**
+
 # Project Lead & Developer Guide — Automated Status Protocol
 
 Welcome! This guide is for **project leads and contributing engineers** (e.g. Nexus Pulse, AAMAS, Zerobea.ai, Nexus Beacon, and upcoming initiatives).

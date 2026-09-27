@@ -65,7 +65,7 @@ The Nexus Pulse Developer Guide is the reference. Adopted patterns, translated t
 - `Makefile` — `make help` cheat-sheet mirroring `/commands`; targets delegate to existing scripts.
 - `Containerfile` — Podman-first PocketBase image (Docker fallback documented).
 - `.kiro/skills/env-doctor/SKILL.md` — surface-aware diagnostic; cross-refs added to `validate-local` / `validate-staging`.
-- `docs/work-environment.md` — onboarding & operations guide (adapted from the Nexus Pulse guide).
+- `docs/work-environment.md` — onboarding & operations guide (adapted from the Nexus Pulse guide). *(Renamed to [`docs/guides/developer-guide.md`](../guides/developer-guide.md) and regrouped under `docs/guides/` by the docs-reorganization refactor, `TSK-052`.)*
 
 ## 5. Risks & Mitigations
 | Risk | Mitigation |

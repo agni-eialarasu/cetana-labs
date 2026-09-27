@@ -1,8 +1,14 @@
-# Cetana Labs — Work Environment & Operations Guide
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Developer Guide**
 
-> 📋 Decision of record: [`RFC-LAB-000-007`](rfc/RFC-LAB-000-007-work-environment.md).
+# Cetana Labs — Developer Guide (Work Environment & Operations)
+
+> **Scope:** local/cloud **setup, commands, and the Kiro Web + IDE surfaces** — how to *develop* on this repo. For how project **leads write `STATUS.md`** and run the status prompts, see [`project-owner-guide.md`](project-owner-guide.md) instead.
+>
+> 📋 Decision of record: [`RFC-LAB-000-007`](../rfc/RFC-LAB-000-007-work-environment.md).
 > Adapted from the Nexus Pulse (`LAB-003`) Developer Guide, translated to this stack
 > (PocketBase + SQLite + SvelteKit, not Postgres/Supabase).
+>
+> *(Renamed from `work-environment.md` — same guide, clearer name.)*
 
 This is the authoritative guide for developing on Cetana Labs across **Kiro Web** and **Kiro IDE**.
 
@@ -143,7 +149,7 @@ podman build -t cetana-pocketbase -f app/pocketbase/Containerfile app/pocketbase
 
 ## 8. Development Process & PR Protocol
 
-Governed by [`RFC-LAB-000-004`](rfc/RFC-LAB-000-004-branching-model.md) (hybrid, path-scoped):
+Governed by [`RFC-LAB-000-004`](../rfc/RFC-LAB-000-004-branching-model.md) (hybrid, path-scoped):
 - **App code / `data/` / migrations** → feature branch → PR → green CI → squash-merge to `main`.
 - **Governance / docs** → may fast-path to `main`.
 - Always run `make validate-local` (`/validate-local`) before opening a PR or `/sprint-done`.
