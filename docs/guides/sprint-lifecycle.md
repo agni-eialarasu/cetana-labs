@@ -19,11 +19,22 @@ Both paths run the **same five phases** and the **same human gate**; only the *B
 
 ## 1. The flow at a glance
 
-```
-brainstorm  ────▶  implement  ────▶  verify (human loop)  ────▶  verify (gate)  ────▶  done
-/plan-start*       /spec-run <id>     run plan ⇄ fix same PR;     /review-pr <PR>       /sprint-done
-/plan-done         (or lead-paired)   /verification-done
-  (Web · Scope)     (IDE · Build)      (IDE · human verify)        (Web · Review)        (Record)
+```mermaid
+flowchart LR
+    B["🧠 <b>brainstorm</b><br/>/plan-start* · /plan-done<br/><i>Web · Scope</i>"]
+    I["🔨 <b>implement</b><br/>/spec-run id<br/>or lead-paired<br/><i>IDE · Build</i>"]
+    V["🔍 <b>verify — human loop</b><br/>run plan · /verification-done<br/><i>IDE · human verify</i>"]
+    G["👀 <b>verify — gate</b><br/>/review-pr PR<br/><i>Web · Review</i>"]
+    D["✅ <b>done</b><br/>/sprint-done<br/><i>Record</i>"]
+
+    B --> I --> V --> G --> D
+    V -. "fix on same PR" .-> V
+    G -. "request changes" .-> I
+
+    classDef web fill:#1e3a5f,stroke:#3b82f6,color:#fff;
+    classDef ide fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    class B,G,D web;
+    class I,V ide;
 ```
 
 - **Order is the contract.** Every command is *phase-aware*: it checks the current state and self-corrects rather than executing blindly (§5).
