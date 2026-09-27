@@ -269,3 +269,45 @@ Follows Entry 004, in the same session that closed SPRINT-08 (v0.10.0). With the
 - **Notable judgment:** the human independently arrived at the textbook three-tier funnel, then insisted the vocabulary and readiness gate **reuse the lifecycle** (one system, not two) — and that the refactor be dogfooded through that lifecycle.
 - **Also captured (process tip):** agreed a `/brainstorm-save` trigger heuristic — save when a session made a *decision* (choice between options / direction set / course-correction / trade-off accepted), not for routine execution; `/plan-done` is the natural trigger point.
 - **Honest note:** `RFC-LAB-000-010` is the decision only; the tracking files still use the old single-file layout until the `TSK-051` refactor Spec ships. Merge-first: the RFC lands before any skill targets the new structure.
+
+
+---
+
+## Entry 006 — Doc-system standardization, deployment unblock, and the next feature horizon
+
+**Date:** 2026-09-27 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `docs-reorganization` Spec (TSK-052); `RFC-LAB-000-011` deployment queued (TSK-053); backlog `BK-012`–`BK-015`
+
+> _Decisions D29–D31 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+A `/plan-start` brainstorm surfacing five items (doc org, project CRUD, branding, app settings, AI integration) plus two mid-session additions (retire the build artifact; org approval for Vercel/GCP). Triaged into one Spec + one queued RFC + four backlog features.
+
+---
+
+### D29 — Standardize the doc system as blueprint infrastructure (grouped folders + a nav standard)
+- **Trigger:** The human asked to audit README/`docs/`: standardized? logically grouped? smooth navigation both ways? The audit found a flat `docs/`, one-way navigation (8 of 10 docs are dead-ends), 3 orphaned docs, and a stale README tree.
+- **Options:** (A) do the tidy directly (docs fast-path); (B) a Kiro Spec with a documented, copyable nav standard.
+- **Decision & rationale:** **Option B + a documented nav standard**, explicitly *because this repo is the blueprint others copy* — the doc system should be standardized deliberately. Group `docs/` into `guides/reference/governance/rfc`; add a `docs/README.md` hub + a breadcrumb standard referenced from `AGENTS.md`; rename `work-environment` → `developer-guide`. Running it as a Spec (not a quick edit) is justified because file moves break links — a Human Verification Plan ("zero broken links") earns its keep, and it's a low-risk second/third AIDLC dogfood. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `docs-reorganization` Spec (TSK-052).
+
+### D30 — Deployment unblocked (Vercel + GCP); it supersedes the Pages stopgap and absorbs the artifact retirement
+- **Trigger:** The human granted two updates: retire the obsolete build artifact (`docs/index.html`), and org approval to deploy frontend → **Vercel**, PocketBase → **GCP**.
+- **The realization (agent-surfaced):** these are one story. `docs/index.html` + `deploy-pages.yml` are the GitHub-Pages *stopgap* dashboard; moving the frontend to Vercel **replaces** it. And this **clears the exact blocker MVP M5 was waiting on** (`RFC-LAB-000-008`: "deploy blocked on org-transfer"; `RFC-LAB-000-007` staging placeholders "pending org transfer").
+- **Decision & rationale:** Treat deployment as an **architecture decision → new `RFC-LAB-000-011`** (amending 007/008), **not** a quick task; **retire the Pages dashboard *within* that deployment work**, not in the docs Spec — deleting it earlier would leave no live dashboard mid-cutover. Sequenced as the **next planning item** after the docs Spec, given it now gates the MVP finish line. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-011` queued (TSK-053); `index.html` retirement scoped out of the docs Spec.
+
+### D31 — Feature horizon triaged; settings-before-branding; CRUD/AI framed against the MVP path
+- **Trigger:** Three feature ideas (admin project CRUD, branding/white-label, app settings) plus the flagship AI-assistant.
+- **Decision & rationale:**
+  - **App settings (`BK-012`) is the foundation; branding (`BK-013`) is its first consumer** — name/description/logo are configurable *settings*, so build one config system, not two.
+  - **Admin project CRUD (`BK-014`) is a superset of MVP M4**, needing auth (M2) + an admin role that `RFC-LAB-000-008` deferred (5-role model) — so it's post-MVP, not standalone.
+  - **AI assistant (`BK-015`) is the flagship** ("ask casual questions about the project, grounded in repo + docs") — highest value *and* effort; needs its own RFC + feasibility spike (index/model/cost/data-boundaries) before scoping.
+  - All shelved as `BK-` with explicit coupling notes rather than half-scoped now. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `BK-012`–`BK-015` with dependency annotations.
+
+---
+
+### Session meta
+- **Theme:** turning a loose idea list into a triaged plan — one actionable Spec now, one newly-unblocked architecture RFC next, four coupled features shelved with honest dependencies.
+- **Notable judgment:** the human's "this is the blueprint" lens repeatedly raised the bar (docs → a documented standard, not a tidy); the agent surfaced that "retire index.html" and "deploy to Vercel/GCP" are the same decision and that it unblocks M5.
+- **Process note:** confirmed the `/brainstorm-save` trigger heuristic in practice — this session had real decisions (D29–D31), so it's captured; pure Spec-authoring sessions (e.g. the refactor Spec) were correctly skipped.
+- **Honest note:** none of D29–D31 is built yet — the docs Spec is authored (merge-first pending), the deployment RFC is only *queued*, and BK-012–015 are shelf items. Scope stays honest: decisions + plan, not delivery.
