@@ -71,17 +71,25 @@ Make executing a Kiro Spec a **true one-liner** in Kiro IDE — the **implement*
   gh api repos/agni-eialarasu/cetana-labs/pulls -f title="..." -f head="<branch>" -f base="main" -f body="..."
   ```
 - PR body: DoD roll-up + link to the Spec. Ensure CI goes green.
-- **STOP-and-hold.** Report the PR number/URL and hand off: "Ready for `/review-pr <PR>`." Do **not** merge.
 
-### 8. Point to the next phase
-- Remind: **`/review-pr <PR>`** (verify/gate) → on approval, merge → **`/sprint-done`** (Record: CHANGELOG/BACKLOG lockstep, `/brainstorm-save` if decisions, `REPORT.md` sign-off, release).
-- If this was an AIDLC/delegated run, prompt to capture the spike notes (`RFC-LAB-000-009` §7) in `REPORT.md`: did this run execute `tasks.md` directly or re-plan, and what hand-off worked.
+### 8. Emit the Human Verification Plan, then STOP (open the verify loop)
+- Read the **Human Verification Plan** from the Spec's `requirements.md` (the human-executable checklist — distinct from the EARS DoD the agent self-checked; see `RFC-LAB-000-009`). If the Spec has none, note it and fall back to deriving quick steps from R1–R6 (but a Spec *should* carry an authored plan).
+- **Emit the plan inline** at the hand-off so the human knows exactly how to verify:
+  > "PR #NN is open and CI is green. **Human verification (please run these):**
+  > V1 … · V2 … · V3 … — report anything that fails; I'll push fixes to *this* PR (Single-PR rule). When it passes, run **`/verification-done`**."
+- **STOP-and-hold.** State is now **IN_VERIFICATION**. Do **not** merge, and do **not** jump to `/review-pr` — the gate comes *after* human verification passes.
+
+### 9. The verify loop + next phase
+- **Iterate loop (IN_VERIFICATION):** the human runs the plan; on any finding, fix it and push to the **same PR** (never a new branch/PR — Single-PR rule); the human re-verifies. Repeat until the plan passes.
+- On pass, the human runs **`/verification-done`** → it appends the Verification Log to `.kiro/specs/<id>/REPORT.md` (same PR) and transitions **IN_VERIFICATION → IN_REVIEW**.
+- Then: **`/review-pr <PR>`** (Kiro Web gate — now reads the verification record as evidence) → human authorizes merge → **`/sprint-done`** (Record).
+- If this was an AIDLC/delegated run, also capture the spike notes (`RFC-LAB-000-009` §7) in `REPORT.md`: did this run execute `tasks.md` directly or re-plan, and what hand-off worked.
 
 ## Rules
 - **You supply only the spec id.** The skill owns all repeatable steps (sync, checkout, preflight, PR). Do not ask the user to check out a branch or run preflight manually.
 - **Merge-first:** the Spec must be on `main`. Missing Spec ⇒ HOLD with "merge the plan first" (never fabricate it).
 - **Never merge**, never post an approving review — this skill implements and opens; the human gates (`/review-pr`).
-- **STOP-and-hold** on: wrong surface (§1), missing-Spec prerequisite (§2), any failed preflight (§3), any blocked task (§5), and always after opening the PR (§7).
+- **STOP-and-hold** on: wrong surface (§1), missing-Spec prerequisite (§2), any failed preflight (§3), any blocked task (§5), and always after opening the PR + emitting the Human Verification Plan (§7–§8) — the run ends in IN_VERIFICATION, awaiting the human loop, not at merge.
 - **The Spec is the single source of truth** — branch, preconditions, scope, functional tasks, and verification all live in the Spec; no inline overrides. If the Spec lacks an Execution header or §0 preconditions, STOP and ask for them.
 - **State-guard semantics** (`RFC-LAB-000-009`): redundant/already-done ⇒ skip + continue; missing prerequisite or gate ⇒ alert + HOLD. Never silently bypass a gate.
 - **IDE-only**; GitHub via `gh api` (REST).

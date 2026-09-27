@@ -55,12 +55,18 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 - For lead-paired work with no Spec, check the PR against the backlog row / stated ask (progressive formality — `RFC-LAB-000-009` §5).
 - List any **unmet or unverifiable** criterion explicitly. An unverifiable DoD item is a hold, not a pass.
 
+### 4b. Human verification record (the evidence the gate consumes — `RFC-LAB-000-009` §3.2)
+- For a Spec PR, open `.kiro/specs/<spec>/REPORT.md` and read the **Verification Log**: did the human run the Spec's Human Verification Plan, and is the **verdict PASS**?
+- Confirm the corrections it records were pushed to **this** PR (Single-PR rule), not a separate branch.
+- **No verification record / verdict not PASS ⇒ HOLD:** "Human functional verification isn't recorded/passed — run `/verification-done` in the IDE after verifying (or finish the loop) before this gate." *(This turns the gate from CI+DoD-on-paper into CI+DoD+**evidence the human exercised it**.)*
+- Lead-paired PRs may satisfy this with a lighter note in the PR body; delegated/AIDLC PRs require the `REPORT.md` Verification Log.
+
 ### 5. Governance lockstep (`RFC-LAB-000-004`, Pillar 2)
 - Application-code PR: is CHANGELOG / BACKLOG updated in step, and `data/` consistent if touched?
 - Confirm `make validate-local` (or CI's mirror) is green (ties to Step 2).
 
 ### 6. Present the review + STOP-and-hold
-- Emit a checklist table: **CI · Scope/hygiene · EARS DoD (per-criterion) · Governance**, each ✅ / ⚠️ / ❌ with a one-line note.
+- Emit a checklist table: **CI · Scope/hygiene · EARS DoD (per-criterion) · Human verification record · Governance**, each ✅ / ⚠️ / ❌ with a one-line note.
 - Give a clear **reviewer recommendation**: `READY (human approval required to merge)` or `HOLD — <reasons>`.
 - **STOP.** Ask the human to explicitly approve or request changes. Do **not** merge, approve via API, or push.
 
@@ -71,6 +77,6 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 ## Rules
 - **Never merge and never post an approving review via the API.** This skill surfaces; the human decides.
 - **STOP-and-hold is mandatory** — always end at a human decision point.
-- A failing/pending check or an unverifiable EARS criterion ⇒ **HOLD**, not a soft pass.
+- A failing/pending check, an unverifiable EARS criterion, or a missing/failed human-verification record ⇒ **HOLD**, not a soft pass.
 - Read-only against the repo except for reporting; make no commits.
 - Reads use `gh api` (REST) — the `gh pr`/GraphQL subcommands are unavailable in this environment.

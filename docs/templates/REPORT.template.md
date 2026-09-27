@@ -39,11 +39,28 @@
 ## 3. Deferred / carried forward (scope honesty)
 <Anything intentionally out of scope or pushed to a later phase, with a one-line reason and where it's tracked (BACKLOG id).>
 
-## 4. Human gate
+## 4. Verification Log — human functional verification (appended by `/verification-done`)
+> The record of the **human-verify loop** (`RFC-LAB-000-009` verify phase): the human ran the
+> Spec's **Human Verification Plan**, and any minor corrections were pushed to the **same PR**
+> (Single-PR rule). This is the evidence the downstream gate (`/review-pr`) and `/sprint-done`
+> read — so it must be **honest** (record failure→fix iterations, not a scrubbed pass).
+> **Append-only** across iterations; do not overwrite prior logs.
+
+### Verification Log — <YYYY-MM-DD> (PR #NN)
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| `V1 <step>` | ✅ / ❌→✅ | `<what happened; fixup SHA if corrected>` |
+| … | | |
+
+- **Iterations:** `<n>` (fixups pushed to this PR: `<shas>`)
+- **Verdict:** `PASS — human functional verification complete` / `still iterating`
+- **Verified by:** `<name>` · **Surface:** Kiro IDE
+
+## 5. Human gate
 - PR(s): #NN — reviewed via `/review-pr` · CI green · squash-merged: yes/no
 - Any STOP-and-hold raised, and how it was resolved: <…>
 
-## 5. AIDLC spike notes *(delegated / autonomous runs only — else "n/a")*
+## 6. AIDLC spike notes *(delegated / autonomous runs only — else "n/a")*
 > Only for a Spec executed via Autonomous mode / a delegated agent. Resolves the open
 > chaining question in `RFC-LAB-000-009` §7 from **evidence**, not assumption.
 - Did Autonomous execute the Spec's `tasks.md` directly, or re-plan from `requirements.md`? <…>
@@ -51,7 +68,7 @@
 - Were the EARS acceptance criteria sufficient as the agent's self-validation target? <…>
 - Anything to fold back into `RFC-LAB-000-009` / the Spec method: <…>
 
-## 6. Sign-off
+## 7. Sign-off
 - **Signed:** `<name>` (`<role>`) — YYYY-MM-DD
 - Decision Journal entry created (if this produced a decision)? yes / n/a — `/brainstorm-save` (never auto-run — D17)
 - Release tagged (if sprint close)? `/sprint-done` → `vX.Y.0` / n/a
