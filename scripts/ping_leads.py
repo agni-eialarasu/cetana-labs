@@ -126,7 +126,7 @@ def build_issue_payload(ping: dict) -> dict:
             "### Action Required\n"
             "Run `/status-init` in the project repository root (or commit a "
             "`STATUS.md` conforming to the "
-            "[Project Protocol](https://github.com/agni-eialarasu/cetana-labs/blob/main/docs/project-protocol.md)) "
+            "[Project Protocol](https://github.com/agni-eialarasu/cetana-labs/blob/main/docs/reference/project-protocol.md)) "
             "to establish the sprint baseline, quality metrics, and verified health.\n\n"
             "---\n"
             "_Automated by the Cetana Labs Lead Ping Engine (`BK-003`). "

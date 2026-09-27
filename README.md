@@ -1,14 +1,15 @@
 # Cetana Labs (Master Registry & Lab Notebook)
 
 > 🌐 **Live Portfolio Dashboard:** [agni-eialarasu.github.io/cetana-labs](https://agni-eialarasu.github.io/cetana-labs/)  
-> 📖 **User Guide:** [docs/user-guide.md](docs/user-guide.md)  
-> 🛠️ **Work Environment & Commands (Kiro Web + IDE):** [docs/work-environment.md](docs/work-environment.md)  
-> 🔄 **Sprint Lifecycle & Delivery Process (visual, both paths):** [docs/sprint-lifecycle.md](docs/sprint-lifecycle.md)  
+> 📚 **All Documentation (hub):** [docs/README.md](docs/README.md)  
+> 📖 **User Guide:** [docs/guides/user-guide.md](docs/guides/user-guide.md)  
+> 🛠️ **Developer Guide (setup, commands, Kiro Web + IDE):** [docs/guides/developer-guide.md](docs/guides/developer-guide.md)  
+> 🔄 **Sprint Lifecycle & Delivery Process (visual, both paths):** [docs/guides/sprint-lifecycle.md](docs/guides/sprint-lifecycle.md)  
 > 🗂️ **Portfolio & Sprint Tracking Model (Backlog → Sprint → Changelog):** [docs/rfc/RFC-LAB-000-010-tracking-model.md](docs/rfc/RFC-LAB-000-010-tracking-model.md)  
-> 🧠 **Decision Journal (how key decisions were reached):** [docs/DECISION-JOURNAL.md](docs/DECISION-JOURNAL.md)  
-> 🤝 **AI Collaboration Model (how we work with AI):** [docs/ai-collaboration-model.md](docs/ai-collaboration-model.md)  
-> 👥 **Project Owner Guide & AI Prompts:** [docs/project-owner-guide.md](docs/project-owner-guide.md)  
-> 📋 **Project Status Protocol (`STATUS.md`):** [docs/project-protocol.md](docs/project-protocol.md)  
+> 🧠 **Decision Journal (how key decisions were reached):** [docs/governance/DECISION-JOURNAL.md](docs/governance/DECISION-JOURNAL.md)  
+> 🤝 **AI Collaboration Model (how we work with AI):** [docs/governance/ai-collaboration-model.md](docs/governance/ai-collaboration-model.md)  
+> 👥 **Project Owner Guide & AI Prompts:** [docs/guides/project-owner-guide.md](docs/guides/project-owner-guide.md)  
+> 📋 **Project Status Protocol (`STATUS.md`):** [docs/reference/project-protocol.md](docs/reference/project-protocol.md)  
 > 🎯 **Sprint Tracker (active + delivered):** [SPRINT_TRACKER.md](SPRINT_TRACKER.md)  
 > 💡 **Product Backlog (idea bucket):** [BACKLOG.md](BACKLOG.md)  
 > 📜 **Project Changelog:** [CHANGELOG.md](CHANGELOG.md)  
@@ -60,22 +61,31 @@ cetana-labs/
 │   ├── generate_dashboard.py      # 🌐 Static HTML portfolio web dashboard generator
 │   ├── ping_leads.py              # 🔔 Automated lead ping engine (stale & onboarding alerts)
 │   └── validate_portfolio.py      # 🛡️ CI linter & project structure validator
-├── docs/
-│   ├── index.html                 # 🌐 Live Interactive Portfolio Dashboard (GitHub Pages)
-│   ├── user-guide.md              # 👤 Human Guide: Navigation, Archetypes, Statuses & AI Prompts
-│   ├── project-owner-guide.md     # 👥 Developer & Lead Guide: AI Prompts (/status-init, /status-update)
-│   └── project-protocol.md        # 📋 Authoritative STATUS.md specification
+├── docs/                          # 📚 Documentation (see docs/README.md — the hub)
+│   ├── README.md                  # 📚 Docs hub: index by category + breadcrumb nav standard
+│   ├── index.html                 # 🌐 Generated GitHub Pages dashboard (build artifact)
+│   ├── guides/                    # 📖 How-to: user, developer, sprint-lifecycle, project-owner
+│   ├── reference/                 # 📐 Specs & standards: project-protocol, DESIGN, design-system
+│   ├── governance/                # ⚖️ Decision Journal & AI collaboration model
+│   ├── rfc/                       # 📜 Numbered decision records (RFC-LAB-000-001 … -010)
+│   └── templates/                 # 🧩 Reusable artifact templates (REPORT.template.md)
 ├── AGENTS.md                      # 🤖 Universal AI Instructions (Rules, Constraints, Workflows)
 ├── CLAUDE.md                      # 🤖 Agent pointer for Claude Code
-├── .kiro/skills/                  # 🤖 Kiro-native project /commands (shared across Web + IDE)
-│   ├── project-status/            # Generates WhatsApp-ready updates on-demand (/project-status)
-│   ├── project-add/               # Onboards new initiatives via remote inspection (/project-add)
-│   ├── project-update/            # Logs delivery wins, health & milestones (/project-update)
-│   ├── project-edit/              # Modifies metadata, leads & lifecycle states (/project-edit)
-│   ├── sprint-done/               # Closes sprint, archives tasks & bumps changelog (/sprint-done)
-│   ├── ping-leads/                # Pings stale/onboarding-pending leads via GitHub issues (/ping-leads)
-│   ├── log-milestone/             # Appends milestone entries to journal
-│   └── commit-changes/            # Standardized trunk-based git commits
+├── .kiro/
+│   ├── skills/                    # 🤖 Kiro-native project /commands (shared across Web + IDE)
+│   │   ├── project-{status,add,update,edit,validate}/  # Portfolio lifecycle commands
+│   │   ├── sprint-{start,done}/   # Open / close the sprint container
+│   │   ├── plan-{start,done}/     # Per-feature planning session (authors + merges a Spec)
+│   │   ├── spec-run/              # IDE one-liner: execute a merged Spec end-to-end
+│   │   ├── review-pr/             # Human PR gate (verify phase)
+│   │   ├── verification-done/     # Record the human functional-verification loop
+│   │   ├── brainstorm-save/       # Append curated decisions to the Decision Journal
+│   │   ├── ping-leads/, log-milestone/, commit-changes/  # Automation + git helpers
+│   │   ├── audit-{doc,project}/   # Documentation / project health audits
+│   │   ├── env-doctor/, validate-{local,staging}/        # Environment + pre-flight checks
+│   │   └── {start,stop,status}-local/, status-staging/   # Local stack lifecycle
+│   ├── specs/                     # 📐 Kiro Specs (requirements / design / tasks per feature)
+│   └── steering/                  # 🧭 product / tech / structure steering + conventions
 ├── templates/                     # Standardized scaffolds for rapid onboarding
 └── projects/                      # All lab initiatives (flat hierarchy)
     ├── LAB-000-cetana-labs/       # Central Command Plane & Protocol Engine
@@ -95,4 +105,4 @@ cetana-labs/
 - 📊 **Data Collection**: Datasets, web scraping pipelines, annotations, and schemas.
 - 🔬 **Verification / Benchmark**: Test rigs, SLA validations, model accuracy benchmarks, and stress tests.
 
-For detailed guidelines, see **[docs/user-guide.md](docs/user-guide.md)** and **[docs/project-protocol.md](docs/project-protocol.md)**.
+For detailed guidelines, see **[docs/guides/user-guide.md](docs/guides/user-guide.md)** and **[docs/reference/project-protocol.md](docs/reference/project-protocol.md)**.

@@ -1,9 +1,11 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Sprint Lifecycle**
+
 # Cetana Labs — Sprint Lifecycle & Delivery Process
 
-> 📋 **Decision of record:** [`RFC-LAB-000-009`](rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) (the *why* + formal state machine).
-> 🤝 **Method:** [`ai-collaboration-model.md`](ai-collaboration-model.md) (human-directed / AI-assisted / human-gated).
-> 🛠️ **Surfaces & commands:** [`work-environment.md`](work-environment.md) (Kiro Web vs Kiro IDE).
-> 🗂️ **Tracking funnel:** [`RFC-LAB-000-010`](rfc/RFC-LAB-000-010-tracking-model.md) — ideas ([`BACKLOG.md`](../BACKLOG.md)) → committed work ([`SPRINT_TRACKER.md`](../SPRINT_TRACKER.md)) → shipped ([`CHANGELOG.md`](../CHANGELOG.md)); status vocab = the state machine below.
+> 📋 **Decision of record:** [`RFC-LAB-000-009`](../rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) (the *why* + formal state machine).
+> 🤝 **Method:** [`ai-collaboration-model.md`](../governance/ai-collaboration-model.md) (human-directed / AI-assisted / human-gated).
+> 🛠️ **Surfaces & commands:** [`work-environment.md`](developer-guide.md) (Kiro Web vs Kiro IDE).
+> 🗂️ **Tracking funnel:** [`RFC-LAB-000-010`](../rfc/RFC-LAB-000-010-tracking-model.md) — ideas ([`BACKLOG.md`](../../BACKLOG.md)) → committed work ([`SPRINT_TRACKER.md`](../../SPRINT_TRACKER.md)) → shipped ([`CHANGELOG.md`](../../CHANGELOG.md)); status vocab = the state machine below.
 > Adapted from the Nexus Pulse (`LAB-003`) Engineering Sprint Lifecycle — the *discipline*, translated to LAB-000's Kiro-native decisions (Specs not `PROMPT.md`, `gh api` not `gh pr create`, 5-pillar `make validate-local`, no Track-A/B roster).
 
 This is the **operational guide** for how a unit of work travels from idea to merged in Cetana Labs. The RFC records the decision; this guide shows you how to *run* it, visually. It covers **both delivery paths**:
@@ -17,11 +19,22 @@ Both paths run the **same five phases** and the **same human gate**; only the *B
 
 ## 1. The flow at a glance
 
-```
-brainstorm  ────▶  implement  ────▶  verify (human loop)  ────▶  verify (gate)  ────▶  done
-/plan-start*       /spec-run <id>     run plan ⇄ fix same PR;     /review-pr <PR>       /sprint-done
-/plan-done         (or lead-paired)   /verification-done
-  (Web · Scope)     (IDE · Build)      (IDE · human verify)        (Web · Review)        (Record)
+```mermaid
+flowchart LR
+    B["🧠 <b>brainstorm</b><br/>/plan-start* · /plan-done<br/><i>Web · Scope</i>"]
+    I["🔨 <b>implement</b><br/>/spec-run id<br/>or lead-paired<br/><i>IDE · Build</i>"]
+    V["🔍 <b>verify — human loop</b><br/>run plan · /verification-done<br/><i>IDE · human verify</i>"]
+    G["👀 <b>verify — gate</b><br/>/review-pr PR<br/><i>Web · Review</i>"]
+    D["✅ <b>done</b><br/>/sprint-done<br/><i>Record</i>"]
+
+    B --> I --> V --> G --> D
+    V -. "fix on same PR" .-> V
+    G -. "request changes" .-> I
+
+    classDef web fill:#1e3a5f,stroke:#3b82f6,color:#fff;
+    classDef ide fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    class B,G,D web;
+    class I,V ide;
 ```
 
 - **Order is the contract.** Every command is *phase-aware*: it checks the current state and self-corrects rather than executing blindly (§5).
@@ -135,7 +148,7 @@ sequenceDiagram
     Web-->>Human: quick plan / backlog row (no full Spec needed)
 
     Note over Human,IDE: PHASE 2 — implement / Build (interactive)
-    Human->>IDE: create feat/ branch; pair on the change live
+    Human->>IDE: create feat/ branch, pair on the change live
     IDE-->>Human: edits, run local stack, iterate together
     Human->>IDE: run gates (make validate-local)
     Human->>IDE: verify the feature works (you exercised it as you built it)
@@ -211,8 +224,8 @@ M1 ("wire the Sleek UI to live PocketBase") is the first delegated-agent Spec (`
 
 ## 8. Related documents
 
-- [`RFC-LAB-000-009`](rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) — decision of record (five phases, §3.1 state machine).
-- [`ai-collaboration-model.md`](ai-collaboration-model.md) — the human-directed/AI-assisted/human-gated method.
-- [`work-environment.md`](work-environment.md) — Kiro Web vs IDE surfaces + command cheat-sheet.
-- [`RFC-LAB-000-004`](rfc/RFC-LAB-000-004-branching-model.md) — branching, PR policy, squash-merge.
-- [`DECISION-JOURNAL.md`](DECISION-JOURNAL.md) — Entries 002–004 (how this lifecycle was reasoned).
+- [`RFC-LAB-000-009`](../rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) — decision of record (five phases, §3.1 state machine).
+- [`ai-collaboration-model.md`](../governance/ai-collaboration-model.md) — the human-directed/AI-assisted/human-gated method.
+- [`work-environment.md`](developer-guide.md) — Kiro Web vs IDE surfaces + command cheat-sheet.
+- [`RFC-LAB-000-004`](../rfc/RFC-LAB-000-004-branching-model.md) — branching, PR policy, squash-merge.
+- [`DECISION-JOURNAL.md`](../governance/DECISION-JOURNAL.md) — Entries 002–004 (how this lifecycle was reasoned).

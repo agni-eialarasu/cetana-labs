@@ -1,7 +1,9 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Reference / **Project Protocol**
+
 # Project Status Protocol — The `STATUS.md` Standard
 
 > 👥 **For Project Leads & Developers:**  
-> Read the step-by-step developer playbook with AI prompts: **[Project Owner Guide (docs/project-owner-guide.md)](project-owner-guide.md)**.
+> Read the step-by-step developer playbook with AI prompts: **[Project Owner Guide (docs/project-owner-guide.md)](../guides/project-owner-guide.md)**.
 
 ---
 
@@ -81,7 +83,7 @@ A 2-sentence summary of what this project does and the business value it deliver
 
 ## 4a. Dev Environment Values
 
-The `Dev Environment` metadata field declares where the initiative is developed. Classification follows the reusable heuristic in [`RFC-LAB-000-001`](rfc/RFC-LAB-000-001-cloud-dev-migration.md) (§4).
+The `Dev Environment` metadata field declares where the initiative is developed. Classification follows the reusable heuristic in [`RFC-LAB-000-001`](../rfc/RFC-LAB-000-001-cloud-dev-migration.md) (§4).
 
 | Value | Badge | Meaning |
 | :--- | :---: | :--- |

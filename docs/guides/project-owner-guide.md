@@ -1,3 +1,5 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Project Owner Guide**
+
 # Project Lead & Developer Guide — Automated Status Protocol
 
 Welcome! This guide is for **project leads and contributing engineers** (e.g. Nexus Pulse, AAMAS, Zerobea.ai, Nexus Beacon, and upcoming initiatives).
@@ -10,23 +12,29 @@ To eliminate repetitive status writing, long standup recaps, and management inte
 
 You **never write this file by hand**. Your AI coding assistant (Cursor, Claude Code, GitHub Copilot, ChatGPT, Antigravity) does it for you in **10 seconds** whenever you complete a sprint or merge major PRs.
 
-```text
-[ Developer: /project-validate ]
-                │
-                ├──── 1. Checks scraper budget (<= 35 lines) & schema
-                ├──── 2. Asserts registries are in lockstep (CHANGELOG/BACKLOG)
-                ├──── 3. Verifies git worktree is clean
-                ├──── 4. Checks AST architecture & golden math parity
-                └──── 5. Auto-counts live passing tests into validation_receipt.json
-                │
-         (If 5 Pillars Green)
-                │
-                ▼
-[ Developer: /status-update ]
-                │
-                ├──── 1. Synthesizes commits into business wins
-                ├──── 2. Updates STATUS.md with certified test tallies
-                └──── 3. Outputs ready-to-send WhatsApp standup message!
+```mermaid
+flowchart TB
+    V["🛡️ <b>/project-validate</b><br/><i>5-pillar pre-flight gate</i>"]
+    P1["1 · Scraper budget ≤ 35 lines &amp; schema"]
+    P2["2 · Registries in lockstep<br/>CHANGELOG / SPRINT_TRACKER / BACKLOG"]
+    P3["3 · Git worktree clean"]
+    P4["4 · AST architecture &amp; golden-math parity"]
+    P5["5 · Auto-count live tests → validation_receipt.json"]
+    GATE{"5 pillars<br/>GREEN?"}
+    U["📝 <b>/status-update</b><br/><i>certified from the receipt</i>"]
+    U1["Synthesize commits → business wins"]
+    U2["Update STATUS.md with certified test tallies"]
+    U3["📱 Ready-to-send WhatsApp standup"]
+    FIX["🔧 Fix the failing pillar, re-run"]
+
+    V --> P1 & P2 & P3 & P4 & P5 --> GATE
+    GATE -- "yes" --> U --> U1 --> U2 --> U3
+    GATE -- "no" --> FIX --> V
+
+    classDef gate fill:#1e3a5f,stroke:#3b82f6,color:#fff;
+    classDef act fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    class V,GATE gate;
+    class U,U3 act;
 ```
 
 ---

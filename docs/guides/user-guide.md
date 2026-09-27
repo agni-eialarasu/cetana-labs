@@ -1,3 +1,5 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **User Guide**
+
 # Cetana Labs — User Guide & Playbook
 
 Welcome to **Cetana Labs**! This repository serves as our master engineering notebook, project registry, sprint roadmap, and operational control plane.
@@ -11,8 +13,8 @@ This guide is written for both **maintainers** and **collaborators** to help you
 `cetana-labs` is **not a code monorepo**. Instead, it is the single source of truth for:
 - 🧭 **Master Registry**: An indexed catalog of all active, completed, and onboarding initiatives.
 - 📋 **Executive Statuses**: Up-to-date, 30-line `STATUS.md` summaries for instant management updates.
-- 🎯 **Sprint Roadmap & Backlog**: Centrally tracked active sprint deliverables and future capabilities in [`BACKLOG.md`](../BACKLOG.md).
-- 📜 **Historical Releases**: Semantic delivery changelog maintained in [`CHANGELOG.md`](../CHANGELOG.md).
+- 🎯 **Sprint Roadmap & Backlog**: Centrally tracked active sprint deliverables and future capabilities in [`BACKLOG.md`](../../BACKLOG.md).
+- 📜 **Historical Releases**: Semantic delivery changelog maintained in [`CHANGELOG.md`](../../CHANGELOG.md).
 - 🗓️ **Journals & Milestones**: High-level milestone timelines, architectural decisions, and phase histories.
 - 🔗 **Pointers**: Direct links to external code repositories, datasets, and research papers.
 
@@ -40,8 +42,8 @@ Each project folder contains standard documents:
 ### Quick Path Finder:
 - **"Where is the source code & setup guide?"** $\rightarrow$ Open `projects/<ID>/README.md` and check the **Remote Repository** link (operational runbooks live directly inside each project's codebase).
 - **"What is the current business status & health?"** $\rightarrow$ Open `projects/<ID>/STATUS.md`.
-- **"What is the active sprint plan & backlog?"** $\rightarrow$ Open root [`BACKLOG.md`](../BACKLOG.md).
-- **"What was shipped recently across versions?"** $\rightarrow$ Open root [`CHANGELOG.md`](../CHANGELOG.md).
+- **"What is the active sprint plan & backlog?"** $\rightarrow$ Open root [`BACKLOG.md`](../../BACKLOG.md).
+- **"What was shipped recently across versions?"** $\rightarrow$ Open root [`CHANGELOG.md`](../../CHANGELOG.md).
 - **"Why was a decision made or what's the latest milestone?"** $\rightarrow$ Open `projects/<ID>/journal.md`.
 
 ---

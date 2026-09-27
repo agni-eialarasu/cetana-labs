@@ -1,14 +1,14 @@
 ---
 name: brainstorm-save
 description: >-
-  Captures the current brainstorming/planning session's KEY DECISIONS as a curated entry appended to docs/DECISION-JOURNAL.md — the reasoning/rationale showcase (problem → options → decision → outcome), attributed to the contributor. Use when the user runs /brainstorm-save or asks to capture/record the session's decisions or thinking.
+  Captures the current brainstorming/planning session's KEY DECISIONS as a curated entry appended to docs/governance/DECISION-JOURNAL.md — the reasoning/rationale showcase (problem → options → decision → outcome), attributed to the contributor. Use when the user runs /brainstorm-save or asks to capture/record the session's decisions or thinking.
 ---
 
 # Skill: Brainstorm Save (Curated Decision Capture)
 
 ## Objective
 Distil a brainstorming/planning session into a **curated decision narrative** and append it to
-[`docs/DECISION-JOURNAL.md`](../../docs/DECISION-JOURNAL.md). This is the "how we reasoned to
+[`docs/governance/DECISION-JOURNAL.md`](../../../docs/governance/DECISION-JOURNAL.md). This is the "how we reasoned to
 decisions" showcase for engineering leadership (and any co-reviewer). It is **signal, not a
 transcript** — only genuine decisions, with honest trade-offs.
 

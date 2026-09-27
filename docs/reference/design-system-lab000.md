@@ -1,3 +1,5 @@
+[🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Reference / **Design System (LAB-000)**
+
 # Design System — LAB-000 Adaptation (SvelteKit)
 
 > **Relationship to the org design system:** [`DESIGN.md`](DESIGN.md) is the
@@ -5,7 +7,7 @@
 > file does **not** override it — it **translates** that system from its native
 > Next.js / React / Tailwind stack to the Cetana Labs Control Hub web app
 > (`LAB-000`), which is built on **SvelteKit + Tailwind** per
-> [`RFC-LAB-000-005`](rfc/RFC-LAB-000-005-web-app-phase2-ui.md).
+> [`RFC-LAB-000-005`](../rfc/RFC-LAB-000-005-web-app-phase2-ui.md).
 >
 > **Rule of precedence:** tokens/colors/type/spacing/anti-patterns in `DESIGN.md`
 > are binding. Where `DESIGN.md` references a **Next.js file** (`layout.tsx`,

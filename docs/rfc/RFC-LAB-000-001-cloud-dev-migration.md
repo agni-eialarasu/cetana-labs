@@ -68,7 +68,7 @@ This RFC anticipates that trajectory:
 
 1. **Ratify** this RFC (this document). ✅
 2. **Add environment metadata** to the `STATUS.md` protocol and master registry.
-3. **Publish** a cloud dev onboarding runbook (`docs/cloud-dev-guide.md`).
+3. **Publish** a cloud dev onboarding runbook (`docs/cloud-dev-guide.md`). *(Later folded into [`docs/guides/developer-guide.md`](../guides/developer-guide.md) — cloud workflow section — by the docs-reorganization refactor, `TSK-052`.)*
 4. **Add** `.devcontainer/devcontainer.json` for reproducibility and forward compatibility.
 5. **Register** the migration in `BACKLOG.md`, bump `CHANGELOG.md` (Unreleased), and log a `LAB-000` journal milestone.
 6. **Decommission** the local IntelliJ + Antigravity instance for `LAB-000` (maintainer action, outside repo).
