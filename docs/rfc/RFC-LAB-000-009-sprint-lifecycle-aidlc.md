@@ -10,6 +10,7 @@
 | **Backlog** | `SPRINT-08` (process standardization; see `RFC-LAB-000-007`) |
 | **Builds On** | `RFC-LAB-000-004` (branching & PR review), `RFC-LAB-000-007` (Web+IDE surfaces), `RFC-LAB-000-008` (MVP — first Spec target) |
 | **Influenced By** | Nexus Pulse (`LAB-003`) Engineering Sprint Lifecycle — adapted, not copied |
+| **See Also** | `RFC-LAB-000-010` (Portfolio & Sprint Tracking Model) — the three-tier funnel whose status vocabulary is this RFC's §3.1 state machine |
 | **Decision Journal** | Entry 002, D12–D15 (rationale of record) |
 
 ---

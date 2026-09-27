@@ -4,6 +4,7 @@
 > 📖 **User Guide:** [docs/user-guide.md](docs/user-guide.md)  
 > 🛠️ **Work Environment & Commands (Kiro Web + IDE):** [docs/work-environment.md](docs/work-environment.md)  
 > 🔄 **Sprint Lifecycle & Delivery Process (visual, both paths):** [docs/sprint-lifecycle.md](docs/sprint-lifecycle.md)  
+> 🗂️ **Portfolio & Sprint Tracking Model (Backlog → Sprint → Changelog):** [docs/rfc/RFC-LAB-000-010-tracking-model.md](docs/rfc/RFC-LAB-000-010-tracking-model.md)  
 > 🧠 **Decision Journal (how key decisions were reached):** [docs/DECISION-JOURNAL.md](docs/DECISION-JOURNAL.md)  
 > 🤝 **AI Collaboration Model (how we work with AI):** [docs/ai-collaboration-model.md](docs/ai-collaboration-model.md)  
 > 👥 **Project Owner Guide & AI Prompts:** [docs/project-owner-guide.md](docs/project-owner-guide.md)  
