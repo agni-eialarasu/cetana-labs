@@ -38,7 +38,7 @@ Two surfaces, one repo. Use the right one for the job (`RFC-LAB-000-007` §2.1):
 
 | Surface | Role | Do this here |
 |---|---|---|
-| **Kiro Web** | **Stateless** governance/docs | RFCs, backlog/changelog/journal, `data/` edits, PR review, planning, Python `scripts/`, status broadcasts |
+| **Kiro Web** | **Stateless** governance/docs | RFCs, sprint-tracker/backlog/changelog/journal, `data/` edits, PR review, planning, Python `scripts/`, status broadcasts |
 | **Kiro IDE** (local) | **Stateful** servers/data | `/start-local`, PocketBase DB, SvelteKit UI dev, secrets/OAuth, staging deploys |
 
 Not a hard wall — Web can edit anything, it just can't run persistent servers.

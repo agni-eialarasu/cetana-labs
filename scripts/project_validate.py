@@ -163,16 +163,26 @@ def validate_pillar_2(project_dir: Path):
         details.append("Neither CHANGELOG.md nor journal.md found at root [FAIL]")
         passed = False
 
-    # Backlog or Sprint Tracker synchronization
-    if backlog_file.exists():
+    # Sprint Tracker synchronization (RFC-LAB-000-010 three-tier funnel).
+    # Sprint state (Current Sprint + Delivered Sprints Archive) lives in
+    # SPRINT_TRACKER.md; BACKLOG.md is the BK- idea bucket. Prefer the tracker for
+    # the delivered-archive markers so the check passes for a real reason (not by
+    # falling through to the idea bucket). Fall back to BACKLOG.md for repos that
+    # have not yet split (backward compatible).
+    sprint_marker = r"Delivered Sprints Archive|Delivered Tasks|###\s*Sprint\s*\d+"
+    if tracker_file.exists():
+        tr_text = tracker_file.read_text(encoding="utf-8")
+        if re.findall(sprint_marker, tr_text, re.IGNORECASE):
+            details.append("Sprint deliverables cataloged in SPRINT_TRACKER.md with verified commit history [PASS]")
+        else:
+            details.append("SPRINT_TRACKER.md active sprint state verified [PASS]")
+    elif backlog_file.exists():
         bl_text = backlog_file.read_text(encoding="utf-8")
-        delivered_blocks = re.findall(r"Delivered Sprints Archive|Delivered Tasks|###\s*Sprint\s*\d+", bl_text, re.IGNORECASE)
+        delivered_blocks = re.findall(sprint_marker, bl_text, re.IGNORECASE)
         if delivered_blocks:
             details.append("Sprint deliverables cataloged with verified commit history [PASS]")
         else:
             details.append("BACKLOG.md active sprint tracker verified [PASS]")
-    elif tracker_file.exists():
-        details.append("SPRINT_TRACKER.md active sprint state verified [PASS]")
     elif journal_file.exists():
         details.append("Milestone journal log verified with active initiative baseline [PASS]")
     else:

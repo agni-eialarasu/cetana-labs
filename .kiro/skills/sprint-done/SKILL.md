@@ -1,7 +1,7 @@
 ---
 name: sprint-done
 description: >-
-  Closes out an active sprint in Cetana Labs: archives completed tasks from BACKLOG.md, bumps version in CHANGELOG.md, synchronizes STATUS.md wins, logs milestone in journal.md, and commits to main (e.g. "/sprint-done", "/sprint-done SPRINT-02").
+  Closes out an active sprint in Cetana Labs: archives completed tasks in SPRINT_TRACKER.md, bumps version in CHANGELOG.md, synchronizes STATUS.md wins, logs milestone in journal.md, and commits to main (e.g. "/sprint-done", "/sprint-done SPRINT-02").
 ---
 
 # Skill: Sprint Closeout Protocol (`/sprint-done`)
@@ -29,15 +29,15 @@ Activate this skill whenever the user invokes:
 - **No active sprint / already closed (redundant) ⇒ skip + continue:** report "no open sprint to close" rather than fabricating a closeout. *(Redundant ⇒ skip.)*
 - Never mark a sprint `DELIVERED` for work that isn't merged to `main` — the human gate (`/review-pr`) is upstream of this step.
 
-### Step 1: Inspect `BACKLOG.md`
-1. Read the **Current Sprint** section in `BACKLOG.md`.
+### Step 1: Inspect `SPRINT_TRACKER.md`
+1. Read the **Current Sprint** section in `SPRINT_TRACKER.md` (the sprint tracker — sprint state lives here, not in `BACKLOG.md`, per `RFC-LAB-000-010`).
 2. Identify all tasks marked `✅ Done`.
-3. Identify any unfinished or carried-over tasks (`🚧 In Progress` or `📋 Planned`).
+3. Identify any unfinished or carried-over tasks (`🔨 In Progress`, `🔍 In Verification`, `👀 In Review`, or `📋 Backlog`).
 
-### Step 2: Archive Sprint in `BACKLOG.md`
-1. Move the finished sprint into the **Delivered Sprints Archive** section.
+### Step 2: Archive Sprint in `SPRINT_TRACKER.md`
+1. Move the finished sprint into the **Delivered Sprints Archive** section of `SPRINT_TRACKER.md`.
 2. Initialize the **Next Sprint** block (e.g. increment `SPRINT-02` $\rightarrow$ `SPRINT-03` with the next 14-day date window).
-3. Carry forward any remaining planned tasks into the new sprint.
+3. Carry forward any remaining incomplete tasks into the new sprint.
 
 ### Step 3: Bump `CHANGELOG.md`
 1. Determine the next semantic version (e.g. `v0.3.0` $\rightarrow$ `v0.4.0` for new features or `v0.3.1` for maintenance).

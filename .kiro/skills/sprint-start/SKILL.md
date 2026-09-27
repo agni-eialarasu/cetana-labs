@@ -1,13 +1,13 @@
 ---
 name: sprint-start
 description: >-
-  Opens the SPRINT CONTAINER in Cetana Labs (RFC-LAB-000-009 Phase 1 Scope, Kiro Web) — creates the Current Sprint block in BACKLOG.md (next SPRINT-XX id, 2-week window, goal, planned items incl. carried-forward tasks) and syncs STATUS.md focus. A sprint CONTAINS MANY plans: within it you run /plan-start -> /plan-done per feature (each producing one merged Spec). Pairs with /sprint-done. Use when the user runs /sprint-start or asks to start/plan a new sprint.
+  Opens the SPRINT CONTAINER in Cetana Labs (RFC-LAB-000-009 Phase 1 Scope, Kiro Web) — creates the Current Sprint block in SPRINT_TRACKER.md (next SPRINT-XX id, 2-week window, goal, planned items incl. carried-forward tasks) and syncs STATUS.md focus. A sprint CONTAINS MANY plans: within it you run /plan-start -> /plan-done per feature (each producing one merged Spec). Pairs with /sprint-done. Use when the user runs /sprint-start or asks to start/plan a new sprint.
 ---
 
 # Skill: Sprint Kickoff (`/sprint-start`)
 
 ## Objective
-Open the **sprint container** — the top-level Scope artifact of the lifecycle (`RFC-LAB-000-009` §3.1). It initializes the Current Sprint block in `BACKLOG.md` (id, window, goal, planned items) and is the counterpart to `/sprint-done`. Normally `/sprint-done` already seeds the next sprint block; use `/sprint-start` to open one from scratch, refine the goal, or (re)plan the item list. Runs on **Kiro Web** (plan) — no code.
+Open the **sprint container** — the top-level Scope artifact of the lifecycle (`RFC-LAB-000-009` §3.1). It initializes the Current Sprint block in `SPRINT_TRACKER.md` (id, window, goal, planned items) and is the counterpart to `/sprint-done`. Normally `/sprint-done` already seeds the next sprint block; use `/sprint-start` to open one from scratch, refine the goal, or (re)plan the item list. Runs on **Kiro Web** (plan) — no code.
 
 ### Lifecycle position (sprint ⊃ plans ⊃ Spec — decided: option a)
 ```
@@ -31,7 +31,7 @@ Open the **sprint container** — the top-level Scope artifact of the lifecycle 
 - **The prior sprint has unclosed, delivered work ⇒ ALERT:** suggest `/sprint-done` to close it first so carry-forwards compute correctly. *(Missing prerequisite ⇒ alert, don't silently overwrite.)*
 
 ### 1. Determine the next sprint
-1. Read `BACKLOG.md`. Find the highest `SPRINT-XX` (in Current or the Delivered Archive).
+1. Read `SPRINT_TRACKER.md`. Find the highest `SPRINT-XX` (in Current or the Delivered Archive).
 2. Next id = increment (e.g. `SPRINT-07` → `SPRINT-08`), zero-padded.
 3. Window = 2 weeks from the prior sprint's end date (or today if none).
 
@@ -48,13 +48,14 @@ Write/replace the **Current Sprint** section with:
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
-### Planned Sprint Items
+### Sprint Items
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-0XX` | ... | P? | Eialarasu | 📋 Planned | YYYY-MM-DD |
+| `TSK-0XX` | ... | P? | Eialarasu | ✅ Ready | YYYY-MM-DD |
 ```
-- **Carry forward** any `📋 Planned` / `🚧 In Progress` items not delivered in the prior sprint.
-- Assign new `TSK-0XX` ids continuing the global sequence (no gaps, no duplicates — check the whole file).
+- Use the state-machine status vocabulary (`RFC-LAB-000-010` §4): `✅ Ready` (Spec merged → `READY_TO_BUILD`), `🔨 In Progress`, `🔍 In Verification`, `👀 In Review`, `✅ Done`; `📋 Backlog` for an item still awaiting its merged Spec (Definition of Ready).
+- **Carry forward** any incomplete items (`🔨 In Progress` / `🔍 In Verification` / `👀 In Review` / `📋 Backlog`) not delivered in the prior sprint.
+- Assign new `TSK-0XX` ids continuing the global sequence (no gaps, no duplicates — scan **both** `SPRINT_TRACKER.md` and `BACKLOG.md` before assigning).
 
 ### 3. Sync focus
 - Update `### 3. Current Focus & Next Milestone` in root `STATUS.md` and `projects/LAB-000-cetana-labs/STATUS.md` to the new sprint goal (keep ≤ 35 lines; keep the two files identical).
@@ -68,6 +69,7 @@ Write/replace the **Current Sprint** section with:
 
 ## Notes
 - **Container vs. plan:** `/sprint-start` opens the sprint; individual feature Specs are authored in `/plan-start` sessions, not here. Keep the boundary (mirrors the `/env-doctor` vs `/validate` discipline — Decision Journal D8).
-- Guard against duplicate `TSK` ids (a past defect) — scan `BACKLOG.md` for the id before assigning.
-- Keep `BACKLOG.md` and `CHANGELOG.md` in lockstep (Pillar 2).
+- Guard against duplicate `TSK` ids (a past defect) — scan both `SPRINT_TRACKER.md` and `BACKLOG.md` for the id before assigning.
+- Keep `SPRINT_TRACKER.md` and `CHANGELOG.md` in lockstep (Pillar 2).
+- `BACKLOG.md` remains the `BK-` idea source (read it for the initiatives a sprint item serves), per the three-tier funnel (`RFC-LAB-000-010`).
 - **Web/plan only** — no code, no feature branch (that's `/spec-run` on the IDE).
