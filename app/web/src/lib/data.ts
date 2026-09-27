@@ -13,10 +13,9 @@
 //   unset / "auto"            → PocketBase when reachable, else snapshot fallback
 
 import { base } from '$app/paths';
-import PocketBase from 'pocketbase';
+import { pb } from './pb'; // shared PocketBase client (M2 — one authStore app-wide)
 import type { User, ProjectRecord, StatusRecord, Project, Archetype } from './types';
 
-const PB_URL = import.meta.env.VITE_PB_URL ?? 'http://127.0.0.1:8090'; // R4.1
 const PB_SOURCE = (import.meta.env.VITE_PB_SOURCE ?? 'auto').toLowerCase();
 
 const ARCHETYPE: Record<Archetype, { label: string; icon: string }> = {
@@ -82,9 +81,7 @@ async function loadFromSnapshot(fetchFn: typeof fetch): Promise<StructuralData> 
 // Maps PocketBase `projects` fields to the UI ProjectRecord shape (requirements §2)
 // and derives the User[] from the expanded owner relation (dedup by seed_id).
 async function loadFromPocketBase(): Promise<StructuralData> {
-  const pb = new PocketBase(PB_URL);
-  pb.autoCancellation(false); // single portfolio load — avoid auto-cancel
-
+  // Uses the shared `pb` client (autoCancellation already disabled in lib/pb.ts).
   const records = await pb.collection('projects').getFullList({ expand: 'owner' });
 
   const usersBySeedId = new Map<string, User>();

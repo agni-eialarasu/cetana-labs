@@ -1,6 +1,7 @@
 <script lang="ts">
   import '../app.css';
   import { theme } from '$lib/theme.svelte';
+  import AuthControl from '$lib/components/AuthControl.svelte';
   import { onMount } from 'svelte';
 
   let { children } = $props();
@@ -14,5 +15,10 @@
     return () => mq.removeEventListener('change', onChange);
   });
 </script>
+
+<!-- Global auth bar (M2, R4). Present on every route; never gates the public dashboard. -->
+<div class="flex justify-end border-b border-line bg-panel/40 px-4 py-2">
+  <AuthControl />
+</div>
 
 {@render children()}
