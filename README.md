@@ -64,7 +64,7 @@ cetana-labs/
 ├── docs/                          # 📚 Documentation (see docs/README.md — the hub)
 │   ├── README.md                  # 📚 Docs hub: index by category + breadcrumb nav standard
 │   ├── index.html                 # 🌐 Generated GitHub Pages dashboard (build artifact)
-│   ├── guides/                    # 📖 How-to: user, developer, sprint-lifecycle, owner, cloud-dev
+│   ├── guides/                    # 📖 How-to: user, developer, sprint-lifecycle, project-owner
 │   ├── reference/                 # 📐 Specs & standards: project-protocol, DESIGN, design-system
 │   ├── governance/                # ⚖️ Decision Journal & AI collaboration model
 │   ├── rfc/                       # 📜 Numbered decision records (RFC-LAB-000-001 … -010)
