@@ -232,3 +232,40 @@ Follows Entry 003, and was **triggered by the very first `/spec-run`** (M1). The
 - **Theme:** the first real execution *taught the process* — running M1 exposed a missing phase, and the fix was folded back immediately (the lifecycle improving itself from evidence, exactly as the AIDLC spike intended).
 - **Notable judgment:** the human insisted verification be **captured, not just performed** (auditability for the next agent) and that a wrong-state `/verification-done` must **never record a pass that didn't happen** (guard: unrun/failing steps ⇒ HOLD) — consistent with the D21 tripwire-not-shortcut principle.
 - **Honest note:** M1's Verification Log is a **retro-capture** — the manual verification happened before this loop was formalized. From the next Spec onward it's the live path. The skills remain *specifications* until exercised; `/verification-done` is first exercised on the next real run.
+
+
+---
+
+## Entry 005 — Standardizing work-tracking: the three-tier funnel as AIDLC-blueprint infrastructure
+
+**Date:** 2026-09-27 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `RFC-LAB-000-010` (Portfolio & Sprint Tracking Model); TSK-051 (refactor Spec, deferred)
+
+> _Decisions D26–D28 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+Follows Entry 004, in the same session that closed SPRINT-08 (v0.10.0). With the lifecycle proven on real work, the human moved to standardize the *tracking* substrate — explicitly framing `LAB-000` as **the proven blueprint for the AIDLC framework**, so the model must be industry-standard and portable, not bespoke.
+
+---
+
+### D26 — Retire the conflated single-file tracking; adopt the three-tier funnel as distinct artifacts
+- **Trigger:** The human proposed a clean separation: sprint-tracker = scoped/planned-for-implementation; backlog = idea bucket (scope-or-shelf); changelog = completed history — and asked for the best industry-standard practice, since this is the blueprint.
+- **Options:** (A) keep the current single `BACKLOG.md` (sprint + ideas together), formalize semantics in place; (B) split a dedicated **`SPRINT_TRACKER.md`** (committed/in-flight) from `BACKLOG.md` (ideas only), with `CHANGELOG.md` as shipped history.
+- **Decision & rationale:** **Option B — split.** The human's three-bucket intuition maps 1:1 onto the standard **Product Backlog → Sprint Backlog → Release** funnel; for a *portable blueprint*, the three concerns should be *physically distinct files* so any reader/agent sees the funnel immediately. Matches the Nexus Pulse `SPRINT_TRACKER.md`/`BACKLOG.md` separation (adapted). The agent noted this is mostly *formalizing what the repo already does* — the value is structure + portability, not new mechanics. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-010` §3.
+
+### D27 — One vocabulary everywhere: tracker status = the lifecycle state machine; Definition of Ready = "Spec merged"
+- **Trigger:** Designing the tracker's status column — reuse the `RFC-LAB-000-009` state machine, or a separate tracker dialect?
+- **Decision & rationale:** **Reuse the state machine verbatim** (`Ready`=`READY_TO_BUILD`, `In Verification`=`IN_VERIFICATION`, `In Review`=`IN_REVIEW`, `Done`=`RECORDED`) — one vocabulary across tracker, commands, and guide is the blueprint payoff and prevents dialect drift. And **Definition of Ready (backlog → sprint) = the Spec is merged to `main`** — i.e. the merge-first `/plan-done` transition. This makes **the funnel *be* the lifecycle**: "sprint-ready" isn't a separate judgment, it's the `READY_TO_BUILD` state — closing the classic "half-baked items enter the sprint" failure. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-010` §4–§5.
+
+### D28 — Make it blueprint-grade: explicit traceability chain + dogfood the refactor as a Spec; RFC now, refactor later
+- **Trigger:** The "this is the proven model for the framework" framing raised the bar beyond a solo repo's convenience.
+- **Decision & rationale:** Add an explicit **traceability chain** (`BK → TSK → Spec → PR → CHANGELOG → tag`) so an idea can be walked to its shipped code and back — the auditable thread a governed AIDLC framework needs. Sequence the work **RFC-first, then a follow-on Spec** for the mechanical refactor (`TSK-051`) — and run that refactor *through the AIDLC lifecycle itself*, so the blueprint is **proven on its own repo** (dogfood). Kept **git-native** — no external tracker (Jira/Linear) — to stay portable. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-010` §6/§9; TSK-051 backlog item.
+
+---
+
+### Session meta
+- **Theme:** treating *work-tracking as framework infrastructure* — because the repo is the blueprint, its tracking must be standard and portable, not personal convenience.
+- **Notable judgment:** the human independently arrived at the textbook three-tier funnel, then insisted the vocabulary and readiness gate **reuse the lifecycle** (one system, not two) — and that the refactor be dogfooded through that lifecycle.
+- **Also captured (process tip):** agreed a `/brainstorm-save` trigger heuristic — save when a session made a *decision* (choice between options / direction set / course-correction / trade-off accepted), not for routine execution; `/plan-done` is the natural trigger point.
+- **Honest note:** `RFC-LAB-000-010` is the decision only; the tracking files still use the old single-file layout until the `TSK-051` refactor Spec ships. Merge-first: the RFC lands before any skill targets the new structure.
