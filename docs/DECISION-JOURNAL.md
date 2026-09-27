@@ -195,3 +195,40 @@ Follows Entries 001–002. Where 002 *chose* Kiro Specs + Autonomous mode as the
 - **Notable judgment:** the human repeatedly optimized for a single thing — *spend attention only on function + verification* — and used it to reject leaky abstractions (the manual checkout) and over-collapsed designs (a monolithic verb).
 - **Course-corrections that changed outcomes (human):** killed the extra-checkout step (→ merge-first, D19); chose nesting over a colliding `/plan-start` (D20); tightened "skip and proceed" so gates can't be silently skipped (D21).
 - **Honest note:** the commands are *skill specifications* (procedures the IDE agent follows), not yet executable code — so their first real exercise is the M1 run, which also remains the spike for the still-undocumented Autonomous-over-existing-Spec chaining (RFC-009 §7). Recorded so the credibility bar (design-vs-proven) stays explicit.
+
+
+---
+
+## Entry 004 — Human functional verification: closing the loop between agent self-validation and merge
+
+**Date:** 2026-09-27 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `RFC-LAB-000-009` §3.2/§3.3 amendment, `/verification-done` skill, Human Verification Plan + Verification Log, `/review-pr` evidence gate; TSK-048
+
+> _Decisions D23–D25 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+Follows Entry 003, and was **triggered by the very first `/spec-run`** (M1). The AIDLC run worked — but in reviewing PR #21, the human noticed the lifecycle had no *formal* step for the part he'd just done by hand: actually exercising the feature. This entry captures closing that gap.
+
+---
+
+### D23 — Add an explicit human functional-verification phase (IN_VERIFICATION), distinct from the gate
+- **Trigger:** After the M1 `/spec-run`, the protocol observed was: IDE completes → human asks for review → **human manually verifies** → authorizes merge. The lifecycle only had agent self-validation (EARS) then the governance gate (`/review-pr`) — the *human exercising the feature* was undocumented and unrecorded.
+- **Options:** (A) leave it implicit inside `/review-pr`; (B) a distinct verification phase/state between implement and the gate, with its own loop.
+- **Decision & rationale:** **Option B.** Insert an **`IN_VERIFICATION`** state: `/spec-run` opens the PR + **emits a Human Verification Plan** and STOPs there (not at merge); the human runs it, fixes ride the **same PR**, and the loop repeats until it passes. Under AIDLC this is *where trust is earned* — an agent wrote the code, so an explicit hands-on human check matters more, not less. Mirrors Nexus Pulse's "Phase 3 — Human Local Verification." _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-009` §3.2; state machine + both sequence diagrams updated.
+
+### D24 — Capture the verification loop (don't let it evaporate): `/verification-done` → Verification Log in `REPORT.md`
+- **Trigger:** The human noted (from Nexus Pulse practice) that "IDE agent handles fixes conversationally" isn't enough — the findings/corrections must be **captured** so the next agent in the pipeline (Web `/review-pr`, then `/sprint-done`) inherits the evidence rather than losing it to IDE chat.
+- **Options for naming:** `/verification-save` (checkpoint-ish) vs `/verification-done` (terminal transition). For location: PR comment vs a repo artifact.
+- **Decision & rationale:** **`/verification-done`** — it fits the `-done` family (`plan-done`, `sprint-done`) and does double duty: **append a Verification Log** to `.kiro/specs/<id>/REPORT.md` (source of truth, rides the same PR) **and** transition `IN_VERIFICATION → IN_REVIEW`. `/review-pr` gains a step that **consumes** the log as evidence (missing/failed ⇒ HOLD) — turning the gate from "CI + DoD-on-paper" into "CI + DoD + the human actually verified it." The **Human Verification Plan** is authored in the Spec (experiential, human-executable) and kept **distinct from EARS** (machine self-validation), not auto-derived. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `/verification-done` skill; `REPORT.template.md` Verification Log; M1 REPORT retro-captures the manual verification as the worked example.
+
+### D25 — Codify the command naming convention: `[phase-or-action]-[start|done]`
+- **Trigger:** Naming `/verification-done`, the human stated the general rule: future commands should follow one style.
+- **Decision & rationale:** Adopt **`[phase-or-action]-[start|done]`** — `start` opens/enters a phase, `done` closes/transitions it — so the command surface is self-documenting and future verbs (`deploy-start`/`deploy-done`, …) slot in without re-litigating names. Honest asymmetry noted: the verify loop has **no `/verification-start`** — it's opened when `/spec-run` emits the plan; only the `-done` closer is a command. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-009` §3.3; applied across the verb map and guide.
+
+---
+
+### Session meta
+- **Theme:** the first real execution *taught the process* — running M1 exposed a missing phase, and the fix was folded back immediately (the lifecycle improving itself from evidence, exactly as the AIDLC spike intended).
+- **Notable judgment:** the human insisted verification be **captured, not just performed** (auditability for the next agent) and that a wrong-state `/verification-done` must **never record a pass that didn't happen** (guard: unrun/failing steps ⇒ HOLD) — consistent with the D21 tripwire-not-shortcut principle.
+- **Honest note:** M1's Verification Log is a **retro-capture** — the manual verification happened before this loop was formalized. From the next Spec onward it's the live path. The skills remain *specifications* until exercised; `/verification-done` is first exercised on the next real run.
