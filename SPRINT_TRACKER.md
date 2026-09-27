@@ -42,7 +42,8 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 | `TSK-049` | MVP M2 — GitHub OAuth sign-in (`RFC-LAB-000-008` §6) authored as a Kiro Spec and run via the AIDLC lifecycle | P1 | Eialarasu | 📋 Backlog | 2026-12-10 |
 | `TSK-050` | MVP M3–M4 — minimum RBAC (`owner_id` rule matrix) + owner write path for project status | P1 | Eialarasu | 📋 Backlog | 2026-12-17 |
 | `TSK-052` | Docs reorganization (Spec `docs-reorganization`) — group `docs/` into guides/reference/governance/rfc; `docs/README.md` hub + breadcrumb nav standard (blueprint); rename `work-environment`→`developer-guide`; refresh README tree; excludes `index.html` | P1 | Eialarasu | ✅ Done | 2026-09-27 |
-| `TSK-053` | Deployment architecture (`RFC-LAB-000-011`) — Vercel (frontend) + GCP (PocketBase); env/secrets, CI/CD, custom domain; **retire the GitHub-Pages classic dashboard** (`index.html` + `deploy-pages.yml`). Unblocks MVP M5 (org approval granted). Amends RFC-007/008 | P1 | Eialarasu | 📋 Backlog | 2026-12-17 |
+| `TSK-053` | Deployment architecture **RFC** (`RFC-LAB-000-011`) — decision of record: Vercel (frontend) + GCP VM (PocketBase); secret split; dual-run then retire GitHub-Pages; custom domain deferred to branding. Amends RFC-007/008; unblocks MVP M5 | P1 | Eialarasu | 👀 In Review | 2026-12-17 |
+| `TSK-054` | MVP **M5 execution** (`RFC-LAB-000-011` §6) — provision GCP VM + PocketBase, provision Vercel (`VITE_PB_URL`→GCP), wire OAuth redirect (needs M2), cutover + retire Pages (`index.html`/`deploy-pages.yml`). Authored as Kiro Spec(s), run via the AIDLC lifecycle | P1 | Eialarasu | 📋 Backlog | 2026-12-17 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Backlog | 2026-12-12 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Backlog | 2026-12-17 |
 
