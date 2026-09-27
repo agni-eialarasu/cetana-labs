@@ -61,14 +61,17 @@ Adapted from the Nexus Pulse five-verb pipeline; each phase names its **surface*
 
 ## 3.1 The lifecycle as a state machine (verb map + ordering discipline)
 
-The five phases are driven by four ordered `/commands`, forming a **brainstorm → implement → verify → done** flow. **Order is the contract** — the commands are *phase-aware*: each detects the current state and self-corrects rather than executing blindly.
+The five phases are driven by ordered `/commands`, forming a **brainstorm → implement → verify → done** flow. **Order is the contract** — the commands are *phase-aware*: each detects the current state and self-corrects rather than executing blindly.
 
 ```
-State:   PLANNING ──(Spec merged)──▶ READY_TO_BUILD ──(/spec-run → PR)──▶ IN_REVIEW ──(approve+merge)──▶ RECORDED
-Phase:   brainstorm                    implement                          verify                          done
-Command: /plan-start* → /plan-done     /spec-run <spec-id>                /review-pr <PR>                 /sprint-done
-Surface: Web (Scope)                   IDE (Build)                        Web (Review)                    Record
+State:   PLANNING ─(Spec merged)▶ READY_TO_BUILD ─(/spec-run→PR)▶ IN_VERIFICATION ⇄ (/verification-done)▶ IN_REVIEW ─(approve+merge)▶ RECORDED
+Phase:   brainstorm                implement                       verify (human loop)                    verify (gate)             done
+Command: /plan-start* → /plan-done  /spec-run <spec-id>            human runs plan ⇄ fix on same PR;      /review-pr <PR>           /sprint-done
+                                                                   /verification-done records + transitions
+Surface: Web (Scope)                IDE (Build)                    IDE (human verify)                     Web (Review)              Record
 ```
+
+> **Amendment (2026-09-27):** the verify phase is split into **human functional verification** (IN_VERIFICATION — the human exercises the feature per the Spec's Human Verification Plan, fixing on the same PR) and the **governance gate** (IN_REVIEW — `/review-pr`). This closes the gap between "agent self-validated" and "human authorizes merge" (§3.2). The original four-verb flow is preserved; `/verification-done` is added between implement and the gate.
 
 **Verb map:**
 
@@ -77,8 +80,9 @@ Surface: Web (Scope)                   IDE (Build)                        Web (R
 | **`/sprint-start`** | Scope (container) | Web | Opens the **sprint** (SPRINT-XX, window, goal) — once per sprint | Contains many plans |
 | **`/plan-start`** *(optional, implicit)* | Scope (brainstorm) | Web | Opens a **planning session** for one feature; **any free-form topic is implicitly a plan-start** | Nested in a sprint; → one Spec |
 | **`/plan-done`** | Scope (close) | Web | Finalizes + **merges the Spec** as a doc PR (the merge-first rule) → `READY_TO_BUILD` | — |
-| **`/spec-run <spec-id>`** | Build (implement) | IDE | **One-liner** executor: owns git/preflight/branch, runs `tasks.md`, self-validates EARS DoD, opens PR, STOPs | Executes one merged Spec |
-| **`/review-pr <PR>`** | Review (verify) | Web | Human gate — surfaces + STOP-and-holds; never merges | — |
+| **`/spec-run <spec-id>`** | Build (implement) | IDE | **One-liner** executor: owns git/preflight/branch, runs `tasks.md`, self-validates EARS DoD, opens PR, **emits the Human Verification Plan**, STOPs → `IN_VERIFICATION` | Executes one merged Spec |
+| **`/verification-done`** | Verify (human loop close) | IDE | After human functional verification passes, **appends the Verification Log to `REPORT.md`** (same PR) and transitions `IN_VERIFICATION → IN_REVIEW` | Closes the verify loop for one Spec |
+| **`/review-pr <PR>`** | Verify (gate) | Web | Human gate — surfaces CI/scope/DoD **+ the verification record**, STOP-and-holds; never merges | — |
 | **`/sprint-done`** | Record (done) | Record | Merge lockstep + release; refuses to close undelivered work | Closes the sprint container |
 
 **Sprint ⊃ plans ⊃ Spec (decided — option a):** a `/sprint-start` sprint **contains many** `/plan-start`→`/plan-done` planning sessions; each produces **one merged Spec** that `/spec-run` executes. `/plan-start` does not open a sprint; `/spec-run` does not open a plan.
@@ -91,15 +95,43 @@ Surface: Web (Scope)                   IDE (Build)                        Web (R
 
 This split is deliberate: a wrong-order command can **skip redundant work** but can **never quietly skip a gate** (the human review, the merge-first requirement, or recording only-merged work). The guard is a tripwire, not a shortcut — preserving the governance guarantees of §6.
 
+## 3.2 Human functional verification — the IN_VERIFICATION loop (amendment)
+
+**The gap this closes.** `/spec-run` ends with the *agent* having self-validated against the machine-checkable EARS DoD and opened a PR. But "the tests pass" is not "a human confirmed the feature does what we wanted." Under AIDLC especially — where an agent, not the human, wrote the code — an explicit **human functional verification** step is where trust is earned. Without it, the loop jumps straight from agent-self-validation to the governance gate, and any hands-on findings live only in ephemeral IDE chat.
+
+**The loop.** Between *implement* and the *gate*, the lifecycle now has an explicit **IN_VERIFICATION** state:
+
+1. `/spec-run` opens the PR and **emits the Spec's Human Verification Plan** (an authored, human-executable checklist — §4), then STOPs in `IN_VERIFICATION`.
+2. The **human runs the plan** — exercises the feature (runs it, clicks it, eyeballs it). On any finding, the IDE agent **fixes it on the same PR** and the human re-verifies. This **⇄ iterate loop** continues until the plan passes.
+3. On pass, the human runs **`/verification-done`** → it **appends a Verification Log** (steps, findings, corrections, verdict) to `.kiro/specs/<id>/REPORT.md`, commits it to the same PR, and transitions **IN_VERIFICATION → IN_REVIEW**.
+4. **`/review-pr`** then reads that verification record as evidence — the gate is now "CI + scope + DoD **+ the human actually verified it**," not DoD-on-paper alone.
+
+**Human Verification Plan vs. EARS DoD (distinct, complementary):**
+- **EARS acceptance criteria** = the *agent's* self-validation target — machine-checkable (does `pnpm check`/parity pass?). Lives in `requirements.md`.
+- **Human Verification Plan** = the *human's* hands-on script — experiential, executable by a person ("start the stack; confirm the dashboard renders 6 live cards; stop PocketBase, reload; confirm graceful fallback"). Authored in `requirements.md`, may reference the R-numbers, but is **not** auto-derived from them (some EARS criteria are internal; some human checks are experiential). `/spec-run` emits it; the human runs it.
+
+**The Single-PR rule (Golden Rule, adapted from Nexus Pulse).** All corrections found during human verification — and the Verification Log itself — are pushed to the **same open PR**. Never merge-then-hotfix; never open a second PR for a minor fix discovered in verification. This keeps the change, its verification, and its corrections in one reviewable unit. (Consistent with `RFC-LAB-000-004` linear history.)
+
+**Why capture it (not just do it):** the record makes verification **auditable** and hands it to the next agent in the pipeline (Web `/review-pr`, then `/sprint-done`) as evidence rather than lost chat context. This is the Nexus Pulse REPORT-as-transactional-envelope pattern, translated to our per-Spec `REPORT.md`.
+
+## 3.3 Command naming convention
+
+Lifecycle commands follow **`[phase-or-action]-[start|done]`** — `start` opens/enters a phase, `done` closes/transitions it. This keeps the surface self-documenting and lets future commands slot in without re-litigating names:
+
+- `plan-start` / `plan-done` (Scope) · `sprint-start` / `sprint-done` (container) · `verification-done` (verify-loop close).
+- **Asymmetry (intentional):** the verify loop has **no `/verification-start`** — it is *opened* implicitly when `/spec-run` emits the Human Verification Plan at its hand-off STOP. Only the `-done` closer is a distinct command.
+- Future phases (e.g. `deploy-start`/`deploy-done`) inherit this pattern.
+
 ## 4. The Contract: Kiro Specs (not a custom PROMPT.md)
 
 A delegated unit of work is specified as a **Kiro Spec** — the native artifact that carries the full brief for an executor with no conversational context:
 
 | Spec file | Role in the contract | Maps to |
 | :--- | :--- | :--- |
-| `requirements.md` | **EARS acceptance criteria = Definition of Done.** Testable, unambiguous "when X, the system shall Y". | The *what* / the gate |
+| `requirements.md` | **EARS acceptance criteria = Definition of Done** (agent self-validation target) **+ a Human Verification Plan** (the human's hands-on script — §3.2). | The *what* / the gate + the human check |
 | `design.md` | Technical approach, interfaces, data touchpoints, trade-offs. | The *how* |
-| `tasks.md` | Ordered, checkable implementation steps. | The *plan* Autonomous mode executes |
+| `tasks.md` | Ordered, checkable implementation steps + the Execution header. | The *plan* Autonomous mode executes |
+| `REPORT.md` *(produced during the run)* | Verification Log (appended by `/verification-done`) + AIDLC spike notes + sign-off. | The *evidence / hand-off envelope* |
 
 **Why Specs over a homegrown `PROMPT.md` (D15):**
 - **EARS is a more testable DoD** than freeform prose — acceptance criteria double as the review checklist and the agent's self-validation target.
@@ -162,9 +194,11 @@ These are captured here so scope stays honest and the team ceremony can be switc
 - (Follow-on, separate PRs — not this docs RFC):
   - **`/spec-run <spec-id>`** skill (`.kiro/skills/`) — the **Kiro IDE one-liner** that executes the Build phase (§3): reads a self-describing Spec, runs its preflight/pre-checks, creates the branch the Spec names, works `tasks.md` in order, self-validates against the EARS DoD, opens a PR, and STOP-and-holds. Never merges. Keyed on the **spec id** (the AIDLC unit of work, §4). Deliberately distinct from `/sprint-start` (Web/plan — the Scope bookend), honoring the surface split (`RFC-LAB-000-007` §2.1).
   - **`/plan-start`** *(optional, implicit)* and **`/plan-done`** skills (`.kiro/skills/`) — the Scope/brainstorm bookends (§3.1). `/plan-done` enforces the **merge-first rule** (merges the Spec to `main`) that makes `/spec-run` a clean one-liner. Nested under `/sprint-start` (a sprint contains many plans).
-  - **`/review-pr`** skill (`.kiro/skills/`) — the human PR gate (§3 Phase 4).
-  - **Phase-aware state guards** added to `/plan-start`, `/plan-done`, `/spec-run`, `/review-pr`, and `/sprint-done` (§3.1) — redundant ⇒ skip+continue; missing prerequisite/gate ⇒ alert+HOLD.
-  - A **`REPORT.md` template** — the Phase 5 sign-off artifact (§10.2).
+  - **`/review-pr`** skill (`.kiro/skills/`) — the human PR gate (§3 Phase 4); consumes the Verification Log as evidence (§3.2).
+  - **`/verification-done`** skill (`.kiro/skills/`) — closes the IN_VERIFICATION loop (§3.2): appends the Verification Log to the Spec's `REPORT.md` (same PR, Single-PR rule) and transitions to `IN_REVIEW`.
+  - A **Human Verification Plan** section authored in each Spec's `requirements.md`; **`/spec-run` emits it** at hand-off (§3.2).
+  - **Phase-aware state guards** added to `/plan-start`, `/plan-done`, `/spec-run`, `/verification-done`, `/review-pr`, and `/sprint-done` (§3.1) — redundant ⇒ skip+continue; missing prerequisite/gate ⇒ alert+HOLD.
+  - A **`REPORT.md` template** — the Phase 5 sign-off artifact (§10.2), now including the Verification Log section.
   - The **M1 Spec** (`.kiro/specs/mvp-m1-live-pocketbase/`) as the first AIDLC artifact, with a self-describing **Execution header** (kickoff command, surface, branch, preflight, EARS target) so `/spec-run` needs no extra arguments.
 
 ## 10. Open Questions

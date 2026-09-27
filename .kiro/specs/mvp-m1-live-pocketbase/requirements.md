@@ -86,6 +86,20 @@ The PocketBase `projects` collection field names differ from the UI's `ProjectRe
 - **R6.2** WHEN the change is complete, `pnpm --dir app/web build` SHALL succeed (static adapter).
 - **R6.3** WHEN the change is complete, `pnpm --dir app/web lint` (prettier) SHALL pass, and `make validate-local` SHALL remain green.
 
+## 4b. Human Verification Plan (the human's hands-on script — `RFC-LAB-000-009` §3.2)
+
+> Distinct from the EARS DoD above (which the agent self-validates, machine-checkable). This is the **experiential** checklist a human runs to confirm the feature actually behaves — `/spec-run` **emits** it at hand-off; the human runs it; `/verification-done` records the outcome in `REPORT.md`. Corrections ride the **same PR** (Single-PR rule).
+
+Run against the local stack (`make start-local`, PocketBase `:8090` + SvelteKit `:5173`) with `VITE_PB_URL=http://127.0.0.1:8090`:
+
+- **V1 — Live read renders (R1/R3):** With PocketBase up and seeded, load the dashboard. Confirm all 6 project cards render, with owner pills showing the correct names/handles — sourced from **live PocketBase**, not the snapshot. *(Spot-check: edit a project's field in the PB admin UI, reload, see it change.)*
+- **V2 — Read-parity (R3.2):** Compare the live-PB render to a `VITE_PB_SOURCE=snapshot` render of the same seed — identical card set, ordering, severity styling, and KPI counts.
+- **V3 — Graceful fallback (R5.1):** Stop PocketBase (`make stop-local`), reload. Confirm the dashboard falls back to the snapshot **without blanking or throwing** (a console warning is expected); no crash.
+- **V4 — Status still merges (R2):** Confirm health/wins/focus/blockers still display (sourced from `status.json`), merged onto the live structural data.
+- **V5 — Gates (R6):** `pnpm --dir app/web check && build` green; `make validate-local` green.
+
+**Verdict rule:** all of V1–V5 must pass (findings fixed on the same PR and re-verified) before `/verification-done`.
+
 ## 5. Out of Scope (deferred — do NOT implement in M1)
 - GitHub OAuth / sign-in (M2), any RBAC rule changes beyond what R-access requires (M3), owner write path (M4), deploy (M5).
 - Migrating status fields into PocketBase (`status_snapshots`) — status stays snapshot-sourced (`RFC-LAB-000-008` §7).
