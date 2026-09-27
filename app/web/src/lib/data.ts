@@ -1,13 +1,23 @@
-// Data-access layer (RFC-LAB-000-005 §4).
+// Data-access layer (RFC-LAB-000-005 §4, RFC-LAB-000-008 M1).
 //
-// Phase 2 read model: structural data (users/projects) + live status
-// (status.json) are loaded from the bundled data/ snapshot. When the PocketBase
-// backend is deployed, `loadProjects` can be swapped to read structural data via
-// the PocketBase JS SDK (pb.collection('projects').getFullList({expand:'owner'}))
-// while continuing to merge live status until Phase 4 migrates it into the DB.
+// M1 read model: structural data (projects + resolved owner) is loaded from the
+// live PocketBase backend via the JS SDK, while live status (status.json) is still
+// merged from the bundled data/ snapshot (status migration into the DB is deferred
+// to a later MVP phase — RFC-LAB-000-008 §7). The static-snapshot path is retained
+// as a configurable fallback so the dashboard never blanks if PocketBase is
+// unreachable (dual-run posture, RFC-LAB-000-008 §9.4).
+//
+// Source selection (R4/R5):
+//   VITE_PB_SOURCE=pocketbase → force live PocketBase
+//   VITE_PB_SOURCE=snapshot   → force bundled snapshot
+//   unset / "auto"            → PocketBase when reachable, else snapshot fallback
 
 import { base } from '$app/paths';
+import PocketBase from 'pocketbase';
 import type { User, ProjectRecord, StatusRecord, Project, Archetype } from './types';
+
+const PB_URL = import.meta.env.VITE_PB_URL ?? 'http://127.0.0.1:8090'; // R4.1
+const PB_SOURCE = (import.meta.env.VITE_PB_SOURCE ?? 'auto').toLowerCase();
 
 const ARCHETYPE: Record<Archetype, { label: string; icon: string }> = {
   'control-plane': { label: 'Control Plane', icon: '💻' },
@@ -52,11 +62,84 @@ async function fetchJson<T>(fetchFn: typeof fetch, path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-export async function loadProjects(fetchFn: typeof fetch): Promise<Project[]> {
-  const [users, projects, statuses] = await Promise.all([
+// --- Structural data sources (R1/R5) -------------------------------------------------
+
+interface StructuralData {
+  users: User[];
+  projects: ProjectRecord[];
+}
+
+// Existing behavior: read structural masters from the bundled snapshot (fallback path).
+async function loadFromSnapshot(fetchFn: typeof fetch): Promise<StructuralData> {
+  const [users, projects] = await Promise.all([
     fetchJson<User[]>(fetchFn, 'users.json'),
-    fetchJson<ProjectRecord[]>(fetchFn, 'portfolio.json'),
-    fetchJson<StatusRecord[]>(fetchFn, 'status.json')
+    fetchJson<ProjectRecord[]>(fetchFn, 'portfolio.json')
+  ]);
+  return { users, projects };
+}
+
+// M1: read structural data from live PocketBase via the JS SDK (R1.1/R1.2/R1.3).
+// Maps PocketBase `projects` fields to the UI ProjectRecord shape (requirements §2)
+// and derives the User[] from the expanded owner relation (dedup by seed_id).
+async function loadFromPocketBase(): Promise<StructuralData> {
+  const pb = new PocketBase(PB_URL);
+  pb.autoCancellation(false); // single portfolio load — avoid auto-cancel
+
+  const records = await pb.collection('projects').getFullList({ expand: 'owner' });
+
+  const usersBySeedId = new Map<string, User>();
+  const projects: ProjectRecord[] = records.map((r): ProjectRecord => {
+    const owner = (r.expand as { owner?: Record<string, unknown> } | undefined)?.owner;
+    const ownerSeedId = (owner?.seed_id as string) ?? (r.owner as string);
+    if (owner && ownerSeedId && !usersBySeedId.has(ownerSeedId)) {
+      usersBySeedId.set(ownerSeedId, {
+        id: ownerSeedId,
+        name: (owner.name as string) ?? '',
+        email: (owner.email as string) ?? null,
+        github_handle: (owner.github_handle as string) || null,
+        role: (owner.role as User['role']) ?? 'owner',
+        org: (owner.org as string) || null,
+        active: (owner.active as boolean) ?? true
+      });
+    }
+    return {
+      id: r.lab_id as string, // lab_id → UI id
+      slug: r.slug as string,
+      name: r.name as string,
+      descriptor: (r.descriptor as string) || null,
+      archetype: r.archetype as Archetype,
+      owner_id: ownerSeedId,
+      repo_url: (r.repo_url as string) || null,
+      reference_url: (r.reference_url as string) || null,
+      dev_environment: r.dev_environment as ProjectRecord['dev_environment'],
+      status_source: r.status_source as ProjectRecord['status_source']
+    };
+  });
+
+  return { users: [...usersBySeedId.values()], projects };
+}
+
+// Source switch + graceful fallback (R5): PocketBase when configured/reachable,
+// else the bundled snapshot. Never throws an unhandled error that blanks the board.
+async function loadProjectRecords(fetchFn: typeof fetch): Promise<StructuralData> {
+  if (PB_SOURCE === 'snapshot') return loadFromSnapshot(fetchFn);
+
+  try {
+    const data = await loadFromPocketBase();
+    if (data.projects.length > 0) return data;
+    if (PB_SOURCE === 'pocketbase') return data; // forced: honor empty result
+    console.warn('[data] PocketBase returned no projects — falling back to snapshot.');
+  } catch (err) {
+    if (PB_SOURCE === 'pocketbase') throw err; // forced: surface the error
+    console.warn('[data] PocketBase unreachable — falling back to snapshot.', err);
+  }
+  return loadFromSnapshot(fetchFn);
+}
+
+export async function loadProjects(fetchFn: typeof fetch): Promise<Project[]> {
+  const [{ users, projects }, statuses] = await Promise.all([
+    loadProjectRecords(fetchFn),
+    fetchJson<StatusRecord[]>(fetchFn, 'status.json') // M1: status stays snapshot-sourced (R2)
   ]);
 
   const usersById = new Map(users.map((u) => [u.id, u]));
