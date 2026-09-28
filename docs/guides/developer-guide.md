@@ -162,6 +162,31 @@ make stop-local              # frees :5173 and :8090; pb_data preserved
 | Data file | `app/pocketbase/pb_data/` (SQLite, gitignored) |
 | Superuser | from `.env` (`PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD`) |
 
+> ⚠️ **The `pb_data` location gotcha (learned the hard way — `RFC-LAB-000-008` M3–M4).**
+> PocketBase resolves `pb_data` **relative to its current working directory**. The
+> **one canonical location is `app/pocketbase/pb_data`** — always start the backend so it
+> lands there, i.e. **`make start-local` / `make pb-serve`** (they `cd app/pocketbase`
+> first), or `pocketbase serve --dir app/pocketbase/pb_data` from the repo root. If you
+> `pocketbase serve` from some *other* directory (e.g. `/opt/homebrew/bin`), it silently
+> creates a **separate, empty `pb_data` there** — your seed, OAuth config, and schema all
+> go to the wrong place, and `make start-local` then serves an empty backend. All backend
+> state (superuser, collections, seed, **OAuth provider config**) lives inside whichever
+> `pb_data` is active, so a mismatch looks like "everything vanished."
+>
+> **Symptoms:** anon reads return `404 "Missing collection context"`; superuser auth
+> `400`; the dashboard is empty though you "just seeded it."
+> **Recovery (rebuild the canonical instance):**
+> ```bash
+> make stop-local                                   # kill any stray servers first
+> pocketbase superuser upsert "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD"   # run from app/pocketbase/
+> make start-local                                  # serves app/pocketbase/pb_data
+> make seed                                          # provision + seed the canonical dir
+> ```
+> Then re-add the GitHub OAuth provider once (§5.1) — the OAuth **client secret is not
+> committed and does not migrate between data dirs**, so a fresh `pb_data` needs it re-entered.
+> **Rule of thumb:** never `pocketbase serve` from a raw shell in an arbitrary directory;
+> use the `make` targets so the data dir is always canonical.
+
 **Test personas & RBAC (forward — Phase 3, `RFC-LAB-000-006`):** once GitHub OAuth + roles land, personas map to the `memberships` roles (`owner`/`lead`/`contributor`/`reviewer`/`stakeholder`). Provisioning steps will be added here when auth is built.
 
 ### 5.1 GitHub OAuth setup (PocketBase v0.40+)
