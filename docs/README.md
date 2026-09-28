@@ -10,9 +10,9 @@ docs/
 ├── reference/    # specs & standards: STATUS protocol, design system
 ├── governance/   # decision records & collaboration model
 ├── rfc/          # numbered decision records (RFC-LAB-000-0XX)
-├── templates/    # reusable artifact templates
-└── index.html    # generated GitHub-Pages dashboard (build artifact — see RFC-LAB-000-011)
+└── templates/    # reusable artifact templates
 ```
+> The live app is the deployed **Sleek UI** (Vercel + Railway, `RFC-LAB-000-011` / M5). The old generated GitHub-Pages dashboard (`docs/index.html`) was retired at M5.
 
 ---
 

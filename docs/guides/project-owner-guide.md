@@ -45,8 +45,8 @@ Every weekday morning at 9:30 AM IST, our automated system generates an executiv
 
 1. **When your project is first registered:**
    - It appears as **`⏳ Onboarding Pending`** with an alert.
-   - **Fastest Setup:** Open the **[Live Portfolio Dashboard](https://agni-eialarasu.github.io/cetana-labs/)**, find your project card, and click **"🤖 Copy AI Onboarding Prompt"**.
-   - Paste that prompt into your repository's AI assistant (Cursor, Claude Code, Copilot). It automatically creates your `STATUS.md`, updates `AGENTS.md`, and links your repo badge.
+   - **Fastest Setup:** paste the generic onboarding prompt below into your repository's AI assistant (Cursor, Claude Code, Copilot). It automatically creates your `STATUS.md`, updates `AGENTS.md`, and links your repo badge.
+   - You can view the live portfolio on the deployed **Sleek UI** (Vercel — see the repo README for the current URL). *(The old GitHub-Pages dashboard with its one-click "Copy Onboarding Prompt" button was retired at M5, `RFC-LAB-000-011`; use the prompt below.)*
    - Pushing `STATUS.md` immediately promotes your badge to **`🟢 On Track`** with your real wins!
 
 2. **Sprint Cadence Reminder (> 14 Days):**
@@ -59,9 +59,9 @@ Every weekday morning at 9:30 AM IST, our automated system generates an executiv
 ## 🚀 Step 1: Initialize `STATUS.md` (Run Once)
 
 > [!TIP]
-> **Recommended:** Get your project's pre-filled, customized prompt directly from the **[Live Portfolio Dashboard](https://agni-eialarasu.github.io/cetana-labs/)** by clicking **"🤖 Copy AI Onboarding Prompt"** on your card!
+> Paste the generic prompt below into your AI chat inside your repo — it's all you need to initialize `STATUS.md`.
 
-Alternatively, paste this generic prompt into your AI chat inside your repo:
+Paste this prompt into your AI chat inside your repo:
 
 > ### 📋 AI Prompt: Initialize Status (`/status-init`)
 > ```text
@@ -203,9 +203,9 @@ Copy and send this to project leads on WhatsApp / Slack / Email:
 
 > *"Team, to simplify executive reporting and eliminate manual status writing, we are adopting a standardized 30-line `STATUS.md` and pre-flight validation gate (`/project-validate`) across all projects.*
 >
-> *You don't need to write this manually. We've set up an automated 1-click prompt generator on our dashboard:*
-> *1. Open https://agni-eialarasu.github.io/cetana-labs/*
-> *2. Click **'🤖 Copy AI Onboarding Prompt'** on your project card.*
-> *3. Paste into your AI tool (Cursor, Claude Code, Copilot) to initialize in 10 seconds!*
+> *You don't need to write this manually — an AI assistant does it in ~10 seconds:*
+> *1. Open the copy-paste onboarding prompt in the Project Owner Guide.*
+> *2. Paste it into your AI tool (Cursor, Claude Code, Copilot) inside your repo.*
+> *3. Push the generated `STATUS.md` — your project goes live on the portfolio.*
 >
-> *Full guide & copy-paste prompts: [docs/project-owner-guide.md](https://github.com/agni-eialarasu/cetana-labs/blob/main/docs/project-owner-guide.md)"*
+> *Full guide & copy-paste prompts: [docs/guides/project-owner-guide.md](https://github.com/agni-eialarasu/cetana-labs/blob/main/docs/guides/project-owner-guide.md)"*

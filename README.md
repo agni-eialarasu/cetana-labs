@@ -1,6 +1,6 @@
 # Cetana Labs (Master Registry & Lab Notebook)
 
-> 🌐 **Live Portfolio Dashboard:** [agni-eialarasu.github.io/cetana-labs](https://agni-eialarasu.github.io/cetana-labs/)  
+> 🌐 **Live App (Sleek UI — Vercel + Railway):** [cetana-labs.vercel.app](https://cetana-labs.vercel.app)  
 > 📚 **All Documentation (hub):** [docs/README.md](docs/README.md)  
 > 📖 **User Guide:** [docs/guides/user-guide.md](docs/guides/user-guide.md)  
 > 🛠️ **Developer Guide (setup, commands, Kiro Web + IDE):** [docs/guides/developer-guide.md](docs/guides/developer-guide.md)  
@@ -57,15 +57,14 @@ cetana-labs/
 ├── .github/workflows/
 │   ├── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
 │   ├── lead-ping-cron.yml         # 🔔 Weekly stale/onboarding lead ping alert workflow
-│   └── deploy-pages.yml           # 🌐 Automated GitHub Pages dashboard deployment workflow
+│   └── ci-validate.yml            # 🛡️ PR CI: portfolio + 5-pillar + registry/schema checks + web build
 ├── scripts/
 │   ├── generate_status.py         # 📱 Standalone WhatsApp executive status generator
-│   ├── generate_dashboard.py      # 🌐 Static HTML portfolio web dashboard generator
 │   ├── ping_leads.py              # 🔔 Automated lead ping engine (stale & onboarding alerts)
 │   └── validate_portfolio.py      # 🛡️ CI linter & project structure validator
+├── app/                           # 🖥️ Web app (BK-011): pocketbase/ backend + web/ SvelteKit Sleek UI
 ├── docs/                          # 📚 Documentation (see docs/README.md — the hub)
 │   ├── README.md                  # 📚 Docs hub: index by category + breadcrumb nav standard
-│   ├── index.html                 # 🌐 Generated GitHub Pages dashboard (build artifact)
 │   ├── guides/                    # 📖 How-to: user, developer, sprint-lifecycle, project-owner
 │   ├── reference/                 # 📐 Specs & standards: project-protocol, DESIGN, design-system
 │   ├── governance/                # ⚖️ Decision Journal & AI collaboration model
