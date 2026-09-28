@@ -381,3 +381,34 @@ Planning M3 (minimum RBAC) + M4 (owner write path). Two decisions settled before
 - **Theme:** settling the *architecture* questions M3–M4 hinge on (enforcement engine, status home) before scoping — so the Spec implements decisions rather than discovering them mid-build.
 - **Notable judgment:** "don'"'"'t reinvent" again (built-in rules over a library, echoing D11/D15 on Specs-over-PROMPT.md); and choosing the minimal status field while *honestly naming* the two-source tension rather than hiding it.
 - **Honest note:** nothing built — the Spec is authored (merge-first pending). M3–M4 completes the MVP'"'"'s *local* auth loop; only M5 (deploy) then remains.
+
+
+---
+
+## Entry 009 — Mini AIDLC: a POC-speed model with a graduation path to standard
+
+**Date:** 2026-09-27 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `templates/aidlc-mini/` scaffold (KICKSTART + POC-LOG + POC-SPEC + MIGRATION + `/graduate` skill)
+
+> _Decisions D38–D40 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+Kicking off a new POC, the human wanted to run AIDLC **from the start** — but in a **mini** mode: faster loop, less ceremony, generic + tech-stack-independent, with a clean path to migrate to the standard model if the POC is approved. Framed as a maturity ladder: **POC (mini) → MVP (standard) → Product (extended)**.
+
+### D38 — A three-tier maturity ladder, same shape at every tier
+- **Trigger:** Full LAB-000 ceremony is too heavy for a throwaway-ish POC, but a *different* lightweight process would create a painful rewrite at migration.
+- **Decision & rationale:** Define **Mini AIDLC** as the *same shape* (brainstorm→implement→verify→done, human-gated) with less ceremony — so migration is "add rigor," not "rewrite." Process formality scales with product maturity, mirroring the *contract* progressive-formality already in `RFC-LAB-000-009` §5, one level up. _(Contributor: Agni Eialarasu)_
+- **Outcome:** the ladder in `KICKSTART.md` §0; scaffold under `templates/aidlc-mini/`.
+
+### D39 — The keep/relax/defer cut (what "mini" means, concretely)
+- **Trigger:** "Faster/lighter" is meaningless unless *what's optional* is defined.
+- **Decision & rationale:** **Non-negotiable even at POC:** the phase shape, the **human gate**, and the Decision Journal (the human held the line on the gate explicitly — cheap, and the habit that makes migration seamless). **Relaxed:** contract → one `POC-SPEC.md`; verify → eyeball checklist; git → commit-freely/milestone-PRs; tracker/changelog/journal → **collapsed into one sectioned `POC-LOG.md`**. **Deferred to standard:** RFCs (POC decisions → journal), merge-first, state machine + guards, validators/lockstep, the command suite, the two-surface split. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `KICKSTART.md` §1–§3; `POC-LOG.md` collapsed artifact.
+
+### D40 — `POC-LOG.md` is the seed crystal; `/graduate` derives-then-freezes
+- **Trigger:** The human articulated the migration precisely: at POC→MVP, SPRINT_TRACKER + BACKLOG are *derived from* `POC-LOG`, and `POC-LOG` *becomes a historical reference*.
+- **Decision & rationale:** Make it a **first-class, documented, commanded transition** — **`/graduate`** (named for the maturity ladder; distinct from data-migration connotations). `POC-LOG.md` is **pre-sectioned along the graduation seams** (§Decisions/§Now/§Ideas/§Shipped/§Spec) so graduation is a clean *lift*: §Now→SPRINT_TRACKER, §Ideas→BACKLOG (forward-looking, migrated); §Shipped→CHANGELOG, §Decisions→DECISION-JOURNAL (historical, carried forward); §Spec→full Kiro Spec; then **freeze `POC-LOG.md`** (kept, not deleted) + add the deferred rigor — **human-gated**. The command + runbook **ship inside the scaffold** so any POC is self-contained and generic. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `MIGRATION.md` (derivation map + graduation checklist); `skills/graduate/SKILL.md`.
+
+### Session meta
+- **Theme:** generalizing the method into a *reusable, tech-agnostic POC kickstarter* — the blueprint producing a smaller blueprint, with an explicit ramp between them.
+- **Notable judgment:** the human insisted the **human gate is non-negotiable even at POC** (speed never buys out trust), and framed the migration as *derive-then-freeze* (seed crystal) — which drove the sectioned `POC-LOG` design.
+- **Honest note:** this is a **template/methodology artifact** — not yet battle-tested; its first real exercise is the new POC the human is starting. `/graduate` is a skill *spec* until first run. Built in parallel with the M3–M4 run (different paths, no collision).

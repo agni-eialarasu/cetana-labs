@@ -7,6 +7,7 @@
 > 🔄 **Sprint Lifecycle & Delivery Process (visual, both paths):** [docs/guides/sprint-lifecycle.md](docs/guides/sprint-lifecycle.md)  
 > 🗂️ **Portfolio & Sprint Tracking Model (Backlog → Sprint → Changelog):** [docs/rfc/RFC-LAB-000-010-tracking-model.md](docs/rfc/RFC-LAB-000-010-tracking-model.md)  
 > 🚀 **Deployment Architecture (Vercel + GCP):** [docs/rfc/RFC-LAB-000-011-deployment.md](docs/rfc/RFC-LAB-000-011-deployment.md)  
+> 🧪 **Mini AIDLC — POC Kickstarter (copy for new POCs, tech-agnostic):** [templates/aidlc-mini/KICKSTART.md](templates/aidlc-mini/KICKSTART.md)  
 > 🧠 **Decision Journal (how key decisions were reached):** [docs/governance/DECISION-JOURNAL.md](docs/governance/DECISION-JOURNAL.md)  
 > 🤝 **AI Collaboration Model (how we work with AI):** [docs/governance/ai-collaboration-model.md](docs/governance/ai-collaboration-model.md)  
 > 👥 **Project Owner Guide & AI Prompts:** [docs/guides/project-owner-guide.md](docs/guides/project-owner-guide.md)  
