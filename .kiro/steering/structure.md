@@ -11,13 +11,14 @@ cetana-labs/
 ├── data/                  # Relational JSON masters + schemas (RFC-LAB-000-002) — source of truth for structural data
 ├── scripts/               # Zero-dependency Python governance engine + generators/validators
 ├── docs/
-│   ├── index.html         # Generated classic dashboard (GitHub Pages root)
-│   ├── DESIGN.md           # Org Nexus Pulse design system (authoritative visual SoT)
-│   ├── design-system-lab000.md  # SvelteKit/Tailwind mapping of DESIGN.md
-│   └── rfc/               # RFC-LAB-000-001 … -006 (decision records)
+│   ├── README.md          # Docs hub + breadcrumb nav standard
+│   ├── guides/            # developer-guide, user-guide, sprint-lifecycle, project-owner-guide
+│   ├── reference/         # project-protocol, DESIGN, design-system-lab000
+│   ├── governance/        # DECISION-JOURNAL, ai-collaboration-model
+│   └── rfc/               # RFC-LAB-000-001 … -011 (decision records)
 ├── app/
-│   ├── pocketbase/        # Backend scaffold: pb_schema.json (generated), README
-│   └── web/               # SvelteKit "Sleek UI" (deployed at /app on Pages)
+│   ├── pocketbase/        # Backend: Containerfile, pb_hooks/, pb_schema.json, pb_provision/import
+│   └── web/               # SvelteKit "Sleek UI" (deployed on Vercel; PocketBase on Railway — RFC-LAB-000-011)
 ├── projects/LAB-XXX-<slug>/  # Per-project README.md + STATUS.md + journal.md
 ├── templates/             # Archetype scaffolds
 └── .kiro/
@@ -35,6 +36,5 @@ cetana-labs/
 
 ## Generated artifacts (never hand-edit)
 - `README.md` registry block (between `<!-- BEGIN:registry -->` markers) → `scripts/generate_registry.py`
-- `docs/index.html` → `scripts/generate_dashboard.py`
 - `app/pocketbase/pb_schema.json` → `scripts/generate_pb_schema.py`
 - `data/status.json` → `scripts/generate_status_json.py`

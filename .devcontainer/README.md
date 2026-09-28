@@ -3,7 +3,7 @@
 Reproducible cloud development environment for the Cetana Labs Control Hub, per [`RFC-LAB-000-001`](../docs/rfc/RFC-LAB-000-001-cloud-dev-migration.md).
 
 ## What it provisions
-- **Python 3.11** — runs the zero-dependency governance scripts (`generate_status.py`, `generate_dashboard.py`, `validate_portfolio.py`, `project_validate.py`).
+- **Python 3.11** — runs the zero-dependency governance scripts (`generate_status.py`, `validate_portfolio.py`, `project_validate.py`, `generate_registry.py`).
 - **GitHub CLI (`gh`)** — supports remote `STATUS.md` sync (`--sync-remote`) and the trunk-based commit workflow in [AGENTS.md](../AGENTS.md).
 - On attach, it runs `validate_portfolio.py` as a smoke check.
 
