@@ -217,8 +217,15 @@ def run(dry_run=True):
         # Sleek UI read the live portfolio anonymously before auth (M2); M3 refines field granularity.
         "listRule": RULE_PUBLIC, "viewRule": RULE_PUBLIC,
         "createRule": None,
-        # MVP minimum-RBAC: owner-or-not write on their own project (RFC-LAB-000-006 §4).
-        "updateRule": '@request.auth.id != "" && owner = @request.auth.id',
+        # MVP minimum-RBAC: owner writes their own project (RFC-LAB-000-006 §4).
+        # Match on github_handle, NOT the relation id: PocketBase creates a separate auth
+        # record per GitHub OAuth identity (id != the seeded owner the `owner` relation points
+        # to), so `owner = @request.auth.id` would wrongly 404 a real owner (found in M3–M4
+        # verification). The signed-in user's github_handle is populated on sign-in by the
+        # pb_hooks/oauth_github_handle.pb.js hook; the seeded owner carries it natively. Both
+        # must be non-empty to match (an empty handle never equals an empty handle here because
+        # the auth guard requires a signed-in identity AND we compare handles).
+        "updateRule": '@request.auth.id != "" && @request.auth.github_handle != "" && owner.github_handle = @request.auth.github_handle',
         "deleteRule": None,
     }
     projects_id = upsert_collection(token, projects_spec, dry_run)
