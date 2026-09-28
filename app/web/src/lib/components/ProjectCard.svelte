@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Project } from '$lib/types';
   import HealthPill from './HealthPill.svelte';
+  import OwnerStatusEditor from './OwnerStatusEditor.svelte';
 
   let { project }: { project: Project } = $props();
 
@@ -74,6 +75,9 @@
       </div>
     {/if}
   {/if}
+
+  <!-- M4: owner-only status editor (renders only for the signed-in owner). -->
+  <OwnerStatusEditor {project} />
 
   {#if project.repo_url || project.reference_url}
     <footer class="mt-auto border-t border-line pt-3">

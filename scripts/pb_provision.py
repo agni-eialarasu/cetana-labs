@@ -38,6 +38,12 @@ RULE_AUTHED = '@request.auth.id != ""'
 # (M2). Field-level public-vs-authenticated granularity is refined in M3.
 RULE_PUBLIC = ""
 ROLE_VALUES = ["owner", "lead", "contributor", "stakeholder", "reviewer"]
+# M4 (RFC-LAB-000-008 §9.1a): owner-editable status health on `projects`. Mirrors the
+# STATUS.md health legend verbatim — do not invent new states (M3–M4 owner-write field).
+HEALTH_VALUES = [
+    "🟢 On Track", "🟡 At Risk", "🔴 Blocked", "⏸️ Paused",
+    "✅ Completed", "⏳ Onboarding Pending",
+]
 
 
 # ---- field builders (v0.23+ `fields` format) ----
@@ -199,6 +205,12 @@ def run(dry_run=True):
             f_url("reference_url"),
             f_select("dev_environment", ["cloud", "local"]),
             f_select("status_source", ["local", "remote"]),
+            # M3–M4: owner-editable status (RFC-LAB-000-008 §9.1a). Covered by the existing
+            # owner updateRule below (no per-field rule) — a non-owner write is rule-denied.
+            # These coexist with status.json (dual-track for MVP; reconciliation is post-MVP).
+            f_select("status_health", HEALTH_VALUES, required=False),
+            f_text("status_note"),
+            f_text("status_updated_at"),  # ISO timestamp, set by the UI on save (OQ-1)
         ],
         "indexes": ["CREATE UNIQUE INDEX `idx_projects_lab_id` ON `projects` (`lab_id`)"],
         # M1: public read = the planned public-summary tier (RFC-LAB-000-008 §4). This lets the

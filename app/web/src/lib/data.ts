@@ -69,11 +69,23 @@ interface StructuralData {
 }
 
 // Existing behavior: read structural masters from the bundled snapshot (fallback path).
+// The snapshot has no live PB record, so the M3–M4 PB-status fields default to null
+// (no owner-edit affordance in snapshot mode — there's nothing live to write to).
 async function loadFromSnapshot(fetchFn: typeof fetch): Promise<StructuralData> {
-  const [users, projects] = await Promise.all([
+  const [users, rawProjects] = await Promise.all([
     fetchJson<User[]>(fetchFn, 'users.json'),
-    fetchJson<ProjectRecord[]>(fetchFn, 'portfolio.json')
+    fetchJson<Omit<ProjectRecord, 'pb_id' | 'status_health' | 'status_note' | 'status_updated_at'>[]>(
+      fetchFn,
+      'portfolio.json'
+    )
   ]);
+  const projects: ProjectRecord[] = rawProjects.map((p) => ({
+    ...p,
+    pb_id: null,
+    status_health: null,
+    status_note: null,
+    status_updated_at: null
+  }));
   return { users, projects };
 }
 
@@ -109,7 +121,12 @@ async function loadFromPocketBase(): Promise<StructuralData> {
       repo_url: (r.repo_url as string) || null,
       reference_url: (r.reference_url as string) || null,
       dev_environment: r.dev_environment as ProjectRecord['dev_environment'],
-      status_source: r.status_source as ProjectRecord['status_source']
+      status_source: r.status_source as ProjectRecord['status_source'],
+      // M3–M4: retain the PB record id for owner writes + read the editable status back.
+      pb_id: (r.id as string) || null,
+      status_health: (r.status_health as string) || null,
+      status_note: (r.status_note as string) || null,
+      status_updated_at: (r.status_updated_at as string) || null
     };
   });
 

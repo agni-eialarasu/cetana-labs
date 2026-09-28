@@ -25,6 +25,14 @@ export interface ProjectRecord {
   reference_url: string | null;
   dev_environment: DevEnvironment;
   status_source: 'local' | 'remote';
+  // M3–M4: the PocketBase record id (NOT lab_id) — needed for owner writes
+  // (pb.collection('projects').update(pb_id, …)). Null when snapshot-sourced.
+  pb_id: string | null;
+  // M3–M4: owner-editable status stored on the PB `projects` record (RFC-LAB-000-008
+  // §9.1a). Distinct from the status.json executive status (dual-track for MVP).
+  status_health: string | null;
+  status_note: string | null;
+  status_updated_at: string | null;
 }
 
 export interface StatusRecord {
