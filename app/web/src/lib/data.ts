@@ -26,7 +26,7 @@ const ARCHETYPE: Record<Archetype, { label: string; icon: string }> = {
   verification: { label: 'Verification', icon: '🔬' }
 };
 
-function severityFor(health: string, hasBlocker: boolean): Project['severity'] {
+export function severityFor(health: string, hasBlocker: boolean): Project['severity'] {
   const h = health.toLowerCase();
   if (hasBlocker || h.includes('block')) return 'critical';
   if (h.includes('risk') || h.includes('pending')) return 'warn';
@@ -69,11 +69,23 @@ interface StructuralData {
 }
 
 // Existing behavior: read structural masters from the bundled snapshot (fallback path).
+// The snapshot has no live PB record, so the M3–M4 PB-status fields default to null
+// (no owner-edit affordance in snapshot mode — there's nothing live to write to).
 async function loadFromSnapshot(fetchFn: typeof fetch): Promise<StructuralData> {
-  const [users, projects] = await Promise.all([
+  const [users, rawProjects] = await Promise.all([
     fetchJson<User[]>(fetchFn, 'users.json'),
-    fetchJson<ProjectRecord[]>(fetchFn, 'portfolio.json')
+    fetchJson<Omit<ProjectRecord, 'pb_id' | 'status_health' | 'status_note' | 'status_updated_at'>[]>(
+      fetchFn,
+      'portfolio.json'
+    )
   ]);
+  const projects: ProjectRecord[] = rawProjects.map((p) => ({
+    ...p,
+    pb_id: null,
+    status_health: null,
+    status_note: null,
+    status_updated_at: null
+  }));
   return { users, projects };
 }
 
@@ -109,7 +121,12 @@ async function loadFromPocketBase(): Promise<StructuralData> {
       repo_url: (r.repo_url as string) || null,
       reference_url: (r.reference_url as string) || null,
       dev_environment: r.dev_environment as ProjectRecord['dev_environment'],
-      status_source: r.status_source as ProjectRecord['status_source']
+      status_source: r.status_source as ProjectRecord['status_source'],
+      // M3–M4: retain the PB record id for owner writes + read the editable status back.
+      pb_id: (r.id as string) || null,
+      status_health: (r.status_health as string) || null,
+      status_note: (r.status_note as string) || null,
+      status_updated_at: (r.status_updated_at as string) || null
     };
   });
 
@@ -146,22 +163,28 @@ export async function loadProjects(fetchFn: typeof fetch): Promise<Project[]> {
     .map((p): Project => {
       const s = statusById.get(p.id) ?? emptyStatus(p.id);
       const owner = usersById.get(p.owner_id);
+      // Effective health (M4, RFC-LAB-000-008): the owner-edited PB `status_health` takes
+      // visual precedence when set; otherwise fall back to the status.json snapshot health.
+      // This makes an owner edit immediately drive the health pill + severity + sort, while
+      // status.json remains the fallback and the executive-broadcast source (dual-track).
+      const effectiveHealth = p.status_health || s.health;
+      const s2: StatusRecord = { ...s, health: effectiveHealth };
       const blockers = (s.blockers || '').trim().toLowerCase();
       const hasBlocker =
         (!!blockers && !['none', 'none.', 'n/a'].includes(blockers)) ||
-        s.health.toLowerCase().includes('block');
+        effectiveHealth.toLowerCase().includes('block');
       const arch = ARCHETYPE[p.archetype] ?? { label: p.archetype, icon: '💻' };
       return {
         ...p,
-        ...stripId(s),
+        ...stripId(s2),
         owner_name: owner?.name ?? '— Unassigned',
         owner_github: owner?.github_handle ?? null,
         archetype_label: arch.label,
         archetype_icon: arch.icon,
         has_blocker: hasBlocker,
-        severity: severityFor(s.health, hasBlocker),
-        priority_score: priorityScore(p, s, hasBlocker),
-        tags: tagsFor(p, s, hasBlocker)
+        severity: severityFor(effectiveHealth, hasBlocker),
+        priority_score: priorityScore(p, s2, hasBlocker),
+        tags: tagsFor(p, s2, hasBlocker)
       };
     })
     .sort((a, b) => a.priority_score - b.priority_score || b.last_updated.localeCompare(a.last_updated));

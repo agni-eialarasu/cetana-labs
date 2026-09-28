@@ -1,8 +1,22 @@
 <script lang="ts">
   import type { Project } from '$lib/types';
   import HealthPill from './HealthPill.svelte';
+  import OwnerStatusEditor from './OwnerStatusEditor.svelte';
+  import { severityFor } from '$lib/data';
+  import { untrack } from 'svelte';
 
   let { project }: { project: Project } = $props();
+
+  // Live health/severity for the pill — seeded once from the loaded project, updated in
+  // place when the owner saves an edit (M4) so the pill reflects it immediately (no reload).
+  let liveHealth = $state(untrack(() => project.health));
+  let liveSeverity = $state(untrack(() => project.severity));
+
+  function onStatusSaved(health: string, _note: string) {
+    if (!health) return;
+    liveHealth = health;
+    liveSeverity = severityFor(health, project.has_blocker);
+  }
 
   const cleanWin = (w: string) => w.replace(/\*\*([^*]+)\*\*/g, '$1');
 </script>
@@ -23,7 +37,7 @@
       <span aria-hidden="true">👤</span>
       <span class="truncate">{project.owner_name}</span>
     </span>
-    <HealthPill health={project.health} severity={project.severity} />
+    <HealthPill health={liveHealth} severity={liveSeverity} />
   </header>
 
   <div class="flex flex-col gap-1">
@@ -74,6 +88,9 @@
       </div>
     {/if}
   {/if}
+
+  <!-- M4: owner-only status editor (renders only for the signed-in owner). -->
+  <OwnerStatusEditor {project} onSaved={onStatusSaved} />
 
   {#if project.repo_url || project.reference_url}
     <footer class="mt-auto border-t border-line pt-3">
