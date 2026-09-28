@@ -7,7 +7,7 @@
 | **Current Health** | 🟢 On Track |
 | **Dev Environment** | ☁️ Cloud (Kiro Web) |
 | **Owner / Lead** | Eialarasu |
-| **Last Updated** | 2026-09-27 |
+| **Last Updated** | 2026-09-28 |
 
 ---
 
@@ -15,19 +15,19 @@
 The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
 
 ### 2. Latest Deliveries & Business Wins
-- **Sprint 8 Closeout & v0.10.0 Release**: Standardized the Kiro Web + IDE work-environment, defined and tooled the **AIDLC sprint lifecycle** (`RFC-LAB-000-009`), and delivered the first MVP feature.
-- **AIDLC Lifecycle Live**: `brainstorm → implement → verify → done` as phase-aware `/commands` (`/plan-*`, `/spec-run`, `/verification-done`, `/review-pr`, `/sprint-done`) with a human functional-verification loop; visual guide at `docs/sprint-lifecycle.md`.
-- **MVP M1 Delivered (`BK-011`)**: Sleek UI now reads the **live PocketBase** portfolio (SDK), with a snapshot fallback — the first feature shipped end-to-end via the lifecycle.
-- **Decision Journal**: Entries 003–004 capture the lifecycle + verification-loop reasoning.
+- **Sprint 9 Closeout & v0.11.0 — MVP COMPLETE (`BK-011`)**: The Control Hub Web App is **deployed and usable** — a logged-in owner edits their own project's status live.
+- **Deployed**: SvelteKit → **Vercel**, PocketBase → **Railway** (`RFC-LAB-000-011`); GitHub-Pages stopgap retired.
+- **Full auth loop**: GitHub OAuth sign-in (M2) → minimum RBAC via PocketBase rules (M3) → owner-writes-own (M4) → deploy (M5).
+- **Method**: 6 AIDLC `/spec-run`s, human-gated; the verification loop caught real bugs pre-merge. Mini-AIDLC blueprint spun out for POCs.
 
 ### 3. Current Focus & Next Milestone
-- Sprint 9: Advance the MVP (`BK-011`) — GitHub OAuth sign-in (M2), minimum RBAC + owner write path (M3–M4) via the AIDLC lifecycle; carried-forward ecosystem integrations (`BK-004`, `BK-001`).
+- Sprint 10: post-MVP hardening — resolve the deployed-PocketBase version workaround (`BK-018`) + production cutover (`BK-019`); begin app-level settings (`BK-012`) as the branding foundation.
 
 ### 4. Blockers & Risks
 - **Blockers**: None.
-- **Key Risks**: Deploy (M5) awaits the org-account transfer; MVP M1–M4 remain fully local.
+- **Key Risks**: Prod PocketBase pinned to 0.28.4 (0.40 OAuth-through-proxy issue — `BK-018`); custom domain deferred to branding (`BK-013`).
 
 ### 5. Verified Quality Metrics
-- 6/6 projects passing portfolio integrity checks; `/project-validate` 5-pillar pre-flight gate all green.
-- MVP M1 read-parity + graceful-fallback verified (human functional verification, PR #21).
-- Clean linear git history on `main`; squash-merge + branch deletion per `RFC-LAB-000-004`.
+- 6/6 projects passing portfolio integrity checks; `/project-validate` 5-pillar gate green.
+- MVP verified end-to-end on live URLs (sign-in, owner-write, RBAC denial, data-survives-redeploy).
+- Linear git history on `main`; every merge human-gated (`/review-pr`); v0.11.0 tagged.

@@ -16,6 +16,13 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-28] Milestone: Sprint 9 Closeout & v0.11.0 — 🎯 MVP COMPLETE (`BK-011`)
+- **Delivered Capabilities**: The Control Hub Web App **MVP is live** — a logged-in owner edits their own project's status, deployed and usable. Full auth loop via the AIDLC lifecycle: GitHub OAuth sign-in (M2) → minimum RBAC by PocketBase API rules, no library (M3) → owner-writes-own (M4) → **deployed: SvelteKit → Vercel, PocketBase → Railway** (M5, `RFC-LAB-000-011`); the GitHub-Pages stopgap was retired. 6 `/spec-run`s, all human-gated; the human-verification loop caught real bugs pre-merge (the M3–M4 owner-rule OAuth-record mismatch; the M5 deploy version saga). Also shipped the three-tier tracking model (`RFC-LAB-000-010`) and the docs reorganization + nav standard.
+- **Known follow-ups**: prod PocketBase pinned to 0.28.4 (`BK-018` — 0.40 OAuth-through-Railway-proxy issue); deploy automation (`BK-017`); production cutover (`BK-019`); terminal-state edit policy (`BK-016`).
+- **Next Horizon**: Sprint 10 — hardening (`BK-018`/`BK-019`) + the first post-MVP product capability, app-level settings (`BK-012`) as the branding foundation (`BK-013`).
+
+---
+
 ### [2026-09-27] Milestone: Sprint 8 Closeout & v0.10.0 Release — AIDLC Lifecycle + MVP M1
 - **Delivered Capabilities**: Standardized the Kiro Web + IDE work-environment (`RFC-LAB-000-007`); defined and tooled the **AIDLC sprint lifecycle** (`RFC-LAB-000-009`) — `brainstorm → implement → verify → done` as phase-aware `/commands` (`/plan-start`, `/plan-done`, `/spec-run`, `/verification-done`, `/review-pr`, `/sprint-done`) with the merge-first rule, state guards, and a human functional-verification loop (`IN_VERIFICATION`); authored the first AIDLC **Kiro Spec** and the visual `docs/sprint-lifecycle.md` guide; and **delivered MVP M1** (`BK-011`) — Sleek UI wired to live PocketBase — as the first feature shipped end-to-end via the lifecycle. Decision Journal Entries 003–004.
 - **Method note**: the first `/spec-run` (M1) both proved the AIDLC path *and* surfaced the missing human-verification phase, which was folded back the same cycle — the lifecycle improving itself from evidence.

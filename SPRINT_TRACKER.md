@@ -24,13 +24,13 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 ---
 
-## 🎯 Current Sprint: Sprint 9 — MVP Delivery (Auth → Owner Writes → Deploy)
+## 🎯 Current Sprint: Sprint 10 — Post-MVP Hardening & First Product Feature
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-09` |
-| **Duration** | 2026-12-03 to 2026-12-17 (2 Weeks) |
-| **Sprint Goal** | Advance the Control Hub Web App MVP (`BK-011`) beyond M1 — GitHub OAuth sign-in (M2), minimum RBAC + owner write path (M3–M4) — via the AIDLC lifecycle; land the carried-forward ecosystem integrations (`BK-004`, `BK-001`). |
+| **Sprint ID** | `SPRINT-10` |
+| **Duration** | 2026-12-17 to 2026-12-31 (2 Weeks) |
+| **Sprint Goal** | Harden the shipped MVP — resolve the deployed-PocketBase version workaround (`BK-018`) and formalize the production cutover (`BK-019`) — and begin the first post-MVP product capability: app-level settings (`BK-012`) as the foundation for branding/white-label (`BK-013`). Carry-forward ecosystem integrations (`BK-004`, `BK-001`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -38,18 +38,28 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-051` | Tracking-model refactor (`RFC-LAB-000-010`) — split `SPRINT_TRACKER.md` from `BACKLOG.md`; status vocab = state machine; Definition-of-Ready = Spec merged; traceability chain; update skills + validators. Authored as a Kiro Spec, run via the AIDLC lifecycle (dogfood) | P1 | Eialarasu | ✅ Done | 2026-09-27 |
-| `TSK-049` | MVP M2 — GitHub OAuth sign-in (`RFC-LAB-000-008` §6; Spec `mvp-m2-github-auth`) — PB OAuth2 flow, auth store, account-link by `github_handle` (link-only), route guard; scope = sign-in only (RBAC=M3, writes=M4) | P1 | Eialarasu | ✅ Done | 2026-09-27 |
-| `TSK-050` | MVP M3–M4 (Spec `mvp-m3-m4-rbac-owner-writes`) — minimum RBAC via **PocketBase API rules (no library)**: public/authenticated/owner-via-`owner_id`; owner edits own project status (new `status_*` field on `projects`, owner `updateRule`); dual-track with `status.json` for MVP. Defers 5-role `memberships` | P1 | Eialarasu | ✅ Done | 2026-09-28 |
-| `TSK-052` | Docs reorganization (Spec `docs-reorganization`) — group `docs/` into guides/reference/governance/rfc; `docs/README.md` hub + breadcrumb nav standard (blueprint); rename `work-environment`→`developer-guide`; refresh README tree; excludes `index.html` | P1 | Eialarasu | ✅ Done | 2026-09-27 |
-| `TSK-053` | Deployment architecture **RFC** (`RFC-LAB-000-011`) — decision of record: Vercel (frontend) + GCP VM (PocketBase); secret split; dual-run then retire GitHub-Pages; custom domain deferred to branding. Amends RFC-007/008; unblocks MVP M5 | P1 | Eialarasu | 👀 In Review | 2026-12-17 |
-| `TSK-054` | MVP **M5 execution** (Spec `mvp-m5-deploy`, `RFC-LAB-000-011` amended) — PocketBase → **Railway** (container + persistent volume, managed TLS), SPA → **Vercel** (`VITE_PB_URL`→Railway), wire prod GitHub OAuth redirect, verify live, cutover + retire Pages (`index.html`/`deploy-pages.yml`/generator). Mixed agent + human-console. Run via the AIDLC lifecycle | P1 | Eialarasu | ✅ Done | 2026-09-28 |
-| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Backlog | 2026-12-12 |
-| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Backlog | 2026-12-17 |
+| `TSK-055` | `BK-018` — latest PocketBase on Railway: root-cause the 0.40 realtime/OAuth-through-proxy failure (leading candidate: redirect-based `authWithOAuth2Code` flow); move prod off the 0.28.4 pin | P1 | Eialarasu | 📋 Backlog | 2026-12-24 |
+| `TSK-056` | `BK-017`/`BK-019` — deploy automation + production cutover: `make setup-staging`/`.env.staging` scripting; formal prod instances + cutover runbook | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
+| `TSK-057` | `BK-012` — app-level settings (RFC + Spec): configurable settings collection + typed accessors, minimal now, grows over time; foundation for `BK-013` branding | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Backlog | 2026-12-24 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
 
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 9: MVP Delivery — Auth → RBAC → Owner Writes → Deploy (2026-09-28) — `v0.11.0` · **MVP complete (`BK-011`)**
+- **Goal**: Complete the Control Hub Web App MVP via the AIDLC lifecycle — sign-in, minimum RBAC, owner writes, deployed.
+- **Deliverables**:
+  - `TSK-051`: Three-tier tracking-model refactor (`RFC-LAB-000-010`) — dogfooded via the lifecycle [PR #25].
+  - `TSK-052`: Docs reorganization + breadcrumb nav standard (`docs/` grouped) [PR #27].
+  - `TSK-049`: **MVP M2** — GitHub OAuth sign-in (auth store, link-by-handle, route guard) [PR #31].
+  - `TSK-050`: **MVP M3–M4** — minimum RBAC (PocketBase rules, no library) + owner status write path [PR #34].
+  - `TSK-053`: Deployment architecture RFC (`RFC-LAB-000-011`; amended GCP→Railway, Entry 010) [PRs #36].
+  - `TSK-054`: **MVP M5** — deployed (SvelteKit → Vercel, PocketBase → Railway); retired the GitHub-Pages stopgap; **MVP complete** [PR #38].
+- **Milestone**: **`BK-011` delivered** — a logged-in owner edits their own project status, deployed and usable (`v0.11.0`). 6 AIDLC `/spec-run`s; the human-verification loop caught real bugs pre-merge (M3–M4 owner-rule mismatch; M5 deploy version saga).
+- **Deferred/follow-ups**: `BK-016` (terminal-state edit policy), `BK-017` (deploy automation), `BK-018` (latest-PB on Railway), `BK-019` (prod cutover).
+- **Carried Forward**: `TSK-025` (`BK-004`) + `TSK-026` (`BK-001`) → `SPRINT-10`.
 
 ### Sprint 8: Work-Environment Standardization, AIDLC Sprint Lifecycle & MVP M1 (2026-09-27) — `v0.10.0`
 - **Goal**: Standardize the Kiro Web + IDE work-environment, define and tool an AIDLC sprint lifecycle, and deliver the first MVP feature.

@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Fixed
+
+---
+
+## [0.11.0] - 2026-09-28
+### Added
 - **MVP M5 — Deployed (Vercel + Railway); MVP complete (`RFC-LAB-000-011`, `BK-011`, `TSK-054`)**: Deployed the authenticated Control Hub — **SvelteKit SPA → Vercel**, **PocketBase → Railway** (container from the `Containerfile` + a persistent volume for SQLite; managed TLS/domain). Wired production GitHub OAuth (callback → the Railway instance), verified the full loop **on live URLs** (sign-in, owner-writes-own, RBAC denial, and data survival across redeploys), and **retired the GitHub-Pages classic dashboard** (`docs/index.html` + `deploy-pages.yml` + `scripts/generate_dashboard.py`). This **completes the MVP** (`BK-011`): a logged-in owner edits their own project status, deployed and usable. Delivered via the AIDLC lifecycle (6th `/spec-run`; the deploy layer was the most iterative — 5 fixups). Decision Journal Entries 007/010 (deployment architecture; GCP→Railway amendment). [PR #38]
   - **Known workaround:** the deployed PocketBase is pinned to **0.28.4** — 0.40's realtime/OAuth handshake fails through Railway's cross-origin HTTPS proxy (does not reproduce locally). Root-cause + move-to-latest tracked in **`BK-018`**. Follow-ups: `BK-017` (deploy automation), `BK-019` (production cutover).
 - **MVP M3–M4 — Minimum RBAC + Owner Write Path (`RFC-LAB-000-008` §6, `TSK-050`)**: Completed the MVP's local auth loop. **RBAC is enforced by PocketBase per-collection API rules — no library** (`RFC-LAB-000-003/006/008`): public read, authenticated, and **owner-writes-own**. Added owner-editable status field(s) to `projects` (`status_health` mirroring the STATUS.md health legend, `status_note`, `status_updated_at`) with an in-app `OwnerStatusEditor`; the owner `updateRule` now matches on **`owner.github_handle = @request.auth.github_handle`** (a `pb_hooks` hook populates `github_handle` on GitHub OAuth sign-in — PocketBase creates a separate auth record per OAuth identity, so id-matching would wrongly deny real owners; found + fixed in verification). Enforcement is the server-side rule (non-owner write → rule-denied, verified with a positive/negative control); the UI edit control is UX only. Coexists with `status.json` (dual-track for MVP; reconciliation post-MVP). Delivered via the AIDLC lifecycle (5th `/spec-run`; the verification loop caught the OAuth-record/owner mismatch pre-merge) [PR #34]. Decision Journal Entry 008. **Only M5 (deploy, `RFC-LAB-000-011`) remains for the MVP.** Deferred: terminal-state edit policy (`BK-016`), the 5-role `memberships` model.
