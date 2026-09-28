@@ -26,7 +26,7 @@ const ARCHETYPE: Record<Archetype, { label: string; icon: string }> = {
   verification: { label: 'Verification', icon: '🔬' }
 };
 
-function severityFor(health: string, hasBlocker: boolean): Project['severity'] {
+export function severityFor(health: string, hasBlocker: boolean): Project['severity'] {
   const h = health.toLowerCase();
   if (hasBlocker || h.includes('block')) return 'critical';
   if (h.includes('risk') || h.includes('pending')) return 'warn';
@@ -163,22 +163,28 @@ export async function loadProjects(fetchFn: typeof fetch): Promise<Project[]> {
     .map((p): Project => {
       const s = statusById.get(p.id) ?? emptyStatus(p.id);
       const owner = usersById.get(p.owner_id);
+      // Effective health (M4, RFC-LAB-000-008): the owner-edited PB `status_health` takes
+      // visual precedence when set; otherwise fall back to the status.json snapshot health.
+      // This makes an owner edit immediately drive the health pill + severity + sort, while
+      // status.json remains the fallback and the executive-broadcast source (dual-track).
+      const effectiveHealth = p.status_health || s.health;
+      const s2: StatusRecord = { ...s, health: effectiveHealth };
       const blockers = (s.blockers || '').trim().toLowerCase();
       const hasBlocker =
         (!!blockers && !['none', 'none.', 'n/a'].includes(blockers)) ||
-        s.health.toLowerCase().includes('block');
+        effectiveHealth.toLowerCase().includes('block');
       const arch = ARCHETYPE[p.archetype] ?? { label: p.archetype, icon: '💻' };
       return {
         ...p,
-        ...stripId(s),
+        ...stripId(s2),
         owner_name: owner?.name ?? '— Unassigned',
         owner_github: owner?.github_handle ?? null,
         archetype_label: arch.label,
         archetype_icon: arch.icon,
         has_blocker: hasBlocker,
-        severity: severityFor(s.health, hasBlocker),
-        priority_score: priorityScore(p, s, hasBlocker),
-        tags: tagsFor(p, s, hasBlocker)
+        severity: severityFor(effectiveHealth, hasBlocker),
+        priority_score: priorityScore(p, s2, hasBlocker),
+        tags: tagsFor(p, s2, hasBlocker)
       };
     })
     .sort((a, b) => a.priority_score - b.priority_score || b.last_updated.localeCompare(a.last_updated));

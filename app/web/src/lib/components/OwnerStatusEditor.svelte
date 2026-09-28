@@ -7,7 +7,7 @@
   import { pb } from '$lib/pb';
   import { auth } from '$lib/auth.svelte';
 
-  let { project }: { project: Project } = $props();
+  let { project, onSaved }: { project: Project; onSaved?: (health: string, note: string) => void } = $props();
 
   // Ownership (UX only): linked seeded user id === the project's owner seed id.
   const isOwner = $derived(!!auth.user && auth.user.id === project.owner_id && !!project.pb_id);
@@ -56,6 +56,8 @@
       savedHealth = (fresh.status_health as string) ?? '';
       savedNote = (fresh.status_note as string) ?? '';
       editing = false;
+      // Propagate to the parent card so the health pill (+ severity) reflect the edit live.
+      onSaved?.(savedHealth, savedNote);
     } catch (err) {
       // A non-owner write would land here (rule-denied) — surface it, don't crash.
       error = err instanceof Error ? err.message : 'Save failed.';
