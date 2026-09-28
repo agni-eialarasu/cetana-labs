@@ -1,9 +1,11 @@
-# RFC-LAB-000-011: Deployment Architecture (Vercel + GCP)
+# RFC-LAB-000-011: Deployment Architecture (Vercel + Railway)
+
+> **⚠️ AMENDMENT (2026-09-28, Decision Journal Entry 010):** the backend host is changed **GCP VM → Railway**. Railway gives the exact model this RFC wanted — one always-on container + a persistent volume for PocketBase's single-binary+SQLite — with Vercel-like DX and none of the GCP VM ops burden (patching, firewall, manual HTTPS) this RFC had listed as risks. **Everything else stands** (Vercel frontend, dual-run→retire-Pages cutover, secrets split, custom-domain-deferred). Below, read "GCP VM" as **Railway service** and "VM env / Secret Manager" as **Railway environment variables**; the §4.1 rationale is superseded by §4.1a.
 
 | Property | Value |
 | :--- | :--- |
 | **RFC ID** | `RFC-LAB-000-011` |
-| **Title** | Production Deployment — SvelteKit on Vercel, PocketBase on GCP; retire the GitHub-Pages stopgap |
+| **Title** | Production Deployment — SvelteKit on Vercel, PocketBase on Railway; retire the GitHub-Pages stopgap |
 | **Author** | Eialarasu (LAB-000 Control Hub) |
 | **Status** | 🟡 Proposed |
 | **Date** | 2026-09-27 |
@@ -23,7 +25,7 @@ This is the **decision of record** (the *what/why* + topology). The actual provi
 ## 2. Decision (summary)
 
 1. **Frontend → Vercel.** The SvelteKit static SPA (`app/web`, `adapter-static`, `ssr=false`) deploys to Vercel.
-2. **PocketBase → a small always-on GCP VM** (e.g. `e2-micro`) running the PocketBase binary on a **persistent disk** — the model closest to local (single binary + SQLite file). The containerized path (`RFC-LAB-000-007` Podman `Containerfile`) remains the **forward option** if the datastore outgrows SQLite.
+2. **PocketBase → Railway** *(amended from GCP VM)* — a single always-on service (container) with a **persistent volume** for the SQLite file. Same "one process + persistent disk" model this RFC wanted, with managed-platform DX. The containerized path (`RFC-LAB-000-007` Podman `Containerfile`) fits Railway directly and remains the **forward option** if the datastore outgrows SQLite (managed Postgres on Railway/elsewhere).
 3. **Dual-run, then cut over.** Deploy to Vercel and verify *alongside* the existing GitHub-Pages dashboard; once Vercel is proven, **retire the Pages stopgap** (`docs/index.html` + `.github/workflows/deploy-pages.yml` + `scripts/generate_dashboard.py` as applicable).
 4. **Secrets split by surface:** Vercel **environment variables** for the frontend (`VITE_PB_URL` → the GCP PocketBase URL); **VM environment / GCP Secret Manager** for backend secrets (PocketBase superuser, GitHub OAuth client id/secret).
 5. **Custom domain deferred to branding** (`BK-013`): deploy domain-ready on Vercel's default domain now; wire the client custom domain when white-labeling lands.
@@ -45,10 +47,17 @@ This is the **decision of record** (the *what/why* + topology). The actual provi
 
 ## 4. Decisions in detail (with rationale)
 
-### 4.1 PocketBase → small GCP VM (not Cloud Run) — for the MVP
+### 4.1a PocketBase → Railway (amended — supersedes 4.1) — for the MVP
+- **Why Railway:** it delivers the exact shape §4.1 wanted — **one always-on process + a persistent volume** for PocketBase's single-binary+SQLite — as a *managed* platform. Deploy from the repo (or the `Containerfile`), attach a volume for `pb_data/`, set env vars, get HTTPS + a URL out of the box.
+- **Why it's better than the GCP VM (original 4.1):** it removes the VM ops burden this RFC itself flagged as risks — **no manual patching, firewall, or reverse-proxy/Let's-Encrypt HTTPS setup** (Railway provides TLS + domain). Vercel-like DX on the backend; keeps local↔prod parity (same binary + volume).
+- **Trade-off accepted:** platform lock-in + usage-based cost vs. raw-VM control — worth it at control-hub scale for the operational simplicity.
+- **Forward path preserved:** the `Containerfile` (`RFC-LAB-000-007` §2.3) deploys directly on Railway; if the datastore outgrows SQLite, Railway (or elsewhere) managed **Postgres** is the documented next step — bridge intact.
+
+### 4.1 PocketBase → small GCP VM (not Cloud Run) — ⚠️ SUPERSEDED by §4.1a (retained for history)
 - **Why:** PocketBase is a **single binary + a SQLite file**; it is happiest as **one always-on process with a persistent disk**. Cloud Run's scale-to-zero + mounted-volume story adds operational complexity (cold starts, volume semantics, single-writer SQLite) for little gain at this scale.
 - **Trade-off accepted:** always-on cost (an `e2-micro` is minimal) in exchange for operational simplicity and local↔prod parity.
 - **Forward path preserved:** if the datastore grows (e.g. Postgres), the containerized `Containerfile` (`RFC-LAB-000-007` §2.3) + Cloud Run/managed DB is the documented next step — this RFC doesn't burn that bridge.
+- *(Superseded: the always-on-process+volume goal is now met by Railway (§4.1a) without VM ops.)*
 
 ### 4.2 Frontend → Vercel, dual-run then retire Pages
 - **Why Vercel:** first-class SvelteKit support, env-var management, preview deploys per PR, trivial custom-domain path later. The app is already a static SPA, so it's a near-drop-in.
@@ -70,8 +79,8 @@ This is the **decision of record** (the *what/why* + topology). The actual provi
 ## 6. Execution plan (delivered later as Spec(s), not in this RFC)
 
 M5 becomes one or more Kiro Specs, run via the lifecycle (merge-first → `/spec-run` → verify → gate):
-1. **Provision GCP** — VM + persistent disk + PocketBase binary + firewall/HTTPS; seed via existing `pb_provision.py`/`pb_import.py`.
-2. **Provision Vercel** — connect repo, build the SPA, set `VITE_PB_URL` → GCP; preview + production.
+1. **Provision Railway** — a PocketBase service (repo/`Containerfile`) + a **persistent volume** mounted at `pb_data/`; Railway provides HTTPS + a URL; set backend env vars; seed via existing `pb_provision.py`/`pb_import.py` against the Railway URL.
+2. **Provision Vercel** — connect repo, build the SPA, set `VITE_PB_URL` → the Railway PocketBase URL; preview + production.
 3. **Wire auth (depends on M2)** — GitHub OAuth redirect URLs → Vercel domain; secrets in place.
 4. **Cutover** — verify Vercel against live GCP; **retire Pages** (`index.html`, `deploy-pages.yml`, generator).
 
@@ -82,16 +91,17 @@ M5 becomes one or more Kiro Specs, run via the lifecycle (merge-first → `/spec
 - **Non-goals:** the actual provisioning (execution Specs); multi-client/multi-tenant hosting; the custom domain (→ `BK-013`); CDN/caching tuning; autoscaling (single VM suffices at this scale); CI/CD beyond Vercel's native Git integration + the existing GitHub Actions.
 
 ## 8. Open Questions (resolve at M5 build)
-1. **GCP region / project** — which GCP project + region (latency to primary users). *(Decide at provisioning.)*
-2. **Backend HTTPS** — Caddy/nginx reverse proxy + Let's Encrypt on the VM, or a GCP load balancer. *(Leaning: lightweight reverse proxy on the VM for MVP.)*
+1. **Railway region** — which region (latency to primary users). *(Decide at provisioning.)*
+2. **Backend HTTPS** — **resolved by Railway** (managed TLS + domain out of the box); no reverse-proxy/Let's-Encrypt setup needed. *(This was the GCP-VM burden the amendment removes.)*
 3. **Backups** — SQLite file backup cadence to GCS. *(Leaning: a simple scheduled snapshot; define at provisioning.)*
 4. **Public-read-before-auth** — deploy a public read-only tier before M2 lands, or wait for auth? *(Leaning: could ship read-only early since M1 read rules are already public-tier.)*
 
 ## 9. Risks & Mitigations
 | Risk | Mitigation |
 | :--- | :--- |
-| SQLite single-writer on a VM under load | Fine at control-hub scale; Postgres + container path is the documented forward option (§4.1). |
-| Secrets leakage | §4.3 split; nothing committed; Secret Manager as hardening. |
+| SQLite single-writer under load | Fine at control-hub scale; managed Postgres is the documented forward option (§4.1a). |
+| Secrets leakage | §4.3 split; nothing committed; Railway env vars (backend) + Vercel env vars (frontend). |
+| Platform lock-in (Railway) | Accepted for MVP simplicity; the `Containerfile` keeps the app portable to any container host. |
 | Dual-run confusion (two live frontends) | Vercel authoritative; Pages explicitly legacy; retire promptly post-verify. |
 | Deploy coupled to M2 auth | §6 dependency note — a public read-only deploy can precede auth. |
 | VM ops burden (patching, uptime) | Minimal single instance; documented runbook in `developer-guide`; container/managed path if it grows. |
