@@ -8,7 +8,7 @@
 #
 # PocketBase is a single static binary; a minimal base keeps the image tiny.
 
-ARG PB_VERSION=0.28.4
+ARG PB_VERSION=0.40.4
 
 FROM docker.io/library/alpine:3.20
 
@@ -27,6 +27,12 @@ RUN wget -q "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VE
 
 # Collections schema is imported at first boot / via the admin UI or pb_import.py.
 COPY pb_schema.json /pb/pb_schema.json
+
+# JS hooks (M3–M4): oauth_github_handle.pb.js populates `github_handle` on GitHub OAuth
+# sign-in — REQUIRED for the owner-write path (the owner updateRule matches on handle).
+# Without this in the image, a deployed sign-in leaves github_handle empty and owner
+# edits are rule-denied (404). PocketBase auto-loads pb_hooks/ next to the binary.
+COPY pb_hooks/ /pb/pb_hooks/
 
 EXPOSE 8090
 
