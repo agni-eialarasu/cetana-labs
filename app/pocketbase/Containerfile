@@ -8,11 +8,14 @@
 #
 # PocketBase is a single static binary; a minimal base keeps the image tiny.
 
-# Pinned to 0.28.x to MATCH the JS SDK line (app/web `pocketbase` ^0.26/0.28 — the SDK's
-# own latest is ~0.28.x and versions independently of the server). A newer server (e.g.
-# 0.40.x) breaks the SDK's all-in-one OAuth2 popup with `/api/realtime 400 Invalid realtime
-# client` (M5 staging). The pairing that must match is SDK↔server, not local↔deploy —
-# do NOT bump the server ahead of the SDK line. (M5, RFC-LAB-000-011.)
+# Pinned to 0.28.4 as a KNOWN-GOOD workaround for M5 staging — NOT a root-cause fix.
+# Symptom: on a 0.40.x server behind Railway's HTTPS proxy, the SDK's all-in-one OAuth2
+# popup fails with `/api/realtime 400 Invalid realtime client`. Note this does NOT reproduce
+# locally (local also runs 0.40.4 and OAuth works) — so it is NOT a simple SDK↔server version
+# gap; the real trigger is 0.40's realtime/OAuth handshake through a cross-origin proxied
+# deploy (CORS / SSE-through-proxy — leading fix candidate: switch to the redirect-based
+# authWithOAuth2Code flow). Root-cause + move to latest PB tracked in BK-018. Until then,
+# 0.28.4 is the version proven to work end-to-end on Railway. (M5, RFC-LAB-000-011.)
 ARG PB_VERSION=0.28.4
 
 FROM docker.io/library/alpine:3.20
