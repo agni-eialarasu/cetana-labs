@@ -17,7 +17,7 @@
       "6/6 projects passing portfolio integrity checks; `/project-validate` 5-pillar pre-flight gate all green.",
       "MVP M1 read-parity + graceful-fallback verified (human functional verification, PR"
     ],
-    "days_ago": 0,
+    "days_ago": 1,
     "is_onboarding_pending": false,
     "is_completed": false,
     "is_stale": false
@@ -39,7 +39,7 @@
       "69/69 unit and integration tests passing across 14 modules.",
       "Strict linter and style compliance."
     ],
-    "days_ago": 4,
+    "days_ago": 5,
     "is_onboarding_pending": false,
     "is_completed": true,
     "is_stale": false
@@ -60,7 +60,7 @@
     "metrics": [
       "100% accuracy on tested temporal, aggregation, and event outbox SQL test cases."
     ],
-    "days_ago": 4,
+    "days_ago": 5,
     "is_onboarding_pending": false,
     "is_completed": true,
     "is_stale": false
@@ -82,7 +82,7 @@
       "431/431 automated test suite passing cleanly.",
       "42/42 architectural AST boundary fitness checks verified with zero leaks."
     ],
-    "days_ago": 3,
+    "days_ago": 4,
     "is_onboarding_pending": false,
     "is_completed": false,
     "is_stale": false
@@ -101,7 +101,7 @@
     "metrics": [
       "Pending initial baseline setup."
     ],
-    "days_ago": 4,
+    "days_ago": 5,
     "is_onboarding_pending": true,
     "is_completed": false,
     "is_stale": false
@@ -120,7 +120,7 @@
     "metrics": [
       "Pending initial baseline setup."
     ],
-    "days_ago": 4,
+    "days_ago": 5,
     "is_onboarding_pending": true,
     "is_completed": false,
     "is_stale": false
