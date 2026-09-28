@@ -29,7 +29,13 @@ RUN wget -q "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VE
 COPY pb_schema.json /pb/pb_schema.json
 
 EXPOSE 8090
-VOLUME ["/pb/pb_data"]
+
+# NOTE: no `VOLUME` instruction here — Railway rejects Dockerfile VOLUME declarations
+# ("VOLUME ... is not supported, use Railway Volumes"). Persistence is attached at RUN
+# time instead, which is portable across all our targets:
+#   - Railway:      attach a Railway Volume mounted at /pb/pb_data (dashboard/config).
+#   - Podman/Docker: run with `-v cetana_pb_data:/pb/pb_data` (see the Run comment above).
+# The data path (/pb/pb_data) is unchanged; only the declaration mechanism differs.
 
 # Bind to all interfaces so the container is reachable via the mapped port.
 ENTRYPOINT ["/pb/pocketbase", "serve", "--http=0.0.0.0:8090"]
