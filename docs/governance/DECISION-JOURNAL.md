@@ -412,3 +412,19 @@ Kicking off a new POC, the human wanted to run AIDLC **from the start** — but 
 - **Theme:** generalizing the method into a *reusable, tech-agnostic POC kickstarter* — the blueprint producing a smaller blueprint, with an explicit ramp between them.
 - **Notable judgment:** the human insisted the **human gate is non-negotiable even at POC** (speed never buys out trust), and framed the migration as *derive-then-freeze* (seed crystal) — which drove the sectioned `POC-LOG` design.
 - **Honest note:** this is a **template/methodology artifact** — not yet battle-tested; its first real exercise is the new POC the human is starting. `/graduate` is a skill *spec* until first run. Built in parallel with the M3–M4 run (different paths, no collision).
+
+
+---
+
+## Entry 010 — Deployment backend: GCP VM → Railway (amend RFC-011)
+
+**Date:** 2026-09-28 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `RFC-LAB-000-011` amended (backend host)
+
+> _Decision D41 was made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+### D41 — Host PocketBase on Railway instead of a GCP VM
+- **Trigger:** Opening `/plan-start M5`, the human corrected the target: "it's Vercel and **Railway**" — a change from `RFC-LAB-000-011`'s recorded decision (Vercel + **GCP VM**, Entry 007/D32). The agent verified the discrepancy against the merged RFC before acting rather than silently switching.
+- **Options:** (a) keep the recorded **GCP VM**; (b) **Railway** for the PocketBase backend.
+- **Decision & rationale:** **(b) Railway.** It delivers the *exact* model RFC-011 wanted — **one always-on process + a persistent volume** for PocketBase's single-binary+SQLite — as a **managed platform**, removing the very GCP-VM burdens the RFC had listed as risks: **no manual patching, firewall, or reverse-proxy/Let's-Encrypt HTTPS** (Railway provides TLS + domain out of the box). Vercel-like DX on the backend; local↔prod parity preserved (same binary + volume; the `Containerfile` deploys directly). Trade-off accepted: platform lock-in + usage cost vs. raw-VM control — worth it at control-hub scale; the `Containerfile` keeps it portable. **Everything else in RFC-011 stands** (Vercel frontend, dual-run→retire-Pages, secrets split → Railway env vars + Vercel env vars, custom-domain-deferred). _(Contributor: Agni Eialarasu)_
+- **Process note:** handled as a proper **amendment to a merged decision-of-record** — an amendment banner + a superseding §4.1a on RFC-011 (original §4.1 retained for history), this journal entry, merge-first — *before* the M5 execution Spec references it. The blueprint's integrity requires the RFC to match reality, not drift silently.
+- **Outcome:** `RFC-LAB-000-011` amended (title, §2.2, §4.1a, §6, §8, §9); M5 execution Spec (`TSK-054`) to be authored against Railway next.
