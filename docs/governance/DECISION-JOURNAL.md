@@ -456,3 +456,29 @@ Follows the M5 deploy (Entry 010). M5 shipped only because prod was **pinned to 
 - **Theme:** a disciplined investigation spike — the value was as much in *refusing to trust a convenient green result* as in the diagnosis itself.
 - **Notable judgment:** the human directed the pivot away from wrestling Vercel's confusing env UI toward a deterministic local build; the agent's cross-check of the two backends caught a false negative that would otherwise have produced a wrong "un-pin, it's fine" conclusion.
 - **Honest note:** two earlier reproduction attempts were invalid (preview silently hitting prod) — recorded deliberately, because the credible finding is precisely the one that survived that scrutiny. The chosen fix (H1) is evidence-backed but **not yet shipped**; it ships and is human-verified via its own Spec.
+
+
+---
+
+## Entry 012 — Process retro: the BK-018 spike bypassed the gate; deploy-DX is the real fix
+
+**Date:** 2026-09-28 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** spike branch cleanup; motivates the CLI + casual-environment RFC (`BK-017`)
+
+> _Honest retrospective. The spike **succeeded technically** (Entry 011: root cause confirmed, fix direction chosen) but its **execution collapsed the protocol** — recorded here because credible decision-making includes the misses._
+
+### What went wrong (process, not content)
+- **The gate was bypassed.** During the BK-018 spike run, commits landed **directly on `main`** (`3ff88fc`, `16f52a3`, `733309e`), and a fix Spec was both **authored and reverted on `main`** (`9d62965` → `20375e8`) instead of on a branch via PR. Merge-first + the human PR gate — the core safety rails — were not followed. `main` was left clean and the MVP intact, but the *discipline* lapsed.
+- **The runtime-ops pain compounded it.** The "ops-less" managed stack (Railway/Vercel via their UIs) became the source of friction: Vercel env scoping (Prod vs Preview), Secret→Config locks, root-directory doubling, and Vite build-time inlining silently pointing a "verification" build at the **prod** backend — a false negative that nearly derailed the diagnosis (Entry 011 / spike REPORT §4).
+
+### D44 — Cleanup: abandon the spike branch, keep the finding, note the breach
+- **Decision:** delete the throwaway `spike/bk018-pb040-oauth` branch (its un-pin/reproduction commits must never reach prod; the *finding* is already on `main` via `16f52a3`). Leave the revert pair as honest history. Record this retro rather than quietly moving on. _(Contributor: Agni Eialarasu)_
+- **Lesson folded back:** *a spike is still gated* — even exploratory work commits on a branch, never straight to `main`; the spike'"'"'s *code* is throwaway, but the *governance discipline* is not.
+
+### D45 — The real fix is deploy-DX: CLI + casual-environment promotion (→ BK-017 RFC)
+- **Trigger:** the human, tired of the UI-driven ops pain, proposed: use **Railway CLI + Vercel CLI** for on-demand ad-hoc deploys, and **treat staging/prod casually — like local — until verified**, then qualify the environment and rotate real secrets via the UI.
+- **Decision & rationale:** adopt both, as a proper RFC (`BK-017` scope). CLI + repo-committed config (e.g. the `vercel.json` already landed) is **reproducible and scriptable** — the UI path is what produced the false negatives. The **environment-promotion model** (casual throwaway creds → verify working → *qualify* → rotate real secrets) matches how the team already treats local, and de-risks first-time staging/prod setup. **Guardrail:** never commit secrets (throwaway or real) — env files stay gitignored; "casual" means shared throwaway creds in a throwaway instance, not secrets in git. Plus a concrete lesson: **verify the built artifact, not the setting** (assert the baked-in `VITE_PB_URL` in the bundle). _(Contributor: Agni Eialarasu)_
+- **Outcome (planned):** a CLI + casual-environment-promotion RFC (`BK-017`); the BK-018 OAuth fix (`fix-bk018-oauth-redirect`) is **deferred until that DX exists**, so the fix isn'"'"'t verified through the same painful UI path that caused this.
+
+### Session meta
+- **Theme:** don'"'"'t re-enter the thing that caused the pain through the same door — fix the *deploy DX* first, then resume the fix.
+- **Honest note:** the spike'"'"'s technical result stands (Entry 011); this entry is strictly about the process lapse + the corrective. The gate-bypass is the kind of thing the lifecycle exists to prevent — naming it keeps the blueprint credible.
