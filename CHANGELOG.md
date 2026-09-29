@@ -9,8 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Deploy Scaffold — CLI-first deploys + artifact verification (`RFC-LAB-000-012`, `BK-017`, `TSK-056`)**: Implemented the deploy-operations scaffold — `app/pocketbase/railway.json` (pins the `Containerfile` builder, no Railpack auto-detect), `scripts/deploy.sh` + `make deploy-staging` (Railway/Vercel CLI-first, reads gitignored `.env.staging`, prints the one-time manual checklist, **no secrets in-repo**), `scripts/verify-bundle.sh` + `make verify-bundle` (asserts the built SPA bundle bakes in the expected `VITE_PB_URL` and not a forbidden one — closes the build-time-config false-negative that derailed the BK-018 spike), and a `developer-guide.md` §9A **Deploy Operations** runbook (CLI flow + the casual→qualified environment lifecycle). [PR #43]
 ### Changed
 ### Fixed
+- **`status.json` date-drift — recurring CI failures eliminated (`BK-020`)**: The status-sync check failed on ~5 unrelated PRs because `days_ago` (and the date-derived `is_stale`) were **stored** in `data/status.json` yet recomputed from *today* on every `--check`, so the committed file went "stale" purely as the calendar advanced. Fixed by **not storing the time-relative fields** (`last_updated` is the source of truth) and **deriving `days_ago`/`is_stale` at read-time in the SPA** (`data.ts`) — proven date-independent at a +400-day mocked clock. Also makes the displayed "days ago" always current. [PR #43]
 
 ---
 
