@@ -1,6 +1,8 @@
 # RFC-LAB-000-011: Deployment Architecture (Vercel + Railway)
 
 > **⚠️ AMENDMENT (2026-09-28, Decision Journal Entry 010):** the backend host is changed **GCP VM → Railway**. Railway gives the exact model this RFC wanted — one always-on container + a persistent volume for PocketBase's single-binary+SQLite — with Vercel-like DX and none of the GCP VM ops burden (patching, firewall, manual HTTPS) this RFC had listed as risks. **Everything else stands** (Vercel frontend, dual-run→retire-Pages cutover, secrets split, custom-domain-deferred). Below, read "GCP VM" as **Railway service** and "VM env / Secret Manager" as **Railway environment variables**; the §4.1 rationale is superseded by §4.1a.
+>
+> **⚠️ AMENDMENT (2026-09-26, Decision Journal Entry 011 — BK-018 spike):** the M5 deploy shipped with PocketBase **pinned to 0.28.4** as a workaround, because 0.40.x broke GitHub OAuth behind Railway's proxy (`/api/realtime 400 Invalid realtime client`). The `BK-018` spike **root-caused** this (see §4.5): PocketBase 0.40's realtime handshake is incompatible with Railway's proxying of long-lived SSE, and the SDK's *popup* OAuth flow depends on that realtime channel. **Fix (chosen, not yet shipped): switch the frontend to the redirect-based `authWithOAuth2Code` flow**, which never touches `/api/realtime` — which **un-pins the backend to PocketBase 0.40+**. This ships via its own fix Spec (`fix-bk018-oauth-redirect`) through the normal gate; **prod stays 0.28.4 until then**. See new §4.5.
 
 | Property | Value |
 | :--- | :--- |
@@ -12,7 +14,7 @@
 | **Backlog** | `TSK-053` (SPRINT-09) |
 | **Builds On** | `RFC-LAB-000-008` (MVP — unblocks M5), `RFC-LAB-000-007` (work-env / staging placeholders), `RFC-LAB-000-003` (PocketBase), `RFC-LAB-000-001` (cloud dev) |
 | **Amends** | `RFC-LAB-000-007` §2.3/§6 (staging + secret-management open questions) · `RFC-LAB-000-008` §6/§9 (M5 target + deploy sequencing) |
-| **Decision Journal** | Entry 006 (deployment unblock), Entry 007 (this RFC) |
+| **Decision Journal** | Entry 006 (deployment unblock), Entry 007 (this RFC), Entry 010 (host: GCP VM → Railway), Entry 011 (PB version: un-pin 0.28.4 → 0.40+ via redirect OAuth) |
 
 ---
 
@@ -72,6 +74,14 @@ This is the **decision of record** (the *what/why* + topology). The actual provi
 ### 4.4 Custom domain deferred to branding
 - Deploy on Vercel's default domain now (usable, HTTPS). The **custom domain is a white-labeling concern** (`BK-013`) — wiring it per-client belongs with branding, not this MVP deploy. Keeps M5 shippable without waiting on domain/DNS decisions.
 
+### 4.5 PocketBase version: un-pin 0.28.4 → 0.40+ via redirect OAuth (amendment — BK-018 spike, Entry 011)
+- **Context:** M5 shipped with PocketBase **pinned to 0.28.4** because 0.40.x failed GitHub OAuth behind Railway's HTTPS proxy: the sign-in threw `/api/realtime 400 "Invalid realtime client"` and the app 500'd. That pin was a workaround, not a decision of record — the `BK-018` spike was logged to find the real cause.
+- **Root cause (confirmed by the spike):** the SDK's all-in-one **popup** OAuth (`authWithOAuth2`) receives its callback over PocketBase's **realtime channel** — a two-step handshake: `GET /api/realtime` opens an SSE stream and returns a `clientId` (this *works* through Railway), then `POST /api/realtime` registers `{clientId, subscriptions:["@oauth2"]}` against that live stream (this **fails** on 0.40: `400 "Missing or invalid client id"`). **Railway's edge proxy does not preserve the SSE connection/affinity that PocketBase 0.40 requires** to associate the POST with the live `clientId`. It is not a version-pairing bug (works locally with no proxy) and is absent on 0.28.4 (older, more tolerant realtime path). Reproduced on a throwaway 0.40 Railway instance using a bundle-verified frontend (validity established first — an earlier "non-reproduction" was an invalid test that had silently hit prod 0.28.4).
+- **Decision:** switch the frontend GitHub sign-in from the popup `authWithOAuth2` to the **redirect-based `authWithOAuth2Code`** flow. It performs a plain OAuth `code` exchange and **never opens the `/api/realtime` channel**, so the proxy/SSE incompatibility structurally cannot occur. It is also PocketBase's recommended production flow. **This un-pins the backend to PocketBase 0.40+.**
+- **Rejected alternative:** tuning Railway/PocketBase to make SSE realtime survive the proxy (trusted-proxy/CORS/forwarded-headers). Depends on proxy internals we don't control and would leave a fragile SSE dependency on the critical sign-in path.
+- **Trade-off accepted:** OAuth UX changes from a popup to a full-page redirect — standard and more robust; acceptable.
+- **Execution (not this RFC):** ships via the fix Spec **`fix-bk018-oauth-redirect`** — swap `signInWithGitHub()` in `app/web/src/lib/auth.svelte.ts`, preserve the `github_handle` hook + owner-write resolution (`RFC-LAB-000-008` M3–M4, R3), then un-pin the `Containerfile` to 0.40.x — through the normal PR + verify gate. **Prod stays 0.28.4 until that Spec merges** (no prod change from the spike).
+
 ## 5. Amendments to prior RFCs
 - **`RFC-LAB-000-007`**: the staging placeholders (`/validate-staging`, `STAGING_*` env vars) and §6 OQ-2 (secret management) are **resolved** here — GCP VM backend + Vercel frontend + the §4.3 secret split.
 - **`RFC-LAB-000-008`**: §6 M5 target is fixed to **Vercel + GCP VM**; §9.3 sequencing OQ resolved — **backend (GCP) first** (the frontend needs a live `VITE_PB_URL`), then frontend (Vercel), then Pages retirement.
@@ -106,3 +116,4 @@ M5 becomes one or more Kiro Specs, run via the lifecycle (merge-first → `/spec
 | Deploy coupled to M2 auth | §6 dependency note — a public read-only deploy can precede auth. |
 | VM ops burden (patching, uptime) | Minimal single instance; documented runbook in `developer-guide`; container/managed path if it grows. |
 | Data loss on VM failure | §8.3 backup cadence to GCS decided at provisioning. |
+| PocketBase 0.40 OAuth breaks behind Railway's SSE proxy | Root-caused (BK-018, §4.5); resolved by the redirect OAuth flow (`fix-bk018-oauth-redirect`), which un-pins 0.28.4 → 0.40+. Prod stays 0.28.4 until that Spec ships. |

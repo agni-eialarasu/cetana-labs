@@ -5,7 +5,7 @@
 | **Spike ID** | `spike-bk018-pb040-oauth` |
 | **Backlog** | `TSK-055` (`BK-018`, SPRINT-10) |
 | **Type** | **Investigation spike** — confirm a root cause + choose a fix; **not** a build (progressive formality, `RFC-LAB-000-009` §5) |
-| **Status** | 🔬 Proposed |
+| **Status** | ✅ Complete — root cause confirmed, H1 chosen (2026-09-26) |
 | **Deliverable** | A **documented finding** (Decision Journal entry + likely an `RFC-LAB-000-011` amendment) → *then* a focused fix Spec |
 | **Related** | `RFC-LAB-000-011` (deployment; PB pinned 0.28.4), `RFC-LAB-000-006`/`-008` (OAuth), M5 REPORT (`mvp-m5-deploy`) |
 
@@ -44,11 +44,20 @@ The **symptom** is known but the **root cause is unconfirmed**, so writing EARS 
 - The **finding is documented**: a Decision Journal entry + (if it changes the deployment decision) an `RFC-LAB-000-011` amendment, and a **follow-on fix Spec is scoped** (or, for H3, a documented decision to stay pinned).
 - **No prod change from the spike** — the fix ships via its own Spec through the normal gate.
 
-## 6. Deliverable (the finding — fill at spike end)
-- **Root cause:** ⟨confirmed mechanism⟩
-- **Chosen fix:** ⟨H1 / H2 / H3⟩ — ⟨rationale + evidence⟩
-- **Prod impact:** ⟨can we un-pin to 0.40? how?⟩
-- **Next:** ⟨fix Spec id/scope, or "stay pinned" decision⟩ · Journal entry · RFC-011 amendment (if applicable)
+## 6. Deliverable (the finding — CONFIRMED 2026-09-26)
+
+**Reproduced on a genuine 0.40 backend (validity established first).** Earlier "non-reproduction" was invalid — the Vercel preview had baked in the *prod* `VITE_PB_URL` (0.28.4). We eliminated that ambiguity by building the spike frontend **locally** with `VITE_PB_URL=https://truthful-prosperity-staging.up.railway.app` and verifying the bundle: the throwaway URL is inlined (1 occurrence) and the prod URL appears **0 times**. Serving that build (`vite preview`) and signing in reproduced the failure against the throwaway 0.40.
+
+- **Root cause (confirmed mechanism):** The SDK's all-in-one popup flow (`authWithOAuth2`) uses PocketBase's **realtime channel** to receive the OAuth callback. That is a two-step handshake: (1) `GET /api/realtime` opens an SSE stream and returns a `clientId`; (2) `POST /api/realtime` registers `{clientId, subscriptions:["@oauth2"]}` against that live stream. Through **Railway's edge proxy**, step (1) succeeds (verified: `GET` returns `PB_CONNECT` + a `clientId`, HTTP 200), but step (2) **fails** — PB 0.40 replies `400 / "Missing or invalid client id"`. The proxy does not preserve the SSE connection/affinity that PB 0.40 requires to associate the `POST` with the live `clientId`, so the subscribe is rejected and the popup OAuth never receives its callback (page shows 500). Evidence: real attempt `POST …/api/realtime` payload `{clientId:"cyqMnaXch…", subscriptions:["@oauth2"]}` → **400**; a manual `POST` with any clientId → `404 "Missing or invalid client id"`. Not an SDK↔server version gap (works locally, no proxy) and not present on 0.28.4 (older/more-tolerant realtime path). **It is the 0.40 realtime handshake being incompatible with Railway's proxying of long-lived SSE.**
+
+- **Chosen fix: H1 — redirect-based `authWithOAuth2Code`.** Confirmed as correct: the redirect flow performs a plain OAuth `code` exchange and **never touches `/api/realtime`**, so the proxy/SSE incompatibility cannot bite. It is also PocketBase's recommended production flow (popups are fragile). H2 (make SSE work through the proxy) was not pursued — it depends on Railway proxy internals we don't control and would leave a fragile channel on the critical sign-in path. Call site to change: `app/web/src/lib/auth.svelte.ts` → `signInWithGitHub()` (currently `authWithOAuth2({provider:'github'})`).
+
+- **Prod impact:** With H1 in place, **prod can un-pin from 0.28.4 to 0.40+** — the only thing keeping us on 0.28.4 is this realtime-through-proxy break, which H1 removes entirely. Un-pinning is deferred to the fix Spec (not done from this spike).
+
+- **Next:**
+  - Scope a focused **fix Spec** (`fix-bk018-oauth-redirect`): swap `signInWithGitHub()` to `authWithOAuth2Code` (redirect + code exchange on return), preserve the `github_handle` hook + owner-write resolution (R3), then un-pin the Containerfile to 0.40.x. UX changes popup → full-page redirect (OQ-2 answered: acceptable).
+  - **Decision Journal** entry (root cause + H1 + un-pin decision).
+  - **RFC-LAB-000-011 amendment**: replace the "PB pinned 0.28.4 (workaround)" note with "0.40+ supported via redirect OAuth flow; popup/realtime OAuth is incompatible with Railway SSE proxying."
 
 ## 7. Scope & guardrails
 - **In:** reproduce, diagnose, validate a fix direction, document.
