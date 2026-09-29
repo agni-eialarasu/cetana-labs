@@ -18,7 +18,7 @@
       "MVP verified end-to-end on live URLs (sign-in, owner-write, RBAC denial, data-survives-redeploy).",
       "Linear git history on `main`; every merge human-gated (`/review-pr`); v0.11.0 tagged."
     ],
-    "days_ago": 0,
+    "days_ago": 1,
     "is_onboarding_pending": false,
     "is_completed": false,
     "is_stale": false
@@ -40,7 +40,7 @@
       "69/69 unit and integration tests passing across 14 modules.",
       "Strict linter and style compliance."
     ],
-    "days_ago": 5,
+    "days_ago": 6,
     "is_onboarding_pending": false,
     "is_completed": true,
     "is_stale": false
@@ -61,7 +61,7 @@
     "metrics": [
       "100% accuracy on tested temporal, aggregation, and event outbox SQL test cases."
     ],
-    "days_ago": 5,
+    "days_ago": 6,
     "is_onboarding_pending": false,
     "is_completed": true,
     "is_stale": false
@@ -83,7 +83,7 @@
       "431/431 automated test suite passing cleanly.",
       "42/42 architectural AST boundary fitness checks verified with zero leaks."
     ],
-    "days_ago": 4,
+    "days_ago": 5,
     "is_onboarding_pending": false,
     "is_completed": false,
     "is_stale": false
@@ -102,7 +102,7 @@
     "metrics": [
       "Pending initial baseline setup."
     ],
-    "days_ago": 5,
+    "days_ago": 6,
     "is_onboarding_pending": true,
     "is_completed": false,
     "is_stale": false
@@ -121,7 +121,7 @@
     "metrics": [
       "Pending initial baseline setup."
     ],
-    "days_ago": 5,
+    "days_ago": 6,
     "is_onboarding_pending": true,
     "is_completed": false,
     "is_stale": false
