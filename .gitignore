@@ -60,3 +60,4 @@ app/pocketbase/pb_migrations/
 
 # Local convenience symlink to ~/.kiro (developer-only; never commit)
 my-kiro
+.vercel
