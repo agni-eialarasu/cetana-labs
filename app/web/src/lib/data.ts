@@ -14,9 +14,35 @@
 
 import { base } from '$app/paths';
 import { pb } from './pb'; // shared PocketBase client (M2 — one authStore app-wide)
-import type { User, ProjectRecord, StatusRecord, Project, Archetype } from './types';
+import type { User, ProjectRecord, StatusRecord, StoredStatusRecord, Project, Archetype } from './types';
 
 const PB_SOURCE = (import.meta.env.VITE_PB_SOURCE ?? 'auto').toLowerCase();
+
+// Cadence threshold — mirrors STALE_DAYS_THRESHOLD in scripts/generate_status.py.
+const STALE_DAYS_THRESHOLD = 14;
+
+// BK-020 / RFC-LAB-000-012 §7: `days_ago` and `is_stale` are DERIVED at read-time
+// from `last_updated` (the source of truth) rather than stored in status.json.
+// Storing time-relative values made the committed file drift stale purely as the
+// calendar advanced, breaking the `--check` compare on unrelated PRs. Computing
+// here also makes the displayed "days ago" always current, not frozen at last write.
+function daysAgoFrom(lastUpdated: string): number {
+  if (!lastUpdated) return 0;
+  const then = Date.parse(lastUpdated);
+  if (Number.isNaN(then)) return 0;
+  return Math.max(0, Math.floor((Date.now() - then) / 86_400_000));
+}
+
+// Rehydrate a stored status record into the full StatusRecord the UI consumes by
+// computing the read-time-derived time fields (days_ago, is_stale) from last_updated.
+function withDerivedStatus(s: StoredStatusRecord): StatusRecord {
+  const days_ago = daysAgoFrom(s.last_updated);
+  return {
+    ...s,
+    days_ago,
+    is_stale: days_ago > STALE_DAYS_THRESHOLD && !s.is_completed
+  };
+}
 
 const ARCHETYPE: Record<Archetype, { label: string; icon: string }> = {
   'control-plane': { label: 'Control Plane', icon: '💻' },
@@ -151,11 +177,14 @@ async function loadProjectRecords(fetchFn: typeof fetch): Promise<StructuralData
 }
 
 export async function loadProjects(fetchFn: typeof fetch): Promise<Project[]> {
-  const [{ users, projects }, statuses] = await Promise.all([
+  const [{ users, projects }, storedStatuses] = await Promise.all([
     loadProjectRecords(fetchFn),
-    fetchJson<StatusRecord[]>(fetchFn, 'status.json') // M1: status stays snapshot-sourced (R2)
+    // M1: status stays snapshot-sourced (R2). status.json carries no time-relative
+    // fields (BK-020) — days_ago/is_stale are derived here from last_updated.
+    fetchJson<StoredStatusRecord[]>(fetchFn, 'status.json')
   ]);
 
+  const statuses = storedStatuses.map(withDerivedStatus);
   const usersById = new Map(users.map((u) => [u.id, u]));
   const statusById = new Map(statuses.map((s) => [s.id, s]));
 

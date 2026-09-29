@@ -74,6 +74,32 @@ python3 scripts/pb_import.py --apply
 > Use the `Containerfile` (Podman-first) only for staging/GCP parity. On the MBP work
 > machine, `pod-start` / `pod-stop` manage the Podman VM's 3 GB budget.
 
+## Deploy on Railway (`railway.json`, `RFC-LAB-000-012` / `BK-017`)
+
+`railway.json` (in this directory) pins the build so Railway does **not** auto-detect
+the stack and run Railpack — the papercut the M5 spike hit. It sets
+`build.builder = DOCKERFILE` with `dockerfilePath = Containerfile` (relative to this
+directory). Deploy the backend with the Railway CLI from **this** directory so the
+service root and the config align (avoids the Root-Directory path-doubling that
+silently fails builds):
+
+```bash
+cd app/pocketbase && railway up      # or: make deploy-staging  (from repo root)
+```
+
+### One-time [HUMAN] step — persistent volume (CLI cannot do this)
+
+PocketBase stores all state in `pb_data/`. The container serves it from **`/pb/pb_data`**
+(see the `Containerfile`). Railway Volumes **cannot be attached via the CLI** — you must,
+**once per service**, attach a Railway Volume mounted at **`/pb/pb_data`** in the Railway
+dashboard (Service → Settings → Volumes). Without it, the SQLite database is ephemeral and
+every redeploy wipes users/projects. The `Containerfile` deliberately omits a `VOLUME`
+instruction because Railway rejects Dockerfile `VOLUME` declarations.
+
+Other irreducibly-manual one-time steps (documented, not automated): Railway CLI login,
+and the GitHub OAuth app + callback. See
+[`docs/guides/developer-guide.md` → Deploy Operations](../../docs/guides/developer-guide.md).
+
 ## Access rules (draft — seeds `BK-007` RBAC)
 
 Drafted in `pb_schema.json` per collection; refined in Phase 3:

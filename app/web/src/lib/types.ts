@@ -35,6 +35,10 @@ export interface ProjectRecord {
   status_updated_at: string | null;
 }
 
+// Live-status layer, keyed by LAB id. `last_updated` is the source of truth for
+// time; `days_ago` and `is_stale` are DERIVED from it at read-time (data.ts) and
+// are NOT persisted in data/status.json — see BK-020 / RFC-LAB-000-012 §7. Storing
+// time-relative values made the file drift stale purely by the calendar advancing.
 export interface StatusRecord {
   id: string;
   health: string;
@@ -45,11 +49,16 @@ export interface StatusRecord {
   blockers: string;
   risks: string;
   metrics: string[];
-  days_ago: number;
   is_onboarding_pending: boolean;
   is_completed: boolean;
+  // Derived at read-time from `last_updated` (not present in status.json):
+  days_ago: number;
   is_stale: boolean;
 }
+
+// The on-disk / on-wire shape of a status.json record: StatusRecord minus the
+// read-time-derived time fields.
+export type StoredStatusRecord = Omit<StatusRecord, 'days_ago' | 'is_stale'>;
 
 // Merged view consumed by the UI (structural + live status + resolved owner).
 export interface Project extends ProjectRecord, Omit<StatusRecord, 'id'> {

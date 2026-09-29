@@ -31,6 +31,8 @@ Every command exists as both a Kiro `/command` and a `make` target (identical be
 | | `make seed` | — | Provision + seed PocketBase from `data/` |
 | | `make clean-data` | — | Reset local DB to a clean slate |
 | **Containers** | `make pb-image` | — | Build PocketBase image (Podman-first) for staging parity |
+| **Deploy** | `make deploy-staging` | — | CLI deploy backend (Railway) + frontend (Vercel); reads `.env.staging` — see §9A |
+| | `make verify-bundle` | — | Assert the built bundle baked in the expected backend URL (§9A.3) |
 | **Sprint** | — | `/sprint-start`, `/sprint-done` | Open / close a sprint |
 | **Audit** | — | `/audit-doc`, `/audit-project` | Doc review / project health sweep |
 
@@ -287,3 +289,63 @@ Confirm: `curl https://<app>.up.railway.app/api/collections/projects/records` re
 Use Railway **volume snapshots** to start; a scheduled `pb_data` export to object storage is the hardening follow-up (RFC-011 OQ).
 
 > `/status-staging` and `/validate-staging` remain placeholders — there is no separate staging tier for the MVP; production is the first deployed environment.
+
+---
+
+## 9A. Deploy Operations (CLI-first) — `RFC-LAB-000-012`
+
+> Decision of record: [`RFC-LAB-000-012`](../rfc/RFC-LAB-000-012-deploy-operations.md) (`BK-017`). §9 above is the *what/where* (Vercel + Railway, from `RFC-LAB-000-011`); this section is the *how we operate* — the reproducible, scriptable loop that replaces click-through-the-console iteration. Reusable for staging, prod, or any new environment.
+
+### The scaffold
+| Piece | Path | Purpose |
+| :--- | :--- | :--- |
+| Backend build pin | [`app/pocketbase/railway.json`](../../app/pocketbase/railway.json) | Pins Railway to the `Containerfile` (`builder: DOCKERFILE`) so it never auto-detects/Railpacks the build. |
+| Deploy wrapper | [`scripts/deploy.sh`](../../scripts/deploy.sh) + `make deploy-staging` | One entry point: `deploy-backend` (Railway) / `deploy-frontend` (Vercel) / `all` / `checklist`. |
+| Artifact assertion | [`scripts/verify-bundle.sh`](../../scripts/verify-bundle.sh) + `make verify-bundle` | Asserts the built bundle baked in the **expected** backend URL (and not a forbidden one) — §9A.3. |
+| Env template | [`.env.staging.example`](../../.env.staging.example) | Keys/comments only; copy to `.env.staging` (gitignored) and fill in. **No secret is ever committed.** |
+
+### 9A.1 CLI-first flow (the iteration loop)
+The **UIs are for one-time linking + inspection only**; the iteration loop is the CLI (reproducible, greppable, scriptable — `RFC-LAB-000-012` §3):
+
+```bash
+cp .env.staging.example .env.staging   # fill in PB_URL / VITE_PB_URL (gitignored)
+railway login && vercel login          # one-time per machine
+make deploy-staging                    # == scripts/deploy.sh all
+#   → deploy-backend  : railway up (from app/pocketbase, railway.json pins the builder)
+#   → deploy-frontend : build with VITE_PB_URL → verify-bundle → vercel deploy
+#   → prints the one-time [HUMAN] checklist
+```
+Deploy one tier at a time with `scripts/deploy.sh deploy-backend` / `deploy-frontend`. Config lives in repo-committed files (`vercel.json`, `railway.json`); the dashboard is the source of truth for **nothing** in the loop — inspect deploys/logs there, don't drive iteration from it.
+
+### 9A.2 Casual → qualified environment lifecycle (`RFC-LAB-000-012` §4)
+Treat a new environment **like local**: get it working casually first, harden second.
+
+```
+CASUAL (get it working)  ──verify──▶  QUALIFIED (hardened)  ──▶  (real use)
+throwaway creds, iterate              rotate REAL secrets via the UI,
+freely via CLI; don't                 lock down access, treat as real
+sweat secrets yet                     from here on
+```
+- **CASUAL:** stand it up with **throwaway credentials** (shared, low-stakes), deploy freely via the CLI, iterate. Don't wrestle real secrets on the first attempt.
+- **Qualification gate:** once the app's Human Verification Plan passes end-to-end against the environment → **rotate to real secrets via the UI**, lock down access, mark it qualified. From here it gets prod discipline.
+- **Guardrail:** casual ≠ careless — **no secrets in git at any stage.** Throwaway creds live in the throwaway instance / CLI-set env vars, never in the repo (`.env.staging` stays gitignored).
+
+### 9A.3 Verify the artifact, not the setting (`RFC-LAB-000-012` §5)
+Vite inlines `VITE_*` at **build time**, so the console *setting* can say one thing while the shipped *bundle* contains another — the BK-018 false negative (a preview silently baked against the prod backend). **Rule:** before trusting any live test, assert the baked-in backend URL in the built artifact:
+
+```bash
+make web-build                                     # or scripts/deploy.sh builds it for you
+make verify-bundle EXPECTED=https://<staging>.up.railway.app \
+                   FORBIDDEN=https://<prod>.up.railway.app
+```
+`scripts/deploy.sh deploy-frontend` runs this automatically **before** the Vercel deploy and refuses to ship a bundle baked against the wrong backend.
+
+### 9A.4 One-time [HUMAN] steps (documented, not automated)
+Some steps are irreducibly interactive / console-only — `scripts/deploy.sh checklist` prints them:
+1. **CLI login** (once per machine): `railway login`, `vercel login`.
+2. **Railway persistent volume** (once per service) — the CLI **cannot** attach volumes: in the dashboard, attach a Volume mounted at **`/pb/pb_data`** (else every redeploy wipes the SQLite DB; see [`app/pocketbase/README.md`](../../app/pocketbase/README.md#deploy-on-railway-railwayjson-rfc-lab-000-012--bk-017)).
+3. **GitHub OAuth app** (once per environment): point the callback at `<PB_URL>/api/oauth2-redirect`; set client id/secret in the Railway PocketBase admin (§5.1).
+4. **Vercel env**: set `VITE_PB_URL` to the Railway URL (`vercel env add` or the dashboard).
+
+### 9A.5 Gated ops (`RFC-LAB-000-012` §6)
+Deploy/ops/spike work follows the same branch → PR → human-gate discipline as features (`RFC-LAB-000-009`) — nothing ad-hoc to `main`. Even throwaway spike code lands on a branch; the *finding* is what merges.

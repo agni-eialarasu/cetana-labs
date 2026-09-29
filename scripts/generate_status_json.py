@@ -45,10 +45,14 @@ def build() -> list:
             "blockers": data.get("blockers", "None"),
             "risks": data.get("risks", ""),
             "metrics": data.get("metrics", []),
-            "days_ago": data.get("days_ago", 0),
+            # NOTE (BK-020 / RFC-LAB-000-012 §7): time-relative fields (`days_ago`
+            # and the date-derived `is_stale`) are intentionally NOT stored here.
+            # They are functions of (now - last_updated) that would make this file
+            # "go stale" purely as the calendar advances, breaking the `--check`
+            # full-string compare on unrelated PRs. `last_updated` is the source of
+            # truth; the SPA computes days-ago / staleness at read-time (data.ts).
             "is_onboarding_pending": data.get("is_onboarding_pending", False),
             "is_completed": data.get("is_completed", False),
-            "is_stale": data.get("is_stale", False),
         })
     return records
 
