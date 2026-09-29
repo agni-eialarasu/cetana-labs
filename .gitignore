@@ -1,3 +1,7 @@
+# =============================================================================
+# Operating Systems
+# =============================================================================
+
 # macOS
 .DS_Store
 .AppleDouble
@@ -17,47 +21,66 @@ ehthumbs.db
 [Dd]esktop.ini
 $RECYCLE.BIN/
 
-# IDE / Editors
+# =============================================================================
+# Editors & IDEs
+# =============================================================================
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
 
+# =============================================================================
+# Languages & Package Managers
+# =============================================================================
+
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Environment & Temp
-.env
-.venv/
+# Node
 node_modules/
+
+# =============================================================================
+# Build Output & Logs
+# =============================================================================
 dist/
 build/
 *.log
-shared-folder
-my-kiro
 
-# Governance Receipts
-.gemini/governance/
-
-
-# PocketBase (BK-008): runtime data + downloaded binary (never committed)
-app/pocketbase/pocketbase
-app/pocketbase/pb_data/
-app/pocketbase/pb_migrations/
-
-
-# Environment (RFC-LAB-000-007) — never commit real secrets
+# =============================================================================
+# Environment & Secrets (RFC-LAB-000-007) — never commit real secrets
+# =============================================================================
 .env
 .env.local
 .env.staging
 .env.*.local
+.venv/
 # ...but keep the committed *.example templates tracked
 !.env.example
 !.env.staging.example
 
-# Local convenience symlink to ~/.kiro (developer-only; never commit)
-my-kiro
+# =============================================================================
+# PocketBase (BK-008) — runtime data + downloaded binary (never committed)
+# =============================================================================
+app/pocketbase/pocketbase
+app/pocketbase/pb_data/
+app/pocketbase/pb_migrations/
+
+# =============================================================================
+# Deployment
+# =============================================================================
 .vercel
+
+# =============================================================================
+# Governance Receipts
+# =============================================================================
+.gemini/governance/
+
+# =============================================================================
+# Developer-Local (never commit)
+# =============================================================================
+_my_kiro
+_my_works
+
