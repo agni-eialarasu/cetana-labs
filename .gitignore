@@ -52,6 +52,11 @@ app/pocketbase/pb_migrations/
 # Environment (RFC-LAB-000-007) — never commit real secrets
 .env
 .env.local
+.env.staging
+.env.*.local
+# ...but keep the committed *.example templates tracked
+!.env.example
+!.env.staging.example
 
 # Local convenience symlink to ~/.kiro (developer-only; never commit)
 my-kiro

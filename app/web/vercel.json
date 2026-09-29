@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "//": "Cetana Labs Sleek UI on Vercel (RFC-LAB-000-011 / M5). We use SvelteKit adapter-static (not Vercel's SvelteKit auto-detection), which writes to build/ — Vercel defaults to dist/ and fails 'No Output Directory named dist' (M5). Pin the build here so it's repo-config, not a per-project dashboard setting. Vercel project Root Directory must be app/web; served at the domain root, so BASE_PATH stays empty.",
+  "framework": null,
+  "buildCommand": "pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "outputDirectory": "build"
+}
