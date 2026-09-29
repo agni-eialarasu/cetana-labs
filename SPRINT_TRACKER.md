@@ -39,7 +39,7 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
 | `TSK-055` | `BK-018` — **spike** (`spike-bk018-pb040-oauth`): reproduce + root-cause the PB 0.40 realtime/OAuth-through-Railway-proxy failure; test H1 (redirect `authWithOAuth2Code` flow); deliverable = documented finding (Journal + RFC-011 amendment) → then a fix Spec to move prod off the 0.28.4 pin. Needs a live 0.40 Railway instance | P1 | Eialarasu | ✅ Ready | 2026-12-24 |
-| `TSK-056` | `BK-017`/`BK-019` — deploy automation + production cutover: `make setup-staging`/`.env.staging` scripting; formal prod instances + cutover runbook | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
+| `TSK-056` | `BK-017` + `BK-020` — deploy scaffold (Spec `deploy-scaffold`, implements `RFC-LAB-000-012`): `railway.json`, `make deploy-staging`→`scripts/deploy.sh` (CLI-first), `make verify-bundle` (artifact-assertion helper), `developer-guide` Deploy-Ops runbook (casual→qualified), **+ fix the `status.json` date-drift (`BK-020`)**. Unblocks the deferred BK-018 OAuth fix. `BK-019` (real prod cutover) remains separate | P2 | Eialarasu | ✅ Ready | 2026-12-31 |
 | `TSK-057` | `BK-012` — app-level settings (RFC + Spec): configurable settings collection + typed accessors, minimal now, grows over time; foundation for `BK-013` branding | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Backlog | 2026-12-24 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
