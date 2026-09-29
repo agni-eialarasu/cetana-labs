@@ -482,3 +482,33 @@ Follows the M5 deploy (Entry 010). M5 shipped only because prod was **pinned to 
 ### Session meta
 - **Theme:** don'"'"'t re-enter the thing that caused the pain through the same door — fix the *deploy DX* first, then resume the fix.
 - **Honest note:** the spike'"'"'s technical result stands (Entry 011); this entry is strictly about the process lapse + the corrective. The gate-bypass is the kind of thing the lifecycle exists to prevent — naming it keeps the blueprint credible.
+
+
+---
+
+## Entry 013 — Deploy operations: CLI-first + casual→qualified environments (RFC-012)
+
+**Date:** 2026-09-28 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `RFC-LAB-000-012` (deploy operations); `BK-020` (status-drift fix); `BK-017` gets its decision of record
+
+> _Decisions D46–D48 were made by Agni Eialarasu (human-directed), AI-assisted in execution/validation._
+
+Follows Entry 012 (the BK-018 spike'"'"'s process breach + UI-driven ops pain). `RFC-011` decided *what* we deploy to; this session decided *how we operate deploys* — the missing piece that made M5 + the spike painful.
+
+### D46 — CLI-first deploys (Railway CLI + Vercel CLI), repo-committed config
+- **Trigger:** the human, tired of "understanding each UI," proposed CLI-based on-demand deploys with UI only for verification.
+- **Decision & rationale:** all ad-hoc/iterative deploys go through the **Railway + Vercel CLIs** with **committed config** (`vercel.json` already landed; `railway.json`, `.env.*.example` to follow); UIs are for one-time linking + inspection, not the loop. The audit backs this: the UI path (env scoping, Secret→Config locks, root-dir doubling) is what produced the BK-018 false negatives. CLI + committed config is reproducible, scriptable, greppable. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-012` §3.
+
+### D47 — Casual → qualified environment promotion
+- **Trigger:** first-time staging/prod setup is miserable when you must wrestle real secrets up front; the human wanted to "treat it like local and go casual, then harden once qualified."
+- **Decision & rationale:** every deployed env has a lifecycle — **CASUAL** (throwaway creds, throwaway instance, iterate freely, don'"'"'t sweat secrets) → verify working → **QUALIFIED** (rotate real secrets via UI, lock down, treat as real). Mirrors how local is already treated; de-risks first-time setup. **Guardrail (non-negotiable):** no secrets in git at *any* stage — "casual" = throwaway creds in a throwaway instance, never committed. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-012` §4.
+
+### D48 — Two spike lessons codified: verify-the-artifact + gates-apply-to-ops
+- **Decision & rationale:** (a) **"Verify the artifact, not the setting"** — for build-time-inlined config (Vite `VITE_*`), assert the baked-in value in the *bundle* before trusting a live test (the exact false negative that nearly derailed BK-018). (b) **Gates apply to ops/spikes too** — even throwaway spike code goes on a branch, never `main` (Entry 012'"'"'s breach, codified). Also folded in: the recurring **`status.json` date-drift** (5 CI failures) → make the check date-tolerant (`BK-020`). _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-012` §5/§6/§7; `BK-020`.
+
+### Session meta
+- **Theme:** fix the *deploy DX* (the source of the pain) before resuming the BK-018 OAuth fix — don'"'"'t re-enter the pain through the same door.
+- **Sequencing:** RFC now (decision) → deploy-scaffold Spec (CLI wrappers + artifact-assertion helper + status-drift fix) → *then* the BK-018 fix Spec, verified via the new CLI flow.
+- **Honest note:** this RFC is `BK-017`'"'"'s decision of record; nothing built yet — the scaffold + fixes are the follow-on Spec.
