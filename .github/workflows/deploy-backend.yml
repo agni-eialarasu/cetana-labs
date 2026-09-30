@@ -72,11 +72,20 @@ jobs:
         run: npm install -g @railway/cli@5.2.0
 
       - name: Deploy PocketBase → Railway
-        # Context is app/pocketbase/ so the repo-committed railway.json builder pin
-        # (DOCKERFILE / Containerfile) is used and the Root-Directory doubling is
-        # sidestepped (R1.3). --path-as-root . makes this dir the archive root.
-        # --ci streams build logs and exits when the build completes (Railway docs).
-        working-directory: app/pocketbase
+        # BK-022 FIX: deploy from the REPO ROOT (not app/pocketbase/).
+        # The Railway *service* has Root Directory = "app/pocketbase" (dashboard,
+        # matched to the proven bk018-throwaway config). So we must upload the WHOLE
+        # repo as the archive root and let Railway's Root Directory scope into it;
+        # Railway then reads app/pocketbase/railway.json (builder = Containerfile).
+        #
+        # The earlier "--path-as-root ." FROM app/pocketbase/ compounded with the
+        # service Root Directory → Railway looked for app/pocketbase/app/pocketbase
+        # → "Root directory app/pocketbase was not found in the deployed source"
+        # (the classic Root-Directory doubling). Deploying from root resolves it.
+        #
+        # NOTE (config-as-dashboard dependency): this deploy relies on the service's
+        # dashboard Root Directory = app/pocketbase. Keep staging == the throwaway
+        # setting. --ci streams build logs and exits on build completion.
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: railway up --service "${{ vars.RAILWAY_SERVICE || 'pocketbase' }}" --ci --path-as-root .
