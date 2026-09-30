@@ -548,3 +548,31 @@ Follows the merge of the BK-018 fix (PR #46, `TSK-058`) which made the codebase 
 - **Theme:** the session that *removed* scope. Started as "plan the prod cutover," ended by declaring cutover/topology out of scope entirely — the more valuable move.
 - **Course-correction:** the AI initially planned an RFC-012 *amendment extending* promotion to staging; the human's framing inverted it — RFC-012 becomes reference-only, and the plan *shrank*. Recorded honestly: the tension "if ops is out of scope, why build deploy automation?" resolved as **a deliberate boundary** — BK-021 is the thin bridge so `done` is *observably* live on the one environment; it is explicitly the edge of scope, not a promotion pipeline.
 - **Division of labor:** human set the scope motto and the one-environment/no-prod-pipeline calls; AI framed the boundary language, mapped it onto existing artifacts, and flagged the strict-vs-pragmatic `done=live` fork (resolved to pragmatic).
+
+---
+
+## Entry 015 — App-level settings: key/value collection + a typed accessor façade
+
+**Date:** 2026-09-30 · **Contributor(s):** Agni Eialarasu (human-directed), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** `RFC-LAB-000-013`; Spec `app-level-settings` (`TSK-057` / `BK-012`); enables `BK-013`
+
+> _Decisions D53–D55 were made by Agni Eialarasu (human-directed), AI-assisted in framing. First SPRINT-11 planning session; opens the first post-MVP product feature._
+
+Planning `BK-012` (app-level settings, the foundation for `BK-013` branding). The design brief — "initialized minimal, grown over time" — made the *shape* the pivotal call, because app settings is configuration, not the array-of-records shape the repo's existing collections use.
+
+### D53 — Shape = key/value collection + a typed accessor façade
+- **Trigger:** settings must "grow over time" cheaply, yet the app wants type-safety when reading them.
+- **Options:** (A) key/value rows; (B) one typed record with a column per setting; (C) a single JSON blob.
+- **Decision & rationale:** **A + a typed accessor façade.** Key/value keeps extensibility in the *data* (a new setting is a seed row, never a schema migration — the "grow freely" brief), and the typed TS accessor recovers B's safety in *one* place (getters that know each key's name, `type` cast, and default). B was rejected as the base (every setting = a migration); C rejected (no validation, corruption-prone). _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-013` §2/§3/§6.
+
+### D54 — RBAC: public read, superuser-only write (for now)
+- **Decision & rationale:** **public read** (branding must render on the anonymous dashboard) + **superuser-only write**. There is no admin role yet (`RFC-LAB-000-008` deferred the 5-role model), and settings are rare/high-trust — so gating writes to superuser is the safe minimum. A lighter owner/admin write path is deferred to `BK-014` (admin CRUD). Recorded as a deliberate deferral, not an oversight. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-013` §5; Spec R2.
+
+### D55 — Scope = the mechanism; branding UI + logo upload deferred to BK-013
+- **Decision & rationale:** `BK-012` ships the *mechanism* — collection, schema, seed, typed accessors, API rules, and **read-wiring** (the app reads its own name/description from settings). **Logo upload/file handling and the branding editor UI are `BK-013`**; this RFC only *reserves* the logo keys. Keeps the Spec tight and the foundation/consumer split clean. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-013` §7; Spec §4 (out of scope).
+
+### Session meta
+- **Sequencing:** did a green `/audit-project` (portfolio healthy, no drift) before authoring, at the human's request, so BK-012 builds on verified docs. RFC + Spec authored here (Web); next `/plan-done` merges them (merge-first) → `/spec-run app-level-settings` (IDE). Then the `BK-015` AI-Assistant RFC + spike (the parallel de-risking track).
+- **Division of labor:** human set the leans (key/value, superuser writes, mechanism-only scope); AI grounded them in the repo's existing collection pattern and wrote the RFC/Spec.
