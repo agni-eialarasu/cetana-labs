@@ -1,28 +1,30 @@
 ---
 name: status-staging
 description: >-
-  Reports the health of the Cetana Labs staging environment. PLACEHOLDER — staging is not yet provisioned; target is GCP (backend + frontend) with optional Vercel for the frontend, pending the repo transfer to the org account. Use when the user runs /status-staging.
+  Reports the health of the Cetana Labs staging environment — the single reference env that a merge to main auto-deploys (Railway backend + Vercel frontend). Probes backend/frontend reachability and deploy freshness vs main. Use when the user runs /status-staging.
 ---
 
-# Skill: Staging Status (`/status-staging`) — PLACEHOLDER
+# Skill: Staging Status (`/status-staging`)
 
-## Status: Not yet provisioned
+## What "staging" is (Decision Journal Entry 014, RFC-LAB-000-011)
 
-Staging does **not exist yet**. This skill is a documented placeholder so the command vocabulary is standardized ahead of the environment being built.
+Staging is the **single reference environment** — one env, auto-deployed on every merge to
+`main`:
+- **Backend:** PocketBase → **Railway** (`.github/workflows/deploy-backend.yml`,
+  path-filtered to `app/pocketbase/**`).
+- **Frontend:** SvelteKit → **Vercel** (Git integration).
 
-## Planned Staging Architecture
-- **Primary target: GCP** — both backend (PocketBase, single-binary + persistent volume, e.g. Cloud Run + a mounted disk / GCS-backed SQLite) and the frontend.
-- **Optional quick-win: Vercel** — for fast frontend preview deploys.
-- **Dependency:** provisioning begins after the repository is **transferred to the org account** (enables org-level Pages/Actions/secrets and branch protection per `RFC-LAB-000-004` §10a).
+No GCP target, no prod tier, no promotion pipeline (out-of-scope ops, `BK-019`).
 
-## Intended Behavior (once staging exists)
-When implemented, `/status-staging` will:
-1. Probe the staging backend health endpoint (GCP PocketBase URL) and report HTTP status + version.
-2. Probe the staging frontend (GCP or Vercel URL) and report reachability.
+## Intended Behavior
+`/status-staging` reports the live env health (URLs from `.env.staging`):
+1. Probe the **Railway** backend health endpoint (`<PB_URL>/api/health`) — HTTP status + version.
+2. Probe the **Vercel** frontend URL — reachability.
 3. Report the last deploy SHA/time and whether it matches `main`.
 
 ## Trigger Patterns
 - `/status-staging`
 
-## Current Response
-State clearly: "Staging is not provisioned yet — planned on GCP (backend + frontend), optional Vercel for frontend, pending the org-account transfer." Do not fabricate a status.
+## Response guidance
+Probe the real Railway/Vercel endpoints and report actual status. If `.env.staging` or a URL
+is missing, say so (point to `.env.staging.example`) — do not fabricate a status.
