@@ -5,7 +5,7 @@
 | **Spec ID** | `fix-bk018-oauth-redirect` |
 | **Feature** | Fix the BK-018 root cause: switch GitHub sign-in from the popup flow to the redirect-based `authWithOAuth2Code` flow, so PocketBase can un-pin `0.28.4 → 0.40+` on Railway |
 | **Backlog** | `TSK-055` (`BK-018`, SPRINT-10) |
-| **Status** | 🟡 Proposed (contract authored on Kiro Web; execution on Kiro IDE + a live 0.40 Railway instance) |
+| **Status** | 👀 In Review (implemented + verified V1–V8 on throwaway 0.40; PR #46 open; `IN_VERIFICATION → IN_REVIEW`) |
 | **RFCs** | `RFC-LAB-000-011` §4.5 (the fix decision-of-record), `RFC-LAB-000-012` (deploy ops — verify via CLI + `verify-bundle`), `RFC-LAB-000-006`/`-008` (OAuth/RBAC) |
 | **Grounded by** | The `spike-bk018-pb040-oauth` finding (Journal Entry 011): root cause **confirmed**, H1 **chosen** |
 | **Executor role** | Delegated-agent / onboarded-dev |
