@@ -512,3 +512,39 @@ Follows Entry 012 (the BK-018 spike'"'"'s process breach + UI-driven ops pain). 
 - **Theme:** fix the *deploy DX* (the source of the pain) before resuming the BK-018 OAuth fix — don'"'"'t re-enter the pain through the same door.
 - **Sequencing:** RFC now (decision) → deploy-scaffold Spec (CLI wrappers + artifact-assertion helper + status-drift fix) → *then* the BK-018 fix Spec, verified via the new CLI flow.
 - **Honest note:** this RFC is `BK-017`'"'"'s decision of record; nothing built yet — the scaffold + fixes are the follow-on Spec.
+
+---
+
+## Entry 014 — AIDLC scope boundary: `done = live-on-main`; multi-env promotion is DevOps (out of scope)
+
+**Date:** 2026-09-30 · **Contributor(s):** Agni Eialarasu (human-directed), AI-assisted · **Mode:** Kiro Web (brainstorm & planning) · **Outcome:** scope-boundary decision (this entry); reframes `RFC-LAB-000-012` as reference ops guidance; `BK-019` reclassified out-of-scope; new `BK-021` (make `done` observably live)
+
+> _Decisions D49–D52 were made by Agni Eialarasu (human-directed), AI-assisted in framing/validation. This session began as "plan BK-019 (prod cutover)" and surfaced that the real question was a **scope boundary**, not a cutover task._
+
+Follows the merge of the BK-018 fix (PR #46, `TSK-058`) which made the codebase 0.40-ready. Planning the "prod cutover" (`BK-019`) exposed that BK-019, RFC-012's promotion ladder, and the stale `status-staging` placeholders were all **operational** concerns that had crept into the **lifecycle** model. This session drew the line.
+
+### D49 — AIDLC scope ends at `done = merged to main = live`; ops is out of scope
+- **Trigger:** the human named the motto — AIDLC is `brainstorm → plan → implement → verify → done`, and **`done` = live** (merged to `main`). "Staging, UAT, Prod etc. are operational, i.e. DevOps scope — not part of this project."
+- **Options:** (a) keep modeling multi-env promotion (staging→UAT→prod) inside the lifecycle; (b) declare the lifecycle's scope ends at a trustworthy, deployed `main` on a single reference environment, and treat topology/promotion/hardening as out-of-scope ops.
+- **Decision & rationale:** **(b).** The LAB-000 blueprint demonstrates *how you structurally go from idea → gated, shipped code* — that is generic and dogfoodable. Environment topology is org-specific and not blueprint-able; conflating the two is what left BK-019 ambiguously "ripe?" and the `status-staging`/`validate-staging` skills stale for weeks. The lifecycle's deliverable is **trustworthy `main`**; where/how many tiers it runs in is DevOps. _(Contributor: Agni Eialarasu)_
+- **Outcome:** this entry as decision of record; drives D50–D52.
+
+### D50 — `done = live` is pragmatic (b), not strict (a): the contract is the merge, not uptime
+- **Trigger:** if `done` means "deployed-and-reachable," a deploy hiccup would become a *lifecycle* failure — pulling ops back into scope through the back door.
+- **Options:** (a) strict — `done` isn't reached until the deploy succeeds (deploy failure = not done); (b) pragmatic — `done` = merged to trustworthy `main`; the auto-deploy is a *consequence* that makes it live, and a deploy hiccup is an *ops* problem, not a lifecycle failure.
+- **Decision & rationale:** **(b).** Keeps the lifecycle clean — its contract is the gated merge; deployment is how `done` becomes *observable*, not what defines it. Honors "deploy mechanics are ops." _(Contributor: Agni Eialarasu)_
+- **Outcome:** encoded in the model; shapes the BK-021 Spec (deploy failure alerts as ops, never blocks the lifecycle).
+
+### D51 — `main` = the single reference environment ("staging"); no prod pipeline; the PR gate IS the deploy gate
+- **Trigger:** the human: "treat merge to `main` = STAGING, for both front and back… I don't want to increase the pipeline for live. Prod will be derived / a new instance later once matured."
+- **Decision & rationale:** one automated environment, fed by `main`. A **merge deploys both tiers** (frontend already via Vercel Git integration; backend to match). The **gate = PR review + required CI checks** — "an invalid build should not reach `main`," so everything on `main` is deployable; no separate, painful post-merge approval. **No staging→prod promotion pipeline** is built; real prod is derived later (ops), when matured. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `BK-021` Spec; branch-protection/required-checks as the gate.
+
+### D52 — Reclassify the ops artifacts: RFC-012 → reference guidance; BK-019 out-of-scope; BK-021 = the minimal bridge
+- **Decision & rationale:** (a) **`RFC-LAB-000-012`** stands as **optional reference ops guidance**, not part of the lifecycle contract (its casual→qualified promotion ladder is ops doctrine). (b) **`BK-019`** ("dedicated prod, domain, backup discipline") is **reclassified out-of-scope / future ops** — not a sprint-blocking lifecycle item. (c) New **`BK-021`**: the *minimal bridge* that makes `done` observably live — **backend CI deploy on merge (path-filtered `app/pocketbase/**`)** to match the frontend, plus a **`/deploy-adhoc`** developer tool for ad-hoc testing against throwaway/other instances (explicitly a tool, not a lifecycle stage). The stale `status-staging`/`validate-staging` placeholders get refreshed to reflect the one-environment reality. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `BK-021` backlog row + Spec `automate-staging-deploy`; RFC-012 reframe note; BK-019 reclassified.
+
+### Session meta
+- **Theme:** the session that *removed* scope. Started as "plan the prod cutover," ended by declaring cutover/topology out of scope entirely — the more valuable move.
+- **Course-correction:** the AI initially planned an RFC-012 *amendment extending* promotion to staging; the human's framing inverted it — RFC-012 becomes reference-only, and the plan *shrank*. Recorded honestly: the tension "if ops is out of scope, why build deploy automation?" resolved as **a deliberate boundary** — BK-021 is the thin bridge so `done` is *observably* live on the one environment; it is explicitly the edge of scope, not a promotion pipeline.
+- **Division of labor:** human set the scope motto and the one-environment/no-prod-pipeline calls; AI framed the boundary language, mapped it onto existing artifacts, and flagged the strict-vs-pragmatic `done=live` fork (resolved to pragmatic).
