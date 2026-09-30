@@ -576,3 +576,27 @@ Planning `BK-012` (app-level settings, the foundation for `BK-013` branding). Th
 ### Session meta
 - **Sequencing:** did a green `/audit-project` (portfolio healthy, no drift) before authoring, at the human's request, so BK-012 builds on verified docs. RFC + Spec authored here (Web); next `/plan-done` merges them (merge-first) → `/spec-run app-level-settings` (IDE). Then the `BK-015` AI-Assistant RFC + spike (the parallel de-risking track).
 - **Division of labor:** human set the leans (key/value, superuser writes, mechanism-only scope); AI grounded them in the repo's existing collection pattern and wrote the RFC/Spec.
+
+---
+
+## Entry 016 — "done = live" is only true if you verify *live*: three stacked, invisible frontend-deploy failures
+
+**Date:** 2026-09-30 · **Contributor(s):** Agni Eialarasu (human-directed — caught it live), AI-assisted (diagnosis/fix) · **Mode:** Kiro Web · **Outcome:** `BK-023` part 1 fixed (PRs #51, #52); `BK-023` part 2 / `TSK-063` opened
+
+> _A dogfooding retro, not a design pivot. Captured because the failure mode is a reusable lesson for the blueprint._
+
+After closing SPRINT-10 on the claim "`done` = live for both tiers" (Entry 014), a **live staging screenshot** revealed sign-in was still broken on `cetana-labs.vercel.app` — running the *old* popup OAuth flow (`/api/realtime` 400) even though the BK-018 redirect fix had been merged to `main` since PR #46. Peeling it back exposed **three stacked failures, none caught by CI or the `/review-pr` gate**:
+
+### D56 — The failure chain (recorded so we recognize it again)
+1. **`vercel.json` had a `"//"` comment key** → Vercel's schema validation *failed every build* (prod + preview) from commit `3ff88fc` onward. Vercel kept serving the last *successful* (pre-BK-018) bundle. (Fix: #51 — schema-pure `vercel.json`.)
+2. **Stale bundle** → the live site ran the old popup flow (the visible symptom).
+3. Once builds were green, **`/oauth/callback` 404'd** — the route is `prerender=false` (client-only) and Vercel (`framework:null`) doesn't auto-apply `adapter-static`'s `index.html` fallback for unmatched paths. (Fix: #52 — `rewrites /(.*)→/index.html`.)
+- **Live-verified fixed:** signed in as Eialarasu via the redirect flow, `/api/realtime` = 0 requests — the first true end-to-end proof of the BK-018 fix on live staging. _(Contributor: Agni Eialarasu)_
+
+### D57 — The real lesson: our gate is blind to the actual deploy
+- **Trigger:** all three failures passed `/review-pr` and CI green. The gate trusts the **"Vercel Preview Comments"** check — which is *not* the Vercel build status — and our GitHub `Build Sleek UI` job runs `pnpm build` directly, never Vercel's config validation. So "green CI + merged" told us nothing about whether the frontend actually deployed.
+- **Decision & rationale:** **"done = live" is only meaningful if something verifies *live*.** We proved the *backend* deploy live (BK-022) but *assumed* the frontend half. The lifecycle needs a **real deploy signal** — not a proxy check. Opened `TSK-063` (BK-023 part 2): wire a genuine Vercel-build signal and/or a post-deploy live-bundle assertion into the gate, honoring the "no extra pipeline for live" rule (a signal, not a pipeline). _(Contributor: Agni Eialarasu)_
+- **Outcome:** `TSK-063`; and a standing reminder — the human checking the live site is what caught all three. Automated live-verification is the durable fix.
+
+### Session meta
+- **Division of labor:** the human caught every failure by looking at the *live* site + consoles (build error, 404, network tab); the AI diagnosed root causes against the repo and shipped the fixes via the normal branch → PR → gate. Honest note: the AI's *first* hypothesis (production pinned to an old commit) was **wrong** — the Deployments screenshot corrected it to "every build erroring." Verify against reality, don't trust the first theory.
