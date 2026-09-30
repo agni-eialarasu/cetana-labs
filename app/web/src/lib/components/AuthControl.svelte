@@ -8,11 +8,12 @@
   async function signIn() {
     busy = true;
     try {
+      // Redirect flow (BK-018): this navigates the whole page to GitHub and returns to
+      // /oauth/callback, so control normally doesn't come back here. A throw means we
+      // failed to even start (e.g. provider not configured) — stay anonymous.
       await auth.signInWithGitHub();
     } catch (err) {
-      // OAuth popup closed/failed — non-fatal; stay anonymous.
-      console.warn('[auth] GitHub sign-in did not complete.', err);
-    } finally {
+      console.warn('[auth] GitHub sign-in did not start.', err);
       busy = false;
     }
   }
