@@ -32,6 +32,13 @@ on:
     paths:
       - 'app/pocketbase/**'
       - '.github/workflows/deploy-backend.yml'
+  # Manual re-deploy button (Actions tab → Run workflow). A GitHub-native sibling of
+  # /deploy-adhoc for the staging service: re-deploy the current backend on demand
+  # (e.g. to apply Railway env-var changes or restart) without a code change.
+  # NOTE: workflow_dispatch bypasses the `paths:` filter above — it proves the deploy
+  # works (V1) but does NOT exercise the path-filter skip (V2), which stays a
+  # post-merge on-push observation.
+  workflow_dispatch:
 
 permissions:
   contents: read
