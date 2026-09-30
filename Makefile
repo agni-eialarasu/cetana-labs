@@ -14,7 +14,7 @@ PB := $(shell command -v pocketbase 2>/dev/null || echo ./pocketbase)
 CONTAINER := $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
 
 .PHONY: help setup validate-local validate-staging status-local start-local stop-local \
-        provision seed clean-data web-dev web-build verify-bundle deploy-staging \
+        provision seed clean-data web-dev web-build verify-bundle deploy-staging deploy-adhoc \
         pb-serve pb-image env-doctor
 
 help: ## Show this cheat-sheet
@@ -40,8 +40,11 @@ validate-local: ## /validate-local — full local pre-flight (Python validators 
 	python3 scripts/project_validate.py --allow-dirty
 	$(NVM) cd app/web && pnpm install --frozen-lockfile && pnpm check && pnpm build
 
-validate-staging: ## /validate-staging — probe staging health (PLACEHOLDER: GCP/Vercel, pending org transfer)
-	@echo "Staging not provisioned yet — target GCP (backend+frontend), optional Vercel. See /validate-staging skill."
+validate-staging: ## /validate-staging — probe the staging (single reference) env: Railway backend + Vercel frontend health
+	@echo "Staging = the single reference environment (auto-deployed on merge to main):"
+	@echo "  backend  → Railway PocketBase (deploy-backend.yml)"
+	@echo "  frontend → Vercel (Git integration)"
+	@echo "Set PB_URL / WEB_URL in .env.staging to probe health. See the /validate-staging skill."
 
 # ---- Local stack lifecycle (mirror /start-local, /stop-local, /status-local) ----
 start-local: ## /start-local — start PocketBase (:8090) + SvelteKit dev (:5173)
@@ -84,14 +87,31 @@ verify-bundle: ## Assert app/web/build bakes in EXPECTED backend URL (FORBIDDEN 
 	@[ -n "$(EXPECTED)" ] || { echo "usage: make verify-bundle EXPECTED=<url> [FORBIDDEN=<url>]"; exit 2; }
 	bash scripts/verify-bundle.sh "$(EXPECTED)" "$(FORBIDDEN)"
 
-deploy-staging: ## /deploy-staging — CLI deploy backend (Railway) + frontend (Vercel); reads .env.staging
+# DEPLOY MODEL (Decision Journal Entry 014, D49–D52) — two deliberately-separated paths:
+#
+#   1. THE STAGING PIPELINE = THE MERGE.  Merging to `main` auto-deploys BOTH tiers to
+#      the single reference environment: frontend via the Vercel Git integration, backend
+#      via .github/workflows/deploy-backend.yml (path-filtered to app/pocketbase/**).
+#      There is NO manual make target for the normal staging deploy — the merge is it.
+#      `deploy-staging` below is only a manual OVERRIDE re-deploy of that same env.
+#
+#   2. `deploy-adhoc` = an on-demand DEV TOOL to deploy to ANY instance (throwaway/other),
+#      parameterized by an env file. NOT a lifecycle stage, NOT "release" (see /deploy-adhoc).
+
+deploy-staging: ## Manual OVERRIDE re-deploy of the staging env (normal staging deploy is AUTOMATIC on merge to main)
+	@echo "NOTE: the normal staging deploy is AUTOMATIC on merge to main (Vercel + deploy-backend.yml)."
+	@echo "      This target is a manual override re-deploy of that same env — not 'the pipeline'. (Entry 014)"
 	bash scripts/deploy.sh all
+
+deploy-adhoc: ## /deploy-adhoc — DEV TOOL: on-demand deploy to ANY instance. usage: make deploy-adhoc ENV=<file> [WHAT=all|deploy-backend|deploy-frontend]
+	@[ -n "$(ENV)" ] || { echo "usage: make deploy-adhoc ENV=<env-file> [WHAT=all|deploy-backend|deploy-frontend]"; echo "  (ENV points at a GITIGNORED env file, e.g. .env.throwaway — NOT the staging pipeline; see /deploy-adhoc)"; exit 2; }
+	ENV_FILE="$(ENV)" bash scripts/deploy.sh "$(if $(WHAT),$(WHAT),all)"
 
 # ---- Containers (Podman-first, Docker fallback — RFC-LAB-000-007 §2.3) ----
 pb-serve: ## Run PocketBase directly (binary, no container — the local default)
 	cd app/pocketbase && $(PB) serve --http=0.0.0.0:8090
 
-pb-image: ## Build the PocketBase container image (Podman-first) for staging/GCP parity
+pb-image: ## Build the PocketBase container image (Podman-first) for local/Railway (Containerfile) parity
 	@[ -n "$(CONTAINER)" ] || { echo "No podman/docker found."; exit 1; }
 	$(CONTAINER) build -t cetana-pocketbase -f app/pocketbase/Containerfile app/pocketbase
 

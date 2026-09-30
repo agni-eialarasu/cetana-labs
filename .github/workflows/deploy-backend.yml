@@ -1,0 +1,75 @@
+# Deploy Backend (PocketBase → Railway) — the backend half of "a merge deploys both tiers"
+#
+# WHY THIS EXISTS (Decision Journal Entry 014, D49–D52; RFC-LAB-000-011):
+#   `main` is the single reference environment. Merging to `main` already auto-deploys
+#   the FRONTEND (Vercel Git integration). This workflow closes the asymmetry by
+#   deploying the BACKEND (PocketBase on Railway) on the same trigger — so `done`
+#   (= the gated merge) is observably live on both tiers.
+#
+# SCOPE (deliberate edge — Entry 014):
+#   - One automated environment only. No promotion pipeline, no prod tier, no
+#     auto-rollback (that is ops / BK-019, out of scope).
+#   - `done` = the merge (D50). A deploy hiccup here is an OPS ALERT (a red check +
+#     logs), NOT a lifecycle failure — it never reverts the already-merged commit.
+#
+# SECRETS DISCIPLINE (P6/R1.2/R7.1 — non-negotiable):
+#   RAILWAY_TOKEN is a Railway *project token* (environment-scoped, deploy-only),
+#   stored ONLY as a GitHub Actions secret. It is never hard-coded and never in the
+#   repo. `.env.*` stay gitignored. There is no `railway login` step — auth is
+#   entirely via the RAILWAY_TOKEN env var.
+#
+# ONE-TIME [HUMAN] PREREQ (the enabler; cannot be scripted):
+#   GitHub → Settings → Secrets and variables → Actions → add `RAILWAY_TOKEN`
+#   (a project token scoped to the staging environment/service).
+
+name: Deploy Backend (Railway)
+
+on:
+  push:
+    branches: [main]
+    # Path filter (R1.1): only fire when the backend actually changes. A docs- or
+    # frontend-only merge skips this workflow entirely (verified by V2).
+    paths:
+      - 'app/pocketbase/**'
+      - '.github/workflows/deploy-backend.yml'
+
+permissions:
+  contents: read
+
+# Avoid overlapping deploys of the same environment (a later push supersedes an
+# in-flight one only after it finishes — we do NOT cancel a deploy mid-flight).
+concurrency:
+  group: deploy-backend-main
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy PocketBase → Railway (staging = the single reference env)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node (for the Railway CLI)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Railway CLI (pinned)
+        # PINNED intentionally. @railway/cli v5.3.0 (2026-06-05) broke project-token
+        # auth for `railway up` in CI ("Not signed in." despite a valid RAILWAY_TOKEN);
+        # v5.2.0 is the last version verified to authenticate via a project token
+        # non-interactively. Revisit this pin when Railway confirms a fixed release.
+        # Ref: Railway Central Station — "CLI v5.3.0 — railway up fails with Not
+        # signed in using a project token (RAILWAY_TOKEN) in CI".
+        run: npm install -g @railway/cli@5.2.0
+
+      - name: Deploy PocketBase → Railway
+        # Context is app/pocketbase/ so the repo-committed railway.json builder pin
+        # (DOCKERFILE / Containerfile) is used and the Root-Directory doubling is
+        # sidestepped (R1.3). --path-as-root . makes this dir the archive root.
+        # --ci streams build logs and exits when the build completes (Railway docs).
+        working-directory: app/pocketbase
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: railway up --service "${{ vars.RAILWAY_SERVICE || 'pocketbase' }}" --ci --path-as-root .

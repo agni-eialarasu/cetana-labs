@@ -31,7 +31,9 @@ Every command exists as both a Kiro `/command` and a `make` target (identical be
 | | `make seed` | — | Provision + seed PocketBase from `data/` |
 | | `make clean-data` | — | Reset local DB to a clean slate |
 | **Containers** | `make pb-image` | — | Build PocketBase image (Podman-first) for staging parity |
-| **Deploy** | `make deploy-staging` | — | CLI deploy backend (Railway) + frontend (Vercel); reads `.env.staging` — see §9A |
+| **Deploy** | *(merge to `main`)* | — | **Normal staging deploy is AUTOMATIC on merge** — both tiers to the single reference env (§9A.0) |
+| | `make deploy-adhoc ENV=<file>` | `/deploy-adhoc` | On-demand deploy to an arbitrary instance (throwaway/other) — a dev tool, not a stage (§9A.0) |
+| | `make deploy-staging` | — | Manual *override* re-deploy of the staging env (not "the pipeline"; §9A.0) |
 | | `make verify-bundle` | — | Assert the built bundle baked in the expected backend URL (§9A.3) |
 | **Sprint** | — | `/sprint-start`, `/sprint-done` | Open / close a sprint |
 | **Audit** | — | `/audit-doc`, `/audit-project` | Doc review / project health sweep |
@@ -294,7 +296,28 @@ Use Railway **volume snapshots** to start; a scheduled `pb_data` export to objec
 
 ## 9A. Deploy Operations (CLI-first) — `RFC-LAB-000-012`
 
-> Decision of record: [`RFC-LAB-000-012`](../rfc/RFC-LAB-000-012-deploy-operations.md) (`BK-017`). §9 above is the *what/where* (Vercel + Railway, from `RFC-LAB-000-011`); this section is the *how we operate* — the reproducible, scriptable loop that replaces click-through-the-console iteration. Reusable for staging, prod, or any new environment.
+> Decision of record: [`RFC-LAB-000-012`](../rfc/RFC-LAB-000-012-deploy-operations.md) (`BK-017`, now **reference ops guidance** — see its header note). §9 above is the *what/where* (Vercel + Railway, from `RFC-LAB-000-011`); this section is the *how we operate* — the reproducible, scriptable loop that replaces click-through-the-console iteration. Reusable for staging, prod, or any new environment.
+
+### 9A.0 The Deployment Model — `main` = the single reference environment (Decision Journal Entry 014)
+
+The lifecycle ends at **`done` = merged to `main` = live** on the project's **single reference environment** ("staging"). There is exactly one automated environment, and **a merge to `main` deploys both tiers to it**:
+
+```
+  PR ──/review-pr (gate: review + required CI checks)──▶ merge to main ─┬─▶ Vercel  (frontend)  — existing Git integration
+                                                                        └─▶ GitHub Actions → Railway (backend)
+                                                                             — deploy-backend.yml, path-filtered app/pocketbase/**
+                                                                        = the SINGLE REFERENCE ENVIRONMENT ("staging")
+```
+
+- **The gate is the merge.** The PR review + required CI checks (`ci-validate.yml`) are the deploy gate. Everything on `main` is deployable, so auto-deploy is safe.
+- **`done` = the merge (pragmatic, D50).** The deploys are *consequences* that make `done` observable. A deploy hiccup is an **ops alert** (a red `deploy-backend.yml` run + logs), **not** a lifecycle failure — it never reverts the merged commit. There is no auto-rollback.
+- **Two symmetric tiers.** Frontend (Vercel, already wired) + backend (Railway, added by `deploy-backend.yml`). `deploy-backend.yml` is deliberately **not** a required check — a deploy failure must not block future merges.
+- **Two deliberately-separated paths:**
+  1. **Auto-staging (the pipeline)** — push to `main` deploys both tiers to the single reference env. No manual target for the normal path; the merge is it. (`make deploy-staging` is only a manual *override* re-deploy of that same env.)
+  2. **On-demand `/deploy-adhoc` (a dev tool)** — `make deploy-adhoc ENV=<file>` deploys to an *arbitrary* instance (throwaway/other) for testing. **Not** a lifecycle stage, **not** "release."
+- **Explicit scope boundary (Entry 014, D51/D52).** No staging→prod promotion pipeline, no dedicated prod tier, no blue-green/canary — that is out-of-scope ops (`BK-019`). One automated environment only. Branch-protection config itself is a one-time [HUMAN] GitHub setting (the gate), assumed here, not scripted.
+
+> The CLI mechanics below (§9A.1–§9A.5) remain valid as the **on-demand / ad-hoc** deploy path (`/deploy-adhoc`, one-time linking, artifact verification). The *normal* staging deploy needs none of them — it is the merge.
 
 ### The scaffold
 | Piece | Path | Purpose |

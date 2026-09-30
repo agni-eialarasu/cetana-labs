@@ -8,7 +8,19 @@
 | **Status** | 🟡 Proposed |
 | **Backlog** | `BK-017` (this RFC is its decision of record); `SPRINT-10` |
 | **Builds On** | `RFC-LAB-000-011` (deployment architecture — Vercel + Railway), `RFC-LAB-000-007` (work-env / secrets), `RFC-LAB-000-009` (lifecycle — gates apply to spikes too) |
-| **Decision Journal** | Entry 012 (D45 — the motivating pain), Entry 013 (this RFC) |
+| **Decision Journal** | Entry 012 (D45 — the motivating pain), Entry 013 (this RFC), Entry 014 (D52 — reframed as reference ops guidance) |
+
+---
+
+> **Scoping note (Decision Journal Entry 014, D52) — added after `automate-staging-deploy`.**
+> This RFC is now **optional reference ops guidance**, *not* part of the lifecycle contract.
+> The lifecycle contract is: **`done` = the gated merge to `main`**, which auto-deploys both
+> tiers to the **single reference environment** (frontend via Vercel; backend via
+> `.github/workflows/deploy-backend.yml`). The casual→qualified promotion and any
+> staging→prod hardening described below are **out-of-scope ops** (`BK-019`) — useful when a
+> real prod tier is eventually stood up, but not a gate any feature passes through today.
+> The CLI-first mechanics here remain the basis of the on-demand `/deploy-adhoc` dev tool.
+> *(This is an append-only scoping note; the decisions below are unchanged.)*
 
 ---
 
