@@ -23,6 +23,7 @@ pnpm build      # static build → build/
 | `outputDirectory` | `build` | `adapter-static` writes to `build/`; Vercel defaults to `dist/` and fails *"No Output Directory named dist"* (the M5 papercut). |
 | `buildCommand` | `pnpm build` | — |
 | `installCommand` | `pnpm install --frozen-lockfile` | — |
+| `rewrites` | `/(.*) → /index.html` | **SPA fallback (BK-023).** `adapter-static` emits `fallback: index.html`, but Vercel (`framework:null`) 404s on client-side deep routes with no matching file (e.g. `/oauth/callback` — the OAuth return leg, and the `(member)` routes). This rewrite sends unmatched paths to the SPA shell so client-side routing resolves them. Static assets (existing files, `_app/…`) are served directly — the rewrite only catches paths with no file. |
 
 - The Vercel project **Root Directory must be `app/web`**; the app is served at the domain root, so `BASE_PATH` stays empty.
 - **Do NOT add a `"//"` comment key (or any non-schema property) to `vercel.json`.** Vercel validates the file against its schema and **fails the build** on additional properties (*"should NOT have additional property"*) — this silently broke every deploy from commit `3ff88fc` until `BK-023`. Keep `vercel.json` schema-pure; put rationale here instead.
