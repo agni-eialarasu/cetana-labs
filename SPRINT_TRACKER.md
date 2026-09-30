@@ -28,9 +28,9 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-10` |
-| **Duration** | 2026-12-17 to 2026-12-31 (2 Weeks) |
-| **Sprint Goal** | Harden the shipped MVP — resolve the deployed-PocketBase version workaround (`BK-018`) and formalize the production cutover (`BK-019`) — and begin the first post-MVP product capability: app-level settings (`BK-012`) as the foundation for branding/white-label (`BK-013`). Carry-forward ecosystem integrations (`BK-004`, `BK-001`). |
+| **Sprint ID** | `SPRINT-11` |
+| **Duration** | 2026-12-31 to 2027-01-14 (2 Weeks) |
+| **Sprint Goal** | Begin the first post-MVP **product** capabilities on the now-hardened, auto-deploying platform: **`BK-012`** app-level settings (foundation) → **`BK-013`** branding/white-labeling (consumes it), in that order. In **parallel**, open the **`BK-015`** (AI Assistant — Ask-the-Portfolio) **RFC + feasibility spike** to de-risk the flagship for a later build (no build this sprint). Carry-forward ecosystem integrations (`BK-004`, `BK-001`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -38,17 +38,26 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-055` | `BK-018` **spike** (`spike-bk018-pb040-oauth`) — root-caused the PB 0.40 realtime/OAuth-through-Railway-proxy failure; chose H1 (redirect `authWithOAuth2Code`); finding on `main` (Journal Entry 011, RFC-011 §4.5). Fix authored as `TSK-058` | P1 | Eialarasu | ✅ Done | 2026-09-29 |
-| `TSK-058` | `BK-018` **fix** (Spec `fix-bk018-oauth-redirect`) — switch GitHub sign-in to the redirect `authWithOAuth2Code` flow (no `/api/realtime`) + un-pin `Containerfile` PB 0.28.4→0.40+; preserve `github_handle` hook + owner-write; verify on a throwaway 0.40 Railway via RFC-012 CLI + `verify-bundle`. Live prod cutover = separate `BK-019`. **Verified V1–V8 on throwaway 0.40 (REPORT.md); merged PR #46.** | P1 | Eialarasu | ✅ Done | 2026-09-30 |
-| `TSK-059` | `BK-021` — automate staging deploy (Spec `automate-staging-deploy`): encode `main`=single reference env, **backend CI deploy on push to `main` (path-filtered `app/pocketbase/**`, `RAILWAY_TOKEN` secret)** to match the frontend's Vercel auto-deploy; `/deploy-adhoc` (`make deploy-adhoc ENV=<file>`) dev tool for throwaway/other instances; refresh stale `status-staging`/`validate-staging` placeholders; reframe `RFC-LAB-000-012` as reference ops guidance. **AIDLC scope edge: `done`=live-on-main, no prod pipeline (Journal Entry 014).** Spec merged to `main` (PR #47). Merged PR #48. **Post-merge (honest): V4 proven LIVE — the merge fired the backend deploy (path filter includes the workflow file itself, which #48 added) and it failed at Railway's build stage → a red ops-alert that did NOT revert the merge or block the lifecycle (`done`=the merge, D50). V1 was initially RED (Railway Root-Directory doubling) → fixed in `BK-022`/PR #49 (deploy from repo root); the #49 merge fired the deploy → `Deploy complete` on `cetana-labs` (run 36718299649) = **V1 PROVEN LIVE**. V2 (path-skip on a non-backend merge) still pending a future docs-only merge — both #48 and #49 touched the workflow file, so neither could test the skip.** | P1 | Eialarasu | ✅ Done | 2026-09-30 |
-| `TSK-056` | `BK-017` + `BK-020` — deploy scaffold (Spec `deploy-scaffold`, implements `RFC-LAB-000-012`): `railway.json`, `make deploy-staging`→`scripts/deploy.sh` (CLI-first), `make verify-bundle` (artifact-assertion helper), `developer-guide` Deploy-Ops runbook (casual→qualified), **+ fix the `status.json` date-drift (`BK-020`)**. Unblocks the deferred BK-018 OAuth fix. `BK-019` (real prod cutover) remains separate | P2 | Eialarasu | ✅ Done | 2026-09-29 |
-| `TSK-057` | `BK-012` — app-level settings (RFC + Spec): configurable settings collection + typed accessors, minimal now, grows over time; foundation for `BK-013` branding | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
-| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal | P2 | Eialarasu | 📋 Backlog | 2026-12-24 |
-| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) | P2 | Eialarasu | 📋 Backlog | 2026-12-31 |
+| `TSK-057` | `BK-012` — **app-level settings** (RFC + Spec): configurable settings collection + typed accessors, minimal now, grows over time; **foundation for `BK-013`**. Needs a small RFC (schema/pattern) before scoping → then Spec → `/spec-run`. **[SPRINT-11 headline #1]** | P1 | Eialarasu | 📋 Backlog | 2027-01-07 |
+| `TSK-060` | `BK-013` — **branding & white-labeling** (Spec): app name (default repo name), description, logo set (icon/small/medium) — **consumes `BK-012` settings**; pre-req for client deployments. Sequenced *after* BK-012. **[SPRINT-11 headline #2]** | P2 | Eialarasu | 📋 Backlog | 2027-01-14 |
+| `TSK-061` | `BK-015` — **AI Assistant RFC + feasibility spike** (parallel track): author the RFC (index strategy, model, cost, data boundaries, where it runs) + a spike to de-risk. **Scope = RFC + spike only, NOT the build** (flagship, highest effort — build in a later sprint). | P1 | Eialarasu | 📋 Backlog | 2027-01-14 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2027-01-14 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2027-01-14 |
+
+> **Open loose end (auto-closing, no work):** `automate-staging-deploy` **V2** (path filter *skips* a non-backend merge) is still unobserved — both BK-021/BK-022 PRs touched the workflow file. The next docs/frontend-only merge to `main` confirms it naturally (`ci-validate` runs, `Deploy Backend (Railway)` does not).
 
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 10: Post-MVP Hardening — 0.40 OAuth Fix + Deploy Automation (`done`=live) (2026-09-30) — `v0.12.0`
+- **`TSK-055` (`BK-018` spike):** root-caused PB 0.40 OAuth-through-Railway failure; chose the redirect flow [PR #39].
+- **`TSK-056` (`BK-017`+`BK-020` deploy scaffold):** CLI-first deploy wrappers, `verify-bundle` artifact assertion, Deploy-Ops runbook, + `status.json` date-drift fix [PR #43].
+- **`TSK-058` (`BK-018` fix):** redirect `authWithOAuth2Code` (no `/api/realtime`), un-pinned PB `0.28.4→0.40.4`; verified V1–V8 on a throwaway 0.40 Railway [PR #46].
+- **`TSK-059` (`BK-021` automate staging deploy):** `main` = single reference env; **backend CI deploy on merge** (path-filtered) matching the frontend's Vercel auto-deploy; `/deploy-adhoc` dev tool; §9A.0 deployment-model docs; RFC-012 reframed as reference ops guidance [PRs #47/#48].
+- **`BK-022` (ops fix):** fixed the Railway Root-Directory doubling → backend deploy green (`Deploy complete`); **V1 proven live** [PR #49].
+- **Governance:** **Decision Journal Entry 014** — the AIDLC scope boundary (`done`=live-on-main; multi-env promotion is DevOps, out of scope); `BK-019` reclassified out-of-scope.
+- **Net:** `done = live` is now literally true for **both tiers** — a gated merge to `main` deploys frontend (Vercel) + backend (Railway). Over-delivered on hardening; the product-feature goal (BK-012) carries into SPRINT-11.
 
 ### Sprint 9: MVP Delivery — Auth → RBAC → Owner Writes → Deploy (2026-09-28) — `v0.11.0` · **MVP complete (`BK-011`)**
 - **Goal**: Complete the Control Hub Web App MVP via the AIDLC lifecycle — sign-in, minimum RBAC, owner writes, deployed.

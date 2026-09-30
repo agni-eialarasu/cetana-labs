@@ -16,6 +16,15 @@
 
 ## 📅 Milestone Log
 
+### [2026-09-30] Milestone: Sprint 10 Closeout & v0.12.0 — Post-MVP Hardening (`done` = live)
+- **Delivered Capabilities**:
+  - **`BK-018` fixed** — GitHub sign-in switched to the redirect `authWithOAuth2Code` flow (no `/api/realtime`); PocketBase un-pinned **0.28.4 → 0.40.4**; verified V1–V8 on a throwaway 0.40 Railway [PR #46].
+  - **`BK-021` automate staging deploy** — encoded `main` = the single reference environment; added backend CI deploy on merge (Railway, path-filtered) to match the frontend's Vercel auto-deploy; `/deploy-adhoc` dev tool; §9A.0 deployment-model docs [PRs #47/#48]. **`BK-022`** then fixed the Railway Root-Directory doubling → backend deploy green, **V1 proven live** [PR #49].
+  - **`BK-017`+`BK-020` deploy scaffold** — CLI-first deploy wrappers, `verify-bundle` artifact assertion, Deploy-Ops runbook, + `status.json` date-drift fix [PR #43].
+  - **Governance** — **Decision Journal Entry 014**: the AIDLC scope boundary (`done`=live-on-main; multi-env promotion is DevOps, out of scope); `RFC-LAB-000-012` reframed as reference ops guidance; `BK-019` reclassified out-of-scope.
+- **Net**: `done = live` is now literally true for **both tiers** — a gated merge to `main` deploys frontend (Vercel) + backend (Railway). Over-delivered on hardening.
+- **Next Horizon**: Sprint 11 — first post-MVP **product** features: `BK-012` app-level settings → `BK-013` branding/white-labeling (in order); in parallel, the `BK-015` AI-Assistant RFC + feasibility spike (de-risk the flagship, no build yet).
+
 ### [2026-09-28] Milestone: Sprint 9 Closeout & v0.11.0 — 🎯 MVP COMPLETE (`BK-011`)
 - **Delivered Capabilities**: The Control Hub Web App **MVP is live** — a logged-in owner edits their own project's status, deployed and usable. Full auth loop via the AIDLC lifecycle: GitHub OAuth sign-in (M2) → minimum RBAC by PocketBase API rules, no library (M3) → owner-writes-own (M4) → **deployed: SvelteKit → Vercel, PocketBase → Railway** (M5, `RFC-LAB-000-011`); the GitHub-Pages stopgap was retired. 6 `/spec-run`s, all human-gated; the human-verification loop caught real bugs pre-merge (the M3–M4 owner-rule OAuth-record mismatch; the M5 deploy version saga). Also shipped the three-tier tracking model (`RFC-LAB-000-010`) and the docs reorganization + nav standard.
 - **Known follow-ups**: prod PocketBase pinned to 0.28.4 (`BK-018` — 0.40 OAuth-through-Railway-proxy issue); deploy automation (`BK-017`); production cutover (`BK-019`); terminal-state edit policy (`BK-016`).
