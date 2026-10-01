@@ -44,4 +44,15 @@ This run executed `tasks.md` directly (T0→T5) with no re-planning. The Spec's 
 
 ## 5. Verification Log
 
-_(Appended by `/verification-done` after the human runs the Human Verification Plan.)_
+### Verification Log — 2026-10-01 (PR #56)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| V1 — gate posts checklist + verdict as a PR comment on a READY PR, labeled recommendation-not-approval, with evidence table | ✅ | Evidenced by the gate's own live run on this PR: `/review-pr 56` posted a comment (`issuecomment` by `agni-eialarasu`) leading with "recommendation (human approval still required)" and the full per-row evidence table (CI · Vercel · scope · EARS · verification · lockstep). First live use of this Spec's own behavior. |
+| V2 — HOLD verdict is recorded on the artifact (verdict + reasons) | ✅ | The same comment is a **Verdict: HOLD** with the blocking reason stated (human verification not yet recorded) — HOLD-recording works, the record is not success-only. |
+| V3 — no GitHub review (approve/request-changes) posted; comment only | ✅ | `gh api …/pulls/56/reviews` → count **0**. Only an issue comment exists; `pulls/<n>/reviews` was never called (R1.3/R5.1 preserved). |
+| V4 — re-run idempotency (dated header / no blind duplicate) | ⚠️ not separately exercised | Not run as a distinct scenario this loop; behavior is specified in §6b (dated run header). Covered by design, not by a second live run. |
+
+- **Iterations:** 0 (no corrections required — build was correct on first open; no fixup commits).
+- **Verdict:** PASS — human functional verification complete. V1–V3 evidenced by the gate's live run on #56; V4 not separately exercised (specified in §6b, acceptable per R3 "dated-append is acceptable"). Human sign-off: "verified, PASS."
+- **Verified by:** Agni Eialarasu · **Surface:** Kiro IDE
