@@ -1,0 +1,94 @@
+# Verify Live Frontend (post-deploy ops-alert) — the frontend half of "is the right
+# thing actually serving?" (BK-023 part 2 / TSK-063; RFC-LAB-000-012).
+#
+# WHY THIS EXISTS:
+#   /review-pr now reads Vercel's REAL deploy status at the gate (option C — "did the
+#   build succeed for this commit?"). This workflow is the post-merge BACKSTOP
+#   (option B — "is the correct bundle actually SERVED?"): after a frontend merge, the
+#   Vercel Git integration deploys, then this asserts the live bundle references the
+#   expected VITE_PB_URL (Railway PocketBase).
+#
+# OPS-ALERT, NOT A GATE (Decision Journal Entry 014, D50; RFC-LAB-000-009 R5.2):
+#   `done` = the gated merge. A failure here is a RED CHECK + logs to investigate — it
+#   NEVER reverts the already-merged commit, and it is deliberately NOT part of the
+#   PR-gating CI job (ci-validate.yml). It runs AFTER merge, on app/web changes, or on
+#   demand from the Actions tab.
+#
+# [HUMAN] PREREQ (repo variables — not secrets; a URL is not sensitive):
+#   GitHub → Settings → Secrets and variables → Actions → Variables:
+#     STAGING_WEB_URL  = the live Vercel URL (e.g. https://cetana-labs.vercel.app)
+#     STAGING_PB_URL   = the expected Railway PocketBase URL baked into the bundle
+#   If STAGING_WEB_URL is unset the job no-ops with a notice (never fails the run) so
+#   the workflow is safe to land before the variables are configured.
+
+name: Verify Live Frontend (post-deploy)
+
+on:
+  push:
+    branches: [main]
+    # Only after a frontend change lands (the Vercel deploy it triggers is what we check).
+    paths:
+      - 'app/web/**'
+      - 'scripts/verify-live-frontend.sh'
+      - '.github/workflows/verify-live-frontend.yml'
+  # On-demand button (Actions tab → Run workflow): re-check the live site any time,
+  # optionally overriding the URLs.
+  workflow_dispatch:
+    inputs:
+      web_url:
+        description: 'Live frontend URL (defaults to the STAGING_WEB_URL repo variable)'
+        required: false
+        type: string
+      pb_url:
+        description: 'Expected backend URL baked into the bundle (defaults to STAGING_PB_URL)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+# One check at a time for the same environment; a later push supersedes an older one
+# only after it finishes (we never cancel an in-flight check).
+concurrency:
+  group: verify-live-frontend-main
+  cancel-in-progress: false
+
+jobs:
+  verify-live:
+    name: Assert live Vercel bundle serves the expected backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for the Vercel deploy to propagate
+        # The Vercel Git integration deploys asynchronously after the merge; give it a
+        # short head start so we assert the NEW bundle, not the previous one. Skipped
+        # on manual runs (the deploy is already up when a human triggers it).
+        if: github.event_name == 'push'
+        run: sleep 90
+
+      - name: Resolve target URLs
+        id: cfg
+        env:
+          IN_WEB: ${{ github.event.inputs.web_url }}
+          IN_PB: ${{ github.event.inputs.pb_url }}
+          VAR_WEB: ${{ vars.STAGING_WEB_URL }}
+          VAR_PB: ${{ vars.STAGING_PB_URL }}
+        run: |
+          WEB="${IN_WEB:-$VAR_WEB}"
+          PB="${IN_PB:-$VAR_PB}"
+          if [ -z "$WEB" ]; then
+            echo "::notice::STAGING_WEB_URL is not set and no web_url input given — skipping the live check (ops-alert no-op, run not failed)."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "web=$WEB" >> "$GITHUB_OUTPUT"
+            echo "pb=$PB" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify the live frontend bundle
+        if: steps.cfg.outputs.skip == 'false'
+        env:
+          EXPECTED_PB_URL: ${{ steps.cfg.outputs.pb }}
+        run: bash scripts/verify-live-frontend.sh "${{ steps.cfg.outputs.web }}" "${{ steps.cfg.outputs.pb }}"

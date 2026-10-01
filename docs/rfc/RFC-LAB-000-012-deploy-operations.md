@@ -102,3 +102,51 @@ The BK-018 false negative (Entry 011/012): a Vercel *preview* looked correct but
 | Build-time-config false negatives | §5 artifact-assertion rule + a helper in the scaffold. |
 | Ops work bypassing the gate (again) | §6 codifies gated ops; Entry 012 is the cautionary record. |
 | status-drift keeps blocking PRs | §7 fold-in fix (`BK-020`) makes the check date-tolerant. |
+
+---
+
+## 11. Append-only: the REAL frontend-deploy signal (`BK-023` part 2, 2026-10-01)
+
+> Append-only operational note. The decisions above are unchanged; this records the signal
+> that enforces §5 ("verify the artifact, not the setting") at the PR gate and post-merge.
+
+**Problem it closes.** `BK-023` found three stacked Vercel-build failures that all passed
+`/review-pr` **and** green GitHub CI. Root cause: the only Vercel-aware entry the gate saw
+was the **"Vercel Preview Comments"** check-run, which reports *comment posting*, **not**
+build/deploy health. Our CI runs `pnpm build` directly (and from the repo root with a Python
+prestep Vercel does not run), so a green CI said nothing about whether Vercel actually built
+and deployed the frontend.
+
+**The real signal (verified 2026-10-01).** Vercel posts a genuine deployment status on the
+**commit-status** API (a different surface from check-runs), as the **`Vercel`** context
+(and **`Cetana Lab Staging - cetana-labs`** when present):
+
+```bash
+head=$(gh api repos/agni-eialarasu/cetana-labs/pulls/<n> --jq .head.sha)
+gh api repos/agni-eialarasu/cetana-labs/commits/$head/status \
+  --jq '.statuses[] | select(.context=="Vercel") | {state, target_url, updated_at}'
+```
+
+Rules now enforced (two signals, each at the right moment):
+
+- **C — pre-merge gate (`/review-pr` step 2b).** Read the `Vercel` commit-status **for the PR
+  head SHA**. `success` on head ⇒ ✅; `failure`/`error` ⇒ ❌ HOLD; **missing for head** or a
+  **success only on an older SHA** ⇒ ⚠️ HOLD (the stale-success trap — Vercel keeps serving
+  the last good build while head is broken). Failure-safe: anything not a head-bound `success`
+  is a HOLD. **"Vercel Preview Comments" is explicitly NOT a deploy signal.**
+- **B — post-merge backstop (`scripts/verify-live-frontend.sh`).** After the Vercel Git
+  integration deploys, assert the **live** bundle references the expected `VITE_PB_URL`
+  (the Railway PocketBase). Wired as the `verify-live-frontend.yml` **ops-alert** workflow
+  (push to `main` on `app/web/**` + `workflow_dispatch`) and `make verify-live-frontend` on
+  demand. **Ops-alert, never a gate** — a red result is a check + logs to investigate; it
+  never reverts the already-merged commit (`done` = the gated merge, Entry 014 D50), and it
+  is **not** part of the PR-gating CI job.
+- **Durable enforcement [HUMAN].** Make the **`Vercel` deployment status a required status
+  check** on `main` (branch protection) so a failing Vercel build blocks merge automatically.
+  Deferred until branch protection lands post-org-transfer (`RFC-LAB-000-004`); documented in
+  `developer-guide.md` §9A. Until then, `/review-pr` step 2b is the enforcement.
+
+**Note on the live-bundle assertion.** The PocketBase JS SDK always ships the strings
+`/api/realtime` and `authWithOAuth2(` regardless of which auth flow the app calls, so those
+are **not** reliable negative markers — the authoritative live signal is the expected
+`VITE_PB_URL` baked into the served bundle (same basis as `verify-bundle.sh`, §5 / `BK-017`).

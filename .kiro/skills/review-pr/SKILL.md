@@ -40,6 +40,28 @@ gh api repos/agni-eialarasu/cetana-labs/commits/<head-sha>/check-runs \
 ```
 - If any check is failing/pending: surface which one, pull the failing log
   (`gh run list` → `gh run view <id> --log-failed`), and mark the gate **BLOCKED** — do not proceed to a merge recommendation.
+- **"Vercel Preview Comments" is NOT a deploy signal.** It appears on the **check-runs** surface above and reports *comment posting*, not build/deploy health. Do **not** treat it as evidence the frontend deployed — the real frontend-deploy signal lives on the **commit-status** API (step 2b). Our GitHub CI runs `pnpm build` directly, so a green CI likewise says nothing about whether Vercel's own build/deploy succeeded. (This is the exact `BK-023` blind spot: three stacked Vercel-build failures all passed this gate + green CI.)
+
+### 2b. Frontend deploy (Vercel's REAL deployment status — `BK-023`)
+The genuine Vercel deploy signal is posted to the **commit-status** API (a different surface from the check-runs above), as the **`Vercel`** context (and `Cetana Lab Staging - cetana-labs` when present). Read it **for the PR head SHA**:
+```bash
+head=$(gh api repos/agni-eialarasu/cetana-labs/pulls/<n> --jq .head.sha)
+gh api repos/agni-eialarasu/cetana-labs/commits/$head/status \
+  --jq '.statuses[] | select(.context=="Vercel" or .context=="Cetana Lab Staging - cetana-labs")
+        | {context, state, target_url, updated_at}'
+```
+Evaluate the result against the head SHA and encode the state (failure-safe — the default is HOLD, not pass):
+
+| Observed on head SHA | Verdict | Why |
+| :--- | :---: | :--- |
+| `Vercel` context = **`success`** (and the query was keyed to head, so it IS for head) | ✅ | Vercel built & deployed this commit. |
+| `Vercel` context = **`failure`** / **`error`** | ❌ **HOLD** | Vercel's build/deploy for this commit failed. |
+| **No `Vercel` status for the head SHA** (empty result) | ⚠️ **HOLD** | Deploy not triggered / in-flight / silently failed — unverified, not a pass. Common: only deploy-triggering commits get a status. |
+| A `Vercel` **success exists only on an older SHA**, not head | ⚠️ **HOLD** | The **stale-success trap** from the `BK-023` incident — Vercel keeps serving the last good build while head is broken. Match the status to head; older-SHA success ≠ head is deployed. |
+
+- The guard is **failure-safe**: anything other than a `success` *bound to the head SHA* is a HOLD. (Because the `commits/$head/status` call is keyed to head, a returned `success` is inherently head's — the stale trap only bites if you query a branch/combined endpoint instead; always key to head.)
+- Capture the **evidence** for the checklist: the context name, the `state`, and that it matched the head SHA (plus the `target_url` for the human to open).
+- This durable enforcement is intended to become a **required status check** on `main` once branch protection lands (see the branch-protection guidance in `developer-guide.md` §9A / `RFC-LAB-000-012`); until then, this gate is the enforcement.
 
 ### 3. Diff scope & branch hygiene (`RFC-LAB-000-004`)
 ```bash
@@ -73,7 +95,7 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 - **Timing nuance (don't over-HOLD):** the CHANGELOG entry and the `Done` status are legitimately **Record-phase (post-merge)** steps in some flows — so a *missing* CHANGELOG entry at review time is a **⚠️ reviewer note + an explicit item in the merge instructions** ("add the CHANGELOG entry + flip the tracker in the post-merge tidy"), **not automatically a HOLD**. But it MUST be surfaced firsthand and MUST be closed in the tidy — never silently marked ✅. If the PR *claims* lockstep is already done and it isn't, that discrepancy **is** a HOLD (the record is untrustworthy).
 
 ### 6. Present the review + STOP-and-hold
-- Emit a checklist table: **CI · Scope/hygiene · EARS DoD (per-criterion) · Human verification record · Governance (CHANGELOG entry firsthand-checked + tracker status)**, each ✅ / ⚠️ / ❌ with a one-line note. For Governance, state the *evidence* (e.g. "CHANGELOG grep: 1 hit for TSK-0XX ✅" or "⚠️ no CHANGELOG entry yet — add in post-merge tidy").
+- Emit a checklist table: **CI · Frontend deploy (Vercel status) · Scope/hygiene · EARS DoD (per-criterion) · Human verification record · Governance (CHANGELOG entry firsthand-checked + tracker status)**, each ✅ / ⚠️ / ❌ with a one-line note. For **Frontend deploy**, state the *evidence* — the `Vercel` context, its `state`, and that it matched the head SHA (e.g. "Vercel status: `success` on head `abc1234` ✅" or "⚠️ no `Vercel` status for head `abc1234` — unverified, HOLD"). For Governance, state the *evidence* (e.g. "CHANGELOG grep: 1 hit for TSK-0XX ✅" or "⚠️ no CHANGELOG entry yet — add in post-merge tidy").
 - Give a clear **reviewer recommendation**: `READY (human approval required to merge)` or `HOLD — <reasons>`.
 - **STOP.** Ask the human to explicitly approve or request changes. Do **not** merge, approve via API, or push.
 
@@ -85,6 +107,7 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 - **Never merge and never post an approving review via the API.** This skill surfaces; the human decides.
 - **STOP-and-hold is mandatory** — always end at a human decision point.
 - A failing/pending check, an unverifiable EARS criterion, or a missing/failed human-verification record ⇒ **HOLD**, not a soft pass.
+- **Frontend deploy (`BK-023`):** read Vercel's **real** deploy status from the **commit-status** `Vercel` context for the **head SHA** (step 2b) — never trust "Vercel Preview Comments" (comment posting, not deploy) or green GitHub CI as the frontend-deploy signal. Anything other than a `success` bound to the head SHA (failure/error, missing-for-head, or success only on an older SHA) ⇒ **HOLD**.
 - **Verify governance lockstep FIRSTHAND (§5) — never assert it from the PR body or Verification Log.** A missing CHANGELOG entry at review time is a ⚠️ note carried into the post-merge tidy (not auto-HOLD); a *false claim* that lockstep is done **is** a HOLD.
 - Read-only against the repo except for reporting; make no commits.
 - Reads use `gh api` (REST) — the `gh pr`/GraphQL subcommands are unavailable in this environment.
