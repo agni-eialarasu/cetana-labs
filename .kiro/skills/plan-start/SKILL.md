@@ -1,13 +1,13 @@
 ---
 name: plan-start
 description: >-
-  Opens a planning/brainstorm session within the current sprint for Cetana Labs (RFC-LAB-000-009 Phase 1 Scope / the "brainstorm" phase, Kiro Web). Frames a topic for brainstorming, backlog prep, RFC/doc changes, and authoring a Kiro Spec. OPTIONAL and IMPLICIT — any free-form topic is treated as a plan-start; you rarely invoke it explicitly. Nested under a sprint (a sprint contains many plans). Use when the user runs /plan-start or begins brainstorming a feature/topic.
+  Opens a planning/brainstorm session within the current sprint for Cetana Labs (RFC-LAB-000-009 Phase 1 Scope / the "brainstorm" phase, KiroCrew Operator). Frames a topic for brainstorming, backlog prep, RFC/doc changes, and authoring a Kiro Spec. OPTIONAL and IMPLICIT — any free-form topic is treated as a plan-start; you rarely invoke it explicitly. Nested under a sprint (a sprint contains many plans). Use when the user runs /plan-start or begins brainstorming a feature/topic.
 ---
 
 # Skill: Plan Start (Brainstorm / Scope opener)
 
 ## Objective
-Open the **brainstorm / Scope** phase for one feature or topic — where direction is set, options are weighed, the backlog is prepped, RFCs/docs are drafted, and (for delegated work) a **Kiro Spec** is authored. This is the first phase of the lifecycle (`RFC-LAB-000-009` §3). It runs on **Kiro Web** (stateless/plan) and produces **no code** — its output is a merged plan (Spec/RFC/backlog rows).
+Open the **brainstorm / Scope** phase for one feature or topic — where direction is set, options are weighed, the backlog is prepped, RFCs/docs are drafted, and (for delegated work) a **Kiro Spec** is authored. This is the first phase of the lifecycle (`RFC-LAB-000-009` §3). It runs on the **KiroCrew Operator** (stateful plan) and produces **no code** — its output is a merged plan (Spec/RFC/backlog rows).
 
 **Optional & implicit:** you seldom type `/plan-start`. **Any free-form topic you raise is implicitly a plan-start** — the assistant treats "let's think about X" as entering planning. Invoke it explicitly only to *name* a planning session or reset focus.
 
