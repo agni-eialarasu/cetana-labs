@@ -41,3 +41,18 @@
 ## Spike notes (AIDLC)
 
 This run executed `tasks.md` directly (no re-plan). The Spec carried a complete Execution header (branch, surface) and §0 preconditions, so no inline overrides were needed. Both deliverables are markdown skills — the main verification surface is the three Human Verification Plan scenarios, which exercise the push gate on the three branch paths.
+
+---
+
+### Verification Log — 2026-10-01 (PR #53)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| V1 — on a `feat/` branch, `/push-changes` pushes the named branch and sets upstream | ✅ | Gate takes the `feat/` path; pushes `origin <branch>` with `-u` when no upstream. No correction. |
+| V2 — on `main` with a docs-only commit, `/push-changes` validates fast-path and **prints** `git push origin main` for the human (does not attempt it) | ✅ | Gate recognises the governance/docs fast-path set, confirms eligibility, and hands the exact command to the operator rather than pushing (agent protected-branch floor). No correction. |
+| V3 — on `main` with code staged, `/commit-and-push-changes` commits but **refuses** the push with the `feat/`+PR instruction | ✅ | Push half (R2.3) inherits R1.3 refusal — local commit succeeds, push is blocked with the move-to-`feat/`+PR guidance (worked example C). No correction. |
+| V4 — `/commit-changes` behavior unchanged | ✅ | Zero diff vs `main` for `.kiro/skills/commit-changes/SKILL.md`; new skills compose with it, do not rewrite it (R5.1). No correction. |
+
+- **Iterations:** 0 (no fixups required — skills are markdown decision procedures; CI green on first push).
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu · **Surface:** Kiro IDE
