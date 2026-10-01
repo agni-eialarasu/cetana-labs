@@ -579,11 +579,35 @@ Planning `BK-012` (app-level settings, the foundation for `BK-013` branding). Th
 
 ---
 
-## Entry 016 — Surface model refresh: KiroCrew (Operator) + Kiro IDE (Executor) + Kiro Web (fallback)
+## Entry 016 — "done = live" is only true if you verify *live*: three stacked, invisible frontend-deploy failures
+
+**Date:** 2026-09-30 · **Contributor(s):** Agni Eialarasu (human-directed — caught it live), AI-assisted (diagnosis/fix) · **Mode:** Kiro Web · **Outcome:** `BK-023` part 1 fixed (PRs #51, #52); `BK-023` part 2 / `TSK-063` opened
+
+> _A dogfooding retro, not a design pivot. Captured because the failure mode is a reusable lesson for the blueprint._
+
+After closing SPRINT-10 on the claim "`done` = live for both tiers" (Entry 014), a **live staging screenshot** revealed sign-in was still broken on `cetana-labs.vercel.app` — running the *old* popup OAuth flow (`/api/realtime` 400) even though the BK-018 redirect fix had been merged to `main` since PR #46. Peeling it back exposed **three stacked failures, none caught by CI or the `/review-pr` gate**:
+
+### D56 — The failure chain (recorded so we recognize it again)
+1. **`vercel.json` had a `"//"` comment key** → Vercel's schema validation *failed every build* (prod + preview) from commit `3ff88fc` onward. Vercel kept serving the last *successful* (pre-BK-018) bundle. (Fix: #51 — schema-pure `vercel.json`.)
+2. **Stale bundle** → the live site ran the old popup flow (the visible symptom).
+3. Once builds were green, **`/oauth/callback` 404'd** — the route is `prerender=false` (client-only) and Vercel (`framework:null`) doesn't auto-apply `adapter-static`'s `index.html` fallback for unmatched paths. (Fix: #52 — `rewrites /(.*)→/index.html`.)
+- **Live-verified fixed:** signed in as Eialarasu via the redirect flow, `/api/realtime` = 0 requests — the first true end-to-end proof of the BK-018 fix on live staging. _(Contributor: Agni Eialarasu)_
+
+### D57 — The real lesson: our gate is blind to the actual deploy
+- **Trigger:** all three failures passed `/review-pr` and CI green. The gate trusts the **"Vercel Preview Comments"** check — which is *not* the Vercel build status — and our GitHub `Build Sleek UI` job runs `pnpm build` directly, never Vercel's config validation. So "green CI + merged" told us nothing about whether the frontend actually deployed.
+- **Decision & rationale:** **"done = live" is only meaningful if something verifies *live*.** We proved the *backend* deploy live (BK-022) but *assumed* the frontend half. The lifecycle needs a **real deploy signal** — not a proxy check. Opened `TSK-063` (BK-023 part 2): wire a genuine Vercel-build signal and/or a post-deploy live-bundle assertion into the gate, honoring the "no extra pipeline for live" rule (a signal, not a pipeline). _(Contributor: Agni Eialarasu)_
+- **Outcome:** `TSK-063`; and a standing reminder — the human checking the live site is what caught all three. Automated live-verification is the durable fix.
+
+### Session meta
+- **Division of labor:** the human caught every failure by looking at the *live* site + consoles (build error, 404, network tab); the AI diagnosed root causes against the repo and shipped the fixes via the normal branch → PR → gate. Honest note: the AI's *first* hypothesis (production pinned to an old commit) was **wrong** — the Deployments screenshot corrected it to "every build erroring." Verify against reality, don't trust the first theory.
+
+---
+
+## Entry 017 — Surface model refresh: KiroCrew (Operator) + Kiro IDE (Executor) + Kiro Web (fallback)
 
 **Date:** 2026-10-01 · **Contributor(s):** Agni Eialarasu, AI-assisted · **Mode:** KiroCrew Operator (alignment session) · **Outcome:** `ai-collaboration-model.md §2` + `RFC-LAB-000-007 §2.1` (amended) + `AGENTS.md §4` + `tech.md`
 
-> _Decisions D56–D58 were made by Agni Eialarasu (human-directed); AI surfaced the redundancy and drafted the lockstep edits._
+> _Decisions D59–D61 were made by Agni Eialarasu (human-directed); AI surfaced the redundancy and drafted the lockstep edits._
 
 The original work-environment model (`RFC-LAB-000-007`, D8) was a **two-surface** split: Kiro Web
 (stateless brainstorm & governance) + Kiro IDE (stateful execution). Since then the human's actual
@@ -592,17 +616,17 @@ scheduled jobs, background sub-agents, multi-session orchestration) and **Kiro I
 realigned the governance docs to that reality so they describe the *current* state, not the
 historical one.
 
-### D56 — KiroCrew becomes the Operator (absorbs & extends the old "Kiro Web" role)
+### D59 — KiroCrew becomes the Operator (absorbs & extends the old "Kiro Web" role)
 - **Trigger:** The human works across 6 projects with parallel per-topic chats, and needs a surface that *holds continuity* across those jumps — which stateless Kiro Web never did.
 - **Options:** (A) keep Web as the primary brainstorm surface; (B) promote KiroCrew to the primary "Operator" surface, folding in brainstorm + plan + governance ops + persistent memory; (C) a custom split.
 - **Decision & rationale:** **B.** KiroCrew already *is* the web surface plus memory/crons/orchestration, so treating Web as primary duplicated a weaker version of it. The Operator owns everything that **decides or coordinates** — brainstorm, RFC/Spec authoring, governance skills (`/project-status`, `/project-validate`, `/audit-*`, `/ping-leads`), PR review, and a durable per-project briefing. The human chose A+B explicitly ("this will be best fit… jumping to other projects will be easy and out-of-project discussion in a different chat will be in parallel").
 - **Outcome:** `ai-collaboration-model.md §2` three-role table; standing operating-agreement lesson saved.
 
-### D57 — Kiro IDE is the Executor/Worker; the gate stays human
+### D60 — Kiro IDE is the Executor/Worker; the gate stays human
 - **Decision & rationale:** All **code execution and local verification** stay in the IDE (`/spec-run`, `/start-local`, `/validate-local`, `/verification-done`, pushing `feat/` branches). The Operator **never merges** — it opens PRs, self-validates, and STOP-and-holds at `/review-pr`. This preserves the AIDLC safety rail (D8, Entry 004): decisions and the merge gate are the human's; execution is AI-accelerated.
 - **Outcome:** Reaffirmed across the amended docs; no change to the merge-gate guarantee.
 
-### D58 — Kiro Web demoted to stateless fallback (not retired)
+### D61 — Kiro Web demoted to stateless fallback (not retired)
 - **Trigger:** With KiroCrew as Operator, what remains for Web?
 - **Decision & rationale:** Keep Web as a **fallback**, not a daily lane — three residual uses: (1) a throwaway brainstorm the human deliberately wants *out* of persistent memory, (2) no-install access from a machine without the KiroCrew app, (3) a cheap `.kiro/` config-sync parity check. Honest scoping over pretending Web is obsolete.
 - **Outcome:** `RFC-LAB-000-007 §2.1` Amendment; `tech.md` surface note updated.
@@ -610,4 +634,4 @@ historical one.
 ### Session meta
 - **Sequencing:** this entry was authored on the Operator during an alignment session (no code). Governance/docs fast-path to `main` per `RFC-LAB-000-004`.
 - **Lockstep touched:** `ai-collaboration-model.md`, `RFC-LAB-000-007`, `AGENTS.md`, `.kiro/steering/tech.md`. (The historical D8 entry above is left intact as the record of the *original* decision — this entry supersedes, it does not rewrite history.)
-- **Division of labor:** human set the direction (A+B, rename to Operator/Executor); AI surfaced that Web was now redundant, proposed the fallback framing, and drafted the four lockstep edits.
+- **Division of labor:** human set the direction (A+B, rename to Operator/Executor); AI surfaced that Web was now redundant, proposed the fallback framing, and drafted the four lockstep edits. (Renumbered from Entry 016 / D56–D58 on merge with `origin/main`, which had independently landed an Entry 016; chronology put the 2026-09-30 BK-023 retro first.)
