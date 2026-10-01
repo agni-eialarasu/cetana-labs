@@ -146,6 +146,7 @@ The forward experiment: delegate a well-scoped sprint to an agent, human-gated t
 - **Human gate:** every merge is human-approved (the AIDLC safety rail).
 - **CI-gated:** portfolio + 5-pillar + build checks must pass before merge.
 - **Lockstep:** CHANGELOG / BACKLOG / journal / `data/` stay synchronized (validator-enforced).
+- **Recorded gate verdict:** `/review-pr` posts its checklist + verdict **transactionally as a PR comment** (a recommendation, never a GitHub approving review — the human still authorizes the merge), so every gate run is auditable on the artifact, not just in chat.
 - **Auditable reasoning:** the Decision Journal records *why*, with honest failure/recovery notes.
 - **Linear history:** squash-merge, branch deletion, no force-push to `main`.
 
