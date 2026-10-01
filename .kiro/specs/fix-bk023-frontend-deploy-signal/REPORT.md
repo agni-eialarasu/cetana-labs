@@ -63,4 +63,15 @@
 - `scripts/verify-live-frontend.sh` is bash-3.2 portable (macOS default shell): `mapfile` replaced with a `while read` loop.
 
 ## Verification Log
-_(Appended by `/verification-done` after the human runs the Human Verification Plan.)_
+
+### Verification Log — 2026-10-01 (PR #54)
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| V1 — `/review-pr` step 2b shows the **Frontend deploy** ✅ row (context + head-SHA evidence) when the `Vercel` status = `success`; "Preview Comments" not treated as the deploy signal | ✅ | Passed as implemented. No correction needed. |
+| V2 — a failing / missing `Vercel` status on the head SHA ⇒ the row is ⚠️/❌ and the gate HOLDs (R1.2 / R1.4) | ✅ | Passed — failure-safe HOLD confirmed (missing-for-head and failure/error both HOLD). |
+| V3 — `scripts/verify-live-frontend.sh` passes against the live site; a deliberately-wrong URL exits non-zero with the mismatch (R2.1 / R2.3) | ✅ | Passed — positive exit 0, wrong-URL exit 1, usage exit 2 against `https://cetana-labs.vercel.app`. |
+| V4 — `/review-pr` remains read-only and never merges (R5.1) | ✅ | Passed — the skill adds a signal only; still STOP-and-hold / never-merge. |
+
+- **Iterations:** 0 (no fixups required — all plan steps passed as implemented in commits `b3628c9` / `4df99ae`).
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu (git config) · **Surface:** Kiro IDE
