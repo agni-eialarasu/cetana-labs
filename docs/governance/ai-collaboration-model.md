@@ -21,11 +21,20 @@ human-approved, CI-gated pull request. This keeps velocity high *and* accountabi
 
 | Surface | Role | Used for |
 | :--- | :--- | :--- |
-| **Kiro Web** | **Brainstorm & plan** (stateless) | Direction-setting, RFCs, scoping, decision capture, PR review |
-| **Kiro IDE** (local) | **Execute & verify** (stateful) | Running the stack, DB work, UI dev, local verification |
+| **KiroCrew** (Operator) | **Brainstorm, plan & govern** (stateful) | Direction-setting, RFCs, Spec authoring, scoping, decision capture, governance ops, PR review, persistent per-project memory |
+| **Kiro IDE** (Executor/Worker, local) | **Execute & verify** (stateful) | Running the stack, DB work, UI dev, `/spec-run`, local verification, pushing `feat/` branches |
+| **Kiro Web** | **Stateless fallback** | Throwaway brainstorm with no persistent memory, no-install access from any machine, config-sync parity checks |
 
-Brainstorming and planning happen where iteration is cheap (Web); execution and verification
-happen where the running system lives (IDE). The same repo config (`.kiro/`) travels to both.
+Brainstorming, planning, and governance happen on the **Operator** (KiroCrew) — where iteration
+is cheap *and* memory persists across sessions; execution and verification happen on the
+**Executor** (Kiro IDE), where the running system lives. **Kiro Web** is a stateless fallback
+only — use it when you explicitly want no persistent memory or are working without the KiroCrew
+app. The same repo config (`.kiro/`) travels to all three.
+
+> The Operator never merges — it opens PRs, self-validates, and STOP-and-holds at the human gate
+> (§3, §6). Decisions and coordination default to the Operator; code execution is delegated to the
+> Executor. (This renames and expands the original Web/IDE split: KiroCrew absorbs and extends the
+> former "Kiro Web = brainstorm & plan" role with persistence, crons, and orchestration.)
 
 ## 3. The loop
 

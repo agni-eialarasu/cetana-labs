@@ -11,7 +11,7 @@
 ## Toolchain notes
 - **Node/pnpm** are provided via **nvm** (`$HOME/.nvm`) and are NOT on the default PATH — source `nvm.sh` before `node`/`pnpm`.
 - **PocketBase** binary is not committed; fetched by `.devcontainer/setup-pocketbase.sh`. `pb_data/` and the binary are gitignored.
-- Local dev runs on a machine/Codespace, not the Kiro Web sandbox.
+- Local dev runs on a machine (Kiro IDE Executor) or Codespace — not the KiroCrew Operator or the Kiro Web fallback (neither runs persistent servers).
 
 ## Key commands
 - Validate everything locally: `/validate-local` (mirrors CI).

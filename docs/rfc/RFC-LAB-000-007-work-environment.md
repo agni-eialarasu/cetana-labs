@@ -1,12 +1,13 @@
-# RFC-LAB-000-007: Work-Environment Standardization (Kiro Web + IDE)
+# RFC-LAB-000-007: Work-Environment Standardization (KiroCrew Operator + Kiro IDE Executor)
 
 | Property | Value |
 | :--- | :--- |
 | **RFC ID** | `RFC-LAB-000-007` |
-| **Title** | Standardized Work Environment — Kiro Web + Kiro IDE parity |
+| **Title** | Standardized Work Environment — KiroCrew (Operator) + Kiro IDE (Executor) + Kiro Web (fallback) |
 | **Author** | Eialarasu (LAB-000 Control Hub) |
 | **Status** | ✅ Accepted |
 | **Date** | 2026-09-24 |
+| **Amended** | 2026-10-01 — surface model updated to the three-role Operator/Executor/fallback split (see §2.1 Amendment) |
 | **Backlog** | `BK` / `TSK-039` (SPRINT-08) |
 | **Builds On** | `RFC-LAB-000-001` (cloud dev), `RFC-LAB-000-004` (branching), Kiro-native skillset (`TSK-038`) |
 | **Influenced By** | Nexus Pulse (`LAB-003`) Developer Onboarding & Operations Guide — adapted, not copied |
@@ -20,12 +21,24 @@ Development spans **two surfaces on the same repo**: **Kiro Web** (cloud sandbox
 ## 2. Decisions
 
 ### 2.1 Surface Roles (intentional split, not a hard wall)
+
+> **Amendment (2026-10-01).** The original two-surface model (Kiro Web + Kiro IDE) is superseded
+> by a three-role model. **KiroCrew** (this control layer) becomes the **Operator** — it absorbs
+> and extends the former "Kiro Web = brainstorm & plan" role with persistent memory, scheduled
+> jobs, and orchestration. **Kiro Web** is demoted to a **stateless fallback**. See
+> [`ai-collaboration-model.md §2`](../governance/ai-collaboration-model.md#2-two-surfaces-two-roles-rfc-lab-000-007).
+
 | Surface | Primary role | Typical work |
 | :--- | :--- | :--- |
-| **Kiro Web** | **Stateless** — governance & docs | RFCs, backlog/changelog/journal, `data/` edits, PR review, planning, `scripts/` (Python), status broadcasts |
-| **Kiro IDE** | **Stateful** — servers & data | Running the stack (`/start-local`), PocketBase DB work, SvelteKit UI dev, secrets/OAuth, staging deploys |
+| **KiroCrew** (Operator) | **Stateful** — brainstorm, plan, govern | RFCs, Spec authoring, backlog/changelog/journal, `data/` edits, PR review, status broadcasts, `scripts/` (Python), persistent per-project memory |
+| **Kiro IDE** (Executor/Worker) | **Stateful** — servers & data | Running the stack (`/start-local`), PocketBase DB work, SvelteKit UI dev, `/spec-run`, secrets/OAuth, local verification, pushing `feat/` branches, staging deploys |
+| **Kiro Web** | **Stateless fallback** | Throwaway brainstorm with no persistent memory, no-install access from any machine, config-sync parity checks |
 
-This is guidance to reach for the right surface — not a restriction. Web *can* edit anything; it simply can't run persistent servers, so stateful work belongs on IDE. Consistent with `RFC-LAB-000-001` (cloud-first for stateless work).
+This is guidance to reach for the right surface — not a restriction. The **Operator never merges**:
+it opens PRs, self-validates, and STOP-and-holds at the human gate. Decisions and coordination
+default to the Operator; code execution is delegated to the Executor. Kiro Web remains able to
+edit anything but holds no persistent state, so use it only as a fallback. Consistent with
+`RFC-LAB-000-001` (cloud-first for stateless work).
 
 ### 2.2 Toolchain Pinning
 - **`.nvmrc`** pins Node (22); `package.json` `packageManager` pins pnpm (10). Both surfaces resolve identical versions.

@@ -576,3 +576,38 @@ Planning `BK-012` (app-level settings, the foundation for `BK-013` branding). Th
 ### Session meta
 - **Sequencing:** did a green `/audit-project` (portfolio healthy, no drift) before authoring, at the human's request, so BK-012 builds on verified docs. RFC + Spec authored here (Web); next `/plan-done` merges them (merge-first) → `/spec-run app-level-settings` (IDE). Then the `BK-015` AI-Assistant RFC + spike (the parallel de-risking track).
 - **Division of labor:** human set the leans (key/value, superuser writes, mechanism-only scope); AI grounded them in the repo's existing collection pattern and wrote the RFC/Spec.
+
+---
+
+## Entry 016 — Surface model refresh: KiroCrew (Operator) + Kiro IDE (Executor) + Kiro Web (fallback)
+
+**Date:** 2026-10-01 · **Contributor(s):** Agni Eialarasu, AI-assisted · **Mode:** KiroCrew Operator (alignment session) · **Outcome:** `ai-collaboration-model.md §2` + `RFC-LAB-000-007 §2.1` (amended) + `AGENTS.md §4` + `tech.md`
+
+> _Decisions D56–D58 were made by Agni Eialarasu (human-directed); AI surfaced the redundancy and drafted the lockstep edits._
+
+The original work-environment model (`RFC-LAB-000-007`, D8) was a **two-surface** split: Kiro Web
+(stateless brainstorm & governance) + Kiro IDE (stateful execution). Since then the human's actual
+tooling changed — day-to-day work now runs on **KiroCrew** (this control layer: persistent memory,
+scheduled jobs, background sub-agents, multi-session orchestration) and **Kiro IDE**. This session
+realigned the governance docs to that reality so they describe the *current* state, not the
+historical one.
+
+### D56 — KiroCrew becomes the Operator (absorbs & extends the old "Kiro Web" role)
+- **Trigger:** The human works across 6 projects with parallel per-topic chats, and needs a surface that *holds continuity* across those jumps — which stateless Kiro Web never did.
+- **Options:** (A) keep Web as the primary brainstorm surface; (B) promote KiroCrew to the primary "Operator" surface, folding in brainstorm + plan + governance ops + persistent memory; (C) a custom split.
+- **Decision & rationale:** **B.** KiroCrew already *is* the web surface plus memory/crons/orchestration, so treating Web as primary duplicated a weaker version of it. The Operator owns everything that **decides or coordinates** — brainstorm, RFC/Spec authoring, governance skills (`/project-status`, `/project-validate`, `/audit-*`, `/ping-leads`), PR review, and a durable per-project briefing. The human chose A+B explicitly ("this will be best fit… jumping to other projects will be easy and out-of-project discussion in a different chat will be in parallel").
+- **Outcome:** `ai-collaboration-model.md §2` three-role table; standing operating-agreement lesson saved.
+
+### D57 — Kiro IDE is the Executor/Worker; the gate stays human
+- **Decision & rationale:** All **code execution and local verification** stay in the IDE (`/spec-run`, `/start-local`, `/validate-local`, `/verification-done`, pushing `feat/` branches). The Operator **never merges** — it opens PRs, self-validates, and STOP-and-holds at `/review-pr`. This preserves the AIDLC safety rail (D8, Entry 004): decisions and the merge gate are the human's; execution is AI-accelerated.
+- **Outcome:** Reaffirmed across the amended docs; no change to the merge-gate guarantee.
+
+### D58 — Kiro Web demoted to stateless fallback (not retired)
+- **Trigger:** With KiroCrew as Operator, what remains for Web?
+- **Decision & rationale:** Keep Web as a **fallback**, not a daily lane — three residual uses: (1) a throwaway brainstorm the human deliberately wants *out* of persistent memory, (2) no-install access from a machine without the KiroCrew app, (3) a cheap `.kiro/` config-sync parity check. Honest scoping over pretending Web is obsolete.
+- **Outcome:** `RFC-LAB-000-007 §2.1` Amendment; `tech.md` surface note updated.
+
+### Session meta
+- **Sequencing:** this entry was authored on the Operator during an alignment session (no code). Governance/docs fast-path to `main` per `RFC-LAB-000-004`.
+- **Lockstep touched:** `ai-collaboration-model.md`, `RFC-LAB-000-007`, `AGENTS.md`, `.kiro/steering/tech.md`. (The historical D8 entry above is left intact as the record of the *original* decision — this entry supersedes, it does not rewrite history.)
+- **Division of labor:** human set the direction (A+B, rename to Operator/Executor); AI surfaced that Web was now redundant, proposed the fallback framing, and drafted the four lockstep edits.

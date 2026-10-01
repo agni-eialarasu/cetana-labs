@@ -62,7 +62,7 @@ When scaffolding a new project, use the corresponding template from `templates/`
 
 ## 4. Reusable AI Agent Skills Suite (`.kiro/skills/`)
 
-Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; committed → shared automatically across Kiro Web + Kiro IDE). Personal commands (`/sign-in`, `/sign-off`, `/session-save`, `/session-resume`) live in the developer's local `~/.kiro/skills/` and sync to Web via Configuration Sync.
+Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; committed → shared automatically across the **KiroCrew Operator** + **Kiro IDE Executor**). Personal commands (`/sign-in`, `/sign-off`, `/session-save`, `/session-resume`) live in the developer's local `~/.kiro/skills/` and sync via Configuration Sync. (Surface roles — Operator / Executor / Kiro Web fallback — are defined in [`RFC-LAB-000-007`](docs/rfc/RFC-LAB-000-007-work-environment.md) and [`ai-collaboration-model.md`](docs/governance/ai-collaboration-model.md).)
 
 **Project lifecycle & governance:**
 - **`/project-validate [ID]`**: Pre-flight 5-pillar audit (scraper budget ≤ 35 lines, registry lockstep, git hygiene, AST boundaries, live test count) emitting `.gemini/governance/validation_receipt.json`.
