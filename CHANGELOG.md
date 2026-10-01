@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **`/push-changes` + `/commit-and-push-changes` skills (Spec `push-changes-skills`, PR #53)**: Two companion project skills that extend `/commit-changes` with a **branch-aware push**, honoring the hybrid path-scoped branching model (`RFC-LAB-000-004`). `/push-changes` pushes the **current branch** by explicit name (`-u` when no upstream); `/commit-and-push-changes` runs `/commit-changes` then that push. On a `feat/` branch the agent pushes directly; on `main`/`master` it **refuses** application code/`data/`/migrations (→ move to a `feat/` branch + PR), and for governance/docs it validates fast-path eligibility then **prints the exact `git push origin main` for the human to run** — because the KiroCrew runtime enforces an absolute protected-branch floor the agent cannot lift (the honest limitation found 2026-10-01). Never force-pushes / `--all` / `--mirror` / bare push; preserves hooks; inherits `/commit-changes` secret-hygiene. `/commit-changes` unchanged (compose, don't rewrite). Authored on the Operator, built via `/spec-run` on the Kiro IDE Executor, human-verified (PASS), gated via `/review-pr`. `AGENTS.md §4` + the Working Model diagram updated in lockstep.
 ### Changed
 ### Fixed
 
