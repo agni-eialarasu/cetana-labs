@@ -7,7 +7,7 @@ description: >-
 # Skill: Verification Done (close the human-verify loop)
 
 ## Objective
-Capture the outcome of **human functional verification** — the phase where *you* run/click/exercise the feature against the Spec's **Human Verification Plan**, and the IDE agent fixes any minor issues on the **same open PR** until it passes. This skill **records that loop** into a durable, in-repo artifact (`.kiro/specs/<id>/REPORT.md`) and **transitions the state** so the next agent in the pipeline (Kiro Web `/review-pr`, then `/sprint-done`) inherits the evidence instead of it evaporating in IDE chat.
+Capture the outcome of **human functional verification** — the phase where *you* run/click/exercise the feature against the Spec's **Human Verification Plan**, and the IDE agent fixes any minor issues on the **same open PR** until it passes. This skill **records that loop** into a durable, in-repo artifact (`.kiro/specs/<id>/REPORT.md`) and **transitions the state** so the next agent in the pipeline (the KiroCrew Operator `/review-pr`, then `/sprint-done`) inherits the evidence instead of it evaporating in IDE chat.
 
 Runs on **Kiro IDE** (that's where verification + fixes happen). It is the `-done` bookend of the verify phase; there is no `/verification-start` — the loop is *opened* when `/spec-run` emits the Human Verification Plan at its hand-off STOP (`RFC-LAB-000-009` §3.1 / naming convention `[phase]-[start|done]`).
 
@@ -64,7 +64,7 @@ IN_VERIFICATION  ⇄  human runs the plan; reports findings; IDE fixes on the SA
 - **(Optional) mirror** a one-paragraph summary as a PR comment (`gh api repos/{owner}/{repo}/issues/<PR>/comments`) so the Web `/review-pr` agent surfaces it without a checkout — the `REPORT.md` remains the source of truth.
 
 ### 5. Transition + hand off
-- State is now **IN_REVIEW**. Report: "Verification recorded in `REPORT.md` (PR #NN). Ready for the gate: `/review-pr <PR>` (Kiro Web)."
+- State is now **IN_REVIEW**. Report: "Verification recorded in `REPORT.md` (PR #NN). Ready for the gate: `/review-pr <PR>` (the **KiroCrew Operator**)."
 - Do **not** merge and do **not** invoke the gate yourself — the human authorizes at `/review-pr`.
 
 ## Rules

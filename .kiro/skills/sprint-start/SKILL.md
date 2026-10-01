@@ -1,13 +1,13 @@
 ---
 name: sprint-start
 description: >-
-  Opens the SPRINT CONTAINER in Cetana Labs (RFC-LAB-000-009 Phase 1 Scope, Kiro Web) — creates the Current Sprint block in SPRINT_TRACKER.md (next SPRINT-XX id, 2-week window, goal, planned items incl. carried-forward tasks) and syncs STATUS.md focus. A sprint CONTAINS MANY plans: within it you run /plan-start -> /plan-done per feature (each producing one merged Spec). Pairs with /sprint-done. Use when the user runs /sprint-start or asks to start/plan a new sprint.
+  Opens the SPRINT CONTAINER in Cetana Labs (RFC-LAB-000-009 Phase 1 Scope, KiroCrew Operator) — creates the Current Sprint block in SPRINT_TRACKER.md (next SPRINT-XX id, 2-week window, goal, planned items incl. carried-forward tasks) and syncs STATUS.md focus. A sprint CONTAINS MANY plans: within it you run /plan-start -> /plan-done per feature (each producing one merged Spec). Pairs with /sprint-done. Use when the user runs /sprint-start or asks to start/plan a new sprint.
 ---
 
 # Skill: Sprint Kickoff (`/sprint-start`)
 
 ## Objective
-Open the **sprint container** — the top-level Scope artifact of the lifecycle (`RFC-LAB-000-009` §3.1). It initializes the Current Sprint block in `SPRINT_TRACKER.md` (id, window, goal, planned items) and is the counterpart to `/sprint-done`. Normally `/sprint-done` already seeds the next sprint block; use `/sprint-start` to open one from scratch, refine the goal, or (re)plan the item list. Runs on **Kiro Web** (plan) — no code.
+Open the **sprint container** — the top-level Scope artifact of the lifecycle (`RFC-LAB-000-009` §3.1). It initializes the Current Sprint block in `SPRINT_TRACKER.md` (id, window, goal, planned items) and is the counterpart to `/sprint-done`. Normally `/sprint-done` already seeds the next sprint block; use `/sprint-start` to open one from scratch, refine the goal, or (re)plan the item list. Runs on the **KiroCrew Operator** (plan) — no code.
 
 ### Lifecycle position (sprint ⊃ plans ⊃ Spec — decided: option a)
 ```

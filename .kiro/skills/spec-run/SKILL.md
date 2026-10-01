@@ -82,7 +82,7 @@ Make executing a Kiro Spec a **true one-liner** in Kiro IDE — the **implement*
 ### 9. The verify loop + next phase
 - **Iterate loop (IN_VERIFICATION):** the human runs the plan; on any finding, fix it and push to the **same PR** (never a new branch/PR — Single-PR rule); the human re-verifies. Repeat until the plan passes.
 - On pass, the human runs **`/verification-done`** → it appends the Verification Log to `.kiro/specs/<id>/REPORT.md` (same PR) and transitions **IN_VERIFICATION → IN_REVIEW**.
-- Then: **`/review-pr <PR>`** (Kiro Web gate — now reads the verification record as evidence) → human authorizes merge → **`/sprint-done`** (Record).
+- Then: **`/review-pr <PR>`** (the **KiroCrew Operator** gate — now reads the verification record as evidence) → human authorizes merge → **`/sprint-done`** (Record).
 - If this was an AIDLC/delegated run, also capture the spike notes (`RFC-LAB-000-009` §7) in `REPORT.md`: did this run execute `tasks.md` directly or re-plan, and what hand-off worked.
 
 ## Rules
