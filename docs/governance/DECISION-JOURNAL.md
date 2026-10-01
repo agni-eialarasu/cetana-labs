@@ -657,3 +657,24 @@ historical one.
 
 ### Session meta
 - **Division of labor:** human proposed both refinements from felt pain during the live run; AI framed the guardrails (worker never merges; isolation via origin only) and did the lockstep edits. Governance/docs fast-path to `main` per `RFC-LAB-000-004`.
+
+---
+
+## Entry 019 — The gate verdict must be recorded transactionally on the PR, not just in chat
+
+**Date:** 2026-10-01 · **Contributor(s):** Agni Eialarasu (human-directed — spotted the gap), AI-assisted · **Mode:** KiroCrew Operator · **Outcome:** `review-record` Spec (authored); PR #54 gate comment posted; `fix/stale-web-surface-wording` PR #55
+
+> _Surfaced during the first real `/review-pr` run on the Operator (PR #54). D64 is the human's call; captured here because it tightens the governance guarantee (`§6`)._
+
+### D64 — A `/review-pr` verdict is only trustworthy if it is durably attached to the PR
+- **Trigger:** The Operator reviewed PR #54 and reported **READY** — but the verdict existed *only in chat*. The human asked: is this transactionally captured anywhere? It wasn't. Nothing on the PR recorded that the gate ran, what it checked, or its finding — a gap in the model's own **auditable** guarantee (`ai-collaboration-model.md §6`): the Decision Journal records *why*, CI records *pass/fail*, but the *review verdict* evaporated with the chat.
+- **Options:** (A) PR comment via `gh api`; (B) a GitHub *review* (approve/request-changes); (C) append to the Spec's `REPORT.md`; (D) Decision Journal per PR.
+- **Decision & rationale:** **A** — `/review-pr` posts its checklist + verdict as a **PR comment**, explicitly labelled **recommendation, not approval** (the human still authorizes the merge). **B was rejected on principle:** the gate must *never* cast a GitHub approve/request-changes review — that would usurp the human gate the whole model is built to protect; the record is a *comment*, never a review verdict. C is a nice complement for Spec PRs; D is overkill per-PR. The comment lives on the artifact, timestamped, visible on GitHub without a checkout — exactly where an auditor looks.
+- **Guardrail preserved:** comment-only (`issues/<n>/comments`), never `pulls/<n>/reviews`. The gate still STOPs; the human still merges.
+- **Outcome:** `review-record` Spec (`/spec-run`-ready; its R4 updates `§6` + CHANGELOG at build time); PR #54's verdict posted manually as the first instance.
+
+### Related — the "Kiro Web" wording drift (lockstep follow-up)
+- The same PR #54 run exposed that the IDE Executor emitted "run `/review-pr` on **Kiro Web**" — stale wording the surface-model refresh (Entry 017) missed in the lifecycle skills. Fixed via PR #55 (`spec-run`, `verification-done`, `plan-start`, `sprint-start` → "KiroCrew Operator"); routed through a `feat/` branch + PR because `.kiro/skills/` are project files, not governance/docs fast-path.
+
+### Session meta
+- **Pattern worth naming:** this is the second process gap the human caught by *watching the model run* (after the "Kiro Web" wording). Both were fed straight back through the model as Specs/PRs — the system improving itself via its own lifecycle. The human's live attention remains the sharpest gap-detector; automate the record, keep the human watching.
