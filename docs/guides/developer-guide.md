@@ -35,6 +35,7 @@ Every command exists as both a Kiro `/command` and a `make` target (identical be
 | | `make deploy-adhoc ENV=<file>` | `/deploy-adhoc` | On-demand deploy to an arbitrary instance (throwaway/other) — a dev tool, not a stage (§9A.0) |
 | | `make deploy-staging` | — | Manual *override* re-deploy of the staging env (not "the pipeline"; §9A.0) |
 | | `make verify-bundle` | — | Assert the built bundle baked in the expected backend URL (§9A.3) |
+| | `make verify-live-frontend URL=<live>` | — | Assert the LIVE Vercel site serves the expected backend (post-deploy ops-alert, §9A.6) |
 | **Sprint** | — | `/sprint-start`, `/sprint-done` | Open / close a sprint |
 | **Audit** | — | `/audit-doc`, `/audit-project` | Doc review / project health sweep |
 
@@ -372,3 +373,23 @@ Some steps are irreducibly interactive / console-only — `scripts/deploy.sh che
 
 ### 9A.5 Gated ops (`RFC-LAB-000-012` §6)
 Deploy/ops/spike work follows the same branch → PR → human-gate discipline as features (`RFC-LAB-000-009`) — nothing ad-hoc to `main`. Even throwaway spike code lands on a branch; the *finding* is what merges.
+
+### 9A.6 Frontend deploy signal — read Vercel's REAL status (`BK-023`, `RFC-LAB-000-012` §11)
+`§9A.3` asserts the *built* artifact; this closes the complementary gap found in `BK-023`: three Vercel-build failures that all passed `/review-pr` **and** green CI, because the only Vercel-aware check the gate saw — **"Vercel Preview Comments"** — reports *comment posting*, **not** deploy health. Our CI runs `pnpm build` directly, so green CI is no proof Vercel deployed. Two signals now cover it:
+
+**Pre-merge (the gate — `/review-pr` step 2b).** The real Vercel deploy status lives on the **commit-status** API (not check-runs), as the **`Vercel`** context (and `Cetana Lab Staging - cetana-labs`). Read it for the **PR head SHA**:
+```bash
+head=$(gh api repos/agni-eialarasu/cetana-labs/pulls/<n> --jq .head.sha)
+gh api repos/agni-eialarasu/cetana-labs/commits/$head/status \
+  --jq '.statuses[] | select(.context=="Vercel") | {state, target_url, updated_at}'
+```
+`success` on head ⇒ ✅; `failure`/`error` ⇒ ❌ HOLD; **no status for head**, or a success only on an **older SHA** (the stale-success trap — Vercel keeps serving the last good build), ⇒ ⚠️ HOLD. Failure-safe: anything but a head-bound `success` is a HOLD. **Never** treat "Vercel Preview Comments" as the deploy signal.
+
+**Post-merge (the backstop — ops-alert).** After the Vercel Git integration deploys, assert the **live** bundle serves the expected backend:
+```bash
+make verify-live-frontend URL=https://<app>.vercel.app EXPECTED=https://<app>.up.railway.app
+# or on CI: the verify-live-frontend.yml workflow (push to main on app/web/**, + manual run)
+```
+This is an **ops-alert, not a gate** — a red result is a check + logs to investigate; it never reverts the merge (`done` = the gated merge) and is **not** in the PR-gating CI job. (Note: the PocketBase SDK always ships `/api/realtime` and `authWithOAuth2(` regardless of our auth flow, so the authoritative live signal is the expected `VITE_PB_URL` baked into the served bundle — same basis as `verify-bundle.sh`.)
+
+**[HUMAN] — make it enforce itself (durable).** The lasting fix is to make the **`Vercel` deployment status a required status check** on `main` (GitHub → Settings → Branches → branch-protection rule for `main` → *Require status checks to pass* → add the **`Vercel`** context). Then a failing Vercel build blocks merge automatically, no reviewer vigilance required. This is a one-time GitHub-settings action, **deferred until branch protection lands post-org-transfer** (`RFC-LAB-000-004`); until then, `/review-pr` step 2b is the enforcement.

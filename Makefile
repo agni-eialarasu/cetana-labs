@@ -14,7 +14,7 @@ PB := $(shell command -v pocketbase 2>/dev/null || echo ./pocketbase)
 CONTAINER := $(shell command -v podman 2>/dev/null || command -v docker 2>/dev/null)
 
 .PHONY: help setup validate-local validate-staging status-local start-local stop-local \
-        provision seed clean-data web-dev web-build verify-bundle deploy-staging deploy-adhoc \
+        provision seed clean-data web-dev web-build verify-bundle verify-live-frontend deploy-staging deploy-adhoc \
         pb-serve pb-image env-doctor
 
 help: ## Show this cheat-sheet
@@ -86,6 +86,10 @@ web-build: ## SvelteKit production build
 verify-bundle: ## Assert app/web/build bakes in EXPECTED backend URL (FORBIDDEN optional) — run after web-build
 	@[ -n "$(EXPECTED)" ] || { echo "usage: make verify-bundle EXPECTED=<url> [FORBIDDEN=<url>]"; exit 2; }
 	bash scripts/verify-bundle.sh "$(EXPECTED)" "$(FORBIDDEN)"
+
+verify-live-frontend: ## Assert the LIVE Vercel site serves the EXPECTED backend URL (post-deploy ops-alert, BK-023). usage: make verify-live-frontend URL=<live> [EXPECTED=<pb-url>]
+	@[ -n "$(URL)" ] || { echo "usage: make verify-live-frontend URL=<live-url> [EXPECTED=<pb-url>]"; exit 2; }
+	bash scripts/verify-live-frontend.sh "$(URL)" "$(EXPECTED)"
 
 # DEPLOY MODEL (Decision Journal Entry 014, D49–D52) — two deliberately-separated paths:
 #
