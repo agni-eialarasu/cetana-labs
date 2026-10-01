@@ -66,6 +66,45 @@ flowchart TB
 - **Human gate:** PR review (`/review-pr`, planned) + STOP-and-hold; nothing merges unapproved.
 - **Record:** CHANGELOG (what), RFCs (formal decision), Decision Journal (how/why).
 
+### 3.1 One complete cycle — sequence of execution
+
+The flowchart above shows the *states*; this sequence shows the **handoffs over time** between the
+three actors — 👤 **You** (direction + both gates), 🤖 **KiroCrew** (Operator — brainstorm, Spec,
+review surface, lockstep), 💻 **Kiro IDE** (Executor — build, PR, verify). Kiro Web (stateless
+fallback) is not a participant in the execution flow.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor You as 👤 You
+    participant KC as 🤖 KiroCrew (Operator)
+    participant IDE as 💻 Kiro IDE (Executor)
+
+    You->>KC: "Let's build X" — set direction
+    KC->>KC: author Spec (requirements·design·tasks) · /plan-start
+    KC->>You: Spec ready — approve merge?
+    You-->>KC: ✅ GATE 1 — approve
+    KC->>KC: merge Spec to main (doc PR) · /plan-done  %% merge-first
+    You->>IDE: /spec-run X
+    IDE->>IDE: execute tasks.md on feat/ branch
+    IDE->>IDE: open PR + self-validate (CI · 5-pillar · EARS DoD)
+    You->>IDE: exercise the feature · /verification-done
+    alt issues found
+        IDE->>IDE: fix on the SAME PR, then re-verify
+    end
+    IDE->>KC: verification record → IN_REVIEW
+    KC->>You: /review-pr checklist + STOP
+    alt changes requested
+        You->>IDE: iterate on the PR
+    end
+    You-->>IDE: ✅ GATE 2 — approve & squash-merge to main
+    KC->>KC: governance lockstep + Decision Journal · /brainstorm-save
+```
+
+- **Two human gates:** ④ approve the Spec merge, and the final approve & squash-merge. Nothing crosses to `main` without you.
+- **Two loop-backs:** verification finds issues (fixed on the same PR, Single-PR rule) and review requests changes (iterate on the PR).
+- **Merge-first ordering:** the Spec merges to `main` (step 5) *before* the first `/spec-run` (step 6) — that is what lets `/spec-run` be a clean IDE one-liner.
+
 ## 4. Progressive formality (scales solo → team)
 
 Contract depth scales with executor autonomy — light where context is shared, full where it isn't:
