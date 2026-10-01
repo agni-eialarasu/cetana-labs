@@ -39,7 +39,7 @@
 ### R1 — `/push-changes` skill (push the current branch)
 - **R1.1** The system SHALL add `.kiro/skills/push-changes/SKILL.md` with YAML frontmatter (`name`, `description`) matching the repo's skill convention.
 - **R1.2** The skill SHALL determine the **current branch** and push it to its remote by **explicit name** (`git push origin <current-branch>`, with `-u` when no upstream is set) — never a bare `git push`.
-- **R1.3** WHEN the current branch is a protected branch (`main`/`master`), the skill SHALL proceed ONLY after confirming the staged/committed paths are **governance/docs** (fast-path eligible per `RFC-LAB-000-004`), AND SHALL require explicit operator confirmation before the push; IF the paths include application code / `data/` / migrations, it SHALL REFUSE and instruct moving the work to a `feat/` branch + PR.
+- **R1.3** WHEN the current branch is a protected branch (`main`/`master`): IF the staged/committed paths include application code / `data/` / migrations, the skill SHALL REFUSE and instruct moving the work to a `feat/` branch + PR. IF the paths are **governance/docs** (fast-path eligible per `RFC-LAB-000-004`), the skill SHALL recognise that the **agent cannot execute a `main` push** — the KiroCrew runtime enforces an absolute protected-branch floor (`git-publish-push-protected-branch-name`) that no operator confirmation in chat can lift — and SHALL therefore **validate the push is fast-path-legal, then print the exact command (`git push origin main`) for the human to run** (terminal, GitHub Desktop, or an IDE Executor session), rather than attempting it. *(This is the honest limitation found 2026-10-01: the human always runs the actual `main` push. On a `feat/` branch, R1.2 applies and the agent pushes directly.)*
 - **R1.4** The skill SHALL NEVER force-push, and SHALL NEVER push `--all`/`--mirror` or a `HEAD`/`@` target.
 - **R1.5** IF there is nothing to push (branch up to date with remote), the skill SHALL report that and exit cleanly (no error).
 
@@ -70,6 +70,6 @@
 ## 5. Human Verification Plan
 
 1. On a `feat/` branch with a committed change, run `/push-changes` → confirm it pushes the named branch and sets upstream.
-2. On `main` with a **docs-only** commit, run `/push-changes` → confirm it asks for confirmation, then pushes.
+2. On `main` with a **docs-only** commit, run `/push-changes` → confirm it validates fast-path eligibility and **prints the exact `git push origin main` command for the human to run** (it does not attempt the push itself — the agent floor forbids it).
 3. On `main` with a **code** change staged, run `/commit-and-push-changes` → confirm it commits but **refuses** the push with the `feat/`+PR instruction.
 4. Confirm `/commit-changes` behavior is unchanged.
