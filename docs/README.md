@@ -30,6 +30,7 @@ docs/
 | Doc | Purpose |
 | :--- | :--- |
 | [Project Protocol](reference/project-protocol.md) | The authoritative 30-line `STATUS.md` standard + 5-pillar validation. |
+| [Capability Map](reference/capability-map.md) | What the app does — capability domains + user journey (doc counterpart of the App Functionality artifact). |
 | [Design System (Nexus Pulse)](reference/DESIGN.md) | The org visual source of truth — tokens, type, color, dark-first. |
 | [Design System (LAB-000)](reference/design-system-lab000.md) | The SvelteKit + Tailwind mapping of the Nexus Pulse system for the Sleek UI. |
 

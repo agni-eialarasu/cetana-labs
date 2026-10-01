@@ -34,18 +34,37 @@ This is the **decision of record** (the *what/why* + topology). The actual provi
 
 ## 3. Topology
 
-```
-                 ┌──────────────────────────┐         ┌─────────────────────────────┐
-   Browser  ───▶ │  Vercel (frontend)       │  HTTPS  │  GCP VM (backend)            │
-                 │  SvelteKit static SPA    │ ──────▶ │  PocketBase binary + SQLite  │
-                 │  env: VITE_PB_URL        │  REST/  │  on a persistent disk        │
-                 │  default domain (→custom │  SDK    │  env/Secret Manager:         │
-                 │  when branding lands)    │         │  PB superuser, GitHub OAuth  │
-                 └──────────────────────────┘         └─────────────────────────────┘
+```mermaid
+flowchart LR
+    B["🌐 Browser<br/><i>end user</i>"]
+    subgraph V["Vercel — frontend"]
+      SPA["SvelteKit static SPA<br/>adapter-static · ssr=false<br/>env: VITE_PB_URL"]
+    end
+    subgraph R["Railway — backend"]
+      PB["PocketBase<br/>container (Containerfile)<br/>managed TLS + URL"]
+      VOL[("Persistent volume<br/>SQLite pb_data/")]
+      PB --- VOL
+    end
+    GH["🔑 GitHub OAuth<br/><i>external IdP</i>"]
+
+    B -->|"HTTPS: static assets"| SPA
+    B -->|"REST/SDK (HTTPS)"| PB
+    B -->|"redirect OAuth"| GH
+    GH -. "identity" .-> PB
+
+    classDef front fill:#1e3a5f,stroke:#3b82f6,color:#fff;
+    classDef back fill:#2a1e3f,stroke:#7c3aed,color:#fff;
+    classDef ext fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    class SPA front; class PB,VOL back; class GH ext;
 ```
 
-- The SPA already reads `VITE_PB_URL` (delivered in M1); production simply points it at the GCP PocketBase URL. The M1 snapshot fallback remains a safety net.
-- GitHub OAuth (M2) is configured in the PocketBase admin UI; redirect URLs updated to the Vercel domain.
+> **Topology note (amended):** backend is **Railway** (container + persistent volume + managed TLS),
+> not a GCP VM — see the amendment banner and §4.1a. PocketBase is currently **pinned to 0.28.4**
+> in production; the 0.40 un-pin ships via `fix-bk018-oauth-redirect`. Custom domain deferred to
+> branding (`BK-013`); runs on Vercel's default domain today.
+
+- The SPA already reads `VITE_PB_URL` (delivered in M1); production simply points it at the **Railway** PocketBase URL. The M1 snapshot fallback remains a safety net.
+- GitHub OAuth (M2) is configured on the PocketBase `users` collection (admin UI); redirect URLs point at the Vercel domain. The **redirect-based** `authWithOAuth2Code` flow avoids `/api/realtime` behind Railway's proxy (the BK-018 fix).
 
 ## 4. Decisions in detail (with rationale)
 
