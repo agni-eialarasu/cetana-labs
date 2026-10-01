@@ -635,3 +635,25 @@ historical one.
 - **Sequencing:** this entry was authored on the Operator during an alignment session (no code). Governance/docs fast-path to `main` per `RFC-LAB-000-004`.
 - **Lockstep touched:** `ai-collaboration-model.md`, `RFC-LAB-000-007`, `AGENTS.md`, `.kiro/steering/tech.md`. (The historical D8 entry above is left intact as the record of the *original* decision — this entry supersedes, it does not rewrite history.)
 - **Division of labor:** human set the direction (A+B, rename to Operator/Executor); AI surfaced that Web was now redundant, proposed the fallback framing, and drafted the four lockstep edits. (Renumbered from Entry 016 / D56–D58 on merge with `origin/main`, which had independently landed an Entry 016; chronology put the 2026-09-30 BK-023 retro first.)
+
+---
+
+## Entry 018 — Two model refinements: a gate-free background-worker lane + Operator/Executor workspace isolation
+
+**Date:** 2026-10-01 · **Contributor(s):** Agni Eialarasu (human-directed), AI-assisted · **Mode:** KiroCrew Operator · **Outcome:** `ai-collaboration-model.md §2` (lane + isolation note); Working Model artifact; standing lesson updated
+
+> _Surfaced during the first full end-to-end run of the Operator/Executor model (the `push-changes-skills` build, PR #53). D62–D63 were the human's calls._
+
+### D62 — A fourth lane: gate-free background workers for bounded specialist work
+- **Trigger:** The human noted that running every delegated task through the full `/spec-run → PR → verify → review` cycle is overkill for work that is bounded, reversible, and off the protected path — and that parallel background workers are "the real benefit of working in KiroCrew."
+- **Decision & rationale:** Add a **background-worker lane**: the Operator may `spawn_run` a worker for research, analysis, doc drafts, diagram data, scoped investigations, or bulk processing — it runs in parallel and returns a result the Operator validates and reports. **The merge gate is explicitly preserved:** a worker **never pushes `main` and never merges**; if its output is code destined for `main`, it still flows through `/spec-run` + a PR + the human gate. The worker produces the *artifact*; the gate decides what lands. This widens throughput without weakening the AIDLC safety rail (D8, Entry 004).
+- **Guardrail:** the lane is for reversible, off-protected-path work only. Anything that becomes a `main` code change takes the full IDE Executor path.
+- **Outcome:** `ai-collaboration-model.md §2` background-worker note; Working Model artifact.
+
+### D63 — Operator and Executor work in separate clones (workspace isolation)
+- **Trigger:** During PR #53, an IDE `/spec-run` was running in the *same* working tree the Operator uses — a two-writers-on-one-worktree hazard (a background worker or an Operator edit could race the build's branch/files). The earlier merge-divergence (Entry 017's merge) was the milder version of the same root issue.
+- **Decision & rationale:** The Operator and the Executor use **separate clones** of the repo (Operator in `cetana-labs/`, the IDE Executor in a sibling `cetana-labs-kiro-ide/`), syncing only through `origin` — never a shared working tree. Mirrors the clean isolation the old Web+IDE split had. It removes the race entirely and lets the Operator safely spawn background workers (D62) without colliding with an IDE run.
+- **Outcome:** `ai-collaboration-model.md §2` workspace-isolation note; standing lesson updated. (Setup is a human action — clone the sibling; no repo change required.)
+
+### Session meta
+- **Division of labor:** human proposed both refinements from felt pain during the live run; AI framed the guardrails (worker never merges; isolation via origin only) and did the lockstep edits. Governance/docs fast-path to `main` per `RFC-LAB-000-004`.

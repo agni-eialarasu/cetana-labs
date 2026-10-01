@@ -23,6 +23,7 @@ human-approved, CI-gated pull request. This keeps velocity high *and* accountabi
 | :--- | :--- | :--- |
 | **KiroCrew** (Operator) | **Brainstorm, plan & govern** (stateful) | Direction-setting, RFCs, Spec authoring, scoping, decision capture, governance ops, PR review, persistent per-project memory |
 | **Kiro IDE** (Executor/Worker, local) | **Execute & verify** (stateful) | Running the stack, DB work, UI dev, `/spec-run`, local verification, pushing `feat/` branches |
+| **Background worker** (Operator-spawned) | **Delegated specialist work** (bounded, gate-free) | Reversible, off-protected-path tasks the Operator delegates in parallel: research, analysis, doc drafts, diagram data, scoped investigations, bulk processing. Returns a result the Operator validates + reports |
 | **Kiro Web** | **Stateless fallback** | Throwaway brainstorm with no persistent memory, no-install access from any machine, config-sync parity checks |
 
 Brainstorming, planning, and governance happen on the **Operator** (KiroCrew) — where iteration
@@ -35,6 +36,21 @@ app. The same repo config (`.kiro/`) travels to all three.
 > (§3, §6). Decisions and coordination default to the Operator; code execution is delegated to the
 > Executor. (This renames and expands the original Web/IDE split: KiroCrew absorbs and extends the
 > former "Kiro Web = brainstorm & plan" role with persistence, crons, and orchestration.)
+
+> **Background-worker lane (gate-free, bounded).** Not everything needs the full `/spec-run → PR →
+> verify → review` cycle. For **bounded, reversible, off-protected-path** specialist work (research,
+> analysis, doc drafts, diagram data, a scoped investigation, bulk processing), the Operator may
+> **spawn a background worker** (`spawn_run`) that runs in parallel and returns a result the Operator
+> validates and reports. **The merge gate is unchanged:** a worker **never pushes `main` and never
+> merges** — if its output is code destined for `main`, it still flows through `/spec-run` + a PR +
+> the human gate. The worker produces the *artifact* (a draft, a branch, a findings doc); the gate
+> still decides what lands. Use the full IDE Executor path for anything that becomes a `main` code change.
+
+> **Workspace isolation.** The Operator and the Executor work in **separate clones** of the repo
+> (e.g. Operator in `cetana-labs/`, the IDE Executor in a sibling `cetana-labs-kiro-ide/`), syncing
+> only through `origin` — never through a shared working tree. This prevents two writers racing on
+> one worktree (the hazard that a shared tree creates when a `/spec-run` build and an Operator edit
+> overlap), and lets the Operator safely spawn background workers without colliding with an IDE run.
 
 ## 3. The loop
 
