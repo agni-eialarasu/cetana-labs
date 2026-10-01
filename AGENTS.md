@@ -79,6 +79,7 @@ Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; com
 - **`/ping-leads`**: Idempotent GitHub issue alerts for stale (> 14 days) / onboarding-pending initiatives (excludes `LAB-000` and completed).
 - **`/audit-doc <file>`** / **`/audit-project [ID]`**: Single-file doc review / whole-project (or portfolio) health sweep.
 - **`log-milestone`** / **`commit-changes`**: Append journal milestones / standardized commits.
+- **`/push-changes`** / **`/commit-and-push-changes`**: Push the **current branch** by explicit name (branch-aware per `RFC-LAB-000-004` — refuses code/`data/`/migration pushes to `main`, validates docs fast-path and hands the human the `main` push, never force-pushes) / commit (via `/commit-changes`) **then** push through that same gate, in one invocation.
 
 **Local & staging infra:**
 - **`/start-local`** / **`/stop-local`** / **`/status-local`**: Bring up / shut down / inspect the local dev stack (PocketBase `:8090` + SvelteKit `:5173`).
