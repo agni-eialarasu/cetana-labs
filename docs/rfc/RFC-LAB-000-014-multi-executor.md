@@ -5,7 +5,7 @@
 | **RFC ID** | `RFC-LAB-000-014` |
 | **Title** | Executor as a multi-instance role; cost-first routing (default Antigravity, escalate to Kiro IDE) |
 | **Author** | Eialarasu (LAB-000 Control Hub) |
-| **Status** | 🟡 Proposed |
+| **Status** | ✅ Accepted (2026-10-01) — model & routing accepted; Antigravity as a live executor is **pending the §7 trial** (and the §8 lockstep is held until it passes) |
 | **Date** | 2026-10-01 |
 | **Builds On** | `RFC-LAB-000-007` (surface roles / work environment), `RFC-LAB-000-009` (sprint lifecycle / gate), `RFC-LAB-000-004` (branching) |
 | **Decision Journal** | Entry 017 (Operator/Executor/fallback), 018 (background-worker lane + workspace isolation) |
