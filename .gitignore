@@ -84,3 +84,7 @@ app/pocketbase/pb_migrations/
 _my_kiro
 _my_works
 
+# KiroCrew CLI runtime settings — machine-local tool state (NOT project config).
+# The rest of .kiro/ (skills, specs, steering) IS committed; only settings/ is local.
+.kiro/settings/
+
