@@ -97,6 +97,18 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 ### 6. Present the review + STOP-and-hold
 - Emit a checklist table: **CI · Frontend deploy (Vercel status) · Scope/hygiene · EARS DoD (per-criterion) · Human verification record · Governance (CHANGELOG entry firsthand-checked + tracker status)**, each ✅ / ⚠️ / ❌ with a one-line note. For **Frontend deploy**, state the *evidence* — the `Vercel` context, its `state`, and that it matched the head SHA (e.g. "Vercel status: `success` on head `abc1234` ✅" or "⚠️ no `Vercel` status for head `abc1234` — unverified, HOLD"). For Governance, state the *evidence* (e.g. "CHANGELOG grep: 1 hit for TSK-0XX ✅" or "⚠️ no CHANGELOG entry yet — add in post-merge tidy").
 - Give a clear **reviewer recommendation**: `READY (human approval required to merge)` or `HOLD — <reasons>`.
+
+### 6b. Record the verdict on the PR (transactional, auditable — `review-record` Spec)
+- After emitting the checklist to chat, **post the same checklist + verdict as a PR comment** so the gate leaves a durable, auditable trace on the artifact itself (`ai-collaboration-model.md` §6). The chat output and the PR comment share one rendered body.
+- **Comment only — NEVER a GitHub review.** Use the **issue-comment** endpoint (`issues/<n>/comments`); do **not** call `pulls/<n>/reviews` (no `APPROVE` / `REQUEST_CHANGES` / even `COMMENT` event). Posting a review would cast a verdict on GitHub and usurp the human gate — forbidden.
+- The body MUST lead with a header stating this is a **recommendation, not an approval — the human still authorizes the merge** (`RFC-LAB-000-009` §4; the Operator never merges), followed by a **dated run line** (`gate run — <ISO date>`) so re-runs are distinguishable, then the per-row evidence table (CI · Frontend deploy (Vercel status) · Scope/hygiene · EARS DoD · Human verification record · Governance lockstep).
+- **HOLD is recorded too:** when the verdict is HOLD, still post the comment (leading with **Verdict: HOLD** + the blocking reasons) so a held PR self-documents *why* on the artifact.
+  ```bash
+  # comment-only — NEVER pulls/<n>/reviews
+  gh api repos/agni-eialarasu/cetana-labs/issues/<n>/comments -f body="$VERDICT_MD"
+  ```
+- **Idempotency (no spam):** the dated run header makes stacked re-runs distinguishable. Optionally (only if it stays simple), find the Operator's prior gate comment by a hidden marker string and update it in place via `gh api --method PATCH repos/agni-eialarasu/cetana-labs/issues/comments/<id> -f body="$VERDICT_MD"` instead of appending a new one.
+- If `gh` fails (auth/rate), surface the error in chat but **still STOP-and-hold** — the chat verdict remains the record of last resort.
 - **STOP.** Ask the human to explicitly approve or request changes. Do **not** merge, approve via API, or push.
 
 ### 7. On explicit human approval only
@@ -104,10 +116,11 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
 - Absent explicit approval, remain held.
 
 ## Rules
-- **Never merge and never post an approving review via the API.** This skill surfaces; the human decides.
+- **Never merge and never post a GitHub review via the API.** This skill surfaces; the human decides. It MAY post an **issue comment** recording the verdict (§6b), but MUST NOT call `pulls/<n>/reviews` (no approve / request-changes / `COMMENT` event) — a review would cast a GitHub verdict and usurp the human gate.
+- **Record the verdict on the PR (§6b):** post the checklist + verdict as an **issue comment**, explicitly labeled recommendation-not-approval with a dated run header. HOLD verdicts are posted too. This is the only repo-write the skill performs, and it is a *comment*, never an action on the merge.
 - **STOP-and-hold is mandatory** — always end at a human decision point.
 - A failing/pending check, an unverifiable EARS criterion, or a missing/failed human-verification record ⇒ **HOLD**, not a soft pass.
 - **Frontend deploy (`BK-023`):** read Vercel's **real** deploy status from the **commit-status** `Vercel` context for the **head SHA** (step 2b) — never trust "Vercel Preview Comments" (comment posting, not deploy) or green GitHub CI as the frontend-deploy signal. Anything other than a `success` bound to the head SHA (failure/error, missing-for-head, or success only on an older SHA) ⇒ **HOLD**.
 - **Verify governance lockstep FIRSTHAND (§5) — never assert it from the PR body or Verification Log.** A missing CHANGELOG entry at review time is a ⚠️ note carried into the post-merge tidy (not auto-HOLD); a *false claim* that lockstep is done **is** a HOLD.
-- Read-only against the repo except for reporting; make no commits.
+- Read-only against the repo (no commits, no merges); the sole write is the PR gate **comment** (§6b) — not a review, not a push.
 - Reads use `gh api` (REST) — the `gh pr`/GraphQL subcommands are unavailable in this environment.
