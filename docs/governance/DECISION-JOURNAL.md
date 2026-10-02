@@ -700,3 +700,33 @@ historical one.
 ### Session meta
 - **Division of labor:** human owned the clone + onboarding + ran the Antigravity validation (the surface the Operator can't reach); Operator authored the contract-check prompt and audited the evidence against §3.
 - **Honest note:** Phase 1 proves the *contract*, not the *economics* — credits-saved and capability-fit are Phase 2's measurement. The Operator's version-anomaly suspicion was wrong and is recorded as such (verify against the current date + the machine, not the training cutoff). Governance/docs fast-path to `main` per `RFC-LAB-000-004`.
+
+---
+
+## Entry 021 — Multi-executor §7 trial COMPLETE: Antigravity shipped a real feature; cost-first routing promoted to standing practice
+
+**Date:** 2026-10-02 · **Contributor(s):** Agni Eialarasu (human-directed — ran the Antigravity build + the human verification + every merge), AI-assisted (authored the Spec + trial prompts, gated the PRs, recorded) · **Mode:** KiroCrew Operator · **Outcome:** `RFC-LAB-000-014` §7 trial complete; cost-first routing (default Antigravity, escalate Kiro IDE) is standing practice; `BK-024` shipped (PR #58 / `TSK-065`)
+
+> _Completes Entry 020 (Phase 1 — contract validation). This records Phase 2 (one real Spec end-to-end on Antigravity) and Phase 3 (the measured findings + the standing-practice decision)._
+
+### D66 — Antigravity passed the §7 trial on a real build; cost-first routing is now standing practice
+- **Trigger:** `RFC-LAB-000-014` §7 required running **one real Spec end-to-end on Antigravity** — measuring credits, wall-clock, review iterations, and contract adherence — before promoting cost-first routing from accepted-model to standing practice.
+- **The trial:** `BK-024` (in-app docs view) — a routine, consumer-facing frontend feature, the archetypal "default → Antigravity (free)" build class (`RFC-LAB-000-014` §4). Spec authored on the Operator (Entry 020), merged merge-first (PR #57), built by **Antigravity** on `feat/bk024-in-app-docs`, PR [#58](https://github.com/agni-eialarasu/cetana-labs/pull/58), human-verified (PASS), gated via `/review-pr`, human-merged (`9936ec5`).
+- **Measured results:**
+  - **Contract adherence — full.** Read the Kiro Spec as its brief; built on a `feat/` branch; wrote `REPORT.md` with the EARS DoD walk + Verification Log; opened the PR via `gh api`; STOP-and-held (never merged, never self-approved); on the rebase used `--force-with-lease` on the feature branch and never touched `main`. Every §3 obligation honored on a *real* build, not just the Phase-1 read-test.
+  - **Cost — zero credits** (Antigravity AI Pro, bundled free) vs. Kiro IDE's firm-budgeted Pro+ credits. The core RFC-014 thesis — route routine builds to the free executor — is validated in practice.
+  - **Speed/quality — ~28 min start→PR, 2 trivial fixups to green** (a `marked` type import; a Prettier format). Clean `pnpm check`/`build`; 5/5 governance pillars green.
+  - **Anticipated risk handled correctly.** The Spec's design (§1.1) flagged the `BK-023` cross-root-globbing risk (reaching the repo `docs/` from `app/web/` under Vite `fs.allow` / Vercel's build context). Antigravity resolved it exactly as anticipated — registered `server.fs.allow: ['../..']` in `vite.config.ts` — and additionally added a `prebuild` `check-docs.js` for deterministic fail-loud, a sound call for the static-adapter SPA.
+- **Decision & rationale:** **Antigravity is promoted from candidate to a standing Executor; cost-first routing is now standing practice** — routine/mechanical/docs-and-skills/low-risk builds default to Antigravity (free); complex/high-stakes/deep-codebase/Kiro-native-dependent builds escalate to Kiro IDE with a one-line reason (`RFC-LAB-000-014` §4). The trial confirmed both halves of the thesis: the saving is real (zero credits) **and** the fit is real (full contract adherence + shippable quality on the first real feature). The gate is unchanged — every PR from either executor still goes through `/review-pr` + the human merge gate; more executors = more throughput, never more merge authority. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-014` §7 satisfied; cost-first routing standing; `BK-024` live; `TSK-065` recorded. The standing lesson + the Working Model artifact (Executor lane showing both executors + the cost-first default) are the lockstep follow-ups.
+
+### Related — Operator coordination lesson: don't merge into `main` while an executor is mid-build
+- **What happened:** while Antigravity was building `BK-024`, the Operator merged an unrelated PR #59 (the Vercel `ignoreCommand` skip) into `main`. Both PRs added `[Unreleased]` CHANGELOG entries, so #58 came back from the build **conflicted** (`mergeable: dirty`) and the `/review-pr` gate correctly HELD on it. Antigravity rebased cleanly (kept both entries) and the gate flipped to READY.
+- **Lesson:** the clone-per-executor isolation (Entry 018 / D63) prevents *worktree* races, but not *`main`-moved-under-you* rebases. With multiple executors in flight, the Operator should **batch or sequence `main` merges** around an active build, or expect (cheap, mechanical) rebases. Recorded as a coordination refinement, not a model flaw — the gate did its job (caught the conflict; nothing bad reached `main`).
+
+### Related — a doc defect the trial surfaced (completes the Entry 020 thread)
+- The Phase-1 validation already caught + fixed the stale `tech.md` nvm note (Entry 020). No new doc defects surfaced in Phase 2.
+
+### Session meta
+- **Division of labor:** human ran the Antigravity build, the human functional verification (incl. the V7 theme toggle Antigravity left for human eyes), and every merge; the Operator authored the Spec + the (now reusable) Antigravity trial/validation/re-sync prompts, gated all three PRs (#57 docs, #59 Vercel-skip, #58 the trial build — HOLD-on-conflict then READY), and recorded. The whole arc stayed inside the Operator/Executor model with the human gate intact throughout.
+- **Honest note:** this is a single-feature trial — strong evidence, not a large sample. Cost-first routing is promoted on the strength of a *clean* first run; if a later complex build on Antigravity shows capability or rework cost that erodes the saving, the routing is revisited on that evidence (the escalation lane to Kiro IDE exists precisely for that). The gate's invariance means a weaker build simply HOLDs — cost routing never relaxes the merge bar.
