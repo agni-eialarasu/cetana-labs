@@ -678,3 +678,25 @@ historical one.
 
 ### Session meta
 - **Pattern worth naming:** this is the second process gap the human caught by *watching the model run* (after the "Kiro Web" wording). Both were fed straight back through the model as Specs/PRs — the system improving itself via its own lifecycle. The human's live attention remains the sharpest gap-detector; automate the record, keep the human watching.
+
+---
+
+## Entry 020 — Multi-executor §7 trial, Phase 1: Antigravity passes the Executor contract (RFC-014 OQ-1 resolved)
+
+**Date:** 2026-10-02 · **Contributor(s):** Agni Eialarasu (human-directed — ran the clone/onboard + the Antigravity validation), AI-assisted (authored the validation prompt, audited the result) · **Mode:** KiroCrew Operator · **Outcome:** `RFC-LAB-000-014` §7 Phase 1 complete; Open Question #1 resolved *yes*; `.kiro/steering/tech.md` stale-nvm line corrected
+
+> _`RFC-LAB-000-014` accepted the multi-executor model but held Antigravity-as-live-executor **pending the §7 trial**. This entry records Phase 1 (contract validation), the first of the trial's three phases (validate → run one real Spec → record)._
+
+### D65 — Antigravity honors the full Executor contract (RFC-014 §3) — adoption gate passed
+- **Trigger:** `RFC-LAB-000-014` §7 requires proving a candidate executor can honor the §3 contract before trusting it with a real build. The human cloned `cetana-labs-antigravity/` + onboarded Antigravity (Phase 1 setup); the Operator authored a **read-only validation prompt** (deliberately not a build — no branch, no push, no PR) covering all six §3 obligations.
+- **Result (audited against §3, not rubber-stamped):** ✅ reads a Kiro Spec as its brief (correctly summarized `review-record` goal/tasks/REPORT); ✅ reads `.kiro/` steering + specs with no Kiro-native loader; ✅ states both branch-discipline rules (path-scoped PR vs fast-path; the absolute no-force-push-`main` floor); ✅ `gh` authed as `agni-eialarasu` with `repo` scope, REST reachable (the PR path); ✅ enumerated the 6 REPORT.md sections; ✅ honored STOP-and-hold (did not branch/push/open anything on a validation task).
+- **Decision & rationale:** **Antigravity is adopted as a candidate Executor** — Phase 1 passes. This **resolves RFC-014 Open Question #1** (*can it read `.kiro/` + the Spec as its brief without a Kiro-native loader?*) → **yes**. It does **not** yet promote cost-first routing to standing practice — that waits on Phase 2 (one real Spec end-to-end, measuring credits + fit) and Phase 3 (record). The gate is unchanged: every PR from Antigravity still goes through `/review-pr` + the human merge gate. _(Contributor: Agni Eialarasu)_
+- **Outcome:** `RFC-LAB-000-014` §7 Phase 1 complete; Phase 2 candidate = `BK-024` in-app docs Spec (authored by the Operator, merge-first, then built on Antigravity as the first real trial build).
+
+### Related — the validation surfaced a real doc defect: the stale `tech.md` nvm note
+- Antigravity reported Node/pnpm on bare Homebrew PATH with **nvm absent** — which contradicted `.kiro/steering/tech.md` ("provided via nvm (`$HOME/.nvm`)… source `nvm.sh`"). The Operator initially flagged Antigravity's version numbers (Node 26, Python 3.14) as implausibly ahead — a **wrong call, anchored to the training cutoff rather than the current date**. Ground-truthing against the live machine (`node -v` → v26.10.0, no `~/.nvm`, Homebrew-managed) and `~/my-works/WORK_MACHINE_GUIDE.md` §4 confirmed Antigravity was **correct**: nvm/Volta were removed 2026-09-30 in a Homebrew consolidation. The steering line was false since then and would mislead every executor's preflight.
+- **Fix:** corrected the `tech.md` toolchain note to the Homebrew reality (docs fast-path). A good first-contact outcome — the trial's whole point is measuring fit, and it immediately caught a stale-config defect that `/spec-run`'s own preflight would also have tripped on.
+
+### Session meta
+- **Division of labor:** human owned the clone + onboarding + ran the Antigravity validation (the surface the Operator can't reach); Operator authored the contract-check prompt and audited the evidence against §3.
+- **Honest note:** Phase 1 proves the *contract*, not the *economics* — credits-saved and capability-fit are Phase 2's measurement. The Operator's version-anomaly suspicion was wrong and is recorded as such (verify against the current date + the machine, not the training cutoff). Governance/docs fast-path to `main` per `RFC-LAB-000-004`.
