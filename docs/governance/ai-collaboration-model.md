@@ -147,6 +147,7 @@ The forward experiment: delegate a well-scoped sprint to an agent, human-gated t
 - **CI-gated:** portfolio + 5-pillar + build checks must pass before merge.
 - **Lockstep:** CHANGELOG / BACKLOG / journal / `data/` stay synchronized (validator-enforced).
 - **Recorded gate verdict:** `/review-pr` posts its checklist + verdict **transactionally as a PR comment** (a recommendation, never a GitHub approving review — the human still authorizes the merge), so every gate run is auditable on the artifact, not just in chat.
+- **In-app docs are consumer surfaces (`BK-024`):** Any repo doc surfaced in the product's `/docs` view (e.g. `user-guide.md`, `project-owner-guide.md`) is a consumer surface. Editing an included doc carries direct UX/product impact (it changes what leads and leadership see in the product), so edits to allow-listed docs must be reviewed with that consequence in mind.
 - **Auditable reasoning:** the Decision Journal records *why*, with honest failure/recovery notes.
 - **Linear history:** squash-merge, branch deletion, no force-push to `main`.
 
