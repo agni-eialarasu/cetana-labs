@@ -9,7 +9,7 @@
 - **CI:** GitHub Actions — `ci-validate.yml` (Python validators + registry/pb-schema/status checks + SvelteKit build). **Deploy:** SvelteKit → **Vercel**, PocketBase → **Railway** (`RFC-LAB-000-011`); the old `deploy-pages.yml` GitHub-Pages dashboard was retired at M5.
 
 ## Toolchain notes
-- **Node/pnpm** are provided via **nvm** (`$HOME/.nvm`) and are NOT on the default PATH — source `nvm.sh` before `node`/`pnpm`.
+- **Node/pnpm** are **Homebrew-managed** and on the default PATH (`/opt/homebrew/bin/node`, `/opt/homebrew/bin/pnpm`) — no `nvm`. (nvm/Volta were removed 2026-09-30 in a toolchain consolidation onto Homebrew; see `~/my-works/WORK_MACHINE_GUIDE.md` §4.) Just run `node`/`pnpm` directly.
 - **PocketBase** binary is not committed; fetched by `.devcontainer/setup-pocketbase.sh`. `pb_data/` and the binary are gitignored.
 - Local dev runs on a machine (Kiro IDE Executor) or Codespace — not the KiroCrew Operator or the Kiro Web fallback (neither runs persistent servers).
 
