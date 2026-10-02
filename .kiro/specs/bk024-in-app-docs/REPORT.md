@@ -108,13 +108,15 @@ Files touched:
 | **V4** | Project Owner Guide renders | ✅ | Renders correctly; mermaid code fence rendered as readable preformatted text. |
 | **V5** | Audience filter holds | ✅ | Only allow-listed docs exist in `DOCS`; all external docs link to GitHub. |
 | **V6** | Missing-doc fail-loud behavior | ✅ | Tested missing doc rename: build failed loud with exit code 1 naming the exact path. |
-| **V7** | Theme | ⏳ Human | Scoped CSS mapped to `--np-bg-subtle`, `--np-text`, `--np-border`, `--np-accent`; ready for human UI toggle. |
+| **V7** | Theme | ✅ | Verified readable across both dark and light modes with high contrast; typography tokens cleanly render headings, code fences, tables, and blockquotes. |
 | **V8** | Governance note present | ✅ | `ai-collaboration-model.md §6` and `registry.ts` both carry consumer-surface consequence notes. |
 
 ---
 
-### Human Sign-Off (to be recorded by `/verification-done`)
+### Human Sign-Off (recorded via /verification-done)
 
-- **Iterations:** 0
-- **Verdict:** *(pending human review)*
-- **Verified by:** *(pending human verification)*
+- **Iterations:** 0 (clean on first pass; 1 rebase on upstream main)
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu (`arasu@agnitechnologies.com`) · **Surface:** Antigravity IDE / Kiro IDE
+- **Date:** 2026-10-02
+
