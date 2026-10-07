@@ -49,6 +49,7 @@ Activate this skill whenever the user invokes:
 2. Update `**Last Updated**` to today's date (`YYYY-MM-DD`).
 3. Update `### 2. Latest Deliveries & Business Wins` highlighting the major achievements of the closed sprint.
 4. Update `### 3. Current Focus & Next Milestone` with the newly planned sprint goals.
+5. **Regenerate the generated `data/status.json` artifact** (it is derived from `STATUS.md`, never hand-edited — see `.kiro/steering/structure.md`): `python3 scripts/generate_status_json.py`. **Skipping this leaves `data/status.json` stale and CI's `generate_status_json.py --check` FAILS** (the local `validate_portfolio.py` does NOT run that check, so the staleness only surfaces on the wire — this bit the SPRINT-12 close, PR #69).
 
 ### Step 5: Append Milestone to `journal.md`
 Append a reverse-chronological entry to `projects/LAB-000-cetana-labs/journal.md`:
@@ -59,11 +60,17 @@ Append a reverse-chronological entry to `projects/LAB-000-cetana-labs/journal.md
 ```
 
 ### Step 6: Validate Integrity & Commit
+Mirror CI exactly (the local `validate_portfolio.py` alone is NOT enough — CI also runs the generated-artifact `--check`s):
 ```bash
 python3 scripts/validate_portfolio.py
+python3 scripts/generate_status_json.py --check    # must be green — Step 4.5 keeps it in sync
+python3 scripts/generate_registry.py --check
+python3 scripts/generate_pb_schema.py --check
+# (or simply: just validate-local — runs all of the above)
 git add .
 git commit -m "feat(governance): closeout <sprint_id> and release v<version>"
-git push origin main
+# Agent NEVER pushes main — print the push for the human (RFC-LAB-000-004 floor):
+echo "git push origin main   # ← run this yourself (GitHub Desktop)"
 ```
 
 ### Step 7: Present Preview
