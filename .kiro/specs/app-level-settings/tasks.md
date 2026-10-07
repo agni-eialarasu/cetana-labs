@@ -36,8 +36,8 @@
 - [x] **T8 — Quality gates + no-regression (R6)**
   - 5 validators (incl. `generate_pb_schema.py --check`), `make validate-local`, `pnpm --dir app/web check && build`. No secret in settings; existing collections unaffected.
 
-- [ ] **T9 — Commit, open PR, emit Human Verification Plan, STOP**
+- [x] **T9 — Commit, open PR, emit Human Verification Plan, STOP**
   - Open PR into `main` via `gh api`; CI green; emit §4b (V1–V7; V2/V4 headline). STOP in `IN_VERIFICATION`. **Never merge.**
 
-- [ ] **T10 — After human verification passes: `/verification-done`**
+- [x] **T10 — After human verification passes: `/verification-done`**
   - Human runs V1–V7 on the local stack (esp. V2 public read renders app_name, V3 default fallback, V4 superuser-only write). Fixes ride the same PR. On pass → `/verification-done` → `IN_REVIEW` → `/review-pr`.
