@@ -241,7 +241,27 @@ App settings are runtime-configurable values read by the SPA (starting with `app
 4. **RBAC Posture:**
    - `listRule` / `viewRule`: **public** (`""`) so branding renders pre-auth on public dashboards.
    - `createRule` / `updateRule` / `deleteRule`: **superuser-only** (`null`). Non-superuser writes are denied. General admin write paths require the admin role (`BK-014`).
-5. **Reserved Logo Keys:** `logo_icon_url`, `logo_small_url`, `logo_medium_url` are reserved for `BK-013` (branding/white-labeling) and intentionally not seeded in `BK-012`. Settings must strictly contain non-sensitive configuration — **never store secrets in settings**.
+5. **Logo Settings (`BK-013`):** `logo_icon_url`, `logo_small_url`, and `logo_medium_url` are seeded with empty string defaults (`type: "url"`, `group: "branding"`). When empty, the app renders text branding only. Settings must strictly contain non-sensitive configuration — **never store secrets in settings**.
+
+### 5.3 White-Labeling a Deploy (`BK-013` / `RFC-LAB-000-011`)
+
+A per-client or white-labeled deployment can customize the app name, description, and logo set **without a code change**:
+
+1. **Branding Settings Available:**
+   - `app_name`: String (default: `'Cetana Labs Control Hub'`). Rendered in page titles, header branding, and dashboard masthead.
+   - `app_description`: String (default: `'Protocol Engine'`). Rendered in masthead subtitle and metadata.
+   - `logo_small_url`: URL reference to an asset (e.g., `/brand/logo.svg` or hosted CDN). Displayed in header navigation and dashboard masthead.
+   - `logo_icon_url`: URL reference to a square icon asset. Used as fallback icon in headers or compact footers.
+   - `logo_medium_url`: URL reference to a medium-sized logo asset.
+
+2. **Two Deployment Paths:**
+   - **Live PocketBase Path (`VITE_PB_SOURCE=auto` or `pocketbase`):**
+     Update the records in the `settings` collection directly via PocketBase Admin UI (`/_/`) or seed them via `scripts/pb_import.py --apply`. The SPA fetches settings at runtime on load.
+   - **Static Snapshot Path (`VITE_PB_SOURCE=snapshot`):**
+     Edit `data/settings.json`, run `node app/web/scripts/copy-data.js` (or `pnpm build`), and deploy the static build. No database connection required.
+
+3. **Data Change, Not a Code Change:**
+   Branding is purely data-driven. The accessor (`SettingsAccessor`) reads settings with built-in fallbacks. When logo URLs are unset or empty, the UI displays text branding only with zero broken images and zero layout shift.
 
 ---
 

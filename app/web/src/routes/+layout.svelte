@@ -19,11 +19,22 @@
 </script>
 
 <div class="min-h-screen flex flex-col bg-canvas text-ink">
-  <!-- Global auth bar (M2, R4). Present on every route; never gates the public dashboard. -->
-  <!-- Full-bleed border/background; inner container matches the page body width so the -->
-  <!-- control aligns to the body's right edge (not the browser edge). -->
+  <!-- Global auth bar (M2, R4) + app branding header (BK-013 / R3.1) -->
   <div class="border-b border-line bg-panel/40">
-    <div class="mx-auto flex max-w-content justify-end px-4 py-2 sm:px-6 lg:px-8">
+    <div class="mx-auto flex max-w-content items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
+      <a
+        href="{base}/"
+        class="flex items-center gap-2 text-sm font-semibold text-ink hover:text-brand transition-colors"
+      >
+        {#if settings.logoSmallUrl() || settings.logoIconUrl()}
+          <img
+            src={settings.logoSmallUrl() || settings.logoIconUrl()}
+            alt={settings.appName()}
+            class="h-6 w-auto"
+          />
+        {/if}
+        <span>{settings.appName()}</span>
+      </a>
       <AuthControl />
     </div>
   </div>
@@ -32,12 +43,21 @@
     {@render children()}
   </div>
 
-  <!-- Minimal consumer-facing footer (BK-024 R2; branded footer chrome deferred to BK-013) -->
+  <!-- Minimal consumer-facing footer (BK-024 R2 / BK-013 branding) -->
   <footer class="border-t border-line bg-panel/20 py-6 mt-12">
     <div
       class="mx-auto flex max-w-content items-center justify-between px-4 sm:px-6 lg:px-8 text-xs text-muted"
     >
-      <div>{settings.appName()}</div>
+      <div class="flex items-center gap-2">
+        {#if settings.logoIconUrl() || settings.logoSmallUrl()}
+          <img
+            src={settings.logoIconUrl() || settings.logoSmallUrl()}
+            alt={settings.appName()}
+            class="h-4 w-auto"
+          />
+        {/if}
+        <span>{settings.appName()}</span>
+      </div>
       <div class="flex items-center gap-4">
         <a href="{base}/docs" class="text-ink-secondary hover:text-ink transition-colors font-medium">Docs</a>
         <a

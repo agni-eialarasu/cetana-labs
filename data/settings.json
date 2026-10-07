@@ -10,5 +10,23 @@
     "value": "Protocol Engine",
     "type": "string",
     "group": "branding"
+  },
+  {
+    "key": "logo_icon_url",
+    "value": "",
+    "type": "url",
+    "group": "branding"
+  },
+  {
+    "key": "logo_small_url",
+    "value": "",
+    "type": "url",
+    "group": "branding"
+  },
+  {
+    "key": "logo_medium_url",
+    "value": "",
+    "type": "url",
+    "group": "branding"
   }
 ]
