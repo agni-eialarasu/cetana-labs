@@ -110,3 +110,21 @@ Files touched:
 5. **References updated**: confirm `.kiro/skills/deploy-adhoc/SKILL.md`, `.kiro/skills/spec-run/SKILL.md`, `.kiro/skills/review-pr/SKILL.md` reference `just`.
 6. **Reversibility**: verify that the commit can be cleanly reverted if needed.
 7. **Scope**: check `git diff` to confirm only runner files, 3 skills, docs, and the Spec report are touched.
+
+---
+
+## 5. Verification Log — 2026-10-07 (PR #63)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1** `just` (bare) / `just --list` | ✅ | Bare `just` and `just --list` executed cleanly; all 20 recipes displayed with complete documentation headers. |
+| **V2** `just validate-local` parity | ✅ | Executed in terminal; all 5 Python validation gates and SvelteKit checks passed cleanly with 0 errors / 0 warnings and build succeeded in 2.42s, matching baseline. |
+| **V3** `just help` | ✅ | Executed in terminal; forwarded cleanly to `@just --list`. |
+| **V4** Core names match Nexus | ✅ | Confirmed exact 7 core recipe names matching Nexus Pulse (`start-local`, `stop-local`, `status-local`, `validate-local`, `validate-staging`, `clean-data`, `help`). |
+| **V5** Shim works + pure | ✅ | Verified `make` forwards seamlessly to `just`; zero task logic in Makefile. |
+| **V6** References updated | ✅ | Verified `deploy-adhoc`, `spec-run`, `review-pr`, `AGENTS.md`, `tech.md`, and `developer-guide.md` reference `just`. |
+| **V7** Scope & Reversibility | ✅ | Confirmed diff is restricted to runner files, skills, docs, and report; clean single-commit revert path intact. |
+
+- **Iterations:** 0 (passed on first run with zero fixups required).
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu · **Surface:** Antigravity Executor

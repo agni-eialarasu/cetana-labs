@@ -43,4 +43,4 @@
 - [x] Do **not** build the convergence ledger (R7.3 — separate follow-up).
 
 ## T6 — Open PR (STOP-and-hold; never merge)
-- [ ] Push `chore/adopt-just-task-runner`; open the PR via `gh api` (REST, per AGENTS.md). STOP for human verification (`/verification-done`) → `/review-pr` → the human gate. Never merge.
+- [x] Push `chore/adopt-just-task-runner`; open the PR via `gh api` (REST, per AGENTS.md). STOP for human verification (`/verification-done`) → `/review-pr` → the human gate. Never merge.
