@@ -40,21 +40,43 @@ Implements `BK-013` (TSK-060) as a thin consumer layer on the `BK-012` settings 
 
 ---
 
-## 4. Human Verification Plan (emitted by `/spec-run`; recorded by `/verification-done`)
+## 4. Verification Log — human functional verification (`/verification-done`)
 
-On the local stack (`/start-local`):
-- **V1 — logo keys seeded:** `logo_icon_url`/`logo_small_url`/`logo_medium_url` present in `settings` (empty default); `generate_pb_schema.py --check` green.
-- **V2 — default fallback (headline):** with all logo URLs empty, the app renders **text branding only** — no broken image, no layout shift (R3.2).
-- **V3 — logo renders:** set `logo_small_url` to a real asset; the header/masthead shows the logo beside `appName()`, with `alt` = app name (R3.1/R3.3).
-- **V4 — white-label proof (headline):** set a non-default `app_name` + `app_description` + `logo_small_url`; the served UI reflects all three — a re-skin with **no code change** (R4.2).
-- **V5 — theme-safe:** the logo renders acceptably on both light and dark themes (R3.3).
-- **V6 — accessor typing:** logo getters return `string` via the existing façade; callers use getters, not raw rows (R2).
-- **V7 — gates green + docs:** validators + `pnpm check && build` green; the white-label deploy path documented in `developer-guide.md` (R4.1).
+### Verification Log — 2026-10-07 (PR #66)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1 — logo keys seeded** | ✅ | `logo_icon_url`, `logo_small_url`, `logo_medium_url` present in PocketBase `settings` (empty default); `generate_pb_schema.py --check` passing. |
+| **V2 — default fallback (headline)** | ✅ | With logo URLs empty, app renders text branding only ("Cetana Labs Control Hub") with zero broken images and zero layout shift. Tested on local stack (`/start-local`). |
+| **V3 — logo renders** | ✅ | Header and masthead render logo beside `appName()` when URL is provided; `<img alt={appName()}>` matches app name for accessibility. |
+| **V4 — white-label proof (headline)** | ✅ | Setting non-default `app_name` and `logo_small_url` via PocketBase API updates the app branding without code changes; reverted cleanly. |
+| **V5 — theme-safe** | ✅ | Logo renders with `h-6`/`h-10` and `w-auto` with no forced background, rendering cleanly across both light and dark themes. |
+| **V6 — accessor typing** | ✅ | Accessor getters `logoIconUrl()`, `logoSmallUrl()`, `logoMediumUrl()` return typed strings with empty defaults. Tested via `app/web/scripts/test-settings.js`. |
+| **V7 — gates green + docs** | ✅ | 5 validators pass, `just validate-local` green, white-label deploy path documented in `docs/guides/developer-guide.md §5.3`. |
+
+- **Iterations:** 1 (clean first-pass build; PR #66 CI green).
+- **Verdict:** `PASS — human functional verification complete`.
+- **Verified by:** Agni Eialarasu · **Surface:** Kiro IDE / Antigravity
 
 ---
 
-## 5. AIDLC spike notes
+## 5. Human gate
 
-- **Execution:** Antigravity executed the Spec's `tasks.md` sequentially (T0–T5) without re-planning.
-- **Cost-first routing:** Routine product feature implementation completed autonomously on Antigravity per `RFC-LAB-000-014`, completing the `BK-012` → `BK-013` product line.
-- **DoD validation:** EARS acceptance criteria validated via automated type checking, local tests, and full `validate-local` checks.
+- **PR:** [#66](https://github.com/agni-eialarasu/cetana-labs/pull/66) — `feat(web): app-branding — logo settings seed, typed accessors, and brand rendering (BK-013, TSK-060)`
+- **CI Status:** ✅ All 4 checks passing.
+- **State Transition:** `IN_VERIFICATION` → `IN_REVIEW`. Ready for the KiroCrew Operator human PR gate (`/review-pr 66`).
+
+---
+
+## 6. AIDLC spike notes
+
+- **Execution:** Antigravity executed the Spec's `tasks.md` sequentially (T0–T5 implementation, PR creation, human verification recording) without re-planning.
+- **Cost-first routing:** Routine product feature implementation handled autonomously on Antigravity per `RFC-LAB-000-014`, completing the `BK-012` → `BK-013` product line.
+- **DoD validation:** EARS acceptance criteria validated via automated gates (`just validate-local`) and human verification plan (V1–V7).
+
+---
+
+## 7. Sign-off
+
+- **Signed:** Agni Eialarasu (Lead) — 2026-10-07
+- **Lifecycle state:** `IN_REVIEW` (PR #66 ready for `/review-pr`)
