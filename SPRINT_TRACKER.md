@@ -24,13 +24,13 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 ---
 
-## 🎯 Current Sprint: Sprint 10 — Post-MVP Hardening & First Product Feature
+## 🎯 Current Sprint: Sprint 12 — First Post-MVP Product Features (carried forward)
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-11` |
-| **Duration** | 2026-12-31 to 2027-01-14 (2 Weeks) |
-| **Sprint Goal** | Begin the first post-MVP **product** capabilities on the now-hardened, auto-deploying platform: **`BK-012`** app-level settings (foundation) → **`BK-013`** branding/white-labeling (consumes it), in that order. In **parallel**, open the **`BK-015`** (AI Assistant — Ask-the-Portfolio) **RFC + feasibility spike** to de-risk the flagship for a later build (no build this sprint). Carry-forward ecosystem integrations (`BK-004`, `BK-001`). |
+| **Sprint ID** | `SPRINT-12` |
+| **Duration** | 2026-10-07 to 2026-10-21 (2 Weeks) |
+| **Sprint Goal** | Deliver the first post-MVP **product** features carried forward from SPRINT-11, on the now process-hardened + multi-executor platform: **`BK-012`** app-level settings (`/spec-run app-level-settings` — Spec already on `main`) → **`BK-013`** branding/white-labeling (consumes it), in that order. In **parallel**, open the **`BK-015`** (AI Assistant — Ask-the-Portfolio) **RFC + feasibility spike** (no build this sprint). Carry-forward ecosystem integrations (`BK-004`, `BK-001`). |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -38,22 +38,27 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-057` | `BK-012` — **app-level settings** (RFC + Spec): configurable settings collection + typed accessors, minimal now, grows over time; **foundation for `BK-013`**. **RFC-LAB-000-013** + Spec `app-level-settings` merged to `main` (PR #50; Journal Entry 015). Key/value collection + typed accessor façade; public read, superuser-only write; mechanism-only (logo/branding UI → BK-013). Ready for `/spec-run app-level-settings`. **[SPRINT-11 headline #1]** | P1 | Eialarasu | ✅ Ready | 2027-01-07 |
-| `TSK-060` | `BK-013` — **branding & white-labeling** (Spec): app name (default repo name), description, logo set (icon/small/medium) — **consumes `BK-012` settings**; pre-req for client deployments. Sequenced *after* BK-012. **[SPRINT-11 headline #2]** | P2 | Eialarasu | 📋 Backlog | 2027-01-14 |
-| `TSK-061` | `BK-015` — **AI Assistant RFC + feasibility spike** (parallel track): author the RFC (index strategy, model, cost, data boundaries, where it runs) + a spike to de-risk. **Scope = RFC + spike only, NOT the build** (flagship, highest effort — build in a later sprint). | P1 | Eialarasu | 📋 Backlog | 2027-01-14 |
-| `TSK-062` | `BK-023` — **live frontend deploy fix** (found via live staging screenshot): (1) **ops/urgent** — redeploy current `main` to Vercel Production (the BK-018 redirect fix is on `main`/`dd3ea0c` but the live bundle is stale → sign-in still hits `/api/realtime` 400); re-verify no `realtime` + redirect→`/oauth/callback`. (2) **lifecycle** — verify+document Vercel Production Branch = `main` (the frontend "merge=deploy" half was assumed, never verified — backend was proven via BK-022); optional live-bundle staleness check. **✅ Part 1 DONE (PRs #51 `//`-key + #52 SPA-fallback rewrite): live-verified signed-in on `cetana-labs.vercel.app`, `/api/realtime`=0 — BK-018 fix proven live. Part 2 (real Vercel-build signal into the `/review-pr` gate) split out below.** | P1 | Eialarasu | 🔧 Part 1 Done / Part 2 open | 2027-01-07 |
-| `TSK-063` | `BK-023` **part 2** — close the gate blind spot: `/review-pr` trusts the "Vercel Preview Comments" check, which is **NOT** the Vercel build status, so 3 stacked frontend-deploy failures (`//` key → stale bundle → SPA 404) passed the gate unseen. Wire a **real Vercel-build signal** into the gate and/or a **post-deploy live-bundle check** (assert the deployed bundle is current + reachable). Honors "no extra pipeline for live" — a real signal, not a pipeline. **Built via Spec `fix-bk023-frontend-deploy-signal`: `/review-pr` reads Vercel's real commit-status (`Vercel` context, head-SHA-matched) + `scripts/verify-live-frontend.sh` live-bundle backstop (ops-alert, not a gate); branch-protection [HUMAN]-documented. PR #54 open — awaiting human verification.** | P1 | Eialarasu | ✅ Done | 2027-01-07 |
-| `TSK-064` | `BK-` (governance/DX) — **review-record**: make the `/review-pr` gate verdict **transactional/auditable** — the gate posts its checklist + verdict as a **PR comment** (recommendation, **not** a GitHub approving review; dated run header for idempotency; HOLD recorded too). Comment-only (never `pulls/<n>/reviews`), preserving the human gate. Edits the `review-pr` skill + `ai-collaboration-model.md §6` lockstep. Surfaced reviewing PR #54 (one-off manual comment); this Spec makes it standard. **Built via Spec `review-record` on the Kiro IDE Executor; PR open — awaiting human verification.** | P2 | Eialarasu | ✅ Done | 2027-01-14 |
-| `TSK-065` | `BK-024` — **in-app docs view** (Spec `bk024-in-app-docs`): consumer-facing docs (`/docs` Help/About route, doc picker sidebar, theme-aware prose render, build-time import + breadcrumb strip + relative link rewrite, footer link, R6.1 governance note). **Built via Spec `bk024-in-app-docs` on Antigravity (RFC-014 §7 trial — first real multi-executor build); human-verified PASS, gated, merged [PR #58].** | P3 | Antigravity (Executor) | ✅ Done | 2027-01-14 |
-| `TSK-066` | `BK-025` — **adopt `just` task runner** (cross-repo DX standard): replace `make` with a `justfile` leading with the shared Agni core (7 recipes, identical names to Nexus Pulse), Cetana extras below; `make` kept as a thin forwarding shim for one sprint (reversible via revert). Updates the 3 skills referencing `make` + docs; parity oracle (`just validate-local` == `make validate-local` outcome). **Built via Spec `adopt-just-task-runner` on Antigravity (routine/mechanical, cost-first default per RFC-014); human-verified PASS, gated, merged [PR #63].** Completes the Agni `just` standard across repos (Nexus ✅ + Cetana ✅). | P2 | Antigravity (Executor) | ✅ Done | 2027-01-14 |
-| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2027-01-14 |
-| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2027-01-14 |
+| `TSK-057` | `BK-012` — **app-level settings** (RFC + Spec): configurable settings collection + typed accessors, minimal now, grows over time; **foundation for `BK-013`**. **RFC-LAB-000-013** + Spec `app-level-settings` merged to `main` (PR #50; Journal Entry 015). Key/value collection + typed accessor façade; public read, superuser-only write; mechanism-only (logo/branding UI → BK-013). **Ready for `/spec-run app-level-settings`** (carried from SPRINT-11). **[SPRINT-12 headline #1]** | P1 | Eialarasu | ✅ Ready | 2026-10-21 |
+| `TSK-060` | `BK-013` — **branding & white-labeling** (Spec): app name (default repo name), description, logo set (icon/small/medium) — **consumes `BK-012` settings**; pre-req for client deployments. Sequenced *after* BK-012. (carried from SPRINT-11) **[SPRINT-12 headline #2]** | P2 | Eialarasu | 📋 Backlog | 2026-10-21 |
+| `TSK-061` | `BK-015` — **AI Assistant RFC + feasibility spike** (parallel track): author the RFC (index strategy, model, cost, data boundaries, where it runs) + a spike to de-risk. **Scope = RFC + spike only, NOT the build** (flagship, highest effort — build in a later sprint). (carried from SPRINT-11) | P1 | Eialarasu | 📋 Backlog | 2026-10-21 |
+| `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2026-10-21 |
+| `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2026-10-21 |
 
-> **Open loose end (auto-closing, no work):** `automate-staging-deploy` **V2** (path filter *skips* a non-backend merge) is still unobserved — both BK-021/BK-022 PRs touched the workflow file. The next docs/frontend-only merge to `main` confirms it naturally (`ci-validate` runs, `Deploy Backend (Railway)` does not).
+> **Candidate (not yet scheduled):** build the **convergence ledger** (`docs/governance/CONVERGENCE-LEDGER.md`) — now that two cross-repo standards have converged (S13 `/command` vocabulary + S14/BK-025 `just` runner, both Nexus ✅ + Cetana ✅), there's concrete content for the single cross-repo adoption view. Proposed-not-built per the cross-repo-structure decision.
 
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 11: Process-Hardening & Multi-Executor Convergence (2026-10-07) — `v0.13.0`
+- **Planned goal (carried forward):** first post-MVP product features — `BK-012` app-level settings (`TSK-057`, ✅ Ready/un-built) → `BK-013` branding (`TSK-060`) + `BK-015` AI-assistant RFC (`TSK-061`). The sprint **pivoted** into process/DX hardening + the multi-executor model (work that de-risks those builds); product items carry to SPRINT-12.
+- **`TSK-062` (`BK-023` pt1):** live frontend-deploy fix — `//`-key + SPA-fallback rewrite; live-verified signed-in on Vercel [PRs #51/#52].
+- **`TSK-063` (`BK-023` pt2, Spec `fix-bk023-frontend-deploy-signal`):** closed the gate blind spot — `/review-pr` now reads Vercel's **real** commit-status (head-SHA-matched) + a `verify-live-frontend.sh` live-bundle backstop [PR #54].
+- **`TSK-064` (review-record, Spec `review-record`):** made the gate verdict transactional — `/review-pr` posts its checklist+verdict as a PR **comment** (recommendation, never a GitHub review; HOLD recorded too) [PR #56]. Built on the Kiro IDE Executor.
+- **`TSK-065` (`BK-024`, Spec `bk024-in-app-docs`):** in-app `/docs` consumer view (build-time markdown import, breadcrumb strip, link rewrite, footer link) [PR #58]. **First real Antigravity build (RFC-014 §7 trial).**
+- **`TSK-066` (`BK-025`, Spec `adopt-just-task-runner`):** replaced `make` with a `justfile` leading with the shared Agni 7-recipe core (identical names to Nexus); `make`→shim; parity-oracle verified [PR #63]. **Second clean Antigravity build.** Completes the Agni `just` standard across repos.
+- **Governance:** Operating model built (4 lanes: Operator / Executor(s) / background worker / Web fallback) + 3 living diagram artifacts; `/push-changes`+`/commit-and-push-changes` skills [PR #53]; **RFC-LAB-000-014 accepted** (multi-executor cost-first routing — Antigravity default, Kiro IDE escalation; §7 trial complete, Entry 021); Decision Journal through Entry 021.
+- **Net:** the AIDLC *process itself* hardened and proved extensible — two independent executors, auditable gate verdicts, a real frontend-deploy signal, and a cross-repo toolchain standard. The flagship product features are now de-risked and queued for SPRINT-12.
 
 ### Sprint 10: Post-MVP Hardening — 0.40 OAuth Fix + Deploy Automation (`done`=live) (2026-09-30) — `v0.12.0`
 - **`TSK-055` (`BK-018` spike):** root-caused PB 0.40 OAuth-through-Railway failure; chose the redirect flow [PR #39].

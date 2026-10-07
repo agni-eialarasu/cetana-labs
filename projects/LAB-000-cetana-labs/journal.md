@@ -16,6 +16,16 @@
 
 ## 📅 Milestone Log
 
+### [2026-10-07] Milestone: Sprint 11 Closeout & v0.13.0 — Process-Hardening & Multi-Executor Convergence
+- **Delivered Capabilities**:
+  - **Multi-executor model (`RFC-LAB-000-014`, accepted)** — Executor is a role with N instances; cost-first routing defaults routine/mechanical builds to **Antigravity (free)**, escalates to Kiro IDE with reason. §7 trial complete (Entry 021).
+  - **Two clean Antigravity builds** proving the model: `BK-024` in-app `/docs` view [PR #58] and `BK-025` `just` task-runner adoption [PR #63].
+  - **Cross-repo `just` standard complete** — identical 7-recipe core in Nexus Pulse + Cetana Labs; parity-oracle verified.
+  - **Gate hardened** — `BK-023` pt2: `/review-pr` reads Vercel's **real** head-SHA-bound commit-status + a live-bundle backstop [PR #54]; `review-record`: the gate verdict is now an auditable PR comment (recommendation, never a GitHub review) [PR #56].
+  - **Operating model + tooling** — 4-lane model (Operator / Executor(s) / background worker / Web fallback) + 3 living diagram artifacts; `/push-changes` + `/commit-and-push-changes` skills [PR #53]; Decision Journal through Entry 021.
+- **Honest sprint note**: the *planned* product goal (`BK-012`→`BK-013`, `BK-015` RFC) was **not** delivered — the sprint pivoted into process/DX hardening that de-risks those builds. Planned items carry forward to SPRINT-12.
+- **Next Horizon (SPRINT-12)**: deliver the carried-forward product features — `BK-012` app-level settings (`/spec-run app-level-settings`) → `BK-013` branding; open the `BK-015` AI-Assistant RFC + spike in parallel.
+
 ### [2026-09-30] Milestone: Sprint 10 Closeout & v0.12.0 — Post-MVP Hardening (`done` = live)
 - **Delivered Capabilities**:
   - **`BK-018` fixed** — GitHub sign-in switched to the redirect `authWithOAuth2Code` flow (no `/api/realtime`); PocketBase un-pinned **0.28.4 → 0.40.4**; verified V1–V8 on a throwaway 0.40 Railway [PR #46].
