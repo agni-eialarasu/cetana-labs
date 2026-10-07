@@ -53,9 +53,18 @@
   <!-- Header -->
   <header class="mb-8 flex flex-col gap-4 border-b border-line pb-6">
     <div class="flex flex-wrap items-start justify-between gap-4">
-      <div>
-        <h1 class="text-3xl font-bold tracking-tight text-ink">{settings.appName()}</h1>
-        <p class="mt-1 text-sm text-muted">{settings.appDescription()}</p>
+      <div class="flex items-center gap-3">
+        {#if settings.logoSmallUrl() || settings.logoMediumUrl() || settings.logoIconUrl()}
+          <img
+            src={settings.logoSmallUrl() || settings.logoMediumUrl() || settings.logoIconUrl()}
+            alt={settings.appName()}
+            class="h-10 w-auto"
+          />
+        {/if}
+        <div>
+          <h1 class="text-3xl font-bold tracking-tight text-ink">{settings.appName()}</h1>
+          <p class="mt-1 text-sm text-muted">{settings.appDescription()}</p>
+        </div>
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <ThemeToggle />

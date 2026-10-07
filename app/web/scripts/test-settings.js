@@ -3,7 +3,10 @@ import assert from 'node:assert/strict';
 
 const SETTINGS_DEFAULTS = {
   app_name: 'Cetana Labs Control Hub',
-  app_description: 'Protocol Engine'
+  app_description: 'Protocol Engine',
+  logo_icon_url: '',
+  logo_small_url: '',
+  logo_medium_url: ''
 };
 
 function castSettingValue(value, type, fallback) {
@@ -52,6 +55,18 @@ class TestSettingsAccessor {
     return this.get('app_description', SETTINGS_DEFAULTS.app_description);
   }
 
+  logoIconUrl() {
+    return this.get('logo_icon_url', SETTINGS_DEFAULTS.logo_icon_url);
+  }
+
+  logoSmallUrl() {
+    return this.get('logo_small_url', SETTINGS_DEFAULTS.logo_small_url);
+  }
+
+  logoMediumUrl() {
+    return this.get('logo_medium_url', SETTINGS_DEFAULTS.logo_medium_url);
+  }
+
   typed(key, fallback) {
     return this.get(key, fallback);
   }
@@ -61,6 +76,9 @@ class TestSettingsAccessor {
 const empty = new TestSettingsAccessor([]);
 assert.equal(empty.appName(), 'Cetana Labs Control Hub');
 assert.equal(empty.appDescription(), 'Protocol Engine');
+assert.equal(empty.logoIconUrl(), '');
+assert.equal(empty.logoSmallUrl(), '');
+assert.equal(empty.logoMediumUrl(), '');
 assert.equal(empty.get('nonexistent', 'fallback'), 'fallback');
 
 // 2. Empty or whitespace value returns default (R3.2 / V3)
@@ -70,10 +88,16 @@ assert.equal(withEmptyValue.appName(), 'Cetana Labs Control Hub');
 // 3. Seeded values
 const seeded = new TestSettingsAccessor([
   { key: 'app_name', value: 'Custom Hub', type: 'string' },
-  { key: 'app_description', value: 'Custom Description', type: 'string' }
+  { key: 'app_description', value: 'Custom Description', type: 'string' },
+  { key: 'logo_small_url', value: '/static/custom-logo.svg', type: 'url' },
+  { key: 'logo_icon_url', value: '/static/custom-icon.svg', type: 'url' },
+  { key: 'logo_medium_url', value: '/static/custom-medium.svg', type: 'url' }
 ]);
 assert.equal(seeded.appName(), 'Custom Hub');
 assert.equal(seeded.appDescription(), 'Custom Description');
+assert.equal(seeded.logoSmallUrl(), '/static/custom-logo.svg');
+assert.equal(seeded.logoIconUrl(), '/static/custom-icon.svg');
+assert.equal(seeded.logoMediumUrl(), '/static/custom-medium.svg');
 
 // 4. Type casting (R3.3 / V5)
 const typed = new TestSettingsAccessor([

@@ -14,7 +14,10 @@ const PB_SOURCE = (import.meta.env.VITE_PB_SOURCE ?? 'auto').toLowerCase();
 
 export const SETTINGS_DEFAULTS = {
   app_name: 'Cetana Labs Control Hub',
-  app_description: 'Protocol Engine'
+  app_description: 'Protocol Engine',
+  logo_icon_url: '',
+  logo_small_url: '',
+  logo_medium_url: ''
 } as const;
 
 export function castSettingValue<T = unknown>(
@@ -77,6 +80,19 @@ export class SettingsAccessor {
 
   appDescription(): string {
     return this.get<string>('app_description', SETTINGS_DEFAULTS.app_description);
+  }
+
+  // Typed logo getters (BK-013 / R2.1)
+  logoIconUrl(): string {
+    return this.get<string>('logo_icon_url', SETTINGS_DEFAULTS.logo_icon_url);
+  }
+
+  logoSmallUrl(): string {
+    return this.get<string>('logo_small_url', SETTINGS_DEFAULTS.logo_small_url);
+  }
+
+  logoMediumUrl(): string {
+    return this.get<string>('logo_medium_url', SETTINGS_DEFAULTS.logo_medium_url);
   }
 
   // Typed getter for custom/future settings without exposing raw rows (R3.3, V5)
