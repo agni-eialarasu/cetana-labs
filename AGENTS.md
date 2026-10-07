@@ -31,6 +31,10 @@ Your role is to keep this repository structured, well-documented, clean, and up 
    - Branch naming: `<type>/<scope>-<slug>` (type mirrors the commit prefixes below). Delete branches after merge; never force-push `main`; roll back via revert PR.
    - In this environment, open PRs via `gh api repos/{owner}/{repo}/pulls` (REST), not `gh pr create`.
    - Tag `vX.Y.0` releases on `main` at each `/sprint-done`.
+7. **Task Runner & Cross-Repo Standard (`just`)**:
+   - Standardized on **`just`** (`justfile`) as the task runner across Agni repos (Director decision: one shared command vocabulary across Nexus Pulse and Cetana Labs). Run `just` or `just --list` for all recipes.
+   - Leads with the 7 shared-core recipes (`start-local`, `stop-local`, `status-local`, `validate-local`, `validate-staging`, `clean-data`, `help` → `just --list`), with identical names across repos. Cetana-specific extras live below the core.
+   - `Makefile` is retained as a thin forwarding shim for one sprint (`make <target>` forwards to `just <target>`), reversible via `git revert`.
 
 ---
 
@@ -81,10 +85,10 @@ Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; com
 - **`log-milestone`** / **`commit-changes`**: Append journal milestones / standardized commits.
 - **`/push-changes`** / **`/commit-and-push-changes`**: Push the **current branch** by explicit name (branch-aware per `RFC-LAB-000-004` — refuses code/`data/`/migration pushes to `main`, validates docs fast-path and hands the human the `main` push, never force-pushes) / commit (via `/commit-changes`) **then** push through that same gate, in one invocation.
 
-**Local & staging infra:**
-- **`/start-local`** / **`/stop-local`** / **`/status-local`**: Bring up / shut down / inspect the local dev stack (PocketBase `:8090` + SvelteKit `:5173`).
-- **`/validate-local`**: Full local pre-flight — Python governance validators + SvelteKit type-check/build (mirrors CI).
-- **`/status-staging`** / **`/validate-staging`**: PLACEHOLDERS — staging targets **GCP** (backend + frontend), optional **Vercel** (frontend), pending the org-account transfer.
+**Local & staging infra (task runner: `just`):**
+- **`/start-local`** / **`/stop-local`** / **`/status-local`**: Bring up / shut down / inspect the local dev stack (PocketBase `:8090` + SvelteKit `:5173`) via `just start-local` / `just stop-local` / `just status-local`.
+- **`/validate-local`**: Full local pre-flight (`just validate-local`) — Python governance validators + SvelteKit type-check/build (mirrors CI).
+- **`/status-staging`** / **`/validate-staging`**: Staging probes (`just validate-staging`) — Railway backend + Vercel frontend.
 
 ---
 

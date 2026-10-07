@@ -16,30 +16,35 @@ This is the authoritative guide for developing on Cetana Labs across **Kiro Web*
 
 ## ⚡ Command Cheat-Sheet
 
-Every command exists as both a Kiro `/command` and a `make` target (identical behavior).
+Cetana Labs standardizes on **`just`** (`justfile`) as the task runner, sharing a common cross-repo core with Nexus Pulse (Director decision: one shared command vocabulary across Agni repos). Run `just` or `just --list` any time for the full cheat-sheet.
 
-| Category | Make | Slash command | What it does |
-|---|---|---|---|
-| **Readiness** | `make env-doctor` | `/env-doctor` | Surface-aware check: is *this* environment ready? (diagnostic only) |
-| **Validate** | `make validate-local` | `/validate-local` | Full local pre-flight: Python validators + SvelteKit type-check/build |
-| | `make validate-staging` | `/validate-staging` | Probe staging health (placeholder: GCP/Vercel) |
-| **Local stack** | `make start-local` | `/start-local` | Start PocketBase (:8090) + SvelteKit dev (:5173) |
-| | `make stop-local` | `/stop-local` | Stop dev servers (preserves data) |
-| | `make status-local` | `/status-local` | Are the servers up? |
-| **Setup** | `make setup` | — | One-time bootstrap: env, deps, superuser, provision, seed |
-| **Data** | `make provision` | — | Create collections via API (version-robust) |
-| | `make seed` | — | Provision + seed PocketBase from `data/` |
-| | `make clean-data` | — | Reset local DB to a clean slate |
-| **Containers** | `make pb-image` | — | Build PocketBase image (Podman-first) for staging parity |
-| **Deploy** | *(merge to `main`)* | — | **Normal staging deploy is AUTOMATIC on merge** — both tiers to the single reference env (§9A.0) |
-| | `make deploy-adhoc ENV=<file>` | `/deploy-adhoc` | On-demand deploy to an arbitrary instance (throwaway/other) — a dev tool, not a stage (§9A.0) |
-| | `make deploy-staging` | — | Manual *override* re-deploy of the staging env (not "the pipeline"; §9A.0) |
-| | `make verify-bundle` | — | Assert the built bundle baked in the expected backend URL (§9A.3) |
-| | `make verify-live-frontend URL=<live>` | — | Assert the LIVE Vercel site serves the expected backend (post-deploy ops-alert, §9A.6) |
-| **Sprint** | — | `/sprint-start`, `/sprint-done` | Open / close a sprint |
-| **Audit** | — | `/audit-doc`, `/audit-project` | Doc review / project health sweep |
+A thin **`Makefile` forwarding shim** is maintained for one sprint to preserve backward compatibility (`make <target>` forwards to `just <target>`).
 
-> Run `make` (or `make help`) any time for this list.
+Every command exists as both a Kiro `/command` and a `just` recipe (identical behavior).
+
+| Category | Just recipe | Make (shim) | Slash command | What it does |
+|---|---|---|---|---|
+| **Help** | `just` / `just help` | `make help` | — | Show recipe cheat-sheet (`just --list`) |
+| **Readiness** | `just env-doctor` | `make env-doctor` | `/env-doctor` | Surface-aware check: is *this* environment ready? (diagnostic only) |
+| **Validate** | `just validate-local` | `make validate-local` | `/validate-local` | Full local pre-flight: Python validators + SvelteKit type-check/build |
+| | `just validate-staging` | `make validate-staging` | `/validate-staging` | Probe staging health (Railway/Vercel) |
+| **Local stack** | `just start-local` | `make start-local` | `/start-local` | Start PocketBase (:8090) + SvelteKit dev (:5173) |
+| | `just stop-local` | `make stop-local` | `/stop-local` | Stop dev servers (preserves data) |
+| | `just status-local` | `make status-local` | `/status-local` | Are the servers up? |
+| **Setup** | `just setup` | `make setup` | — | One-time bootstrap: env, deps, superuser, provision, seed |
+| **Data** | `just provision` | `make provision` | — | Create collections via API (version-robust) |
+| | `just seed` | `make seed` | — | Provision + seed PocketBase from `data/` |
+| | `just clean-data` | `make clean-data` | — | Reset local DB to a clean slate |
+| **Containers** | `just pb-image` | `make pb-image` | — | Build PocketBase image (Podman-first) for staging parity |
+| **Deploy** | *(merge to `main`)* | — | — | **Normal staging deploy is AUTOMATIC on merge** — both tiers to the single reference env (§9A.0) |
+| | `just deploy-adhoc ENV=<file>` | `make deploy-adhoc ENV=<file>` | `/deploy-adhoc` | On-demand deploy to an arbitrary instance (throwaway/other) — a dev tool, not a stage (§9A.0) |
+| | `just deploy-staging` | `make deploy-staging` | — | Manual *override* re-deploy of the staging env (not "the pipeline"; §9A.0) |
+| | `just verify-bundle` | `make verify-bundle` | — | Assert the built bundle baked in the expected backend URL (§9A.3) |
+| | `just verify-live-frontend URL=<live>` | `make verify-live-frontend URL=<live>` | — | Assert the LIVE Vercel site serves the expected backend (post-deploy ops-alert, §9A.6) |
+| **Sprint** | — | — | `/sprint-start`, `/sprint-done` | Open / close a sprint |
+| **Audit** | — | — | `/audit-doc`, `/audit-project` | Doc review / project health sweep |
+
+> Run `just` (or `just --list`, or `make help`) any time for this list.
 
 ---
 
@@ -101,7 +106,7 @@ Kiro Web needs none of the server tooling — it's for stateless work.
 **One command** (recommended) — idempotent bootstrap with sensible local defaults:
 
 ```bash
-make setup            # env + web deps + PocketBase superuser + schema hint + seed
+just setup            # env + web deps + PocketBase superuser + schema hint + seed (or: make setup)
 # equivalently: bash scripts/setup-local.sh
 ```
 Defaults: superuser `admin@cetana.local` / `CetanaLocal2026!` (override via `PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD` env or `.env`). The script prints the Admin UI import step for `pb_schema.json`, then offers to seed from `data/`. Re-runnable any time.
@@ -113,7 +118,7 @@ cp .env.example .env                                   # set PB_ADMIN_*
 cd app/web && pnpm install --frozen-lockfile && cd ../..
 pb superuser upsert admin@cetana.local 'CetanaLocal2026!'   # >= 8 chars
 pb --version                                            # confirm >= 0.23
-make env-doctor
+just env-doctor
 ```
 </details>
 
@@ -121,39 +126,39 @@ make env-doctor
 
 ## 4. Starting the Local Stack
 
-The `make` targets move the local stack between states:
+The `just` recipes (or `make` shim) move the local stack between states:
 
 ```mermaid
 stateDiagram-v2
     [*] --> Fresh : git clone
-    Fresh --> Ready : make setup (env, deps, superuser, provision, seed)
-    Ready --> Running : make start-local (PB :8090 + web :5173)
-    Running --> Seeded : make seed (users/projects/memberships)
+    Fresh --> Ready : just setup (env, deps, superuser, provision, seed)
+    Ready --> Running : just start-local (PB :8090 + web :5173)
+    Running --> Seeded : just seed (users/projects/memberships)
     Seeded --> Running : iterate
-    Running --> Ready : make stop-local (pb_data preserved)
-    Running --> Fresh : make clean-data (wipe pb_data)
-    Seeded --> Fresh : make clean-data
+    Running --> Ready : just stop-local (pb_data preserved)
+    Running --> Fresh : just clean-data (wipe pb_data)
+    Seeded --> Fresh : just clean-data
 ```
 
 Two modes, mirroring Nexus Pulse's State A / State B:
 
 ### State A — Clean slate (recommended default)
 ```bash
-make start-local
+just start-local
 ```
 Starts PocketBase (`:8090`, admin `/_/`) and SvelteKit dev (`:5173`) with an empty DB — good for onboarding/intake flows.
 
 ### State B — Seeded from `data/`
 ```bash
-make start-local            # in one terminal (PB + web)
+just start-local            # in one terminal (PB + web)
 # then, with PB_ADMIN_* set in .env:
-make seed                    # provisions collections (API) + seeds users/projects/memberships
+just seed                   # provisions collections (API) + seeds users/projects/memberships
 ```
-`make seed` runs `pb_provision.py` (creates collections via the API — version-robust, no manual schema import) then `pb_import.py` (seeds the 3 users, 6 projects, memberships from the relational masters, `RFC-LAB-000-002`). `make setup` does this end-to-end on first run.
+`just seed` runs `pb_provision.py` (creates collections via the API — version-robust, no manual schema import) then `pb_import.py` (seeds the 3 users, 6 projects, memberships from the relational masters, `RFC-LAB-000-002`). `just setup` does this end-to-end on first run.
 
 ### Stop
 ```bash
-make stop-local              # frees :5173 and :8090; pb_data preserved
+just stop-local             # frees :5173 and :8090; pb_data preserved
 ```
 
 ---
@@ -170,11 +175,11 @@ make stop-local              # frees :5173 and :8090; pb_data preserved
 > ⚠️ **The `pb_data` location gotcha (learned the hard way — `RFC-LAB-000-008` M3–M4).**
 > PocketBase resolves `pb_data` **relative to its current working directory**. The
 > **one canonical location is `app/pocketbase/pb_data`** — always start the backend so it
-> lands there, i.e. **`make start-local` / `make pb-serve`** (they `cd app/pocketbase`
+> lands there, i.e. **`just start-local` / `just pb-serve`** (they `cd app/pocketbase`
 > first), or `pocketbase serve --dir app/pocketbase/pb_data` from the repo root. If you
 > `pocketbase serve` from some *other* directory (e.g. `/opt/homebrew/bin`), it silently
 > creates a **separate, empty `pb_data` there** — your seed, OAuth config, and schema all
-> go to the wrong place, and `make start-local` then serves an empty backend. All backend
+> go to the wrong place, and `just start-local` then serves an empty backend. All backend
 > state (superuser, collections, seed, **OAuth provider config**) lives inside whichever
 > `pb_data` is active, so a mismatch looks like "everything vanished."
 >
@@ -182,15 +187,15 @@ make stop-local              # frees :5173 and :8090; pb_data preserved
 > `400`; the dashboard is empty though you "just seeded it."
 > **Recovery (rebuild the canonical instance):**
 > ```bash
-> make stop-local                                   # kill any stray servers first
+> just stop-local                                  # kill any stray servers first
 > pocketbase superuser upsert "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD"   # run from app/pocketbase/
-> make start-local                                  # serves app/pocketbase/pb_data
-> make seed                                          # provision + seed the canonical dir
+> just start-local                                 # serves app/pocketbase/pb_data
+> just seed                                        # provision + seed the canonical dir
 > ```
 > Then re-add the GitHub OAuth provider once (§5.1) — the OAuth **client secret is not
 > committed and does not migrate between data dirs**, so a fresh `pb_data` needs it re-entered.
 > **Rule of thumb:** never `pocketbase serve` from a raw shell in an arbitrary directory;
-> use the `make` targets so the data dir is always canonical.
+> use the `just` recipes so the data dir is always canonical.
 
 **Test personas & RBAC (forward — Phase 3, `RFC-LAB-000-006`):** once GitHub OAuth + roles land, personas map to the `memberships` roles (`owner`/`lead`/`contributor`/`reviewer`/`stakeholder`). Provisioning steps will be added here when auth is built.
 
@@ -222,7 +227,7 @@ make stop-local              # frees :5173 and :8090; pb_data preserved
 
 ```bash
 # Fast: wipe local DB data, keep schema/binary
-make clean-data && make seed
+just clean-data && just seed   # (or: make clean-data && make seed)
 
 # Deep (container path): rebuild the PocketBase image
 podman build -t cetana-pocketbase -f app/pocketbase/Containerfile app/pocketbase   # or: docker build ...
@@ -244,7 +249,7 @@ podman build -t cetana-pocketbase -f app/pocketbase/Containerfile app/pocketbase
 Governed by [`RFC-LAB-000-004`](../rfc/RFC-LAB-000-004-branching-model.md) (hybrid, path-scoped):
 - **App code / `data/` / migrations** → feature branch → PR → green CI → squash-merge to `main`.
 - **Governance / docs** → may fast-path to `main`.
-- Always run `make validate-local` (`/validate-local`) before opening a PR or `/sprint-done`.
+- Always run `just validate-local` (`/validate-local`) before opening a PR or `/sprint-done`.
 - Never force-push `main`; roll back via revert PR.
 
 ---
@@ -314,8 +319,8 @@ The lifecycle ends at **`done` = merged to `main` = live** on the project's **si
 - **`done` = the merge (pragmatic, D50).** The deploys are *consequences* that make `done` observable. A deploy hiccup is an **ops alert** (a red `deploy-backend.yml` run + logs), **not** a lifecycle failure — it never reverts the merged commit. There is no auto-rollback.
 - **Two symmetric tiers.** Frontend (Vercel, already wired) + backend (Railway, added by `deploy-backend.yml`). `deploy-backend.yml` is deliberately **not** a required check — a deploy failure must not block future merges.
 - **Two deliberately-separated paths:**
-  1. **Auto-staging (the pipeline)** — push to `main` deploys both tiers to the single reference env. No manual target for the normal path; the merge is it. (`make deploy-staging` is only a manual *override* re-deploy of that same env.)
-  2. **On-demand `/deploy-adhoc` (a dev tool)** — `make deploy-adhoc ENV=<file>` deploys to an *arbitrary* instance (throwaway/other) for testing. **Not** a lifecycle stage, **not** "release."
+  1. **Auto-staging (the pipeline)** — push to `main` deploys both tiers to the single reference env. No manual target for the normal path; the merge is it. (`just deploy-staging` is only a manual *override* re-deploy of that same env; forwards from `make deploy-staging`.)
+  2. **On-demand `/deploy-adhoc` (a dev tool)** — `just deploy-adhoc ENV=<file>` deploys to an *arbitrary* instance (throwaway/other) for testing. **Not** a lifecycle stage, **not** "release."
 - **Explicit scope boundary (Entry 014, D51/D52).** No staging→prod promotion pipeline, no dedicated prod tier, no blue-green/canary — that is out-of-scope ops (`BK-019`). One automated environment only. Branch-protection config itself is a one-time [HUMAN] GitHub setting (the gate), assumed here, not scripted.
 
 > The CLI mechanics below (§9A.1–§9A.5) remain valid as the **on-demand / ad-hoc** deploy path (`/deploy-adhoc`, one-time linking, artifact verification). The *normal* staging deploy needs none of them — it is the merge.
@@ -324,8 +329,8 @@ The lifecycle ends at **`done` = merged to `main` = live** on the project's **si
 | Piece | Path | Purpose |
 | :--- | :--- | :--- |
 | Backend build pin | [`app/pocketbase/railway.json`](../../app/pocketbase/railway.json) | Pins Railway to the `Containerfile` (`builder: DOCKERFILE`) so it never auto-detects/Railpacks the build. |
-| Deploy wrapper | [`scripts/deploy.sh`](../../scripts/deploy.sh) + `make deploy-staging` | One entry point: `deploy-backend` (Railway) / `deploy-frontend` (Vercel) / `all` / `checklist`. |
-| Artifact assertion | [`scripts/verify-bundle.sh`](../../scripts/verify-bundle.sh) + `make verify-bundle` | Asserts the built bundle baked in the **expected** backend URL (and not a forbidden one) — §9A.3. |
+| Deploy wrapper | [`scripts/deploy.sh`](../../scripts/deploy.sh) + `just deploy-staging` | One entry point: `deploy-backend` (Railway) / `deploy-frontend` (Vercel) / `all` / `checklist`. |
+| Artifact assertion | [`scripts/verify-bundle.sh`](../../scripts/verify-bundle.sh) + `just verify-bundle` | Asserts the built bundle baked in the **expected** backend URL (and not a forbidden one) — §9A.3. |
 | Env template | [`.env.staging.example`](../../.env.staging.example) | Keys/comments only; copy to `.env.staging` (gitignored) and fill in. **No secret is ever committed.** |
 
 ### 9A.1 CLI-first flow (the iteration loop)
@@ -334,7 +339,7 @@ The **UIs are for one-time linking + inspection only**; the iteration loop is th
 ```bash
 cp .env.staging.example .env.staging   # fill in PB_URL / VITE_PB_URL (gitignored)
 railway login && vercel login          # one-time per machine
-make deploy-staging                    # == scripts/deploy.sh all
+just deploy-staging                    # == scripts/deploy.sh all (or: make deploy-staging)
 #   → deploy-backend  : railway up (from app/pocketbase, railway.json pins the builder)
 #   → deploy-frontend : build with VITE_PB_URL → verify-bundle → vercel deploy
 #   → prints the one-time [HUMAN] checklist
@@ -358,8 +363,8 @@ sweat secrets yet                     from here on
 Vite inlines `VITE_*` at **build time**, so the console *setting* can say one thing while the shipped *bundle* contains another — the BK-018 false negative (a preview silently baked against the prod backend). **Rule:** before trusting any live test, assert the baked-in backend URL in the built artifact:
 
 ```bash
-make web-build                                     # or scripts/deploy.sh builds it for you
-make verify-bundle EXPECTED=https://<staging>.up.railway.app \
+just web-build                                     # or scripts/deploy.sh builds it for you
+just verify-bundle EXPECTED=https://<staging>.up.railway.app \
                    FORBIDDEN=https://<prod>.up.railway.app
 ```
 `scripts/deploy.sh deploy-frontend` runs this automatically **before** the Vercel deploy and refuses to ship a bundle baked against the wrong backend.
@@ -387,7 +392,7 @@ gh api repos/agni-eialarasu/cetana-labs/commits/$head/status \
 
 **Post-merge (the backstop — ops-alert).** After the Vercel Git integration deploys, assert the **live** bundle serves the expected backend:
 ```bash
-make verify-live-frontend URL=https://<app>.vercel.app EXPECTED=https://<app>.up.railway.app
+just verify-live-frontend URL=https://<app>.vercel.app EXPECTED=https://<app>.up.railway.app
 # or on CI: the verify-live-frontend.yml workflow (push to main on app/web/**, + manual run)
 ```
 This is an **ops-alert, not a gate** — a red result is a check + logs to investigate; it never reverts the merge (`done` = the gated merge) and is **not** in the PR-gating CI job. (Note: the PocketBase SDK always ships `/api/realtime` and `authWithOAuth2(` regardless of our auth flow, so the authoritative live signal is the expected `VITE_PB_URL` baked into the served bundle — same basis as `verify-bundle.sh`.)

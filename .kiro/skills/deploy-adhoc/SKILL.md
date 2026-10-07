@@ -1,7 +1,7 @@
 ---
 name: deploy-adhoc
 description: >-
-  On-demand developer deploy to an ARBITRARY instance (throwaway/other), parameterized by an env file — a testing tool, NOT a lifecycle stage and NOT "release." Wraps `make deploy-adhoc ENV=<file>` (delegates to scripts/deploy.sh). Use when the user runs /deploy-adhoc or asks to deploy to a throwaway/scratch instance for testing. The normal staging deploy is automatic on merge to main — this is separate.
+  On-demand developer deploy to an ARBITRARY instance (throwaway/other), parameterized by an env file — a testing tool, NOT a lifecycle stage and NOT "release." Wraps `just deploy-adhoc ENV=<file>` (delegates to scripts/deploy.sh). Use when the user runs /deploy-adhoc or asks to deploy to a throwaway/scratch instance for testing. The normal staging deploy is automatic on merge to main — this is separate.
 ---
 
 # Skill: Ad-hoc Deploy (`/deploy-adhoc`) — developer testing tool
@@ -27,9 +27,9 @@ scratch instance** for hands-on testing.
 ## Usage
 
 ```bash
-make deploy-adhoc ENV=<env-file>            # backend + frontend to whatever <env-file> points at
-make deploy-adhoc ENV=<env-file> WHAT=deploy-backend    # backend only
-make deploy-adhoc ENV=<env-file> WHAT=deploy-frontend   # frontend only (build + verify-bundle first)
+just deploy-adhoc ENV=<env-file>            # backend + frontend to whatever <env-file> points at
+just deploy-adhoc ENV=<env-file> WHAT=deploy-backend    # backend only
+just deploy-adhoc ENV=<env-file> WHAT=deploy-frontend   # frontend only (build + verify-bundle first)
 ```
 
 - `ENV=<file>` — a **gitignored** env file (e.g. `.env.throwaway`) describing the target
@@ -37,7 +37,7 @@ make deploy-adhoc ENV=<env-file> WHAT=deploy-frontend   # frontend only (build +
   `cp .env.staging.example .env.throwaway` then edit (it is gitignored — NEVER commit it).
 - `WHAT=` — `all` (default) · `deploy-backend` · `deploy-frontend`.
 
-The make target sets `ENV_FILE=<ENV>` and calls `scripts/deploy.sh <WHAT>` — the same
+The recipe sets `ENV_FILE=<ENV>` and calls `scripts/deploy.sh <WHAT>` — the same
 script the staging CLI path uses, just aimed at a different env file.
 
 ## Guarantees & discipline (carried over from scripts/deploy.sh)

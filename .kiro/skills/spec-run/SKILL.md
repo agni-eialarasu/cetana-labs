@@ -59,7 +59,7 @@ Make executing a Kiro Spec a **true one-liner** in Kiro IDE — the **implement*
 - Walk every `requirements.md` acceptance criterion (R1, R2, …); run the Spec's own verification steps (e.g. parity/fallback checks) plus the standard gates:
   ```bash
   pnpm --dir app/web check && pnpm --dir app/web build && pnpm --dir app/web lint
-  make validate-local
+  just validate-local
   ```
 - Any unmet/unverifiable criterion ⇒ resolve or STOP with a clear note. A green build is necessary but **not** sufficient — the DoD is the bar.
 
