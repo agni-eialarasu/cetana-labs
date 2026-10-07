@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **App-Level Settings (`BK-012`, `TSK-057`, Spec `app-level-settings`)**: Implemented `RFC-LAB-000-013`: a key/value `settings` PocketBase collection (`key` unique/required, `value`, `type` select: `string`|`number`|`boolean`|`url`, `group` optional) with a typed TypeScript accessor façade (`app/web/src/lib/settings.ts` / `settings.svelte.ts`) in the SPA. Seeded `app_name` (default: `'Cetana Labs Control Hub'`) and `app_description` (default: `'Protocol Engine'`) via `data/settings.json` and `data/settings.schema.json`, wired through `generate_pb_schema.py`, `pb_provision.py`, and `pb_import.py`. Public read (`listRule`/`viewRule` open so branding renders pre-auth), superuser-only write (`createRule`/`updateRule`/`deleteRule` null; non-superuser write denied). Typed accessor provides hardcoded fallbacks on absent/empty keys (no blanking, no crash) and casts values by `type`. Wired `settings.appName()` and `settings.appDescription()` into the app header, title, and layout footer. Reserved logo keys (`logo_icon_url`, `logo_small_url`, `logo_medium_url`) for `BK-013` (branding & white-labeling). Documented pattern in `docs/guides/developer-guide.md §5.2`. Built on Google Antigravity per `RFC-LAB-000-014` cost-first routing.
 ### Changed
 ### Fixed
 

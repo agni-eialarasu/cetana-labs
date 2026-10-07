@@ -235,5 +235,57 @@
     "createRule": null,
     "updateRule": null,
     "deleteRule": null
+  },
+  {
+    "name": "settings",
+    "type": "base",
+    "fields": [
+      {
+        "name": "key",
+        "type": "text",
+        "required": true,
+        "hidden": false,
+        "presentable": false,
+        "pattern": ""
+      },
+      {
+        "name": "value",
+        "type": "text",
+        "required": false,
+        "hidden": false,
+        "presentable": false,
+        "pattern": ""
+      },
+      {
+        "name": "type",
+        "type": "select",
+        "required": true,
+        "hidden": false,
+        "presentable": false,
+        "maxSelect": 1,
+        "values": [
+          "string",
+          "number",
+          "boolean",
+          "url"
+        ]
+      },
+      {
+        "name": "group",
+        "type": "text",
+        "required": false,
+        "hidden": false,
+        "presentable": false,
+        "pattern": ""
+      }
+    ],
+    "indexes": [
+      "CREATE UNIQUE INDEX `idx_settings_key` ON `settings` (`key`)"
+    ],
+    "listRule": "",
+    "viewRule": "",
+    "createRule": null,
+    "updateRule": null,
+    "deleteRule": null
   }
 ]

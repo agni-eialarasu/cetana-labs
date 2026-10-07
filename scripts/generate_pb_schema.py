@@ -116,7 +116,24 @@ def collections() -> list:
         "deleteRule": None,
     }
 
-    return [users, projects, memberships]
+    settings = {
+        "name": "settings",
+        "type": "base",
+        "fields": [
+            _text("key", required=True),
+            _text("value"),
+            _select("type", ["string", "number", "boolean", "url"]),
+            _text("group"),
+        ],
+        "indexes": ["CREATE UNIQUE INDEX `idx_settings_key` ON `settings` (`key`)"],
+        "listRule": "",
+        "viewRule": "",
+        "createRule": None,
+        "updateRule": None,
+        "deleteRule": None,
+    }
+
+    return [users, projects, memberships, settings]
 
 
 def render() -> str:
@@ -141,7 +158,7 @@ def main():
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(payload, encoding="utf-8")
-    print(f"✅ PocketBase schema generated: {OUT.relative_to(REPO_ROOT)} (3 collections)")
+    print(f"✅ PocketBase schema generated: {OUT.relative_to(REPO_ROOT)} ({len(collections())} collections)")
     return 0
 
 

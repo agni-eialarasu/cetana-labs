@@ -8,7 +8,7 @@ const here = dirname(fileURLToPath(import.meta.url));
 const repoData = resolve(here, '../../../data');
 const dest = resolve(here, '../static/data');
 
-const files = ['users.json', 'portfolio.json', 'status.json'];
+const files = ['users.json', 'portfolio.json', 'status.json', 'settings.json'];
 
 mkdirSync(dest, { recursive: true });
 let copied = 0;

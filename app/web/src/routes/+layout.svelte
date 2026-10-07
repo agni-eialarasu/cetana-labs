@@ -1,6 +1,7 @@
 <script lang="ts">
   import '../app.css';
   import { theme } from '$lib/theme.svelte';
+  import { settings } from '$lib/settings';
   import AuthControl from '$lib/components/AuthControl.svelte';
   import { onMount } from 'svelte';
   import { base } from '$app/paths';
@@ -36,7 +37,7 @@
     <div
       class="mx-auto flex max-w-content items-center justify-between px-4 sm:px-6 lg:px-8 text-xs text-muted"
     >
-      <div>Cetana Labs Control Hub</div>
+      <div>{settings.appName()}</div>
       <div class="flex items-center gap-4">
         <a href="{base}/docs" class="text-ink-secondary hover:text-ink transition-colors font-medium">Docs</a>
         <a

@@ -245,6 +245,22 @@ def run(dry_run=True):
     }
     upsert_collection(token, memberships_spec, dry_run)
 
+    # 4. settings (base) — key/value app settings (RFC-LAB-000-013).
+    settings_spec = {
+        "name": "settings", "type": "base",
+        "fields": [
+            f_text("key", required=True),
+            f_text("value"),
+            f_select("type", ["string", "number", "boolean", "url"], required=True),
+            f_text("group"),
+        ],
+        "indexes": ["CREATE UNIQUE INDEX `idx_settings_key` ON `settings` (`key`)"],
+        # Public read (branding renders pre-auth); superuser-only write (admin role = BK-014).
+        "listRule": RULE_PUBLIC, "viewRule": RULE_PUBLIC,
+        "createRule": None, "updateRule": None, "deleteRule": None,
+    }
+    upsert_collection(token, settings_spec, dry_run)
+
     print("✅ Provision plan complete." if dry_run else "✅ Collections provisioned.")
     return 0
 
