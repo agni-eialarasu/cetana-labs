@@ -205,7 +205,8 @@ just stop-local             # frees :5173 and :8090; pb_data preserved
 
 **1. Create a GitHub OAuth app** — GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App:
 - **Homepage URL:** `http://localhost:5173` (local) / your Vercel URL (deployed).
-- **Authorization callback URL:** `http://127.0.0.1:8090/api/oauth2-redirect` (local) / your GCP PocketBase URL + `/api/oauth2-redirect` (deployed).
+- **Authorization callback URL:** `http://localhost:5173/oauth/callback` (local) / your Vercel URL + `/oauth/callback` (deployed). This is the **frontend** callback the BK-018 redirect flow returns to (`${window.location.origin}/oauth/callback` — `app/web/src/lib/auth.svelte.ts`), **NOT** PocketBase's `/api/oauth2-redirect` (that direct-provider endpoint was dropped in BK-018 because PB's `/api/realtime` channel breaks behind Railway's proxy — `RFC-LAB-000-011` §4.5).
+  - ⚠️ **Host-consistency footgun:** GitHub treats `localhost` and `127.0.0.1` as **different hosts**, and it requires the token-exchange `redirect_uri` to match the authorize step exactly. Browse the app and register the callback on the **same** host (use `http://localhost:5173` for both). A `localhost`↔`127.0.0.1` mismatch passes the authorize step but fails the token exchange with **`400 Failed to fetch OAuth2 token`**.
 - Copy the **Client ID** and generate a **Client Secret**.
 
 **2. Enable it in PocketBase** — admin UI (`http://127.0.0.1:8090/_/`):
@@ -323,7 +324,7 @@ python3 scripts/pb_import.py --apply         # 6 projects / 3 users / membership
 Confirm: `curl https://<app>.up.railway.app/api/collections/projects/records` returns 6 projects.
 
 ### 9.3 Production GitHub OAuth
-1. In the GitHub OAuth app (or a dedicated prod app), set **Authorization callback URL** → `https://<app>.up.railway.app/api/oauth2-redirect`.
+1. In the GitHub OAuth app (or a dedicated prod app), set **Authorization callback URL** → `https://<your-vercel-app>/oauth/callback` (the deployed **frontend** origin + `/oauth/callback`, matching the BK-018 redirect flow — NOT the PocketBase `/api/oauth2-redirect` endpoint).
 2. On the **Railway** PocketBase admin (`https://<app>.up.railway.app/_/`), enable OAuth2 on the `users` collection and add GitHub (client id + secret) — same per-collection path as §5.1. Secrets stay in Railway/PB, never in the repo.
 
 ### 9.4 Frontend — SvelteKit on Vercel
@@ -415,7 +416,7 @@ just verify-bundle EXPECTED=https://<staging>.up.railway.app \
 Some steps are irreducibly interactive / console-only — `scripts/deploy.sh checklist` prints them:
 1. **CLI login** (once per machine): `railway login`, `vercel login`.
 2. **Railway persistent volume** (once per service) — the CLI **cannot** attach volumes: in the dashboard, attach a Volume mounted at **`/pb/pb_data`** (else every redeploy wipes the SQLite DB; see [`app/pocketbase/README.md`](../../app/pocketbase/README.md#deploy-on-railway-railwayjson-rfc-lab-000-012--bk-017)).
-3. **GitHub OAuth app** (once per environment): point the callback at `<PB_URL>/api/oauth2-redirect`; set client id/secret in the Railway PocketBase admin (§5.1).
+3. **GitHub OAuth app** (once per environment): point the callback at the **frontend** origin + `/oauth/callback` (e.g. `https://<your-vercel-app>/oauth/callback`); set client id/secret in the Railway PocketBase admin (§5.1).
 4. **Vercel env**: set `VITE_PB_URL` to the Railway URL (`vercel env add` or the dashboard).
 
 ### 9A.5 Gated ops (`RFC-LAB-000-012` §6)
