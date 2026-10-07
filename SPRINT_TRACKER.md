@@ -24,13 +24,13 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 ---
 
-## 🎯 Current Sprint: Sprint 12 — First Post-MVP Product Features (carried forward)
+## 🎯 Current Sprint: Sprint 13 — BK-015 Feasibility Spike + Carry-Forwards
 
 | Property | Value |
 | :--- | :--- |
-| **Sprint ID** | `SPRINT-12` |
+| **Sprint ID** | `SPRINT-13` |
 | **Duration** | 2026-10-07 to 2026-10-21 (2 Weeks) |
-| **Sprint Goal** | Deliver the first post-MVP **product** features carried forward from SPRINT-11, on the now process-hardened + multi-executor platform: **`BK-012`** app-level settings (`/spec-run app-level-settings` — Spec already on `main`) → **`BK-013`** branding/white-labeling (consumes it), in that order. In **parallel**, open the **`BK-015`** (AI Assistant — Ask-the-Portfolio) **RFC + feasibility spike** (no build this sprint). Carry-forward ecosystem integrations (`BK-004`, `BK-001`). |
+| **Sprint Goal** | Run the **`BK-015` AI-Assistant feasibility spike** (`RFC-LAB-000-015` §5 — the three probes: PocketBase-hook runtime, grounding on sample questions, cost) to ratify/revise the architecture and decide whether BK-015 graduates to a build Spec. Pick up opportunistic ecosystem carry-forwards (`BK-004`, `BK-001`) as capacity allows. |
 | **Status** | 🟢 Active |
 | **Lead** | Eialarasu |
 
@@ -38,18 +38,23 @@ BACKLOG.md            SPRINT_TRACKER.md              CHANGELOG.md
 
 | Task ID | Item / Feature | Priority | Assignee | Status | Target Date |
 | :---: | :--- | :---: | :---: | :---: | :---: |
-| `TSK-057` | `BK-012` — **app-level settings** (RFC + Spec): configurable settings collection + typed accessors, minimal now, grows over time; **foundation for `BK-013`**. **RFC-LAB-000-013** + Spec `app-level-settings` merged to `main` (PR #50; Journal Entry 015). Key/value collection + typed accessor façade; public read, superuser-only write; mechanism-only (logo/branding UI → BK-013). **Built via Spec `app-level-settings`; human-verified PASS, gated, merged [PR #64]. Unblocks `BK-013` branding.** **[SPRINT-12 headline #1]** | P1 | Eialarasu | ✅ Done | 2026-10-21 |
-| `TSK-060` | `BK-013` — **branding & white-labeling** (Spec `app-branding`): app name/description + logo set (icon/small/medium) as **URL settings** (not uploads — fits BK-012's `url` type; upload/editor UI deferred to BK-014), rendered with graceful text-only fallback; **consumes `BK-012` settings**; white-label = data-change-not-code-change. Implemented via `/spec-run app-branding` on Antigravity; **human-verified PASS, gated, merged [PR #66]** — scope floor verified (schema/generator byte-unchanged; URL-logo decision held). Completes the SPRINT-12 BK-012 → BK-013 product line. **[SPRINT-12 headline #2]** | P2 | Eialarasu | ✅ Done | 2026-10-21 |
-| `TSK-061` | `BK-015` — **AI Assistant RFC + feasibility spike** (parallel track): author the RFC (index strategy, model, cost, data boundaries, where it runs) + a spike to de-risk. **Scope = RFC + spike only, NOT the build** (flagship, highest effort — build in a later sprint). **RFC-LAB-000-015 drafted** (Proposed): runtime = PocketBase `pb_hooks` route (the only server runtime; static SPA can't hold a key); index = structured-query-first over tiny `data/` corpus (no vector DB yet); model = config-driven/swappable; data boundary = public-read `data/`+docs, fail-closed. Next: run the §5 feasibility spike (runtime/grounding/cost probes) → ratify/revise → Journal. (carried from SPRINT-11) | P1 | Eialarasu | 🔨 RFC drafted / spike next | 2026-10-21 |
-| `TSK-067` | `BK-026` — **Requirement Gathering System (RGS) Stage C** (Spec `rgs-stage-c` + skill `/rgs`): AI elicitation engine turning a fuzzy ask → guided Q&A → byte-compatible `INTAKE-NNN` draft (register row + detail block) + channel-relay message; gap + thin-overlap flags; grounded, never writes a repo. **Engine/surface separated** for Stage B/D reuse. **Governance tooling → simplified path** (validate-docs → branch/push → human fast-merge; no scorecard, no Gate 5). Operator-authored this session; demoed on a fuzzy sample. Cross-repo kickoff (D1–D3 accepted). **Fast-merged [PR #67]** (simplified governance path — no scorecard/Gate 5). `/rgs` is now live. | P2 | Eialarasu | ✅ Done | 2026-10-21 |
+| `TSK-061` | `BK-015` — **AI Assistant feasibility spike** (`RFC-LAB-000-015` Accepted): run the §5 throwaway probes — (1) `pb_hooks` runtime holds a key + returns an LLM round-trip; (2) grounding on 5 sample questions (3 structured from `data/`, 2 narrative over docs); (3) cost measurement. Output = spike-findings note (ratify/revise §4) in the Decision Journal → decide if BK-015 graduates to a build Spec. **Needs a test LLM key on the probe surface. NOT the product build.** (carried from SPRINT-12) **[SPRINT-13 headline]** | P1 | Eialarasu | 📋 Ready (RFC merged; spike pending) | 2026-10-21 |
 | `TSK-025` | Multi-Repository PR Cross-Referencer (`BK-004`) — link sub-project PRs into Cetana journal (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2026-10-21 |
 | `TSK-026` | Option B: Slack / WhatsApp incoming webhook dispatch (`BK-001`) (carry-forward, opportunistic) | P2 | Eialarasu | 📋 Backlog | 2026-10-21 |
 
-> **Candidate (not yet scheduled):** build the **convergence ledger** (`docs/governance/CONVERGENCE-LEDGER.md`) — now that two cross-repo standards have converged (S13 `/command` vocabulary + S14/BK-025 `just` runner, both Nexus ✅ + Cetana ✅), there's concrete content for the single cross-repo adoption view. Proposed-not-built per the cross-repo-structure decision.
+> **Candidate (not yet scheduled):** build the **convergence ledger** (`docs/governance/CONVERGENCE-LEDGER.md`) — two cross-repo standards have converged (S13 `/command` vocabulary + S14/BK-025 `just` runner, both Nexus ✅ + Cetana ✅); concrete content exists for the single cross-repo adoption view. Proposed-not-built per the cross-repo-structure decision.
 
 ---
 
 ## 📦 Delivered Sprints Archive
+
+### Sprint 12: First Post-MVP Product Features (2026-10-07) — `v0.14.0`
+- **`TSK-057` (`BK-012` app-level settings):** key/value `settings` collection + typed accessor façade (public read, superuser write); seeds `app_name`/`app_description`; foundation for branding [PR #64, Antigravity].
+- **`TSK-060` (`BK-013` branding & white-labeling):** logo set as URL settings + typed getters + render with text-only fallback; white-label = data-change-not-code-change; scope floor verified (schema byte-unchanged) [PR #66, Antigravity]. **Completes the BK-012 → BK-013 product line.**
+- **`TSK-067` (`BK-026` RGS Stage C):** the `/rgs` requirement-elicitation skill — fuzzy ask → guided Q&A → byte-compatible `INTAKE-NNN` draft + channel relay; engine/surface separated for Stage B/D reuse; governance-tooling simplified path [PR #67, Operator].
+- **`TSK-061` (`BK-015` AI Assistant — RFC):** `RFC-LAB-000-015` Accepted [PR #68] — architecture decided (PocketBase-hook runtime, structured-first retrieval over the tiny corpus, config-driven model, fail-closed public-read boundary). **Feasibility spike carries forward to SPRINT-13** (no build yet).
+- **Carried forward → SPRINT-13:** `TSK-061` (BK-015 spike), `TSK-025` (BK-004), `TSK-026` (BK-001).
+- **Net:** three product features shipped end-to-end on the hardened + multi-executor platform (two clean Antigravity builds), plus the flagship de-risked. A clean, fully-delivered sprint — unlike SPRINT-11's process-pivot, this hit its planned product goal.
 
 ### Sprint 11: Process-Hardening & Multi-Executor Convergence (2026-10-07) — `v0.13.0`
 - **Planned goal (carried forward):** first post-MVP product features — `BK-012` app-level settings (`TSK-057`, ✅ Ready/un-built) → `BK-013` branding (`TSK-060`) + `BK-015` AI-assistant RFC (`TSK-061`). The sprint **pivoted** into process/DX hardening + the multi-executor model (work that de-risks those builds); product items carry to SPRINT-12.

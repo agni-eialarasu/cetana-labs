@@ -16,6 +16,16 @@
 
 ## 📅 Milestone Log
 
+### [2026-10-07] Milestone: Sprint 12 Closeout & v0.14.0 — First Post-MVP Product Features
+- **Delivered Capabilities**:
+  - **`BK-012` app-level settings** [PR #64] — key/value `settings` collection + typed accessor façade (public read, superuser write); foundation for branding.
+  - **`BK-013` branding & white-labeling** [PR #66] — logo set as URL settings + render with text-only fallback; white-label = data-change-not-code-change; scope floor verified (schema byte-unchanged). **Completes the BK-012 → BK-013 product line.**
+  - **`BK-026` RGS Stage C** [PR #67] — the `/rgs` requirement-elicitation skill: fuzzy ask → guided Q&A → byte-compatible `INTAKE-NNN` draft + channel relay; engine/surface separated for Stage B/D reuse; governance-tooling simplified path.
+  - **`BK-015` AI Assistant RFC** [PR #68] — `RFC-LAB-000-015` Accepted: PocketBase-hook runtime, structured-first retrieval over the tiny corpus, config-driven model, fail-closed public-read boundary.
+- **Executors**: two clean Antigravity builds (BK-012, BK-013) + Operator-authored RGS/RFC — the cost-first multi-executor model continuing to pay off.
+- **Honest note**: a transient GitHub write outage (Internal Server Error) briefly blocked the #68 merge + a `main` push late in the sprint; reads stayed healthy and everything landed cleanly on retry — no repo/model issue.
+- **Next Horizon (SPRINT-13)**: run the `BK-015` feasibility spike (`RFC-LAB-000-015` §5 — runtime/grounding/cost probes) to decide if the flagship graduates to a build Spec; opportunistic ecosystem carry-forwards (BK-004, BK-001).
+
 ### [2026-10-07] Milestone: Sprint 11 Closeout & v0.13.0 — Process-Hardening & Multi-Executor Convergence
 - **Delivered Capabilities**:
   - **Multi-executor model (`RFC-LAB-000-014`, accepted)** — Executor is a role with N instances; cost-first routing defaults routine/mechanical builds to **Antigravity (free)**, escalates to Kiro IDE with reason. §7 trial complete (Entry 021).

@@ -15,13 +15,13 @@
 The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.
 
 ### 2. Latest Deliveries & Business Wins
-- **Sprint 11 Closeout & v0.13.0 — Process-Hardening & Multi-Executor Convergence**: the AIDLC *process itself* hardened and proved extensible — auditable gate verdicts, a real frontend-deploy signal, and a second independent executor.
-- **Multi-executor model accepted (`RFC-LAB-000-014`)**: Antigravity (free) is the cost-first default executor, Kiro IDE the escalation path — §7 trial passed, two clean Antigravity builds (`BK-024`, `BK-025`).
-- **Cross-repo `just` standard complete** (`BK-025`): identical 7-recipe core in Nexus Pulse + Cetana Labs — one shared `just <recipe>` vocabulary across repos.
-- **Gate hardened**: `/review-pr` reads Vercel's **real** deploy status (`BK-023` pt2) and now records its verdict as an auditable PR comment (`review-record`).
+- **Sprint 12 Closeout & v0.14.0 — First Post-MVP Product Features**: delivered the planned product sequence in full plus the requirement-gathering skill, and de-risked the flagship.
+- **App-level settings + branding/white-labeling (`BK-012` → `BK-013`)**: a key/value settings collection + typed accessor, consumed by logo/name branding — white-labeling a deploy is now a **data change, not a code change**.
+- **Requirement Gathering System (`BK-026`, `/rgs`)**: an AI elicitation skill that turns a fuzzy ask into a ledger-ready `INTAKE-NNN` draft — the business-analyst front-end for the intake lifecycle.
+- **AI-Assistant flagship de-risked (`RFC-LAB-000-015` Accepted)**: architecture decided (PocketBase-hook runtime, structured-first retrieval, config-driven model, fail-closed public-read boundary); feasibility spike next.
 
 ### 3. Current Focus & Next Milestone
-- Sprint 12 (carried forward): first post-MVP **product** features — `BK-012` app-level settings (`/spec-run app-level-settings`) → `BK-013` branding/white-labeling (in order); in parallel, the `BK-015` AI-Assistant **RFC + spike** (de-risk the flagship, no build yet).
+- Sprint 13: run the **`BK-015` AI-Assistant feasibility spike** (`RFC-LAB-000-015` §5 — runtime/grounding/cost probes) to decide whether the flagship graduates to a build Spec; pick up ecosystem carry-forwards (`BK-004`, `BK-001`) as capacity allows.
 
 ### 4. Blockers & Risks
 - **Blockers**: None.
@@ -30,4 +30,4 @@ The central engineering command plane, lab notebook, and automated management re
 ### 5. Verified Quality Metrics
 - 6/6 projects passing portfolio integrity checks; `/project-validate` 5-pillar gate green.
 - Backend deploy proven live end-to-end (`Deploy complete` on Railway); PB on 0.40.4.
-- Linear git history on `main`; every merge human-gated (`/review-pr`, now auto-recorded on the PR); **v0.13.0** tagged.
+- Linear git history on `main`; every merge human-gated (`/review-pr`, auto-recorded on the PR); **v0.14.0** tagged.
