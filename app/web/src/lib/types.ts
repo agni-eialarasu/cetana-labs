@@ -71,3 +71,13 @@ export interface Project extends ProjectRecord, Omit<StatusRecord, 'id'> {
   priority_score: number;
   tags: string[];
 }
+
+// App-level settings (RFC-LAB-000-013 / BK-012)
+export type SettingType = 'string' | 'number' | 'boolean' | 'url';
+
+export interface SettingRecord {
+  key: string;
+  value: string;
+  type: SettingType;
+  group?: string | null;
+}

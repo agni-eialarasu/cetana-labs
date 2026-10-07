@@ -1,0 +1,14 @@
+[
+  {
+    "key": "app_name",
+    "value": "Cetana Labs Control Hub",
+    "type": "string",
+    "group": "branding"
+  },
+  {
+    "key": "app_description",
+    "value": "Protocol Engine",
+    "type": "string",
+    "group": "branding"
+  }
+]

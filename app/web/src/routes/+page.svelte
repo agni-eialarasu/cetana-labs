@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Project } from '$lib/types';
+  import { settings } from '$lib/settings';
   import ThemeToggle from '$lib/components/ThemeToggle.svelte';
   import KpiCard from '$lib/components/KpiCard.svelte';
   import ProjectCard from '$lib/components/ProjectCard.svelte';
@@ -46,15 +47,15 @@
   });
 </script>
 
-<svelte:head><title>Cetana Labs — Engineering Portfolio</title></svelte:head>
+<svelte:head><title>{settings.appName()} — Engineering Portfolio</title></svelte:head>
 
 <div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
   <!-- Header -->
   <header class="mb-8 flex flex-col gap-4 border-b border-line pb-6">
     <div class="flex flex-wrap items-start justify-between gap-4">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight text-ink">Cetana Labs</h1>
-        <p class="mt-1 text-sm text-muted">Executive engineering portfolio &amp; automated status</p>
+        <h1 class="text-3xl font-bold tracking-tight text-ink">{settings.appName()}</h1>
+        <p class="mt-1 text-sm text-muted">{settings.appDescription()}</p>
       </div>
       <div class="flex flex-wrap items-center gap-3">
         <ThemeToggle />
@@ -156,8 +157,10 @@
     </p>
   {/if}
 
-  <footer class="mt-12 flex flex-col items-center gap-2 border-t border-line pt-5 text-center text-xs text-muted">
-    <span>Cetana Labs Control Hub • Sleek UI (beta) • read-only preview</span>
+  <footer
+    class="mt-12 flex flex-col items-center gap-2 border-t border-line pt-5 text-center text-xs text-muted"
+  >
+    <span>{settings.appName()} • Sleek UI (beta) • read-only preview</span>
     <a href="../" class="font-semibold text-brand hover:text-brand-hover">← Classic dashboard</a>
   </footer>
 </div>

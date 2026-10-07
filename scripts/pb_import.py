@@ -175,6 +175,18 @@ def run(dry_run=True):
         }
         upsert(token, "memberships", "seed_id", m["id"], payload, dry_run)
 
+    # 4. Settings (RFC-LAB-000-013, natural key: 'key')
+    settings = _load("settings.json") if (DATA_DIR / "settings.json").exists() else []
+    print(f"→ Importing {len(settings)} settings")
+    for s in settings:
+        payload = {
+            "key": s["key"],
+            "value": s.get("value", ""),
+            "type": s.get("type", "string"),
+            "group": s.get("group", ""),
+        }
+        upsert(token, "settings", "key", s["key"], payload, dry_run)
+
     print("✅ Import plan complete." if dry_run else "✅ Import applied to PocketBase.")
     return 0
 

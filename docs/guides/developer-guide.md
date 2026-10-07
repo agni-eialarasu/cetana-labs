@@ -221,6 +221,28 @@ just stop-local             # frees :5173 and :8090; pb_data preserved
 - **`projects.updateRule` matches on handle, not id:** `@request.auth.id != "" && @request.auth.github_handle != "" && owner.github_handle = @request.auth.github_handle`. This is environment-robust (record ids change per seed; handles don't) and matches how the UI already resolves ownership.
 - **Existing OAuth records** created *before* the hook won't have a handle — either sign out/in again (the hook backfills) or set `github_handle` once in the admin. A brand-new local `pb_data` needs neither (the hook runs on first sign-in).
 
+### 5.2 App-Level Settings Pattern (`RFC-LAB-000-013` / `BK-012`)
+
+App settings are runtime-configurable values read by the SPA (starting with `app_name` and `app_description`), serving as the foundation for `BK-013` branding and white-labeling:
+
+1. **Collection (`settings`):** Key/value store with fields `key` (text, unique, required), `value` (text), `type` (select: `string`|`number`|`boolean`|`url`), and `group` (text, optional). Declared in `scripts/generate_pb_schema.py`, seeded via `data/settings.json` + `data/settings.schema.json`.
+2. **Typed Accessor Façade (`app/web/src/lib/settings.ts`):** Eagerly loads settings once and exposes typed getters with hardcoded defaults:
+   - `settings.appName(): string` (default: `'Cetana Labs Control Hub'`)
+   - `settings.appDescription(): string` (default: `'Protocol Engine'`)
+   - Absent or empty keys return the hardcoded default (resilience: no crash, no blanking).
+   - Values are cast per `type`; callers never touch raw database rows.
+3. **How to add a new setting:**
+   - Add a seed entry in `data/settings.json`: `{"key": "my_setting", "value": "val", "type": "string", "group": "general"}`.
+   - Add a default and typed getter in `app/web/src/lib/settings.svelte.ts`:
+     ```ts
+     mySetting(): string { return this.get('my_setting', DEFAULT_VALUE); }
+     ```
+   - Consume anywhere via `settings.mySetting()`.
+4. **RBAC Posture:**
+   - `listRule` / `viewRule`: **public** (`""`) so branding renders pre-auth on public dashboards.
+   - `createRule` / `updateRule` / `deleteRule`: **superuser-only** (`null`). Non-superuser writes are denied. General admin write paths require the admin role (`BK-014`).
+5. **Reserved Logo Keys:** `logo_icon_url`, `logo_small_url`, `logo_medium_url` are reserved for `BK-013` (branding/white-labeling) and intentionally not seeded in `BK-012`. Settings must strictly contain non-sensitive configuration — **never store secrets in settings**.
+
 ---
 
 ## 6. Full Clean Reset
