@@ -91,7 +91,7 @@ gh api repos/agni-eialarasu/cetana-labs/pulls/<n>/files --jq '.[].filename'
   # or, on the PR files: gh api repos/.../pulls/<n>/files --jq '.[].filename' | grep -x CHANGELOG.md
   ```
 - **Tracker status coherent?** The item's `SPRINT_TRACKER.md` status matches its lifecycle state (e.g. not still `📋 Backlog` for a PR in review).
-- **`data/` consistent** if touched; `make validate-local` (or CI's mirror) green (ties to Step 2).
+- **`data/` consistent** if touched; `just validate-local` (or CI's mirror) green (ties to Step 2).
 - **Timing nuance (don't over-HOLD):** the CHANGELOG entry and the `Done` status are legitimately **Record-phase (post-merge)** steps in some flows — so a *missing* CHANGELOG entry at review time is a **⚠️ reviewer note + an explicit item in the merge instructions** ("add the CHANGELOG entry + flip the tracker in the post-merge tidy"), **not automatically a HOLD**. But it MUST be surfaced firsthand and MUST be closed in the tidy — never silently marked ✅. If the PR *claims* lockstep is already done and it isn't, that discrepancy **is** a HOLD (the record is untrustworthy).
 
 ### 6. Present the review + STOP-and-hold
