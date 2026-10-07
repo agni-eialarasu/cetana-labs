@@ -6,7 +6,7 @@
 | **Feature** | App name, description, and logo set branding settings + graceful text fallback + white-label deploy path |
 | **Backlog** | `TSK-060` (`BK-013`, SPRINT-12) |
 | **Branch** | `feat/app-branding` |
-| **PR** | Pending |
+| **PR** | [#66](https://github.com/agni-eialarasu/cetana-labs/pull/66) |
 | **Executor** | Antigravity (routine/product feature implementation, cost-first default per `RFC-LAB-000-014`) |
 | **Date** | 2026-10-07 |
 
