@@ -34,6 +34,7 @@ Every command exists as both a Kiro `/command` and a `just` recipe (identical be
 | **Setup** | `just setup` | `make setup` | — | One-time bootstrap: env, deps, superuser, provision, seed |
 | **Data** | `just provision` | `make provision` | — | Create collections via API (version-robust) |
 | | `just seed` | `make seed` | — | Provision + seed PocketBase from `data/` |
+| | `just export-live-data` | `make export-live-data` | — | Export live PocketBase records to `data/*.json` (reconciliation, BK-014) |
 | | `just clean-data` | `make clean-data` | — | Reset local DB to a clean slate |
 | **Containers** | `just pb-image` | `make pb-image` | — | Build PocketBase image (Podman-first) for staging parity |
 | **Deploy** | *(merge to `main`)* | — | — | **Normal staging deploy is AUTOMATIC on merge** — both tiers to the single reference env (§9A.0) |
@@ -272,6 +273,32 @@ A per-client or white-labeled deployment can customize the app name, description
 
 3. **Data Change, Not a Code Change:**
    Branding is purely data-driven. The accessor (`SettingsAccessor`) reads settings with built-in fallbacks. When logo URLs are unset or empty, the UI displays text branding only with zero broken images and zero layout shift.
+
+### 5.4 In-App CRUD & Data Reconciliation (`BK-014` / `D-CRUD-1`)
+
+Cetana Labs operates on a dual source-of-truth model:
+- **Live Writes**: Admin-tier CRUD operations (`/admin/projects`, `/admin/developers`, `/admin/settings`) write directly to the live PocketBase database (`RULE_ADMIN` gated).
+- **Committed Masters**: `data/portfolio.json` and `data/users.json` are the committed git source-of-truth for the README master registry and static offline snapshot fallbacks.
+
+#### The Reconciliation Workflow
+When projects or developers are created, updated, or removed in-app, the live database legitimately diverges from the committed files. The admin UI displays an **honesty divergence banner** indicating that the database differs from committed masters.
+
+To synchronize live changes back to the repository and update the README registry:
+
+1. **Perform in-app edits** via `/admin/projects` or `/admin/developers`.
+2. **Export live records to data masters**:
+   ```bash
+   just export-live-data    # (or: python3 scripts/export_pb_to_data.py --apply)
+   ```
+   This script reads live `projects` and `users` from PocketBase, maps internal IDs to canonical natural keys (`seed_id`, `lab_id`), and writes formatted `data/portfolio.json` and `data/users.json`.
+3. **Verify and regenerate the registry**:
+   ```bash
+   just validate-local      # runs validators + generates updated README registry
+   ```
+4. **Commit via a Pull Request**:
+   Commit the updated `data/*.json` and regenerated `README.md` on a branch and submit a PR for human review.
+
+> **Governance Principle (`D-CRUD-1`):** In-app edits never automatically commit to git behind the scenes. Reconciliation is a deliberate, auditable step that preserves human review and gate integrity over the control plane's public registry.
 
 ---
 

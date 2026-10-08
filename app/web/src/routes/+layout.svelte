@@ -37,9 +37,21 @@
         <span class="text-xs text-muted hidden sm:inline">{settings.appDescription()}</span>
       </a>
 
-      <!-- CENTER: nav slot (BK-027 center nav / BK-031 admin settings link) -->
-      <nav class="flex items-center gap-3 text-sm" aria-label="Primary">
+      <!-- CENTER: nav slot (BK-027 center nav / BK-031 admin settings link / BK-014 CRUD) -->
+      <nav class="flex items-center gap-2 text-sm" aria-label="Primary">
         {#if auth.isAdmin}
+          <a
+            href="{base}/admin/projects"
+            class="rounded-[6px] px-2.5 py-1 text-xs font-semibold text-ink-secondary transition-colors hover:bg-panel hover:text-ink"
+          >
+            📁 Projects
+          </a>
+          <a
+            href="{base}/admin/developers"
+            class="rounded-[6px] px-2.5 py-1 text-xs font-semibold text-ink-secondary transition-colors hover:bg-panel hover:text-ink"
+          >
+            👥 Developers
+          </a>
           <a
             href="{base}/admin/settings"
             class="rounded-[6px] px-2.5 py-1 text-xs font-semibold text-ink-secondary transition-colors hover:bg-panel hover:text-ink"
