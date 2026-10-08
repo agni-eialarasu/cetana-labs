@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Header & Footer Standardization (`BK-027`, `TSK-068`, Spec `header-footer-standard`)**: Standardized webapp chrome to a conventional global header and footer in `+layout.svelte`. Global header renders app branding (`settings.appName()` + `settings.appDescription()` `hidden sm:inline`, logo-guarded), an empty styled center navigation slot (`<nav aria-label="Primary">`), and `<AuthControl/>` on the right. Global footer unifies the application theme toggle into a single global `<ThemeToggle/>` (removed from per-page instances), maintains public access to `/docs` pre-auth (`BK-024`/`D-HF-1`), and retains GitHub navigation and lightweight branding. Stripped the redundant "second row" masthead branding block, duplicate GitHub link, and local theme toggle from the dashboard (`+page.svelte`), and removed the per-page theme toggle from `docs/+page.svelte`. Built on Google Antigravity per `RFC-LAB-000-014` cost-first routing.
 ### Changed
 ### Fixed
+- **`just seed` env auto-load (`BK-028`)**: Added `set dotenv-load := true` to the `justfile` header so the gitignored root `.env` (`PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD` / `PB_URL`) auto-loads into every recipe. Previously `just seed` ran `pb_provision.py --apply` in a shell that hadn't sourced `.env`, failing with `--apply requires PB_ADMIN_EMAIL and PB_ADMIN_PASSWORD` even though the values existed in the file — a recurring local-dev stumble. Governance tooling → simplified path.
 
 ---
 
