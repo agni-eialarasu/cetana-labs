@@ -15,4 +15,4 @@
 - [x] **T5 — Fail-closed proof** (R2.2/R3.2): verify a failed/blocked refresh never elevates `#admin`.
 - [x] **T6 — Scope floor** (R3.3): diff is `auth.svelte.ts` ONLY — no `data/**`, `app/pocketbase/**`, rules, or `pb_schema.json`.
 - [x] **T7 — Self-validate**: `pnpm check` + `pnpm build` clean; `just validate-local` green. Lockstep: CHANGELOG entry for TSK-073; SPRINT_TRACKER coherent.
-- [ ] **T8 — Open PR** against `main`; STOP-and-hold for `/verification-done` (incl. V1 bootstrap-without-signout + V3 fail-closed + V4 server-gate) → `/review-pr`. Never merge.
+- [x] **T8 — Open PR** against `main`; STOP-and-hold for `/verification-done` (incl. V1 bootstrap-without-signout + V3 fail-closed + V4 server-gate) → `/review-pr`. Never merge.
