@@ -44,7 +44,7 @@
       <nav class="flex items-center gap-1.5 text-xs font-medium" aria-label="Primary">
         <a
           href="{base}/"
-          class="flex items-center gap-1.5 rounded-md px-3 py-1.5 transition-all {pathname === '/' || pathname === ''
+          class="flex items-center gap-1.5 rounded-md px-3 py-1.5 transition-all {pathname === '/'
             ? 'bg-panel text-brand font-semibold shadow-sm border border-line'
             : 'text-muted hover:text-ink hover:bg-panel/50'}"
         >
