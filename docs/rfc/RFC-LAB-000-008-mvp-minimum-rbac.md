@@ -96,3 +96,56 @@ The UI's *structural* data (projects, owner) comes from PocketBase in M1. **Live
 | Two status sources (STATUS.md + PB) confusion | §7/§9.1 decides one path at M4; document clearly. |
 | Deploy blocked on org-transfer | M1–M4 are fully local; deploy (M5) is the only transfer-dependent phase. |
 | Auth complexity balloons | GitHub OAuth only for MVP; email/password + extra providers deferred. |
+
+---
+
+## Amendment A1 — The `is_admin` tier (in-app administration) · 2026-10-08
+
+| Property | Value |
+| :--- | :--- |
+| **Status** | 🟢 Accepted (brainstorm 2026-10-08, Operator session) |
+| **Decision** | **Option C** — add ONE `is_admin` boolean tier, NOT the deferred 5-role `memberships` model. |
+| **Motivates** | `BK-027`-era UI arc: **Projects/Developers CRUD UI**, **App Settings UI** (both need a write path that doesn't exist today), and partly the RGS Stage B UI. |
+| **Supersedes** | the §4 line "Create/delete of projects in-app" (was deferred) — now permitted **for admins only**. The 5-role model + `memberships`-based multi-role writes remain **deferred** (§4 unchanged for those). |
+
+### A1.1 Why (the gap this closes)
+MVP RBAC is **owner-or-not**: an owner edits their own project's *status*; **nobody** can create/delete projects in-app, and **nobody** can write `settings` in-app (both are superuser/admin-UI-only, rules `null`/`""`). Three queued features need in-app administration by someone who is **not** handed a PocketBase **superuser** credential (the superuser can edit the schema itself — too much power to hand a lead). The minimum surface that unblocks them is a single **application-level admin flag**, decided here rather than ad-hoc at build time.
+
+### A1.2 What (the new tier — exactly one boolean)
+Add a boolean field **`is_admin`** to the `users` auth collection (default `false`). It is distinct from the PocketBase **superuser** (an admin-UI/schema role) and from the deferred `role` select — it is purely an *application* capability flag.
+
+| Tier | Can (NEW/changed) | Granted by |
+| :--- | :--- | :--- |
+| **Admin** (`is_admin = true`) | Create / edit / delete **any** project; write **`settings`**; manage **users** (set `name`/`role`/`active`/`is_admin`) | A superuser (admin UI), or another admin, sets the flag. Bootstrap: the control-hub owner sets the first admin via the PocketBase admin UI. |
+
+Non-admins are unchanged: public read, authenticated detail, owner-edits-own-status.
+
+### A1.3 The rule matrix (authoritative — codify in `scripts/generate_pb_schema.py` + `scripts/pb_provision.py`)
+Define a reusable predicate `RULE_ADMIN = '@request.auth.id != "" && @request.auth.is_admin = true'`, then OR it into the existing rules:
+
+| Collection | Rule | Current | After A1 |
+| :--- | :--- | :--- | :--- |
+| `projects` | `createRule` | `null` | `RULE_ADMIN` |
+| `projects` | `updateRule` | owner-only | `(@request.auth.id != "" && owner = @request.auth.id) \|\| {RULE_ADMIN}` *(owner edits own; admin edits any)* |
+| `projects` | `deleteRule` | `null` | `RULE_ADMIN` |
+| `settings` | `createRule`/`updateRule`/`deleteRule` | `null` | `RULE_ADMIN` |
+| `users` | `updateRule` | `null` | `RULE_ADMIN` *(admin manages users; `is_admin` self-escalation prevented — see A1.4)* |
+
+> **PocketBase note:** `@request.auth.is_admin` references the authed user's own `is_admin` field — valid in a collection rule. The field must be present on the `users` auth collection for the token to carry it.
+
+### A1.4 Guardrails (non-negotiable)
+- **No self-escalation:** a non-admin can never set their own `is_admin` (the `users.updateRule` already gates writes to admins; a non-admin has no write path to `users` at all).
+- **Superuser stays the escape hatch / bootstrap:** the first admin is set via the PocketBase admin UI; `is_admin` never grants schema/collection-management power (that's superuser-only).
+- **Audit trail still deferred** (§4) — admin writes are not yet logged; note as a known gap for a later RFC if in-app admin volume grows.
+- **5-role model stays deferred** — this amendment deliberately does NOT touch `memberships`; if a future need requires per-project role writes, that's a separate RFC.
+
+### A1.5 Downstream build sequence (Specs that depend on A1, in order)
+1. **A1 itself** (this amendment) merges to `main` → then:
+2. **`settings` write rule + App Settings UI** (smallest — one collection, one admin gate).
+3. **Projects/Developers CRUD UI** (create/edit/delete projects + manage users).
+4. RGS Stage B UI consumes the same admin tier for who-can-manage-intakes (its larger blocker is the server-runtime spike, separate).
+
+Each is a **sprint deliverable → full gate** (business functionality). A1 is the design record they cite.
+
+### A1.6 Scope floor for the A1 implementation Spec
+When A1 graduates to a build: touch `users` schema (`is_admin` field), the two rule-source scripts (`generate_pb_schema.py` + `pb_provision.py`), regenerate `app/pocketbase/pb_schema.json` (generated artifact), and seed the first admin. **No UI in the A1 Spec** — the UIs (settings, CRUD) are their own Specs citing A1. This keeps the auth change isolated and independently verifiable (rule tests: admin can write settings; non-admin denied; owner still edits own project; non-owner denied).

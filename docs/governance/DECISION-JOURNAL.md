@@ -730,3 +730,27 @@ historical one.
 ### Session meta
 - **Division of labor:** human ran the Antigravity build, the human functional verification (incl. the V7 theme toggle Antigravity left for human eyes), and every merge; the Operator authored the Spec + the (now reusable) Antigravity trial/validation/re-sync prompts, gated all three PRs (#57 docs, #59 Vercel-skip, #58 the trial build — HOLD-on-conflict then READY), and recorded. The whole arc stayed inside the Operator/Executor model with the human gate intact throughout.
 - **Honest note:** this is a single-feature trial — strong evidence, not a large sample. Cost-first routing is promoted on the strength of a *clean* first run; if a later complex build on Antigravity shows capability or rework cost that erodes the saving, the routing is revisited on that evidence (the escalation lane to Kiro IDE exists precisely for that). The gate's invariance means a weaker build simply HOLDs — cost routing never relaxes the merge bar.
+
+---
+
+## Entry 022 — The `is_admin` tier: in-app administration unblocked (Option C), RFC-008 Amendment A1
+
+> _Brainstorm decision (Operator session, 2026-10-08). Resolves the gate three queued UI features waited on: a write path for someone who is not a PocketBase superuser._
+
+### D67 — Add ONE `is_admin` boolean tier (not the deferred 5-role model) to unblock in-app admin
+
+- **The question:** three brainstorm items (Projects/Developers CRUD UI, App Settings UI, partly RGS Stage B UI) need in-app writes that today's RBAC forbids — `projects` create/delete is `null`, `settings` write is superuser-only. "Is the admin role in scope?"
+- **Options weighed:** (A) full admin role / resurrect the 5-role `memberships` model — rejected as over-build; (B) defer admin, keep PocketBase admin-UI as the escape hatch — rejected because "settings/CRUD UI" without a write path are just read views (half-features); (C) **one `is_admin` boolean** — the minimum surface that unblocks all three.
+- **Decision: Option C.** Add a single application-level `is_admin` flag on `users` (distinct from the PocketBase **superuser**, which keeps schema power, and from the deferred `role` select). Admin can create/edit/delete any project, write `settings`, and manage users. The 5-role `memberships` model stays **deferred** — nothing listed needs it.
+- **Recorded as:** `RFC-LAB-000-008` **Amendment A1** (Accepted) — carries the exact rule matrix (`RULE_ADMIN = @request.auth.id != "" && @request.auth.is_admin = true`), guardrails (no self-escalation; superuser stays bootstrap/escape-hatch; audit still deferred), and the downstream Spec sequence.
+- **Supersedes:** the §4 "create/delete of projects in-app = deferred" line — now permitted **for admins only**. All other §4 deferrals stand.
+
+### Downstream (Specs that cite A1, in dependency order)
+1. **A1 implementation** (auth-only, no UI): add `is_admin`, update the two rule-source scripts + regenerate `pb_schema.json`, seed the first admin, rule tests. Sprint deliverable → full gate.
+2. **App Settings UI** (`BK-012` UI half) — smallest, one collection.
+3. **Projects/Developers CRUD UI** (`BK-014`, now unblocked) — manage projects + users.
+4. RGS Stage B UI — consumes the admin tier; its larger blocker is the server-runtime spike (separate).
+
+### Session meta
+- **Class:** governance/architecture decision → RFC amendment + Decision Journal (doc fast-path / merge-first). The *implementation* of A1 is a separate sprint-deliverable Spec through the full gate.
+- **Division of labor:** Operator grounded current RBAC in the live schema (`generate_pb_schema.py` rules, `pb_schema.json`), framed the three options honestly, recommended C, authored the amendment on the user's decision. Human holds every merge.
