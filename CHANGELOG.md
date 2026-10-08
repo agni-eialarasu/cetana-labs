@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Auth Live-Refresh (`BK-033`, `TSK-073`, Spec `auth-live-refresh`)**: Reactive admin tier synchronization and live rehydration:
+  - **Reactive Admin State (`R1`)**: Added `#admin = $state<boolean>` to `AuthState` in `app/web/src/lib/auth.svelte.ts`, initialized from `pb.authStore.record.is_admin` and kept reactive on store changes, OAuth callback completion, and sign-out. Simplified `isAdmin` getter to reactive `this.#authed && this.#admin`.
+  - **Live Refresh on Rehydrate (`R2`)**: `#rehydrate()` now calls `pb.collection('users').authRefresh()` when `pb.authStore.isValid`, updating `#admin` so admin grants (e.g. initial superuser bootstrap) take effect immediately on next page load without requiring a manual sign-out/sign-in round-trip.
+  - **Fail-Closed Security Invariant (`R3`)**: When `authRefresh()` fails (revoked session or network outage), `#admin` is not elevated, a warning is logged, and existing unprivileged state stands. Server-side `RULE_ADMIN` remains the authoritative write gate.
+  - **Scope Floor (`R3.3`)**: Client-side single-file change (`auth.svelte.ts`); zero modifications to `data/**`, `app/pocketbase/**`, rules, or schemas.
 - **UI Density & Navigation Pass (`BK-032`, `TSK-072`, Spec `ui-density-nav-pass`)**: Cohesive design system polish delivering 100%-zoom comfort, unified header navigation, and streamlined vertical density:
   - **Type Scale Tokens (`R1`)**: Standardized typography with semantic Tailwind tokens (`2xs` through `3xl`) in `tailwind.config.js` and set `:root` to 16px with a 15px/1.5 body base in `app.css`. Swept all ad-hoc `text-[10px]` and `text-[11px]` micro-text literals across the codebase to semantic `text-2xs` and `text-xs`.
   - **Unified Header Navigation (`R2.1`–`R2.3`)**: Added route-aware primary navigation pills (`📊 Portfolio` always visible; `📁 Projects`, `👥 Developers`, `⚙️ Settings` gated by `auth.isAdmin`) to the global header in `+layout.svelte`, highlighting active paths with subtle panel pill styles and hover states.

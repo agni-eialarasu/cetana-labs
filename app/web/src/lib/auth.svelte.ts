@@ -80,6 +80,10 @@ function loginFromMeta(meta: unknown): string {
 class AuthState {
   /** Reactive auth flag — drives the UI (do NOT read pb.authStore.isValid in templates). */
   #authed = $state<boolean>(pb.authStore.isValid);
+  /** Reactive admin tier flag — reflects is_admin on pb.authStore.record. */
+  #admin = $state<boolean>(
+    (pb.authStore.record as unknown as Record<string, unknown> | null)?.is_admin === true
+  );
   /** The resolved identity, or null when anonymous. Reactive. */
   identity = $state<AuthIdentity | null>(null);
 
@@ -89,6 +93,8 @@ class AuthState {
     // Keep the reactive flag in sync with token changes across tabs / SDK events.
     pb.authStore.onChange((token) => {
       this.#authed = pb.authStore.isValid;
+      this.#admin =
+        (pb.authStore.record as unknown as Record<string, unknown> | null)?.is_admin === true;
       if (!token) this.identity = null;
     });
   }
@@ -106,9 +112,7 @@ class AuthState {
   }
 
   get isAdmin(): boolean {
-    return (
-      this.#authed && (pb.authStore.record as unknown as Record<string, unknown> | null)?.is_admin === true
-    );
+    return this.#authed && this.#admin;
   }
 
   // START half of the redirect OAuth2 flow (R1.1, R1.3). Unlike the old all-in-one popup
@@ -149,6 +153,8 @@ class AuthState {
       .collection('users')
       .authWithOAuth2Code(OAUTH_PROVIDER, code, savedVerifier, redirectURL());
     this.#authed = pb.authStore.isValid; // reactive flip immediately (R1.4 — no reload)
+    this.#admin =
+      (pb.authStore.record as unknown as Record<string, unknown> | null)?.is_admin === true;
     const login = loginFromMeta(res.meta);
     if (login && typeof localStorage !== 'undefined') localStorage.setItem(LINK_KEY, login);
     await this.#resolve(login, res.meta);
@@ -157,12 +163,22 @@ class AuthState {
   signOut(): void {
     pb.authStore.clear(); // R1.3
     this.#authed = false; // reactive flip immediately (no reload)
+    this.#admin = false;
     this.identity = null;
     if (typeof localStorage !== 'undefined') localStorage.removeItem(LINK_KEY);
   }
 
   // Rebuild identity from persisted state on page load (no OAuth meta available).
   async #rehydrate(): Promise<void> {
+    if (pb.authStore.isValid) {
+      try {
+        await pb.collection('users').authRefresh();
+        this.#admin =
+          (pb.authStore.record as unknown as Record<string, unknown> | null)?.is_admin === true;
+      } catch (err) {
+        console.warn('[auth] authRefresh failed on rehydrate:', err);
+      }
+    }
     const login =
       (typeof localStorage !== 'undefined' && localStorage.getItem(LINK_KEY)) ||
       ((pb.authStore.record as unknown as Record<string, unknown>)?.github_handle as string) ||
