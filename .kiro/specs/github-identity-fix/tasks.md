@@ -16,4 +16,4 @@
 - [x] **T6 — Security checks** (R4): assert no record gains admin it lacked; `RULE_ADMIN`/`OWNER_RULE` unchanged; forced client `isAdmin` still 403s (rule tests still 26/26).
 - [x] **T7 — Scope floor** (R5): no `settings`/`projects` rule change; changes limited to the files in design §4.
 - [x] **T8 — Self-validate**: `pnpm check`/`build` clean; `just validate-local` green (incl. generator `--check`). Lockstep: CHANGELOG TSK-074; SPRINT_TRACKER coherent.
-- [ ] **T9 — Open PR** against `main`; STOP-and-hold for `/verification-done` (V1 one-row + V4 no-orphan + V5 no-leak + V6 reversible) → `/review-pr`. Never merge.
+- [x] **T9 — Open PR** against `main`; STOP-and-hold for `/verification-done` (V1 one-row + V4 no-orphan + V5 no-leak + V6 reversible) → `/review-pr`. Never merge.
