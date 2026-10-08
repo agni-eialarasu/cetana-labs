@@ -6,7 +6,7 @@
 | **Feature** | Admin-gated in-app CRUD for **projects** (`/admin/projects`) and **developers** (`/admin/developers`), completing the admin-tier trio (`BK-030` + `BK-031` + `BK-014`). Includes D-CRUD-1 data reconciliation and honesty divergence banner. |
 | **Backlog** | `BK-014` (`TSK-071`, SPRINT-13) |
 | **Branch** | `feat/admin-crud` |
-| **PR** | Pending |
+| **PR** | [PR #80](https://github.com/agni-eialarasu/cetana-labs/pull/80) |
 | **Executor** | Antigravity (SvelteKit CRUD forms + reconciliation engine, cost-first per `RFC-LAB-000-014`) |
 | **Date** | 2026-10-08 |
 
