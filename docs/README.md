@@ -24,6 +24,7 @@ docs/
 | [Developer Guide](guides/developer-guide.md) | Local/cloud **setup, commands, and Kiro Web + IDE surfaces** — how to develop on this repo (renamed from `work-environment.md`; absorbed the former cloud-dev guide). |
 | [Sprint Lifecycle](guides/sprint-lifecycle.md) | The five-phase AIDLC delivery process (both paths) — visual state + sequence guide. |
 | [Project Owner Guide](guides/project-owner-guide.md) | How project **leads write `STATUS.md`** and run the `/status-init` · `/status-update` prompts. |
+| [RGS Guide](guides/rgs-guide.md) | How to use **`/rgs`** (Requirement Gathering System) — turn a fuzzy ask into a ledger-ready `INTAKE-NNN` entry; the chat-only elicitation flow + where drafts land. |
 
 ## 📐 Reference
 
