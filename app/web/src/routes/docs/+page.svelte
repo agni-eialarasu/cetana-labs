@@ -2,7 +2,6 @@
   import { DOCS, INCLUDED_DOCS } from '$lib/docs/registry';
   import { page } from '$app/state';
   import { base } from '$app/paths';
-  import ThemeToggle from '$lib/components/ThemeToggle.svelte';
 
   // Read ?doc=<slug> from query param, default to first included doc
   const docParam = $derived(page.url.searchParams.get('doc'));
@@ -29,7 +28,6 @@
         <span class="text-xs font-mono text-muted">Help &amp; Documentation</span>
       </div>
       <div class="flex items-center gap-3">
-        <ThemeToggle />
         <a
           href="https://github.com/agni-eialarasu/cetana-labs"
           target="_blank"

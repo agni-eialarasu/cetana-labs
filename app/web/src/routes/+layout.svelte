@@ -3,6 +3,7 @@
   import { theme } from '$lib/theme.svelte';
   import { settings } from '$lib/settings';
   import AuthControl from '$lib/components/AuthControl.svelte';
+  import ThemeToggle from '$lib/components/ThemeToggle.svelte';
   import { onMount } from 'svelte';
   import { base } from '$app/paths';
 
@@ -19,13 +20,11 @@
 </script>
 
 <div class="min-h-screen flex flex-col bg-canvas text-ink">
-  <!-- Global auth bar (M2, R4) + app branding header (BK-013 / R3.1) -->
-  <div class="border-b border-line bg-panel/40">
+  <!-- Global auth bar (M2, R4) + app branding header (BK-013 / R3.1) + center nav slot (BK-027) -->
+  <header class="border-b border-line bg-panel/40">
     <div class="mx-auto flex max-w-content items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
-      <a
-        href="{base}/"
-        class="flex items-center gap-2 text-sm font-semibold text-ink hover:text-brand transition-colors"
-      >
+      <!-- LEFT: branding -->
+      <a href="{base}/" class="flex items-center gap-2 text-sm hover:text-brand transition-colors">
         {#if settings.logoSmallUrl() || settings.logoIconUrl()}
           <img
             src={settings.logoSmallUrl() || settings.logoIconUrl()}
@@ -33,17 +32,25 @@
             class="h-6 w-auto"
           />
         {/if}
-        <span>{settings.appName()}</span>
+        <span class="font-semibold text-ink">{settings.appName()}</span>
+        <span class="text-xs text-muted hidden sm:inline">{settings.appDescription()}</span>
       </a>
+
+      <!-- CENTER: nav slot (empty now; styled container ready for links) -->
+      <nav class="hidden md:flex items-center gap-4 text-sm" aria-label="Primary">
+        <!-- future routes mount here (R1.2) -->
+      </nav>
+
+      <!-- RIGHT: auth -->
       <AuthControl />
     </div>
-  </div>
+  </header>
 
   <div class="flex-1">
     {@render children()}
   </div>
 
-  <!-- Minimal consumer-facing footer (BK-024 R2 / BK-013 branding) -->
+  <!-- Minimal consumer-facing footer (BK-024 R2 / BK-013 branding / BK-027 global theme toggle) -->
   <footer class="border-t border-line bg-panel/20 py-6 mt-12">
     <div
       class="mx-auto flex max-w-content items-center justify-between px-4 sm:px-6 lg:px-8 text-xs text-muted"
@@ -59,6 +66,7 @@
         <span>{settings.appName()}</span>
       </div>
       <div class="flex items-center gap-4">
+        <ThemeToggle />
         <a href="{base}/docs" class="text-ink-secondary hover:text-ink transition-colors font-medium">Docs</a>
         <a
           href="https://github.com/agni-eialarasu/cetana-labs"
