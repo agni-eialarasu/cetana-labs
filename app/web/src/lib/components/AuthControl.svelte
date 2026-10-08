@@ -33,7 +33,7 @@
       {auth.identity?.name}
       {#if auth.isUnlinked}
         <span
-          class="ml-1 rounded-[6px] bg-panel px-1.5 py-0.5 text-[10px] font-medium text-muted"
+          class="ml-1 rounded-[6px] bg-panel px-1.5 py-0.5 text-2xs font-medium text-muted"
           title="Signed in, but this GitHub account isn't linked to a portfolio project."
         >
           unlinked

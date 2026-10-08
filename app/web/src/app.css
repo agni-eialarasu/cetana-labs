@@ -84,11 +84,15 @@ body {
   padding: 0;
 }
 
+:root {
+  font-size: 16px;
+}
+
 body {
   background: var(--np-bg);
   color: var(--np-text);
   font-family: 'IBM Plex Sans', sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   transition:

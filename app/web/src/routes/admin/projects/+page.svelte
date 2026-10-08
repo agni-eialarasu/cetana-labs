@@ -351,11 +351,11 @@
     </div>
   </div>
 {:else}
-  <div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+  <div class="mx-auto max-w-content px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
     <AdminNav />
 
     <!-- Action Bar & Summary -->
-    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="mb-3.5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-line pb-3">
       <div>
         <h2 class="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
           <span>📁 Projects Register</span>
@@ -386,7 +386,7 @@
     <!-- Success Notice -->
     {#if successNotice}
       <div
-        class="mb-6 flex items-center justify-between rounded-lg border border-brand/30 bg-brand-soft/20 px-4 py-3 text-xs text-brand-ink"
+        class="mb-3.5 flex items-center justify-between rounded-lg border border-brand/30 bg-brand-soft/20 px-3.5 py-2 text-xs text-brand-ink"
       >
         <div class="flex items-center gap-2">
           <span>✅</span>
@@ -399,19 +399,19 @@
     {/if}
 
     <!-- Filters & Search -->
-    <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-4">
+    <div class="mb-3.5 grid grid-cols-1 gap-2.5 sm:grid-cols-4">
       <div class="sm:col-span-2">
         <input
           type="search"
           placeholder="Search by ID, name, slug, or owner…"
           bind:value={searchQuery}
-          class="w-full rounded-md border border-line bg-panel px-3 py-2 text-xs text-ink placeholder:text-muted focus:border-brand focus:outline-none"
+          class="w-full rounded-md border border-line bg-panel px-3 py-1.5 text-xs text-ink placeholder:text-muted focus:border-brand focus:outline-none"
         />
       </div>
       <div>
         <select
           bind:value={archetypeFilter}
-          class="w-full rounded-md border border-line bg-panel px-3 py-2 text-xs text-ink focus:border-brand focus:outline-none"
+          class="w-full rounded-md border border-line bg-panel px-3 py-1.5 text-xs text-ink focus:border-brand focus:outline-none"
         >
           <option value="all">All Archetypes</option>
           {#each ARCHETYPES as arch}
@@ -422,7 +422,7 @@
       <div>
         <select
           bind:value={healthFilter}
-          class="w-full rounded-md border border-line bg-panel px-3 py-2 text-xs text-ink focus:border-brand focus:outline-none"
+          class="w-full rounded-md border border-line bg-panel px-3 py-1.5 text-xs text-ink focus:border-brand focus:outline-none"
         >
           <option value="all">All Health States</option>
           {#each HEALTH_OPTIONS as h}
@@ -434,7 +434,7 @@
 
     <!-- Main Table View -->
     {#if loading}
-      <div class="flex items-center justify-center py-20 text-muted">
+      <div class="flex items-center justify-center py-12 text-muted">
         <span class="text-sm">Loading project portfolio…</span>
       </div>
     {:else if loadError}
@@ -450,7 +450,7 @@
         </button>
       </div>
     {:else if filteredProjects.length === 0}
-      <div class="rounded-lg border border-line bg-panel p-12 text-center text-xs text-muted">
+      <div class="rounded-lg border border-line bg-panel p-8 text-center text-xs text-muted">
         <p class="text-sm font-medium text-ink">No projects match the current filter</p>
         <p class="mt-1">Try adjusting your search query or archetype/health filters.</p>
       </div>
@@ -458,73 +458,73 @@
       <div class="overflow-x-auto rounded-lg border border-line bg-panel shadow-sm">
         <table class="w-full text-left text-xs">
           <thead
-            class="border-b border-line bg-canvas/60 text-[11px] font-semibold text-muted uppercase tracking-wider"
+            class="border-b border-line bg-canvas/60 text-xs font-semibold text-muted uppercase tracking-wider"
           >
             <tr>
-              <th scope="col" class="py-3 pl-4 pr-3">ID</th>
-              <th scope="col" class="px-3 py-3">Project / Slug</th>
-              <th scope="col" class="px-3 py-3">Archetype</th>
-              <th scope="col" class="px-3 py-3">Owner</th>
-              <th scope="col" class="px-3 py-3">Dev Env</th>
-              <th scope="col" class="px-3 py-3">Health Status</th>
-              <th scope="col" class="py-3 pl-3 pr-4 text-right">Actions</th>
+              <th scope="col" class="py-2.5 pl-3.5 pr-2.5">ID</th>
+              <th scope="col" class="px-2.5 py-2.5">Project / Slug</th>
+              <th scope="col" class="px-2.5 py-2.5">Archetype</th>
+              <th scope="col" class="px-2.5 py-2.5">Owner</th>
+              <th scope="col" class="px-2.5 py-2.5">Dev Env</th>
+              <th scope="col" class="px-2.5 py-2.5">Health Status</th>
+              <th scope="col" class="py-2.5 pl-2.5 pr-3.5 text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-line text-ink">
             {#each filteredProjects as p (p.id)}
               <tr class="transition-colors hover:bg-canvas/40">
-                <td class="py-3.5 pl-4 pr-3 font-mono font-bold text-ink whitespace-nowrap">
+                <td class="py-2.5 pl-3.5 pr-2.5 font-mono font-bold text-ink whitespace-nowrap">
                   {p.lab_id}
                 </td>
-                <td class="px-3 py-3.5">
+                <td class="px-2.5 py-2.5">
                   <div class="font-medium text-ink">{p.name}</div>
-                  <div class="font-mono text-[11px] text-muted">{p.slug}</div>
+                  <div class="font-mono text-2xs text-muted">{p.slug}</div>
                   {#if p.descriptor}
-                    <div class="text-[11px] text-muted italic mt-0.5 line-clamp-1">{p.descriptor}</div>
+                    <div class="text-2xs text-muted italic mt-0.5 line-clamp-1">{p.descriptor}</div>
                   {/if}
                 </td>
-                <td class="px-3 py-3.5 whitespace-nowrap">
+                <td class="px-2.5 py-2.5 whitespace-nowrap">
                   <span
-                    class="inline-flex items-center gap-1 rounded bg-canvas px-2 py-1 text-[11px] border border-line"
+                    class="inline-flex items-center gap-1 rounded bg-canvas px-2 py-0.5 text-xs border border-line"
                   >
                     <span>{ARCHETYPES.find((a) => a.value === p.archetype)?.icon || '💻'}</span>
                     <span>{ARCHETYPES.find((a) => a.value === p.archetype)?.label || p.archetype}</span>
                   </span>
                 </td>
-                <td class="px-3 py-3.5 whitespace-nowrap">
+                <td class="px-2.5 py-2.5 whitespace-nowrap">
                   <div class="font-medium text-ink">{p.owner_name}</div>
                   {#if p.owner_github}
-                    <div class="text-[11px] text-muted font-mono">@{p.owner_github}</div>
+                    <div class="text-2xs text-muted font-mono">@{p.owner_github}</div>
                   {/if}
                 </td>
-                <td class="px-3 py-3.5 whitespace-nowrap">
+                <td class="px-2.5 py-2.5 whitespace-nowrap">
                   <span
-                    class="rounded px-2 py-0.5 font-mono text-[11px] uppercase {p.dev_environment === 'cloud'
+                    class="rounded px-2 py-0.5 font-mono text-2xs uppercase {p.dev_environment === 'cloud'
                       ? 'bg-brand-soft/40 text-brand'
                       : 'bg-canvas text-muted border border-line'}"
                   >
                     {p.dev_environment}
                   </span>
                 </td>
-                <td class="px-3 py-3.5 whitespace-nowrap">
-                  <div class="text-[11px] font-medium">{p.status_health || '—'}</div>
+                <td class="px-2.5 py-2.5 whitespace-nowrap">
+                  <div class="text-xs font-medium">{p.status_health || '—'}</div>
                   {#if p.status_note}
-                    <div class="text-[10px] text-muted line-clamp-1 max-w-xs">{p.status_note}</div>
+                    <div class="text-2xs text-muted line-clamp-1 max-w-xs">{p.status_note}</div>
                   {/if}
                 </td>
-                <td class="py-3.5 pl-3 pr-4 text-right whitespace-nowrap">
+                <td class="py-2.5 pl-2.5 pr-3.5 text-right whitespace-nowrap">
                   <div class="flex items-center justify-end gap-1.5">
                     <button
                       type="button"
                       onclick={() => openEditModal(p)}
-                      class="rounded border border-line bg-canvas px-2.5 py-1 text-[11px] font-medium text-ink transition-colors hover:border-brand-line hover:text-brand"
+                      class="rounded border border-line bg-canvas px-2.5 py-1 text-xs font-medium text-ink transition-colors hover:border-brand-line hover:text-brand"
                     >
                       Edit
                     </button>
                     <button
                       type="button"
                       onclick={() => openDeleteModal(p)}
-                      class="rounded border border-critical-line/40 bg-critical-soft/10 px-2 py-1 text-[11px] font-medium text-critical transition-colors hover:bg-critical hover:text-white"
+                      class="rounded border border-critical-line/40 bg-critical-soft/10 px-2 py-1 text-xs font-medium text-critical transition-colors hover:bg-critical hover:text-white"
                     >
                       Delete
                     </button>
@@ -586,7 +586,7 @@
               required
               class="mt-1 w-full rounded border border-line bg-canvas px-3 py-2 font-mono text-xs text-ink uppercase focus:border-brand focus:outline-none"
             />
-            <p class="mt-0.5 text-[11px] text-muted">
+            <p class="mt-0.5 text-xs text-muted">
               Strict pattern: <code class="font-mono">^LAB-\d&#123;3&#125;$</code>
             </p>
           </div>
@@ -669,7 +669,7 @@
                 </option>
               {/each}
             </select>
-            <p class="mt-0.5 text-[11px] text-muted">Required foreign-key relation to users collection.</p>
+            <p class="mt-0.5 text-xs text-muted">Required foreign-key relation to users collection.</p>
           </div>
 
           <!-- Dev Environment -->
@@ -894,7 +894,7 @@
                 </option>
               {/each}
             </select>
-            <p class="mt-0.5 text-[11px] text-muted">
+            <p class="mt-0.5 text-xs text-muted">
               Reassigning owner updates PocketBase owner foreign key.
             </p>
           </div>
@@ -1024,8 +1024,8 @@
 
       <div class="mt-4 rounded bg-canvas p-3 border border-line text-xs">
         <div class="font-bold text-ink">{deletingProject.name}</div>
-        <div class="font-mono text-muted text-[11px]">{deletingProject.lab_id} · {deletingProject.slug}</div>
-        <div class="text-[11px] text-muted mt-1">Owner: {deletingProject.owner_name}</div>
+        <div class="font-mono text-muted text-xs">{deletingProject.lab_id} · {deletingProject.slug}</div>
+        <div class="text-xs text-muted mt-1">Owner: {deletingProject.owner_name}</div>
       </div>
 
       <div class="mt-4">

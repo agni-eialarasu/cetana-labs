@@ -234,11 +234,11 @@
     </div>
   </div>
 {:else}
-  <div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+  <div class="mx-auto max-w-content px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
     <AdminNav />
 
     <!-- Action Bar & Summary -->
-    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="mb-3.5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-line pb-3">
       <div>
         <h2 class="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
           <span>👥 Developers & Access Control</span>
@@ -277,7 +277,7 @@
     <!-- Success Notice -->
     {#if successNotice}
       <div
-        class="mb-6 flex items-center justify-between rounded-lg border border-brand/30 bg-brand-soft/20 px-4 py-3 text-xs text-brand-ink"
+        class="mb-3.5 flex items-center justify-between rounded-lg border border-brand/30 bg-brand-soft/20 px-3.5 py-2 text-xs text-brand-ink"
       >
         <div class="flex items-center gap-2">
           <span>✅</span>
@@ -290,19 +290,19 @@
     {/if}
 
     <!-- Search & Filters -->
-    <div class="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-4">
+    <div class="mb-3.5 grid grid-cols-1 gap-2.5 sm:grid-cols-4">
       <div class="sm:col-span-2">
         <input
           type="search"
           placeholder="Search by name, @handle, ID, or organization…"
           bind:value={searchQuery}
-          class="w-full rounded-md border border-line bg-panel px-3 py-2 text-xs text-ink placeholder:text-muted focus:border-brand focus:outline-none"
+          class="w-full rounded-md border border-line bg-panel px-3 py-1.5 text-xs text-ink placeholder:text-muted focus:border-brand focus:outline-none"
         />
       </div>
       <div>
         <select
           bind:value={roleFilter}
-          class="w-full rounded-md border border-line bg-panel px-3 py-2 text-xs text-ink focus:border-brand focus:outline-none"
+          class="w-full rounded-md border border-line bg-panel px-3 py-1.5 text-xs text-ink focus:border-brand focus:outline-none"
         >
           <option value="all">All Roles</option>
           {#each ROLES as r}
@@ -313,7 +313,7 @@
       <div>
         <select
           bind:value={statusFilter}
-          class="w-full rounded-md border border-line bg-panel px-3 py-2 text-xs text-ink focus:border-brand focus:outline-none"
+          class="w-full rounded-md border border-line bg-panel px-3 py-1.5 text-xs text-ink focus:border-brand focus:outline-none"
         >
           <option value="all">All Statuses</option>
           <option value="active">Active Only</option>
@@ -325,7 +325,7 @@
 
     <!-- Main Users Table -->
     {#if loading}
-      <div class="flex items-center justify-center py-20 text-muted">
+      <div class="flex items-center justify-center py-12 text-muted">
         <span class="text-sm">Loading developer roster…</span>
       </div>
     {:else if loadError}
@@ -341,7 +341,7 @@
         </button>
       </div>
     {:else if filteredUsers.length === 0}
-      <div class="rounded-lg border border-line bg-panel p-12 text-center text-xs text-muted">
+      <div class="rounded-lg border border-line bg-panel p-8 text-center text-xs text-muted">
         <p class="text-sm font-medium text-ink">No developers match your filters</p>
         <p class="mt-1">Try clearing your search term or selecting "All Roles".</p>
       </div>
@@ -349,26 +349,26 @@
       <div class="overflow-x-auto rounded-lg border border-line bg-panel shadow-sm">
         <table class="w-full text-left text-xs">
           <thead
-            class="border-b border-line bg-canvas/60 text-[11px] font-semibold text-muted uppercase tracking-wider"
+            class="border-b border-line bg-canvas/60 text-xs font-semibold text-muted uppercase tracking-wider"
           >
             <tr>
-              <th scope="col" class="py-3 pl-4 pr-3">Developer</th>
-              <th scope="col" class="px-3 py-3">GitHub Handle</th>
-              <th scope="col" class="px-3 py-3">Role & Org</th>
-              <th scope="col" class="px-3 py-3">Owned Projects</th>
-              <th scope="col" class="px-3 py-3">Privileges</th>
-              <th scope="col" class="px-3 py-3">Status</th>
-              <th scope="col" class="py-3 pl-3 pr-4 text-right">Actions</th>
+              <th scope="col" class="py-2.5 pl-3.5 pr-2.5">Developer</th>
+              <th scope="col" class="px-2.5 py-2.5">GitHub Handle</th>
+              <th scope="col" class="px-2.5 py-2.5">Role & Org</th>
+              <th scope="col" class="px-2.5 py-2.5">Owned Projects</th>
+              <th scope="col" class="px-2.5 py-2.5">Privileges</th>
+              <th scope="col" class="px-2.5 py-2.5">Status</th>
+              <th scope="col" class="py-2.5 pl-2.5 pr-3.5 text-right">Actions</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-line text-ink">
             {#each filteredUsers as u (u.id)}
               <tr class="transition-colors hover:bg-canvas/40">
-                <td class="py-3.5 pl-4 pr-3">
+                <td class="py-2.5 pl-3.5 pr-2.5">
                   <div class="font-semibold text-ink">{u.name}</div>
-                  <div class="font-mono text-[11px] text-muted">{u.seed_id || u.id}</div>
+                  <div class="font-mono text-2xs text-muted">{u.seed_id || u.id}</div>
                 </td>
-                <td class="px-3 py-3.5 whitespace-nowrap">
+                <td class="px-2.5 py-2.5 whitespace-nowrap">
                   {#if u.github_handle}
                     <a
                       href="https://github.com/{u.github_handle}"
@@ -379,64 +379,64 @@
                       @{u.github_handle}
                     </a>
                   {:else}
-                    <span class="text-muted font-mono text-[11px]">Unlinked</span>
+                    <span class="text-muted font-mono text-2xs">Unlinked</span>
                   {/if}
                 </td>
-                <td class="px-3 py-3.5">
+                <td class="px-2.5 py-2.5">
                   <div class="font-medium capitalize text-ink">{u.role}</div>
                   {#if u.org}
-                    <div class="text-[11px] text-muted">{u.org}</div>
+                    <div class="text-2xs text-muted">{u.org}</div>
                   {/if}
                 </td>
-                <td class="px-3 py-3.5">
+                <td class="px-2.5 py-2.5">
                   {#if u.owned_projects.length > 0}
                     <div class="flex flex-wrap gap-1">
                       {#each u.owned_projects as pid}
                         <span
-                          class="rounded bg-canvas border border-line px-1.5 py-0.5 font-mono text-[10px] text-ink font-semibold"
+                          class="rounded bg-canvas border border-line px-1.5 py-0.5 font-mono text-2xs text-ink font-semibold"
                         >
                           {pid}
                         </span>
                       {/each}
                     </div>
                   {:else}
-                    <span class="text-muted text-[11px]">None</span>
+                    <span class="text-muted text-2xs">None</span>
                   {/if}
                 </td>
-                <td class="px-3 py-3.5 whitespace-nowrap">
+                <td class="px-2.5 py-2.5 whitespace-nowrap">
                   {#if u.is_admin}
                     <span
-                      class="inline-flex items-center gap-1 rounded bg-brand-soft/60 px-2 py-0.5 text-[11px] font-semibold text-brand-ink"
+                      class="inline-flex items-center gap-1 rounded bg-brand-soft/60 px-2 py-0.5 text-xs font-semibold text-brand-ink"
                     >
                       <span>🛡️</span>
                       <span>Admin</span>
                     </span>
                   {:else}
-                    <span class="text-muted text-[11px]">Standard</span>
+                    <span class="text-muted text-xs">Standard</span>
                   {/if}
                 </td>
-                <td class="px-3 py-3.5 whitespace-nowrap">
+                <td class="px-2.5 py-2.5 whitespace-nowrap">
                   {#if u.active}
                     <span
-                      class="inline-flex items-center gap-1.5 rounded-full bg-panel px-2 py-0.5 text-[11px] font-medium text-ink border border-line"
+                      class="inline-flex items-center gap-1.5 rounded-full bg-panel px-2.5 py-0.5 text-xs font-medium text-ink border border-line"
                     >
                       <span class="h-1.5 w-1.5 rounded-full bg-brand"></span>
                       <span>Active</span>
                     </span>
                   {:else}
                     <span
-                      class="inline-flex items-center gap-1.5 rounded-full bg-panel px-2 py-0.5 text-[11px] font-medium text-muted border border-line"
+                      class="inline-flex items-center gap-1.5 rounded-full bg-panel px-2.5 py-0.5 text-xs font-medium text-muted border border-line"
                     >
                       <span class="h-1.5 w-1.5 rounded-full bg-muted"></span>
                       <span>Inactive</span>
                     </span>
                   {/if}
                 </td>
-                <td class="py-3.5 pl-3 pr-4 text-right whitespace-nowrap">
+                <td class="py-2.5 pl-2.5 pr-3.5 text-right whitespace-nowrap">
                   <button
                     type="button"
                     onclick={() => openEditModal(u)}
-                    class="rounded border border-line bg-canvas px-2.5 py-1 text-[11px] font-medium text-ink transition-colors hover:border-brand-line hover:text-brand"
+                    class="rounded border border-line bg-canvas px-2.5 py-1 text-xs font-medium text-ink transition-colors hover:border-brand-line hover:text-brand"
                   >
                     Edit / Access
                   </button>
@@ -470,7 +470,7 @@
       </div>
 
       <!-- Information notice about OAuth vs direct creation -->
-      <div class="mt-4 rounded border border-line bg-canvas/70 p-3 text-[11px] text-muted">
+      <div class="mt-4 rounded border border-line bg-canvas/70 p-3 text-xs text-muted">
         <p class="font-semibold text-ink">💡 Authentication Note</p>
         <p class="mt-0.5">
           The standard developer path is self-sign-in via GitHub OAuth. You can also pre-provision developer
@@ -516,7 +516,7 @@
               placeholder="usr-john-doe"
               class="mt-1 w-full rounded border border-line bg-canvas px-3 py-2 font-mono text-xs text-ink focus:border-brand focus:outline-none"
             />
-            <p class="mt-0.5 text-[10px] text-muted">Format: <code class="font-mono">usr-name</code></p>
+            <p class="mt-0.5 text-2xs text-muted">Format: <code class="font-mono">usr-name</code></p>
           </div>
 
           <div>
@@ -578,7 +578,7 @@
             />
             <div>
               <span class="font-semibold text-ink">🛡️ Grant Administrator Privileges (is_admin)</span>
-              <p class="text-[11px] text-muted">
+              <p class="text-xs text-muted">
                 Authorizes write access to Settings, Projects register, and Developer accounts.
               </p>
             </div>
@@ -730,7 +730,7 @@
             />
             <div>
               <span class="font-semibold text-ink">🛡️ Administrator Privileges (is_admin)</span>
-              <p class="text-[11px] text-muted">Grant or revoke administrator access across the system.</p>
+              <p class="text-xs text-muted">Grant or revoke administrator access across the system.</p>
             </div>
           </label>
 
@@ -743,7 +743,7 @@
             />
             <div>
               <span class="font-semibold text-ink">Active Status</span>
-              <p class="text-[11px] text-muted">
+              <p class="text-xs text-muted">
                 Uncheck to soft-deactivate this account without deleting audit records.
               </p>
             </div>

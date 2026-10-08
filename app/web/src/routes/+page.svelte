@@ -48,10 +48,10 @@
 
 <svelte:head><title>{settings.appName()} — Engineering Portfolio</title></svelte:head>
 
-<div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+<div class="mx-auto max-w-content px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
   <!-- KPI bar (BK-027: masthead moved to global layout header) -->
-  <section class="mb-8 border-b border-line pb-6" aria-label="Portfolio metrics">
-    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+  <section class="mb-3.5 border-b border-line pb-3.5" aria-label="Portfolio metrics">
+    <div class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
       <KpiCard
         label="Active Products"
         value={activeCount}
@@ -91,12 +91,12 @@
   </section>
 
   <!-- Controls -->
-  <div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-    <div class="flex flex-wrap gap-2">
+  <div class="mb-3.5 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex flex-wrap gap-1.5">
       {#each tabs as tab (tab.id)}
         <button
           type="button"
-          class="rounded-control border px-3.5 py-2 text-sm font-semibold transition-colors
+          class="rounded-control border px-3 py-1.5 text-xs font-semibold transition-colors
             {filter === tab.id
             ? 'border-brand bg-brand-soft text-brand-ink'
             : 'border-line bg-panel text-muted hover:text-ink'}"
@@ -106,10 +106,10 @@
         </button>
       {/each}
     </div>
-    <div class="flex flex-wrap items-center gap-3">
-      <label class="flex items-center gap-2 rounded-control border border-line bg-panel px-3 py-1.5">
-        <span class="text-[11px] font-semibold uppercase tracking-wide text-muted">Sort</span>
-        <select bind:value={sort} class="bg-transparent text-sm font-semibold text-ink outline-none">
+    <div class="flex flex-wrap items-center gap-2.5">
+      <label class="flex items-center gap-1.5 rounded-control border border-line bg-panel px-2.5 py-1">
+        <span class="text-xs font-semibold uppercase tracking-wide text-muted">Sort</span>
+        <select bind:value={sort} class="bg-transparent text-xs font-semibold text-ink outline-none">
           <option value="priority">Executive Priority</option>
           <option value="recent">Recently Updated</option>
           <option value="id">Project ID</option>
@@ -119,20 +119,20 @@
         type="search"
         bind:value={query}
         placeholder="Search title, lead, ID…"
-        class="min-w-[220px] rounded-control border border-line bg-panel px-3.5 py-2 text-sm text-ink outline-none focus:border-brand"
+        class="min-w-[200px] rounded-control border border-line bg-panel px-3 py-1 text-xs text-ink outline-none focus:border-brand"
       />
     </div>
   </div>
 
   <!-- Cards -->
   {#if visible.length}
-    <div class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+    <div class="grid grid-cols-1 gap-3.5 md:grid-cols-2 xl:grid-cols-3">
       {#each visible as project (project.id)}
         <ProjectCard {project} />
       {/each}
     </div>
   {:else}
-    <p class="rounded-card border border-line bg-panel p-8 text-center text-muted">
+    <p class="rounded-card border border-line bg-panel p-6 text-center text-muted">
       No projects match the current filter.
     </p>
   {/if}

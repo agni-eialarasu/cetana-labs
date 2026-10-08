@@ -201,42 +201,33 @@
     </div>
   </div>
 {:else}
-  <div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+  <div class="mx-auto max-w-content px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
     <AdminNav />
-    <!-- Top Navigation & Header -->
-    <header class="mb-8 flex flex-col gap-4 border-b border-line pb-6">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <a
-            href="{base}/"
-            class="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-ink transition-colors"
-          >
-            <span>←</span>
-            <span>Back to Dashboard</span>
-          </a>
-          <span class="text-line-strong">•</span>
-          <span class="text-xs font-mono text-muted">Admin Controls</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span
-            class="inline-flex items-center gap-1 rounded-[6px] bg-brand-soft px-2 py-0.5 text-xs font-medium text-brand-ink"
-          >
-            <span>🛡️</span>
-            <span>Administrator Tier</span>
-          </span>
-        </div>
-      </div>
 
+    <!-- Action Bar & Summary -->
+    <header class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between border-b border-line pb-3">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight text-ink">Application Settings</h1>
-        <p class="mt-1 text-sm text-muted">
+        <h1 class="text-xl font-bold tracking-tight text-ink flex items-center gap-2">
+          <span>⚙️ Application Settings</span>
+          <span
+            class="rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand"
+          >
+            🛡️ Admin Tier
+          </span>
+        </h1>
+        <p class="mt-0.5 text-xs text-muted">
           Configure application branding, titles, and logo asset URLs. Changes update in-app branding live.
         </p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="rounded bg-panel border border-line px-2 py-1 text-xs font-mono text-muted">
+          RULE_ADMIN
+        </span>
       </div>
     </header>
 
     {#if loading}
-      <div class="flex items-center justify-center py-20 text-muted">
+      <div class="flex items-center justify-center py-12 text-muted">
         <span class="text-sm">Loading application settings…</span>
       </div>
     {:else if loadError}
@@ -309,10 +300,10 @@
                 <div class="flex items-center justify-between">
                   <label for={field.key} class="text-xs font-semibold text-ink">
                     {field.label}
-                    <span class="ml-1 text-[11px] font-mono text-muted font-normal">({field.key})</span>
+                    <span class="ml-1 text-2xs font-mono text-muted font-normal">({field.key})</span>
                   </label>
                   {#if field.draft !== field.original}
-                    <span class="text-[10px] font-medium text-warn font-mono">modified</span>
+                    <span class="text-2xs font-medium text-warn font-mono">modified</span>
                   {/if}
                 </div>
 
