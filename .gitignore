@@ -67,6 +67,9 @@ build/
 app/pocketbase/pocketbase
 app/pocketbase/pb_data/
 app/pocketbase/pb_migrations/
+# Defensive: a stray pb_data/ anywhere (e.g. a raw `pocketbase serve` from the repo root
+# before --dir was pinned) — local SQLite runtime data, never tracked.
+pb_data/
 
 # =============================================================================
 # Deployment

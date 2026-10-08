@@ -94,10 +94,19 @@ hooks are intentionally disabled for fast terminal startup — do **not** rely o
 
 - **Python 3.11+** (governance scripts are zero-dependency; no venv needed). `uv` is the standard if deps are ever added.
 - **Node** & **pnpm 10.27** via Homebrew (`/opt/homebrew/bin/node`, `/opt/homebrew/bin/pnpm`). `package.json` pins `packageManager: pnpm@10.27.0`; Corepack keeps it consistent. No per-project Node switching.
-- **PocketBase >= 0.23** — system binary via Homebrew (`pb`), or fetched by `.devcontainer/setup-pocketbase.sh` in cloud/CI.
+- **PocketBase >= 0.23** — system binary via Homebrew (`pb` / `pocketbase`, on PATH at `/opt/homebrew/bin`), or fetched by `.devcontainer/setup-pocketbase.sh` in cloud/CI.
 - **Podman** (preferred; `pod-start`/`pod-stop` manage the VM) or Docker context — only for containerized workflows; local dev runs the `pb` binary directly.
 
 Kiro Web needs none of the server tooling — it's for stateless work.
+
+> ### Local Dev — DX quick reference (recurring gotchas, all handled)
+> These bit us during v0.14.0 local testing; the fixes are in the repo now, but know them:
+> 1. **PocketBase is a PATH binary, not `./pocketbase`.** Install is Homebrew (`brew install pocketbase` → `/opt/homebrew/bin/pocketbase`). The repo has **no committed `pocketbase` file** (gitignored). Never run `./pocketbase` or `cd app/pocketbase && ./pocketbase` — use `just start-local` / `just setup` (they resolve the PATH binary) or `pocketbase serve --dir app/pocketbase/pb_data`.
+> 2. **`just seed` needs `.env` — now auto-loaded.** `set dotenv-load := true` in the `justfile` sources the root `.env` (`PB_ADMIN_EMAIL`/`PB_ADMIN_PASSWORD`) into every recipe. If you call PocketBase/Python directly outside a recipe: `set -a && source .env && set +a` first.
+> 3. **Always pin `--dir app/pocketbase/pb_data`** on any raw `pocketbase serve` / `superuser` from the repo root — otherwise PocketBase writes a **stray `pb_data/` at the root** (the recurring `git status` noise). The `just` recipes and `scripts/setup-local.sh` do this for you.
+> 4. **OAuth: browse at `http://localhost:5173`** (not `127.0.0.1`) to match the registered GitHub callback `http://localhost:5173/oauth/callback` — a host mismatch passes the authorize step but 400s the token exchange (§5.1).
+>
+> **Fastest clean start:** `just setup` (end-to-end: superuser + schema + seed, PATH binary, canonical dir), then `just start-local`.
 
 ---
 
@@ -188,7 +197,7 @@ just stop-local             # frees :5173 and :8090; pb_data preserved
 > **Recovery (rebuild the canonical instance):**
 > ```bash
 > just stop-local                                  # kill any stray servers first
-> pocketbase superuser upsert "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD"   # run from app/pocketbase/
+> pocketbase superuser upsert "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD" --dir app/pocketbase/pb_data   # PATH binary; --dir avoids the CWD trap
 > just start-local                                 # serves app/pocketbase/pb_data
 > just seed                                        # provision + seed the canonical dir
 > ```
@@ -294,6 +303,9 @@ Governed by [`RFC-LAB-000-004`](../rfc/RFC-LAB-000-004-branching-model.md) (hybr
 - **Governance / docs** → may fast-path to `main`.
 - Always run `just validate-local` (`/validate-local`) before opening a PR or `/sprint-done`.
 - Never force-push `main`; roll back via revert PR.
+
+> ### Who pushes `main` (the "`main` is 1 ahead" is expected, not a bug)
+> **The agent never pushes `main` and never merges a PR — that gate is always the human's** (absolute floor, same as force-push). So after the Operator makes a **governance/docs fast-path commit** (a lockstep tidy, a status flip, a doc fix), you will routinely see **local `main` is "1 ahead of origin."** That is the *designed* handoff, not an error: the agent committed locally; **you push it** via **GitHub Desktop** (or `git push origin main`). Likewise for PRs — CI goes green, the Operator posts the `/review-pr` scorecard, and **you squash-merge**. If a push/merge fails with `remote: Internal Server Error` + a Request ID while reads work, that's a transient GitHub write-path outage — wait a few minutes and retry (do not re-author or re-branch; same endpoint).
 
 ---
 
