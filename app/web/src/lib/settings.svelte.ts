@@ -155,3 +155,22 @@ export async function loadSettings(fetchFn: typeof fetch = fetch): Promise<Setti
 
   return settings;
 }
+
+export interface EditableSettingRecord extends SettingRecord {
+  id: string;
+}
+
+export async function loadEditableSettings(): Promise<EditableSettingRecord[]> {
+  const records = await pb.collection('settings').getFullList();
+  return records.map((r) => ({
+    id: r.id,
+    key: r.key as string,
+    value: (r.value as string) ?? '',
+    type: (r.type as SettingType) ?? 'string',
+    group: (r.group as string) || null
+  }));
+}
+
+export async function updateSetting(id: string, value: string): Promise<void> {
+  await pb.collection('settings').update(id, { value });
+}

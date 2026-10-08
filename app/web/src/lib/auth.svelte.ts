@@ -105,6 +105,12 @@ class AuthState {
     return this.#authed && this.identity?.linkedUser == null;
   }
 
+  get isAdmin(): boolean {
+    return (
+      this.#authed && (pb.authStore.record as unknown as Record<string, unknown> | null)?.is_admin === true
+    );
+  }
+
   // START half of the redirect OAuth2 flow (R1.1, R1.3). Unlike the old all-in-one popup
   // (authWithOAuth2), this NEVER opens /api/realtime — the channel Railway's proxy breaks
   // on PB 0.40 (spike-confirmed, RFC-011 §4.5). Instead we redirect the whole page to
