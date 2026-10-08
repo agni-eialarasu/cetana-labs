@@ -86,9 +86,12 @@ fi
 # ---------------------------------------------------------------------------
 say "4/6  PocketBase superuser (idempotent)"
 # 0.23+: superusers are managed via the `superuser` command. upsert = create-or-update.
-if "$PB_BIN" superuser upsert "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD" >/dev/null 2>&1; then
+# --dir pins the canonical data dir (app/pocketbase/pb_data) regardless of CWD — otherwise
+# PocketBase writes a stray pb_data/ at the repo root (the recurring `git status` noise).
+PB_DATA_DIR="app/pocketbase/pb_data"
+if "$PB_BIN" superuser upsert "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD" --dir "$PB_DATA_DIR" >/dev/null 2>&1; then
   ok "superuser ready: $PB_ADMIN_EMAIL"
-elif "$PB_BIN" superuser create "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD" >/dev/null 2>&1; then
+elif "$PB_BIN" superuser create "$PB_ADMIN_EMAIL" "$PB_ADMIN_PASSWORD" --dir "$PB_DATA_DIR" >/dev/null 2>&1; then
   ok "superuser created: $PB_ADMIN_EMAIL"
 else
   warn "could not auto-create superuser (may already exist). Verify: $PB_BIN superuser --help"
@@ -97,7 +100,8 @@ fi
 # ---------------------------------------------------------------------------
 say "5/6  Start PocketBase + import collections schema"
 # Start a temporary background server to import schema + seed, then leave it running.
-"$PB_BIN" serve --http="0.0.0.0:${PB_PORT}" >/tmp/cetana-pb.log 2>&1 &
+# --dir pins the canonical data dir so seed/OAuth/schema all land in app/pocketbase/pb_data.
+"$PB_BIN" serve --http="0.0.0.0:${PB_PORT}" --dir "$PB_DATA_DIR" >/tmp/cetana-pb.log 2>&1 &
 PB_PID=$!
 # Wait for health
 for i in $(seq 1 20); do
