@@ -83,6 +83,10 @@ seed:
     {{PYTHON}} scripts/pb_provision.py --apply
     {{PYTHON}} scripts/pb_import.py --apply
 
+# Export live PocketBase data to data/*.json (reconciliation after in-app CRUD edits; BK-014 / R7.1)
+export-live-data:
+    {{PYTHON}} scripts/export_pb_to_data.py --apply
+
 # SvelteKit dev server only (:5173)
 web-dev:
     {{NVM}} cd app/web && pnpm install --frozen-lockfile && pnpm dev

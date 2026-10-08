@@ -2,6 +2,7 @@
   import { base } from '$app/paths';
   import { auth } from '$lib/auth.svelte';
   import { loadEditableSettings, updateSetting, loadSettings } from '$lib/settings.svelte';
+  import AdminNav from '$lib/components/AdminNav.svelte';
   import { onMount } from 'svelte';
 
   interface SettingField {
@@ -201,6 +202,7 @@
   </div>
 {:else}
   <div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+    <AdminNav />
     <!-- Top Navigation & Header -->
     <header class="mb-8 flex flex-col gap-4 border-b border-line pb-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
