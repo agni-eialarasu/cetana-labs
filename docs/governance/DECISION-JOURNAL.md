@@ -773,3 +773,24 @@ historical one.
 ### Session meta
 - **Class:** governance/doc decision → doc fast-path (README prose above the generated block; `generate_registry --check` stays green). Closes the loop on today's BK-014 reconciliation.
 - First of the three "lighter" brainstorm items; the other two (RGS user guide, RGS doc audit) remain open — the audit's intake-ledger question is the next real decision.
+
+---
+
+## Entry 024 — Adopt a Cetana intake ledger (RGS gets a home); seed of the Stage-D org hub
+
+> _RGS doc audit (Operator session, 2026-10-08). Finding: `/rgs` is a producer without a consumer here — it emits `INTAKE-NNN` drafts byte-compatible with `docs/REQUIREMENTS_INTAKE.md`, but Cetana had no such ledger._
+
+### D69 — Create a minimal Cetana `docs/governance/REQUIREMENTS_INTAKE.md`; Cetana-only scope now, documented as the Stage-D org-hub seed
+
+- **Audit finding:** `/rgs` (Stage C, live) shapes fuzzy asks into `INTAKE-NNN` drafts + a channel-relay message, grounded byte-for-byte in the Nexus Pulse intake shape. But **Cetana had no `REQUIREMENTS_INTAKE.md`** — so the drafts and their state machine (`NEW → AWAITING-SOURCE → CLARIFIED → SPECCED → DELIVERED`) had nowhere to land. The skill itself anticipated this ("if no ledger exists yet, e.g. Cetana Labs today, emit INTAKE-001 and note the ledger must be created on first adoption").
+- **Options weighed:** (A) adopt a Cetana ledger now; (B) document RGS as draft-only, relay elsewhere, no ledger; (C) defer entirely to the Stage-D org hub.
+- **Decision: Option A, scoped minimally — Cetana-only now, explicitly framed as the seed of the Stage-D org hub.** Created `docs/governance/REQUIREMENTS_INTAKE.md` (empty register + state legend). Rationale: (1) Cetana IS the master control plane, so the org-wide intake view belongs here long-term (matches the standing "org-hub over per-repo duplication" lean) — Option B under-uses that role; (2) building the full Stage-D hub now is over-build — Option C leaves RGS homeless meanwhile; (3) Option A as a *seed* threads it: RGS drafts land today, the AIDLC funnel works, and the doc records that org-wide intake is the Stage-D evolution (pairs with the convergence-ledger candidate). No throwaway.
+- **The one real fork (recorded):** Cetana-own requirements vs org-wide inbound. Chose **Cetana-only now**, with the ledger's scope note stating org-wide is the Stage-D direction — so the hub isn't prematurely built but the path is documented.
+- **Guardrail unchanged:** RGS still never writes this file; the Operator reviews + commits each entry by hand (governance/docs fast-path).
+
+### Downstream
+- Unblocks the **RGS minimal user guide** (brainstorm item #1) — it can now say "your `/rgs` draft lands in `docs/governance/REQUIREMENTS_INTAKE.md`."
+- The RGS skill's "no ledger yet (e.g. Cetana Labs today)" note is updated to point at the now-existing ledger.
+
+### Session meta
+- **Class:** governance/doc decision + a new (empty) governance doc → doc fast-path. Second of the three lighter brainstorm items (after D68 README); the RGS user guide (#1) is the last.

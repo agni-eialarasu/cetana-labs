@@ -65,7 +65,7 @@ Grounded in the live Nexus Pulse `docs/REQUIREMENTS_INTAKE.md`. Emit BOTH parts,
 ```
 
 **State** (R-OUT-2) ∈ `NEW` · `AWAITING-SOURCE` · `CLARIFIED` · `SPECCED` · `DELIVERED`. Emit `CLARIFIED` if all 7 slots resolved; else `AWAITING-SOURCE` (+ list the open questions) or `NEW`.
-**NNN** = next free id in the target ledger. If no ledger exists yet (e.g. Cetana Labs today), emit `INTAKE-001` and note the ledger must be created on first adoption.
+**NNN** = next free id in the target ledger. For Cetana Labs the ledger is **`docs/governance/REQUIREMENTS_INTAKE.md`** (adopted 2026-10-08, D69) — the first real entry is `INTAKE-001`. If a target repo has no ledger yet, emit `INTAKE-001` and note the ledger must be created on first adoption (as Cetana did).
 **Owner labels** = full name **"Agni Eialarasu"** (bare "Agni" = the org, not the person) (R-GOV-2).
 
 **(3) Channel-relay draft** (R-OUT-4) — a SEPARATE short copy-paste block (never sent by RGS):
