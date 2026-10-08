@@ -6,7 +6,7 @@
 | **Feature** | In-app editor for `settings` (`app_name`, `app_description`, `logo_*_url`), reactive `auth.isAdmin` getter, settings write layer, live branding refresh |
 | **Backlog** | `BK-031` (`TSK-070`, SPRINT-13) |
 | **Branch** | `feat/app-settings-ui` |
-| **PR** | Pending open (`feat/app-settings-ui → main`) |
+| **PR** | [PR #78](https://github.com/agni-eialarasu/cetana-labs/pull/78) |
 | **Executor** | Antigravity (SvelteKit form UI, cost-first per `RFC-LAB-000-014`) |
 | **Date** | 2026-10-08 |
 
@@ -40,7 +40,7 @@ Key additions:
 
 ---
 
-## 3. Human Verification Plan (for `/verification-done`)
+## 3. Human Verification Plan
 
 On the local stack (`just setup && just start-local`), with an authenticated admin (`is_admin=true`) and non-admin / anonymous user:
 
@@ -65,3 +65,45 @@ On the local stack (`just setup && just start-local`), with an authenticated adm
 - **V6 — Quality gates:**
   - `pnpm --dir app/web check && pnpm --dir app/web build` passes with zero errors.
   - `just validate-local` passes all 5 governance validators.
+
+---
+
+## 4. Verification Log — human functional verification (`/verification-done`)
+
+### Verification Log — 2026-10-08 (PR #78)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1 — Gate hidden for non-admin** | ✅ | Header center-nav slot remains empty when anonymous or non-admin. Navigating directly to `/admin/settings` displays the "Admin Access Required" lock notice; no settings controls rendered. |
+| **V2 — Gate shown for admin** | ✅ | Signed in as admin (`is_admin=true`), `⚙️ Settings` appears in navigation. Editor renders all 5 seeded settings pre-filled from live PocketBase records with IDs. |
+| **V3 — Edit persists & live refresh** | ✅ | Updating `app_name` / `app_description` succeeds; global header and footer branding reflect changes immediately via `loadSettings()` without page reload. Hard reload confirms persistence in SQLite. |
+| **V4 — Server gate holds** | ✅ | Server-side `RULE_ADMIN` denies non-admin write requests to `settings`. Fail-closed matrix verified by `scripts/test-rbac-admin.py` (assertions R6.2.3 and R6.3.4). |
+| **V5 — URL validation** | ✅ | Non-URL text in logo URL fields triggers inline validation error and disables saving. Empty URL values save cleanly and render text-only branding fallback without broken images or layout shift. |
+| **V6 — Quality gates** | ✅ | `pnpm check && build` green, `just validate-local` green (all 5 validators pass). CI runs green on PR #78. |
+
+- **Iterations:** 0 (clean run on first pass)
+- **Verdict:** `PASS — human functional verification complete`.
+- **Verified by:** Agni Eialarasu (Lead) · **Surface:** Antigravity IDE
+
+---
+
+## 5. Human Gate
+
+- **PR:** [PR #78](https://github.com/agni-eialarasu/cetana-labs/pull/78) — `feat(lab-000): app-settings-ui — admin-gated settings editor (BK-031 / TSK-070)`
+- **CI Status:** ✅ CI — Portfolio & Governance Validation, SvelteKit Build, and Vercel Preview passed (`success`).
+- **State Transition:** `IN_VERIFICATION` → `IN_REVIEW`. Ready for the KiroCrew Operator human PR gate (`/review-pr 78`).
+
+---
+
+## 6. AIDLC Spike Notes
+
+- **Executor:** Executed on Google Antigravity per `RFC-LAB-000-014` cost-first routing (SvelteKit form UI over existing SDK write path).
+- **Plan execution:** Followed `tasks.md` sequentially (T0 baseline & admin bootstrap, T1 `auth.isAdmin`, T2 settings write layer, T3 editor route, T4 nav slot, T5 gates and lockstep).
+- **Single-PR rule:** Implementation and verification evidence consolidated in a single PR ([PR #78](https://github.com/agni-eialarasu/cetana-labs/pull/78)).
+
+---
+
+## 7. Sign-off
+
+- **Signed:** Agni Eialarasu (Lead) — 2026-10-08
+- **Lifecycle state:** `IN_REVIEW` (PR #78 ready for `/review-pr 78`)
