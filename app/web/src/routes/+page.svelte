@@ -136,11 +136,4 @@
       No projects match the current filter.
     </p>
   {/if}
-
-  <footer
-    class="mt-12 flex flex-col items-center gap-2 border-t border-line pt-5 text-center text-xs text-muted"
-  >
-    <span>{settings.appName()} • Sleek UI (beta) • read-only preview</span>
-    <a href="../" class="font-semibold text-brand hover:text-brand-hover">← Classic dashboard</a>
-  </footer>
 </div>
