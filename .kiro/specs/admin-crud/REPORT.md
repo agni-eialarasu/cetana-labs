@@ -98,6 +98,45 @@ On the local stack (`just setup && just start-local`), with an authenticated adm
 
 ---
 
-## 4. Verification Log
+## 4. Verification Log — human functional verification (`/verification-done`)
 
-*(To be filled during human verification via `/verification-done`)*
+### Verification Log — 2026-10-08 (PR #80)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1 — Gate** | ✅ | Non-admin and anonymous views completely hide admin links (`📁 Projects`, `👥 Developers`). Direct navigation to `/admin/projects` or `/admin/developers` renders the "Admin Access Required" lock screen. Signed-in administrator has full access. |
+| **V2 — Project Create** | ✅ | Project create modal enforces `^LAB-\d{3}$` pattern validation and sequential uniqueness. Populates owner relation from live users. Project creates cleanly in PocketBase and renders in real-time. |
+| **V3 — Project Edit & Delete** | ✅ | Editing project fields and reassigning `owner` relation persists immediately. Named delete confirmation dialog requires typing target `LAB-XXX` ID before executing delete. |
+| **V4 — Developer Edit & Admin Grant** | ✅ | Editing developer details and toggling `is_admin` persists in PocketBase `users` collection. Granted admin privileges take effect immediately. |
+| **V5 — Soft-Delete Guard (R5.2)** | ✅ | In-app hard-delete blocked (`users.deleteRule = None`). Attempting to deactivate a developer who owns projects triggers warning naming owned initiatives and blocks deactivation until ownership is reassigned. |
+| **V6 — Server Gate** | ✅ | Server-side `RULE_ADMIN` denies non-admin write requests across `projects`, `users`, and `settings`. All 26 fail-closed test criteria pass in `scripts/test-rbac-admin.py`. |
+| **V7 — Reconciliation & Divergence (D-CRUD-1)** | ✅ | In-app edits trigger the amber Divergence Banner across admin routes. Running `just export-live-data` exports live PocketBase records to `data/portfolio.json` and `data/users.json` with zero-diff round-trip parity. Re-check clears banner. |
+| **V8 — Quality Gates** | ✅ | `pnpm check && build` green, `pnpm lint` green, `just validate-local` green (all 5 validators pass). CI runs green on PR #80. |
+
+- **Iterations:** 0 (clean run on first pass; prettier formatting applied)
+- **Verdict:** `PASS — human functional verification complete`.
+- **Verified by:** Agni Eialarasu (Lead) · **Surface:** Antigravity IDE
+
+---
+
+## 5. Human Gate
+
+- **PR:** [PR #80](https://github.com/agni-eialarasu/cetana-labs/pull/80) — `feat(admin-crud): admin-tier in-app CRUD + data reconciliation (BK-014/TSK-071)`
+- **CI Status:** ✅ CI — Portfolio & Governance Validation, SvelteKit Build, and Vercel Preview passed (`success`).
+- **State Transition:** `IN_VERIFICATION` → `IN_REVIEW`. Ready for the KiroCrew Operator human PR gate (`/review-pr 80`).
+
+---
+
+## 6. AIDLC Spike Notes
+
+- **Executor:** Executed on Google Antigravity per `RFC-LAB-000-014` cost-first routing (SvelteKit CRUD forms + reconciliation engine).
+- **Plan execution:** Executed all tasks sequentially from T0 baseline through T8 gates in a single clean build (both Phase A Project CRUD and Phase B User CRUD delivered).
+- **Single-PR rule:** Implementation, reconciliation toolchain, and verification evidence consolidated into a single PR ([PR #80](https://github.com/agni-eialarasu/cetana-labs/pull/80)).
+
+---
+
+## 7. Sign-off
+
+- **Signed:** Agni Eialarasu (Lead) — 2026-10-08
+- **Lifecycle state:** `IN_REVIEW` (PR #80 ready for `/review-pr 80`)
+
