@@ -6,7 +6,7 @@
 | **Feature** | `is_admin` boolean auth tier on `users` + write-rule matrix for projects, settings, and users (zero UI) |
 | **Backlog** | `BK-030` (`TSK-069`, SPRINT-13) |
 | **Branch** | `feat/is-admin-auth` |
-| **PR** | Pending open |
+| **PR** | [PR #76](https://github.com/agni-eialarasu/cetana-labs/pull/76) |
 | **Executor** | Kiro IDE (security-sensitive, escalated from Antigravity default per `RFC-LAB-000-014`) |
 | **Date** | 2026-10-08 |
 
