@@ -56,6 +56,13 @@
         "required": false,
         "hidden": false,
         "presentable": false
+      },
+      {
+        "name": "is_admin",
+        "type": "bool",
+        "required": false,
+        "hidden": false,
+        "presentable": false
       }
     ],
     "indexes": [
@@ -64,7 +71,7 @@
     "listRule": "@request.auth.id != \"\"",
     "viewRule": "@request.auth.id != \"\"",
     "createRule": null,
-    "updateRule": null,
+    "updateRule": "@request.auth.id != \"\" && @request.auth.is_admin = true",
     "deleteRule": null
   },
   {
@@ -173,9 +180,9 @@
     ],
     "listRule": "@request.auth.id != \"\"",
     "viewRule": "@request.auth.id != \"\"",
-    "createRule": null,
-    "updateRule": "@request.auth.id != \"\" && owner = @request.auth.id",
-    "deleteRule": null
+    "createRule": "@request.auth.id != \"\" && @request.auth.is_admin = true",
+    "updateRule": "(@request.auth.id != \"\" && @request.auth.github_handle != \"\" && owner.github_handle = @request.auth.github_handle) || (@request.auth.id != \"\" && @request.auth.is_admin = true)",
+    "deleteRule": "@request.auth.id != \"\" && @request.auth.is_admin = true"
   },
   {
     "name": "memberships",
@@ -284,8 +291,8 @@
     ],
     "listRule": "",
     "viewRule": "",
-    "createRule": null,
-    "updateRule": null,
-    "deleteRule": null
+    "createRule": "@request.auth.id != \"\" && @request.auth.is_admin = true",
+    "updateRule": "@request.auth.id != \"\" && @request.auth.is_admin = true",
+    "deleteRule": "@request.auth.id != \"\" && @request.auth.is_admin = true"
   }
 ]
