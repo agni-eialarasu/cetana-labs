@@ -754,3 +754,22 @@ historical one.
 ### Session meta
 - **Class:** governance/architecture decision → RFC amendment + Decision Journal (doc fast-path / merge-first). The *implementation* of A1 is a separate sprint-deliverable Spec through the full gate.
 - **Division of labor:** Operator grounded current RBAC in the live schema (`generate_pb_schema.py` rules, `pb_schema.json`), framed the three options honestly, recommended C, authored the amendment on the user's decision. Human holds every merge.
+
+---
+
+## Entry 023 — README master registry: KEEP as a reconciled snapshot (post-BK-014)
+
+> _Brainstorm decision (Operator session, 2026-10-08), prompted by: "do we keep the project registry + archetypes in the README now that the app has CRUD?"_
+
+### D68 — Keep the README registry + archetypes; reframe it as a reconciled snapshot, not the source of truth
+
+- **Context:** today `BK-014` landed in-app Projects/Developers CRUD + `scripts/export_pb_to_data.py` reconciliation. That made the question timely: with a live app registry, does the generated README registry still belong?
+- **Decision: KEEP it** (both the generated registry block and the static archetype list), but **reframe its role**. It is a **committed, at-a-glance, reconciled snapshot** of the portfolio on GitHub — zero-maintenance (generated from `data/`), and where the architect/leads look today. It is explicitly **NOT the live source of truth**: the live portfolio is the deployed app (PocketBase); admins edit there and run `just export-live-data` to reconcile back into `data/*.json`, which regenerates the README block through the normal gate.
+- **Why not drop it:** it costs nothing (generated), GitHub remains the common read surface, and a brief DB↔README divergence between an edit and a reconciliation is expected and surfaced (the app's divergence banner, R7.2).
+- **Why not make it the source of truth:** the app now is — the README mirrors it. Keeping both honest is exactly what the BK-014 reconciliation + divergence banner provide.
+- **Archetypes:** kept — reference material (what the icons mean), not state; no maintenance cost.
+- **Recorded in:** a note above the registry block in `README.md` (survives regeneration — it's outside the `BEGIN/END:registry` markers).
+
+### Session meta
+- **Class:** governance/doc decision → doc fast-path (README prose above the generated block; `generate_registry --check` stays green). Closes the loop on today's BK-014 reconciliation.
+- First of the three "lighter" brainstorm items; the other two (RGS user guide, RGS doc audit) remain open — the audit's intake-ledger question is the next real decision.
