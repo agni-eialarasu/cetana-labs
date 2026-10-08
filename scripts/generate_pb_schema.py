@@ -22,6 +22,9 @@ OUT = REPO_ROOT / "app" / "pocketbase" / "pb_schema.json"
 # Access rules (draft, Phase 1) — refined for RBAC in Phase 3 (BK-007).
 # @request.auth.id != "" means "any authenticated user".
 RULE_AUTHED = '@request.auth.id != ""'
+# BK-030 (RFC-LAB-000-008 A1): application admin tier predicate
+RULE_ADMIN = '@request.auth.id != "" && @request.auth.is_admin = true'
+OWNER_RULE = '@request.auth.id != "" && @request.auth.github_handle != "" && owner.github_handle = @request.auth.github_handle'
 
 
 ROLE_VALUES = ["owner", "lead", "contributor", "stakeholder", "reviewer"]
@@ -66,12 +69,13 @@ def collections() -> list:
             _select("role", ROLE_VALUES),
             _text("org"),
             {"name": "active", "type": "bool", "required": False, "hidden": False, "presentable": False},
+            {"name": "is_admin", "type": "bool", "required": False, "hidden": False, "presentable": False},
         ],
         "indexes": ["CREATE UNIQUE INDEX `idx_users_seed_id` ON `users` (`seed_id`)"],
         "listRule": RULE_AUTHED,
         "viewRule": RULE_AUTHED,
         "createRule": None,
-        "updateRule": None,
+        "updateRule": RULE_ADMIN,
         "deleteRule": None,
     }
 
@@ -93,10 +97,11 @@ def collections() -> list:
         "indexes": ["CREATE UNIQUE INDEX `idx_projects_lab_id` ON `projects` (`lab_id`)"],
         "listRule": RULE_AUTHED,
         "viewRule": RULE_AUTHED,
-        "createRule": None,
-        # MVP minimum-RBAC: owner-or-not write on their own project (RFC-LAB-000-006 §4).
-        "updateRule": '@request.auth.id != "" && owner = @request.auth.id',
-        "deleteRule": None,
+        "createRule": RULE_ADMIN,
+        # MVP minimum-RBAC: owner writes their own project (RFC-LAB-000-006 §4)
+        # OR admin writes any project (BK-030 / RFC-LAB-000-008 A1).
+        "updateRule": f"({OWNER_RULE}) || ({RULE_ADMIN})",
+        "deleteRule": RULE_ADMIN,
     }
 
     memberships = {
@@ -128,9 +133,9 @@ def collections() -> list:
         "indexes": ["CREATE UNIQUE INDEX `idx_settings_key` ON `settings` (`key`)"],
         "listRule": "",
         "viewRule": "",
-        "createRule": None,
-        "updateRule": None,
-        "deleteRule": None,
+        "createRule": RULE_ADMIN,
+        "updateRule": RULE_ADMIN,
+        "deleteRule": RULE_ADMIN,
     }
 
     return [users, projects, memberships, settings]

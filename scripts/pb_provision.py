@@ -37,6 +37,9 @@ RULE_AUTHED = '@request.auth.id != ""'
 # anonymous clients so the Sleek UI can read the live portfolio before auth exists
 # (M2). Field-level public-vs-authenticated granularity is refined in M3.
 RULE_PUBLIC = ""
+# BK-030 (RFC-LAB-000-008 A1): application admin tier predicate
+RULE_ADMIN = '@request.auth.id != "" && @request.auth.is_admin = true'
+OWNER_RULE = '@request.auth.id != "" && @request.auth.github_handle != "" && owner.github_handle = @request.auth.github_handle'
 ROLE_VALUES = ["owner", "lead", "contributor", "stakeholder", "reviewer"]
 # M4 (RFC-LAB-000-008 §9.1a): owner-editable status health on `projects`. Mirrors the
 # STATUS.md health legend verbatim — do not invent new states (M3–M4 owner-write field).
@@ -169,6 +172,7 @@ def run(dry_run=True):
             f_select("role", ROLE_VALUES, required=False),
             f_text("org"),
             f_bool("active"),
+            f_bool("is_admin"),
         ],
         # NOTE: `users` is PocketBase's pre-existing default auth collection. We EXTEND
         # it with custom fields; `seed_id` is a plain matching field (NO unique index —
@@ -186,8 +190,11 @@ def run(dry_run=True):
         # OAuth identity gets an auth record, but that grants NO portfolio ownership —
         # ownership is resolved separately by `github_handle` against the seeded data
         # (authenticated-but-unlinked, R3.2). updateRule/deleteRule stay superuser-only.
+        #
+        # BK-030 (RFC-LAB-000-008 A1 / R2.6): updateRule = RULE_ADMIN so an admin can manage
+        # user flags (is_admin, role, active). Non-admins cannot update users (R5.1).
         "listRule": RULE_AUTHED, "viewRule": RULE_PUBLIC,
-        "createRule": RULE_PUBLIC, "updateRule": None, "deleteRule": None,
+        "createRule": RULE_PUBLIC, "updateRule": RULE_ADMIN, "deleteRule": None,
     }
     users_id = upsert_collection(token, users_spec, dry_run)
 
@@ -216,8 +223,9 @@ def run(dry_run=True):
         # M1: public read = the planned public-summary tier (RFC-LAB-000-008 §4). This lets the
         # Sleek UI read the live portfolio anonymously before auth (M2); M3 refines field granularity.
         "listRule": RULE_PUBLIC, "viewRule": RULE_PUBLIC,
-        "createRule": None,
-        # MVP minimum-RBAC: owner writes their own project (RFC-LAB-000-006 §4).
+        "createRule": RULE_ADMIN,
+        # MVP minimum-RBAC: owner writes their own project (RFC-LAB-000-006 §4)
+        # OR admin writes any project (BK-030 / RFC-LAB-000-008 A1).
         # Match on github_handle, NOT the relation id: PocketBase creates a separate auth
         # record per GitHub OAuth identity (id != the seeded owner the `owner` relation points
         # to), so `owner = @request.auth.id` would wrongly 404 a real owner (found in M3–M4
@@ -225,8 +233,8 @@ def run(dry_run=True):
         # pb_hooks/oauth_github_handle.pb.js hook; the seeded owner carries it natively. Both
         # must be non-empty to match (an empty handle never equals an empty handle here because
         # the auth guard requires a signed-in identity AND we compare handles).
-        "updateRule": '@request.auth.id != "" && @request.auth.github_handle != "" && owner.github_handle = @request.auth.github_handle',
-        "deleteRule": None,
+        "updateRule": f"({OWNER_RULE}) || ({RULE_ADMIN})",
+        "deleteRule": RULE_ADMIN,
     }
     projects_id = upsert_collection(token, projects_spec, dry_run)
 
@@ -255,9 +263,9 @@ def run(dry_run=True):
             f_text("group"),
         ],
         "indexes": ["CREATE UNIQUE INDEX `idx_settings_key` ON `settings` (`key`)"],
-        # Public read (branding renders pre-auth); superuser-only write (admin role = BK-014).
+        # Public read (branding renders pre-auth); admin-only write (BK-030 / RFC-LAB-000-008 A1).
         "listRule": RULE_PUBLIC, "viewRule": RULE_PUBLIC,
-        "createRule": None, "updateRule": None, "deleteRule": None,
+        "createRule": RULE_ADMIN, "updateRule": RULE_ADMIN, "deleteRule": RULE_ADMIN,
     }
     upsert_collection(token, settings_spec, dry_run)
 
