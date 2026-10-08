@@ -107,20 +107,42 @@ Results: 26 passed, 0 failed
 
 ---
 
-## 5. Human Verification Plan (to be executed for `/verification-done`)
+## 5. Verification Log — human functional verification (`/verification-done`)
 
-On the local stack (`just setup && just start-local`), with a bootstrapped admin + non-admin owner:
-- **V1 — Field present:** Inspect `users` collection via PocketBase Admin UI (`/_/`) or API; verify `is_admin` boolean exists and defaults to `false`. Token payload carries `is_admin`.
-- **V2 — Admin writes:** Authenticated as an `is_admin=true` user, create a project record and update a `settings` row via API/SDK → succeeds and persists.
-- **V3 — Owner preserved:** Authenticated as a non-admin project owner, update own project `status_health` / `status_note` → succeeds; update another owner's project → denied.
-- **V4 — Non-admin denied:** Authenticated as a plain authed non-admin user, any write to `projects` or `settings` → denied; attempt to PATCH own `is_admin` to `true` → denied.
-- **V5 — Anonymous read:** Unauthenticated requests to read `projects` and `settings` succeed; all anonymous write requests are denied.
-- **V6 — Quality gates:** `just validate-local` green; `python3 scripts/generate_pb_schema.py --check` green; `python3 scripts/test-rbac-admin.py` all-pass.
+### Verification Log — 2026-10-08 (PR #76)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1 — field present** | ✅ | `users` collection contains `is_admin` boolean field with `false` default; token auth payload carries `is_admin`. |
+| **V2 — admin writes** | ✅ | Authenticated as `is_admin=true`, creating project records and updating `settings` rows succeeds and persists. |
+| **V3 — owner preserved** | ✅ | Non-admin project owner successfully updates own project `status_health`/`status_note`; updates to another owner's project are denied. |
+| **V4 — non-admin denied** | ✅ | Plain authed user writes to `projects` and `settings` are denied; non-admin PATCH on own `is_admin` denied (no self-escalation). |
+| **V5 — anon read** | ✅ | Unauthenticated GET on `/api/collections/projects/records` and `/api/collections/settings/records` succeeds; public branding renders cleanly. |
+| **V6 — quality gates** | ✅ | `just validate-local` green (5 validators + schema check + web build); `python3 scripts/test-rbac-admin.py` 26/26 PASS. |
+
+- **Iterations:** 1 (fixup pushed to this PR: `c2084f1`)
+- **Verdict:** `PASS — human functional verification complete`.
+- **Verified by:** Agni Eialarasu (Lead) · **Surface:** Kiro IDE
 
 ---
 
-## 6. AIDLC Spike Notes
+## 6. Human Gate
+
+- **PR:** [PR #76](https://github.com/agni-eialarasu/cetana-labs/pull/76) — `feat(lab-000): is-admin-auth — application-level admin boolean tier and rule matrix (BK-030, TSK-069)`
+- **CI Status:** ✅ CI — Portfolio & Governance Validation and SvelteKit Build passed (`success`).
+- **State Transition:** `IN_VERIFICATION` → `IN_REVIEW`. Ready for the KiroCrew Operator human PR gate (`/review-pr 76`).
+
+---
+
+## 7. AIDLC Spike Notes
 
 - **Executor:** Executed on Kiro IDE per `RFC-LAB-000-014` (security-sensitive RBAC and auth rules).
 - **Plan execution:** Followed `tasks.md` sequentially (T0 baseline, T1 field addition, T2 rule matrix, T3 schema generation, T4 bootstrap docs, T5/T6 automated rule tests, T7 lockstep sync).
-- **Single-PR rule:** Implementation and verification evidence consolidated in a single PR.
+- **Single-PR rule:** Implementation and verification evidence consolidated in a single PR ([PR #76](https://github.com/agni-eialarasu/cetana-labs/pull/76)).
+
+---
+
+## 8. Sign-off
+
+- **Signed:** Agni Eialarasu (Lead) — 2026-10-08
+- **Lifecycle state:** `IN_REVIEW` (PR #76 ready for `/review-pr 76`)
