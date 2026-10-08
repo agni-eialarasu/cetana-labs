@@ -1,6 +1,11 @@
 # Cetana Labs — just task runner (RFC-LAB-000-007). Shared Agni core first; Cetana extras below.
 set shell := ["/bin/bash", "-c"]
 
+# Auto-load the gitignored root .env (PB_ADMIN_EMAIL / PB_ADMIN_PASSWORD / PB_URL etc.) into
+# every recipe's environment, so `just seed` / `just provision` get the superuser creds without
+# a manual `source .env`. Values live in .env (see .env.example); absent file = no-op.
+set dotenv-load := true
+
 # --- resolved toolchain vars (mirror the Makefile's; Homebrew-first with sandbox fallbacks) ---
 PYTHON := env_var_or_default("PYTHON", "python3")
 PB := `command -v pocketbase 2>/dev/null || echo ./pocketbase`
