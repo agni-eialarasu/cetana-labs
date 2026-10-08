@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **Header & Footer Standardization (`BK-027`, `TSK-068`, Spec `header-footer-standard`)**: Standardized webapp chrome to a conventional global header and footer in `+layout.svelte`. Global header renders app branding (`settings.appName()` + `settings.appDescription()` `hidden sm:inline`, logo-guarded), an empty styled center navigation slot (`<nav aria-label="Primary">`), and `<AuthControl/>` on the right. Global footer unifies the application theme toggle into a single global `<ThemeToggle/>` (removed from per-page instances), maintains public access to `/docs` pre-auth (`BK-024`/`D-HF-1`), and retains GitHub navigation and lightweight branding. Stripped the redundant "second row" masthead branding block, duplicate GitHub link, and local theme toggle from the dashboard (`+page.svelte`), and removed the per-page theme toggle from `docs/+page.svelte`. Built on Google Antigravity per `RFC-LAB-000-014` cost-first routing.
 ### Changed
 ### Fixed
 

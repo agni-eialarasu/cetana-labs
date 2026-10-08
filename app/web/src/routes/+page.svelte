@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Project } from '$lib/types';
   import { settings } from '$lib/settings';
-  import ThemeToggle from '$lib/components/ThemeToggle.svelte';
   import KpiCard from '$lib/components/KpiCard.svelte';
   import ProjectCard from '$lib/components/ProjectCard.svelte';
 
@@ -50,36 +49,8 @@
 <svelte:head><title>{settings.appName()} — Engineering Portfolio</title></svelte:head>
 
 <div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
-  <!-- Header -->
-  <header class="mb-8 flex flex-col gap-4 border-b border-line pb-6">
-    <div class="flex flex-wrap items-start justify-between gap-4">
-      <div class="flex items-center gap-3">
-        {#if settings.logoSmallUrl() || settings.logoMediumUrl() || settings.logoIconUrl()}
-          <img
-            src={settings.logoSmallUrl() || settings.logoMediumUrl() || settings.logoIconUrl()}
-            alt={settings.appName()}
-            class="h-10 w-auto"
-          />
-        {/if}
-        <div>
-          <h1 class="text-3xl font-bold tracking-tight text-ink">{settings.appName()}</h1>
-          <p class="mt-1 text-sm text-muted">{settings.appDescription()}</p>
-        </div>
-      </div>
-      <div class="flex flex-wrap items-center gap-3">
-        <ThemeToggle />
-        <a
-          href="https://github.com/agni-eialarasu/cetana-labs"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="rounded-control border border-line bg-panel px-3.5 py-2 text-sm font-semibold text-ink hover:border-brand-line"
-        >
-          GitHub ↗
-        </a>
-      </div>
-    </div>
-
-    <!-- KPI bar -->
+  <!-- KPI bar (BK-027: masthead moved to global layout header) -->
+  <section class="mb-8 border-b border-line pb-6" aria-label="Portfolio metrics">
     <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       <KpiCard
         label="Active Products"
@@ -117,7 +88,7 @@
         onclick={() => (filter = 'all')}
       />
     </div>
-  </header>
+  </section>
 
   <!-- Controls -->
   <div class="mb-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -165,11 +136,4 @@
       No projects match the current filter.
     </p>
   {/if}
-
-  <footer
-    class="mt-12 flex flex-col items-center gap-2 border-t border-line pt-5 text-center text-xs text-muted"
-  >
-    <span>{settings.appName()} • Sleek UI (beta) • read-only preview</span>
-    <a href="../" class="font-semibold text-brand hover:text-brand-hover">← Classic dashboard</a>
-  </footer>
 </div>
