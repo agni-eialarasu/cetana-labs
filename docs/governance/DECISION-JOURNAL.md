@@ -794,3 +794,19 @@ historical one.
 
 ### Session meta
 - **Class:** governance/doc decision + a new (empty) governance doc → doc fast-path. Second of the three lighter brainstorm items (after D68 README); the RGS user guide (#1) is the last.
+
+---
+
+## Entry 025 — GitHub-handle identity + PocketBase as source of truth (RFC-016); retire the dual-source model
+
+> _Triggered by a live-app screenshot: signing in as `@agni-eialarasu` produced TWO `users` rows for one human — the OAuth-minted record (Unlinked, owns nothing) and the seeded `usr-eialarasu` (owns LAB-000..003). The dual-source model (committed `data/` masters AND live PocketBase, reconciled by a fragile handle match) made visible._
+
+### D70 — Decide identity (GitHub handle = single key) now; frame + phase the registry retirement
+
+- **Root cause (verified in `auth.svelte.ts`):** PocketBase mints a separate auth record per GitHub identity; the frontend links to a seeded owner by `github_handle`, and a misfire leaves the user authenticated-but-unlinked — two identities, one human. Ownership lives on the seeded row, auth on the OAuth row.
+- **Two decisions deliberately separated** (so the urgent fix isn't held hostage to the bigger one):
+  - **Decision 1 (DECIDED):** `github_handle` is the unique, authoritative user key — ONE record per GitHub identity; sign-in **upserts by handle** (binds to the seeded row, never creates a second); a one-off migration merges the existing `o43801zyav6cwmd` → `usr-eialarasu`.
+  - **Decision 2 (FRAMED, gated):** retire hand-authored `data/` masters + the README registry block + the local `project-*` skillset; PocketBase becomes source of truth; `data/` likely survives as a committed **export** (OQ-2 lean). Deletions gated behind OQ-1..OQ-4.
+- **Key correction captured in the RFC:** the daily WhatsApp scraper reads **`STATUS.md`**, not `data/status.json` — so retiring `data/` masters does **not** break the executive broadcast. That materially shrinks Decision 2's blast radius.
+- **Phasing:** Phase 1 = identity Spec (fixes the bug, no registry change); Phase 2 = answer OQ-1..OQ-4; Phase 3 = registry inversion Spec(s), keeping `data/` as export.
+- **Class:** architecture decision (RFC + journal) → doc merge-first. Implementation Phases are sprint deliverables → full gate; the Phase-1 data migration touches live records (scripted, verified, reversible by reseed).
