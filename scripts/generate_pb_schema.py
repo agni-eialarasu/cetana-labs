@@ -71,7 +71,10 @@ def collections() -> list:
             {"name": "active", "type": "bool", "required": False, "hidden": False, "presentable": False},
             {"name": "is_admin", "type": "bool", "required": False, "hidden": False, "presentable": False},
         ],
-        "indexes": ["CREATE UNIQUE INDEX `idx_users_seed_id` ON `users` (`seed_id`)"],
+        "indexes": [
+            "CREATE UNIQUE INDEX `idx_users_seed_id` ON `users` (`seed_id`)",
+            "CREATE UNIQUE INDEX `idx_users_github_handle` ON `users` (`github_handle` COLLATE NOCASE) WHERE `github_handle` != '' AND `github_handle` IS NOT NULL",
+        ],
         "listRule": RULE_AUTHED,
         "viewRule": RULE_AUTHED,
         "createRule": None,

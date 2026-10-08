@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- **GitHub-Handle Identity Fix (`BK-034`, `TSK-074`, Spec `github-identity-fix`)**: RFC-016 Phase 1 — single authoritative user identity keyed by `github_handle`:
+  - **Authoritative Unique Index (`R1`)**: Added case-insensitive unique index on `users.github_handle` (null/empty allowed) across both rule sources (`scripts/pb_provision.py` and `scripts/generate_pb_schema.py`) and regenerated `app/pocketbase/pb_schema.json`.
+  - **Server-Side Upsert Hook (`R2.1`–`R2.3`)**: Added `onRecordAuthWithOAuth2Request` hook in `app/pocketbase/pb_hooks/oauth_github_handle.pb.js` that binds OAuth sessions to existing user records by handle (enriching them) and ensures new developer records are keyed by handle, eliminating duplicate user creation.
+  - **Simplified Auth Store (`R2.4`)**: Refactored `app/web/src/lib/auth.svelte.ts` to derive identity and user directly from the authenticated record, removing the display-only `resolveSeededOwner` lookup.
+  - **Scripted Data Migration (`R3`, `R4`)**: Added `scripts/migrate_identity_merge.py` merging live duplicate OAuth rows into seeded records (`o43801zyav6cwmd` → `usr-eialarasu`), repointing `_externalAuths` and `projects.owner` atomically, preserving ownership of LAB-000..003 without privilege leak, and verified with pre-migration safety backups (reversible by `just seed`).
 - **Auth Live-Refresh (`BK-033`, `TSK-073`, Spec `auth-live-refresh`)**: Reactive admin tier synchronization and live rehydration:
   - **Reactive Admin State (`R1`)**: Added `#admin = $state<boolean>` to `AuthState` in `app/web/src/lib/auth.svelte.ts`, initialized from `pb.authStore.record.is_admin` and kept reactive on store changes, OAuth callback completion, and sign-out. Simplified `isAdmin` getter to reactive `this.#authed && this.#admin`.
   - **Live Refresh on Rehydrate (`R2`)**: `#rehydrate()` now calls `pb.collection('users').authRefresh()` when `pb.authStore.isValid`, updating `#admin` so admin grants (e.g. initial superuser bootstrap) take effect immediately on next page load without requiring a manual sign-out/sign-in round-trip.

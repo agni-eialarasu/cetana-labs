@@ -137,8 +137,11 @@ def upsert_collection(token, spec, dry_run):
                 "listRule": spec.get("listRule"), "viewRule": spec.get("viewRule"),
                 "createRule": spec.get("createRule"), "updateRule": spec.get("updateRule"),
                 "deleteRule": spec.get("deleteRule")}
-        if spec.get("indexes"):
-            body["indexes"] = spec["indexes"]
+        if spec.get("indexes") is not None:
+            sys_indexes = [idx for idx in existing.get("indexes", []) if "__pb_" in idx]
+            spec_indexes = spec.get("indexes", [])
+            merged_indexes = sys_indexes + [idx for idx in spec_indexes if idx not in sys_indexes]
+            body["indexes"] = merged_indexes
         status, resp = _req("PATCH", f"/api/collections/{existing['id']}", token=token, body=body)
         if status != 200:
             raise SystemExit(f"ERROR: update collection '{name}' failed ({status}): {resp}")
@@ -178,7 +181,11 @@ def run(dry_run=True):
         # it with custom fields; `seed_id` is a plain matching field (NO unique index —
         # forcing one on a pre-populated system collection fails). Upsert keys on seed_id
         # via a filter query (see pb_import.py), and email uniqueness is enforced natively.
-        "indexes": [],
+        #
+        # BK-034 / RFC-LAB-000-016: unique index on github_handle (null/empty allowed).
+        "indexes": [
+            "CREATE UNIQUE INDEX `idx_users_github_handle` ON `users` (`github_handle` COLLATE NOCASE) WHERE `github_handle` != '' AND `github_handle` IS NOT NULL",
+        ],
         # M1: view is public so `projects` owner-expand resolves the non-sensitive
         # display fields (name/github_handle) for anonymous reads (RFC-LAB-000-008 §4).
         # list stays authed-only (no anonymous user enumeration); M3 refines field granularity.
