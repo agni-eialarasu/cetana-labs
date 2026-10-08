@@ -52,7 +52,7 @@
     <!-- Sidebar / Doc Picker -->
     <aside class="sticky top-6 flex flex-col gap-6">
       <div class="rounded-card border border-line bg-panel/40 p-4">
-        <div class="mb-3 px-2 text-[11px] font-semibold uppercase tracking-wider text-muted">
+        <div class="mb-3 px-2 text-xs font-semibold uppercase tracking-wider text-muted">
           Included Guides
         </div>
         <nav class="flex flex-col gap-1" aria-label="Documentation navigation">

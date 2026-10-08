@@ -39,6 +39,16 @@ export default {
         sans: ['"IBM Plex Sans"', 'sans-serif'],
         mono: ['"IBM Plex Mono"', 'monospace']
       },
+      fontSize: {
+        '2xs': ['0.75rem', { lineHeight: '1rem' }],
+        xs: ['0.84375rem', { lineHeight: '1.25rem' }],
+        sm: ['0.9375rem', { lineHeight: '1.375rem' }],
+        base: ['1.03125rem', { lineHeight: '1.5rem' }],
+        lg: ['1.1875rem', { lineHeight: '1.625rem' }],
+        xl: ['1.375rem', { lineHeight: '1.75rem' }],
+        '2xl': ['1.625rem', { lineHeight: '2rem' }],
+        '3xl': ['2rem', { lineHeight: '2.375rem' }]
+      },
       maxWidth: {
         content: '1500px'
       },

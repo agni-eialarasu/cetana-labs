@@ -25,10 +25,10 @@
 
 <button
   type="button"
-  class="flex flex-col gap-1 rounded-card border border-line bg-panel p-4 text-left transition-colors hover:border-brand-line"
+  class="flex flex-col gap-0.5 rounded-card border border-line bg-panel p-3.5 text-left transition-colors hover:border-brand-line"
   {onclick}
 >
-  <span class="text-[11px] font-semibold uppercase tracking-wider text-muted">{label}</span>
-  <span class="tabular text-3xl font-bold {toneClass[tone]}">{value}</span>
+  <span class="text-xs font-semibold uppercase tracking-wider text-muted">{label}</span>
+  <span class="tabular text-2xl font-bold {toneClass[tone]}">{value}</span>
   <span class="text-xs text-muted">{sub}</span>
 </button>

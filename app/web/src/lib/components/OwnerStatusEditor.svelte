@@ -70,7 +70,7 @@
 {#if isOwner}
   <div class="rounded-control border border-brand/30 bg-brand-soft/30 p-3">
     <div class="mb-1.5 flex items-center justify-between">
-      <span class="text-[11px] font-bold uppercase tracking-wide text-brand-ink">✏️ Your status (owner)</span>
+      <span class="text-xs font-bold uppercase tracking-wide text-brand-ink">✏️ Your status (owner)</span>
       {#if !editing}
         <button
           type="button"
