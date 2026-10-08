@@ -6,7 +6,7 @@
 | **Feature** | Global header (branding + center nav slot + auth) & footer (single global ThemeToggle + public Docs + GitHub) + removal of duplicate masthead second row |
 | **Backlog** | `TSK-068` (`BK-027`, SPRINT-13) |
 | **Branch** | `feat/header-footer-standard` |
-| **PR** | Pending |
+| **PR** | [PR #71](https://github.com/agni-eialarasu/cetana-labs/pull/71) |
 | **Executor** | Antigravity (routine/layout refactoring, cost-first default per `RFC-LAB-000-014`) |
 | **Date** | 2026-10-08 |
 
