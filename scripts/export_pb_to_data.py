@@ -42,6 +42,17 @@ PB_ADMIN_EMAIL = os.environ.get("PB_ADMIN_EMAIL", "admin@cetana.local")
 PB_ADMIN_PASSWORD = os.environ.get("PB_ADMIN_PASSWORD", "CetanaLocal2026!")
 
 
+def is_pb_reachable(timeout=1.5):
+    """Probe PocketBase health endpoint without throwing fatal errors."""
+    url = f"{PB_URL}/api/health"
+    req = urllib.request.Request(url, method="GET")
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
 def _req(method, path, token=None, body=None):
     url = f"{PB_URL}{path}"
     data = json.dumps(body).encode() if body is not None else None
@@ -87,17 +98,13 @@ def get_all_records(token, collection, expand=None):
     return records
 
 
-def export_data(dry_run=True):
+def get_export_payloads():
+    """Fetch live records and build canonical JSON strings for users and portfolio."""
     token = authenticate()
-
-    print(f"→ Fetching live records from PocketBase ({PB_URL})")
     raw_users = get_all_records(token, "users")
     raw_projects = get_all_records(token, "projects", expand="owner")
 
-    print(f"  Live counts: {len(raw_users)} users, {len(raw_projects)} projects")
-
     # 1. Process users
-    # Mapping: PB record id -> natural user id (seed_id or fallback)
     user_id_map = {}
     users_export = []
 
@@ -113,7 +120,6 @@ def export_data(dry_run=True):
 
         user_id_map[pb_id] = user_id
 
-        # Clean fields matching data/users.json schema
         email = u.get("email")
         if email and (email.endswith("@cetana.local") or email == f"{user_id}@cetana.local"):
             email = None
@@ -129,7 +135,6 @@ def export_data(dry_run=True):
         }
         users_export.append(rec)
 
-    # Order users: existing order first, then any new users sorted by id
     users_path = DATA_DIR / "users.json"
     existing_user_order = []
     if users_path.exists():
@@ -184,6 +189,67 @@ def export_data(dry_run=True):
 
     users_json_str = json.dumps(users_export, indent=2) + "\n"
     portfolio_json_str = json.dumps(projects_export, indent=2) + "\n"
+    return users_json_str, portfolio_json_str, users_export, projects_export
+
+
+def check_export_freshness(timeout=1.5):
+    """
+    Checks if live PocketBase is reachable and whether committed data/*.json matches live PB.
+    Returns:
+        dict: {"reachable": bool, "in_sync": bool, "error": str or None, "details": list}
+    """
+    if not is_pb_reachable(timeout=timeout):
+        return {
+            "reachable": False,
+            "in_sync": False,
+            "error": f"PocketBase is not reachable at {PB_URL}",
+            "details": []
+        }
+
+    try:
+        users_json_str, portfolio_json_str, users_export, projects_export = get_export_payloads()
+    except Exception as e:
+        return {
+            "reachable": True,
+            "in_sync": False,
+            "error": f"Failed to retrieve PocketBase records: {e}",
+            "details": [str(e)]
+        }
+
+    users_path = DATA_DIR / "users.json"
+    portfolio_path = DATA_DIR / "portfolio.json"
+    cur_users_str = users_path.read_text(encoding="utf-8") if users_path.exists() else ""
+    cur_portfolio_str = portfolio_path.read_text(encoding="utf-8") if portfolio_path.exists() else ""
+
+    users_changed = cur_users_str != users_json_str
+    portfolio_changed = cur_portfolio_str != portfolio_json_str
+
+    details = []
+    if users_changed:
+        details.append(f"data/users.json divergence ({len(users_export)} export rows vs {cur_users_str.count('{')} current)")
+    if portfolio_changed:
+        details.append(f"data/portfolio.json divergence ({len(projects_export)} export rows vs {cur_portfolio_str.count('{')} current)")
+
+    if not users_changed and not portfolio_changed:
+        return {
+            "reachable": True,
+            "in_sync": True,
+            "error": None,
+            "details": ["Committed data/ export matches live PocketBase records."]
+        }
+
+    return {
+        "reachable": True,
+        "in_sync": False,
+        "error": "Committed data/ export diverges from live PocketBase",
+        "details": details
+    }
+
+
+def export_data(dry_run=True):
+    print(f"→ Fetching live records from PocketBase ({PB_URL})")
+    users_json_str, portfolio_json_str, users_export, projects_export = get_export_payloads()
+    print(f"  Live counts: {len(users_export)} users, {len(projects_export)} projects")
 
     users_path = DATA_DIR / "users.json"
     portfolio_path = DATA_DIR / "portfolio.json"
@@ -219,6 +285,20 @@ def export_data(dry_run=True):
 
 
 def main():
+    if "--check" in sys.argv[1:]:
+        res = check_export_freshness()
+        if not res["reachable"]:
+            print(f"⚠️  PocketBase unreachable at {PB_URL} (skipping live export freshness check).")
+            return 0
+        if not res["in_sync"]:
+            print("❌ Committed data/ export is stale compared to live PocketBase:", file=sys.stderr)
+            for d in res["details"]:
+                print(f"   • {d}", file=sys.stderr)
+            print("\nRun: just export-live-data", file=sys.stderr)
+            return 1
+        print("✅ Committed data/ export is in sync with live PocketBase.")
+        return 0
+
     dry_run = "--apply" not in sys.argv[1:]
     return export_data(dry_run=dry_run)
 

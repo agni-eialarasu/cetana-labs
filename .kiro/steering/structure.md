@@ -8,7 +8,7 @@ cetana-labs/
 ├── BACKLOG.md             # Sprint plan + prioritized backlog + delivered archive
 ├── CHANGELOG.md           # Keep a Changelog; semver; tag vX.Y.0 at each /sprint-done
 ├── AGENTS.md              # Universal agent guidelines (rules, commit conventions, branch model)
-├── data/                  # Relational JSON masters + schemas (RFC-LAB-000-002) — source of truth for structural data
+├── data/                  # Generated snapshots (RFC-LAB-000-016 Phase 3) — committed exports from PocketBase; do not hand-edit
 ├── scripts/               # Zero-dependency Python governance engine + generators/validators
 ├── docs/
 │   ├── README.md          # Docs hub + breadcrumb nav standard
@@ -29,12 +29,14 @@ cetana-labs/
 ## Conventions (see AGENTS.md for detail)
 - **Flat, sequential IDs:** control hub = `LAB-000`; others `LAB-XXX-<slug>` (zero-padded, lowercase hyphenated slug).
 - **Portability:** never write machine-specific absolute paths in docs; use relative/GitHub links.
-- **Lockstep:** on any change, keep `README.md` registry (regenerate), `BACKLOG.md`, `CHANGELOG.md`, journals, and `data/` in sync.
+- **Lockstep:** on any metadata change, export PocketBase live data (`just export-live-data`), regenerate `README.md` registry (`python3 scripts/generate_registry.py`), and keep `BACKLOG.md`, `CHANGELOG.md`, journals, and `data/` in sync.
 - **Branching (`RFC-LAB-000-004`, hybrid):** app code / `data/` / migrations → **PR + green CI + squash-merge** into `main`; governance/docs → may fast-path. Never force-push `main`.
 - **Commit prefixes:** `feat(lab-XXX)` / `log(lab-XXX)` / `status(lab-XXX)` / `chore(lab-XXX)` / `feat(governance)` / `docs:` (see AGENTS.md §2).
 - **Two-Phase Governance:** run `/project-validate` (or `/validate-local`) before status emission / PR / release.
 
 ## Generated artifacts (never hand-edit)
+- `data/portfolio.json` + `data/users.json` → `just export-live-data` (`scripts/export_pb_to_data.py --apply`)
 - `README.md` registry block (between `<!-- BEGIN:registry -->` markers) → `scripts/generate_registry.py`
 - `app/pocketbase/pb_schema.json` → `scripts/generate_pb_schema.py`
 - `data/status.json` → `scripts/generate_status_json.py`
+*(Note: `data/memberships.json` is retained-as-is because the app CRUD directly manages `projects.owner` relations rather than a join-table UI; referential integrity checks in `validate_portfolio.py` consume it.)*

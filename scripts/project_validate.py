@@ -188,6 +188,47 @@ def validate_pillar_2(project_dir: Path):
     else:
         details.append("Single registry (CHANGELOG.md) verified [PASS]")
 
+    # Project metadata registry lockstep (RFC-LAB-000-016 Phase 3 / BK-036)
+    data_dir = project_dir / "data"
+    if data_dir.exists() and (data_dir / "portfolio.json").exists():
+        scripts_dir = project_dir / "scripts"
+        if str(scripts_dir) not in sys.path:
+            sys.path.insert(0, str(scripts_dir))
+        try:
+            from export_pb_to_data import check_export_freshness
+            freshness = check_export_freshness(timeout=1.5)
+            if freshness["reachable"]:
+                if freshness["in_sync"]:
+                    details.append("Committed data/ export is in sync with live PocketBase [PASS]")
+                else:
+                    details.append("Committed data/ export differs from live PocketBase (run 'just export-live-data') [FAIL]")
+                    passed = False
+            else:
+                # CI fallback: assert committed export matches README block
+                from generate_registry import build_registry_block, BEGIN_MARKER, END_MARKER
+                users_file = data_dir / "users.json"
+                projects_file = data_dir / "portfolio.json"
+                readme_file = project_dir / "README.md"
+                if users_file.exists() and projects_file.exists() and readme_file.exists():
+                    u_data = json.loads(users_file.read_text(encoding="utf-8"))
+                    p_data = json.loads(projects_file.read_text(encoding="utf-8"))
+                    expected_block = build_registry_block(u_data, p_data)
+                    readme_text = readme_file.read_text(encoding="utf-8")
+                    b_idx = readme_text.find(BEGIN_MARKER)
+                    e_idx = readme_text.find(END_MARKER)
+                    if b_idx != -1 and e_idx != -1:
+                        curr_block = readme_text[b_idx:e_idx + len(END_MARKER)]
+                        if curr_block == expected_block:
+                            details.append("Live PocketBase unreachable (CI mode); committed export matches README master registry [PASS]")
+                        else:
+                            details.append("README master registry is stale compared to committed data/ export (run 'python3 scripts/generate_registry.py') [FAIL]")
+                            passed = False
+                    else:
+                        details.append("README.md missing registry markers [FAIL]")
+                        passed = False
+        except Exception as e:
+            details.append(f"Registry export freshness check warning: {e} [WARN]")
+
     return passed, details, metrics
 
 

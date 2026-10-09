@@ -79,21 +79,17 @@ Generates an emoji-rich, mobile-friendly WhatsApp broadcast block for leadership
 - `/project-status LAB-000` $\rightarrow$ Deep-dive briefing on the Cetana Labs Control Hub kernel.
 - `/project-status LAB-003` $\rightarrow$ Deep-dive briefing on a single project.
 
-### ➕ `/project-add <repo_url_or_title>` (Onboard Project)
-Scaffolds the next sequential `LAB-XXX` directory, fetches remote repository metadata, initializes `STATUS.md` in `⏳ Onboarding Pending` state, registers the project in the master table, and commits to `main`:
-- `/project-add https://github.com/org/repo --owner "Lead Name"`
-- `/project-add "Edge Model Benchmark" research Eialarasu`
+### 🌐 In-App Project Metadata Management (`admin/projects`)
+Projects are created and updated directly in the web application (`admin/projects` CRUD):
+- To reconcile live PocketBase changes to the repository: run `just export-live-data`.
+- To update the root `README.md` master registry: run `python3 scripts/generate_registry.py`.
+- Replaces the retired file-based `/project-add` and `/project-edit` skills (`RFC-LAB-000-016` Phase 3).
 
 ### 🔄 `/project-update <ID>` (Log Wins & Health)
 Records delivery wins, health updates, or blockers in `STATUS.md` and appends a milestone entry to `journal.md`:
 - `/project-update LAB-003` (Auto-inspects remote repository commits)
 - `/project-update LAB-003 "Shipped margin signal rule SIG-01"`
 - `/project-update LAB-003 --health at-risk --blocker "Awaiting staging API key"`
-
-### ✏️ `/project-edit <ID>` (Administrative Metadata)
-Modifies project ownership, titles, repository links, or archives an initiative:
-- `/project-edit LAB-003 --owner "Eialarasu"`
-- `/project-edit LAB-002 --health completed`
 
 ---
 

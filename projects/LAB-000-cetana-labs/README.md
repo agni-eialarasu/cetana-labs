@@ -34,7 +34,7 @@ flowchart TD
 - **Protocol Core**: Authoritative 30-line `STATUS.md` specification adhering to a strict 5-section schema.
 - **Reporting Engine**: Standalone zero-dependency Python generator (`scripts/generate_status.py`) producing WhatsApp-optimized markdown briefings.
 - **Automated Cadence**: Weekday morning GitHub Actions workflow (`.github/workflows/project-status-cron.yml`) at 9:30 AM IST.
-- **AI Agent Skill Suite**: Slash commands (`/project-status`, `/project-add`, `/project-update`, `/project-edit`) for autonomous lifecycle management.
+- **AI Agent Skill Suite**: Slash commands (`/project-status`, `/project-update`, `/project-validate`, `/audit-project`) for autonomous lifecycle management (project create/edit managed in-app via `admin/projects`).
 
 ---
 

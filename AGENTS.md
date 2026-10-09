@@ -22,11 +22,12 @@ Your role is to keep this repository structured, well-documented, clean, and up 
    - All other projects reside in `projects/LAB-XXX-<slug>/`.
    - `XXX` is a zero-padded sequential 3-digit number (e.g. `LAB-001`, `LAB-002`, `LAB-003`, `LAB-004`, `LAB-005`).
    - `<slug>` is lowercase, hyphen-separated, alphanumeric without spaces.
-5. **Synchronized Master Registry & Backlog**:
-   - Whenever a project is created, edited, or changes health, the table in [README.md](README.md) MUST be updated immediately.
+5. **Synchronized Master Registry & Backlog (PocketBase as Source of Truth)**:
+   - PocketBase is the authoritative live master for project metadata; `data/*.json` is the committed export snapshot (`RFC-LAB-000-016` Phase 3).
+   - Project metadata creation/updates occur in-app (`admin/projects` CRUD) → followed by `just export-live-data` (export PB → `data/`) and `python3 scripts/generate_registry.py` (export → README). Whenever project health changes, the master table in [README.md](README.md) is regenerated from the export snapshot.
    - When a sprint task is completed, update [`SPRINT_TRACKER.md`](SPRINT_TRACKER.md) (sprint state) and [`CHANGELOG.md`](CHANGELOG.md); [`BACKLOG.md`](BACKLOG.md) holds only `BK-` ideas.
 6. **Branch-Based Development (Hybrid Path-Scoped)** — see [`RFC-LAB-000-004`](docs/rfc/RFC-LAB-000-004-branching-model.md):
-   - **Application code, migrations, and `data/`** (relational masters/schemas) MUST land via a **pull request** on a short-lived `feat/`|`fix/`|`chore/`|`refactor/` branch, with **green CI** (portfolio validator + `/project-validate` 5-pillar gate + registry `--check`) before **squash-merge** into protected `main`.
+   - **Application code, migrations, and `data/`** (committed PocketBase exports / schemas) MUST land via a **pull request** on a short-lived `feat/`|`fix/`|`chore/`|`refactor/` branch, with **green CI** (portfolio validator + `/project-validate` 5-pillar gate + registry `--check`) before **squash-merge** into protected `main`.
    - **Governance / documentation** (`STATUS.md`, `journal.md`, `SPRINT_TRACKER.md`, `BACKLOG.md`, `CHANGELOG.md`, `README.md`, `docs/**`) MAY still fast-path directly to `main`; automated skills (`/project-update`, `/sprint-done`, `/ping-leads`, `log-milestone`) retain their direct-commit path.
    - Branch naming: `<type>/<scope>-<slug>` (type mirrors the commit prefixes below). Delete branches after merge; never force-push `main`; roll back via revert PR.
    - In this environment, open PRs via `gh api repos/{owner}/{repo}/pulls` (REST), not `gh pr create`.
@@ -52,7 +53,7 @@ When making commits on behalf of the user, use structured prefixes:
 
 ## 3. Supported Project Archetypes & Templates
 
-When scaffolding a new project, use the corresponding template from `templates/`:
+When scaffolding a new project, use the corresponding template from `templates/` *(note: templates are retained for structural reference; project registration and metadata creation is now app-side via `admin/projects` CRUD, with template cleanup flagged as a Phase-3 follow-up candidate)*:
 
 | Archetype | Icon | Template Path | Remote Codebase |
 | :--- | :---: | :--- | :--- |
@@ -71,9 +72,8 @@ Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; com
 **Project lifecycle & governance:**
 - **`/project-validate [ID]`**: Pre-flight 5-pillar audit (scraper budget ≤ 35 lines, registry lockstep, git hygiene, AST boundaries, live test count) emitting `.gemini/governance/validation_receipt.json`.
 - **`/project-status [ID]`**: WhatsApp briefings via `scripts/generate_status.py` (filters completed initiatives and `LAB-000`).
-- **`/project-add <url_or_title>`**: Scaffolds next project ID, inspects remote repo, assigns `⏳ Onboarding Pending`, registers in `README.md`.
+- **App-Side Metadata Management (`admin/projects`)**: Projects are created and edited in the web application (`admin/projects` CRUD) → `just export-live-data` reconciles live PocketBase to committed `data/*.json` → `python3 scripts/generate_registry.py` updates the README master registry. (Replaces retired `/project-add` and `/project-edit` skills; the 5 executive/governance skills `/project-validate`, `/project-status`, `/project-update`, `/audit-doc`, `/audit-project` remain active.)
 - **`/project-update <ID>`**: Updates `STATUS.md`, prepends wins, appends a `journal.md` milestone.
-- **`/project-edit <ID>`**: Modifies owner, title, remote URL, or lifecycle health across project files and registry.
 **Sprint lifecycle (`RFC-LAB-000-009`) — `brainstorm → implement → verify → done`, phase-aware (order is the contract):**
 - **`/sprint-start [goal]`** / **`/sprint-done [sprint_id]`**: Open / close the **sprint container** in `SPRINT_TRACKER.md` (id, window, goal, carry-forward) and sync `STATUS.md` / `CHANGELOG.md`. *(Web — Scope/Record.)* A sprint **contains many plans**. `/sprint-done` refuses to close undelivered (still-in-review) work.
 - **`/plan-start [topic]`** *(optional, implicit — any free-form topic is a plan-start)* / **`/plan-done`**: Open / close a **planning session** within a sprint (brainstorm, backlog prep, RFC/doc, author a Spec). `/plan-done` finalizes and **merges the Spec** to `main` as a doc PR (the merge-first rule) → state `READY_TO_BUILD`. *(Web — Scope.)*

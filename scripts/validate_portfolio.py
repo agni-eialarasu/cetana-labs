@@ -95,8 +95,59 @@ def validate_relational_integrity(errors: list, warnings: list) -> None:
         owner_name = users_by_id.get(p.get("owner_id"), {}).get("name", "")
         if owner_name and status_lead != owner_name:
             warnings.append(
-                f"[{p.get('id')}/STATUS.md] Owner/Lead '{status_lead}' differs from users master '{owner_name}' (data/ is authoritative)."
+                f"[{p.get('id')}/STATUS.md] Owner/Lead '{status_lead}' differs from users master '{owner_name}' (PocketBase / committed export is authoritative)."
             )
+
+
+def validate_registry_lockstep(errors: list, warnings: list) -> None:
+    """
+    Registry lockstep pillar (RFC-LAB-000-016 Phase 3 / BK-036).
+    Asserts committed data/ export is in sync with live PocketBase when reachable.
+    When PB is not reachable (e.g. CI), falls back to asserting committed data/
+    export is internally consistent with README.md master table.
+    """
+    scripts_dir = Path(__file__).resolve().parent
+    if str(scripts_dir) not in sys.path:
+        sys.path.insert(0, str(scripts_dir))
+
+    try:
+        from export_pb_to_data import check_export_freshness
+        freshness = check_export_freshness(timeout=1.5)
+    except Exception as e:
+        freshness = {"reachable": False, "in_sync": False, "error": str(e), "details": []}
+
+    if freshness["reachable"]:
+        if not freshness["in_sync"]:
+            errors.append(
+                f"[registry lockstep] Committed data/ export is stale compared to live PocketBase ({freshness.get('error')}). Run 'just export-live-data'."
+            )
+        else:
+            print("  • Registry lockstep: Committed data/ export matches live PocketBase [PASS]")
+    else:
+        # Fallback for CI / PB unreachable: assert export matches README table
+        try:
+            from generate_registry import build_registry_block, BEGIN_MARKER, END_MARKER
+            users_file = DATA_DIR / "users.json"
+            projects_file = DATA_DIR / "portfolio.json"
+            if users_file.exists() and projects_file.exists() and MASTER_README.exists():
+                u_data = json.loads(users_file.read_text(encoding="utf-8"))
+                p_data = json.loads(projects_file.read_text(encoding="utf-8"))
+                expected_block = build_registry_block(u_data, p_data)
+                readme_text = MASTER_README.read_text(encoding="utf-8")
+                b_idx = readme_text.find(BEGIN_MARKER)
+                e_idx = readme_text.find(END_MARKER)
+                if b_idx == -1 or e_idx == -1:
+                    errors.append("[registry lockstep] README.md missing registry markers.")
+                else:
+                    curr_block = readme_text[b_idx:e_idx + len(END_MARKER)]
+                    if curr_block != expected_block:
+                        errors.append(
+                            "[registry lockstep] README.md master registry is stale compared to committed data/ export. Run 'python3 scripts/generate_registry.py'."
+                        )
+                    else:
+                        print("  • Registry lockstep: PocketBase offline (CI mode); committed export matches README master registry [PASS]")
+        except Exception as e:
+            errors.append(f"[registry lockstep] Verification fallback failed: {e}")
 
 
 def validate() -> int:
@@ -169,6 +220,9 @@ def validate() -> int:
 
     # 5. Relational data-layer referential integrity (BK-009 / RFC-LAB-000-002)
     validate_relational_integrity(errors, warnings)
+
+    # 6. Registry lockstep / export freshness (RFC-LAB-000-016 Phase 3 / BK-036)
+    validate_registry_lockstep(errors, warnings)
 
     # Print results
     if warnings:
