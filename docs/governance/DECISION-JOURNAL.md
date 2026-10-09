@@ -810,3 +810,25 @@ historical one.
 - **Key correction captured in the RFC:** the daily WhatsApp scraper reads **`STATUS.md`**, not `data/status.json` — so retiring `data/` masters does **not** break the executive broadcast. That materially shrinks Decision 2's blast radius.
 - **Phasing:** Phase 1 = identity Spec (fixes the bug, no registry change); Phase 2 = answer OQ-1..OQ-4; Phase 3 = registry inversion Spec(s), keeping `data/` as export.
 - **Class:** architecture decision (RFC + journal) → doc merge-first. Implementation Phases are sprint deliverables → full gate; the Phase-1 data migration touches live records (scripted, verified, reversible by reseed).
+
+---
+
+## Entry 026 — Registry-retirement design: answer RFC-016 OQ-1..OQ-4 (Phase 2)
+
+> _Phase 2 of RFC-016. Before any master or skill is deleted, answer the four gating open questions the RFC left open. Grounded in the live code: the app's CRUD owns project **metadata** only; the executive broadcast reads `STATUS.md`, not `data/`._
+
+### D71 — Answer the OQs; retire 2 skills, keep `data/` as export, invert the data flow in Phase 3
+
+- **Decisive finding (verified in code):** the web app's BK-014 CRUD (`admin/projects`, `admin/developers`) owns project **metadata** (`portfolio.json`/`users.json` fields) — it does **not** own `STATUS.md`, `journal.md`, or the WhatsApp broadcast (`generate_status.py` reads `STATUS.md` exclusively: 11 refs, 0 to `data/`). So the registry retirement is a metadata-source-of-truth change, not a status-reporting change.
+- **OQ-3 (per-skill call) — retire 2 of 7:** RETIRE `project-add` + `project-edit` (the pure metadata lifecycle the app now owns). KEEP `project-update`, `project-status`, `project-validate`, `audit-doc`, `audit-project` (they operate on the executive/governance layer the app deliberately doesn't touch). KEEP `projects/LAB-XXX/` dirs (existing STATUS/journal still managed by the kept skills; Phase 3 stops *creating new* disk dirs, doesn't delete existing). KEEP `templates/` for now — re-evaluate as a Phase-3 follow-up, not a Phase-3 deletion.
+- **OQ-1 — re-point, don't retire:** the "registry lockstep" CI pillar flips its assertion from *README matches hand-authored `data/`* to *committed `data/` export matches live PB*. Still a real gate; guards export freshness. Keeps the at-rest GitHub registry view D68 reframed.
+- **OQ-2 — keep `data/` as a generated export** (confirms the RFC lean): `just export-live-data` already writes it; the app's `data.ts` fallback depends on it; GitHub keeps rendering the portfolio. Flip its role master → generated artifact (add to the "never hand-edit" list in `structure.md`).
+- **OQ-4 — already satisfied by BK-034 (#89):** handle-unique index + atomic owner-re-point-before-delete migration shipped.
+- **The one consequential change Phase 3 (BK-036) owns — the data-flow inversion:** today `data/ ──seed──▶ PB`; Phase 3 flips it to `PB ──export──▶ data/`. Implies: new projects created in-app (not disk-scaffolded); `just export-live-data` becomes the lockstep step (not `generate_registry` from masters); the registry pillars assert export-matches-PB; the 2 retired skills removed with AGENTS.md §3/§4 + referencing docs updated in-lockstep.
+
+### Downstream
+- **Unblocks BK-036 (Phase 3)** — its registry-inversion Spec cites `docs/governance/registry-retirement-design.md` for the OQ answers.
+- The status-reporting spine (`STATUS.md`, `journal.md`, `project-status`, `project-update`) is explicitly out of scope — a key de-risking.
+
+### Session meta
+- **Class:** governance/design decision + a new governance doc → doc fast-path (merge-first, so the Phase-3 Spec can cite it). No code change.

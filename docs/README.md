@@ -41,6 +41,8 @@ docs/
 | :--- | :--- |
 | [Decision Journal](governance/DECISION-JOURNAL.md) | Curated decision-narrative log (problem → options → decision → outcome). |
 | [AI Collaboration Model](governance/ai-collaboration-model.md) | The human-directed / AI-assisted / human-gated working methodology. |
+| [Requirements Intake](governance/REQUIREMENTS_INTAKE.md) | The `/rgs` requirement-draft register and its state machine (RFC-016 / D69). |
+| [Registry-Retirement Design](governance/registry-retirement-design.md) | RFC-016 Phase 2 (BK-035): the OQ-1..OQ-4 answers that gate the registry inversion. |
 
 ## 📜 RFCs
 
