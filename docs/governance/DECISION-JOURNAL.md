@@ -857,4 +857,27 @@ historical one.
 - **Class:** governance/documentation → simplified fast-path. Shipped as 3 branch PRs (reviewable multi-file restructures) rather than direct-to-main, each human-merged. Three invariants held throughout: human merge gate, agent never pushed `main`, validators green. Two safety-policy over-blocks encountered (a fused-`&&` push read as bare, a spurious ssh-regex match on a multiline command) and routed correctly by splitting into clean single-purpose commands — never re-spelled to evade.
 ---
 
+## Entry 028 — Nexus Pulse comparison: adopt best docs patterns; sharpen the skill-hook; add an agent entry map
+
+> _Follow-on to the docs-audit (Entry 027). Driven by "check/compare the Nexus Pulse repo — adapt what is best and reliable" and "go deep on AGENTS.md for the repo skill hook; what's `llms.txt`?" Shipped as two doc-class PRs (#96, #97), human-gated, no code change._
+
+### D73 — Adopt NP's reliable docs patterns into Cetana (in-doc TOC + local-env matrix), state the full skill-hook in AGENTS.md §4, and add a repo-root `llms.txt` agent entry map
+
+- **The problem:** `developer-guide.md` was still a long scroll with no in-doc table of contents; local-environment facts (URLs, health routes, the throwaway superuser credential) were scattered through prose; `AGENTS.md` §4 described the skill convention only as "shared across Operator + IDE Executor" — missing the actual *mechanism* and the two newer surfaces; and an agent reading the repo cold had no single "start here" map. A Nexus Pulse comparison surfaced several portable, more-mature patterns worth adopting (and some to send back the other way).
+- **The decision — adopt what proved reliable, state conventions precisely, add a cheap forward-looking map:**
+  - **Dev-guide TOC (#96):** added an `<a id="top"></a>` anchor + a Quick-Links strip + a full in-doc Table of Contents (NP pattern), making the 339-line guide jump-navigable; upgraded the footer "Top" links repo-wide from `#` to `#top` so they reliably jump.
+  - **Local Environment & Credentials Matrix (#96):** one `§5.0` table — subsystem × local URL × credential × health route — exposing the **local-only, never-deployed** superuser `admin@cetana.local` / `CetanaLocal2026!`, a deliberate day-0 DX win at zero security cost (throwaway local creds, explicitly flagged as non-production). Mirrors NP's env-topology table.
+  - **Audit cleanup (#96):** `.DS_Store` gitignored (`**/.DS_Store`); `docs/reference/DESIGN.md` clarified as an **imported org design-system reference** (it is Nexus Pulse's, kept as the authority `design-system-lab000.md` maps from) rather than a stray — so "outdated cruft" is correctly reclassified as "intentional cross-repo reference."
+  - **Skill-hook stated in full (`AGENTS.md` §4, #97):** adopted NP's sharper wording of Cetana's own convention — one committed `.kiro/skills/<name>/SKILL.md` becomes a live `/command` across **all four surfaces** (Kiro IDE/Web read `.kiro/` natively · Antigravity reads the repo copy · KiroCrew symlinks `~/.kiro/crew/skills/cetana-labs → .kiro/skills`), with the `[!IMPORTANT]` "one file, one location" anti-duplication callout (no retired `.agents/`/`.gemini/` copies) and the committed-vs-`.kiro/settings/` boundary.
+  - **Root `llms.txt` (#97):** added a repo-root agent/human entry map in the [llmstxt.org](https://llmstxt.org) format (H1 + summary + annotated links to AGENTS.md, the eight guides, governance, RFCs, trackers). Scoped as a **repo-root agent map, NOT the web-crawler variant** — the app is behind OAuth with no public surface to justify the web use yet (revisit if BK-024 ships a public docs view). Framed explicitly as a **convenience mirror, not a source of truth** — the linked doc wins on conflict; a README Navigate row points to it. Rationale: Antigravity and future executors reading the repo cold get one canonical "start here" instead of guessing between README/AGENTS/docs-hub, and it mirrors content already maintained (the README Navigate TOC).
+
+### Downstream
+- **Reverse-adoption flagged (Cetana ← NP):** NP's `just validate-docs` doc-health gate (audits every markdown link/anchor/target) is the single highest-value thing Cetana still lacks — a candidate Cetana addition, tracked so the two repos stay convention-compatible.
+- **Cross-repo adoption brief prepared (Cetana → NP):** a copy-paste kickoff brief listing the Cetana patterns NP should adopt (uniform nav standard, purpose-scoped guide split, two-work-classes routing table, one-source-per-concept de-dup) plus corrections noticed in NP (committed `.DS_Store`, early-sprint archive, badge honesty) — to run under NP's own lifecycle, never cross-applied from here.
+- No functional/product impact — pure governance/docs maintenance.
+
+### Session meta
+- **Class:** governance/documentation → simplified fast-path. Shipped as 2 branch PRs (#96, #97), human-merged. Three invariants held: human merge gate, agent never pushed `main`, validators green (registry block byte-identical throughout). This entry rides on the #97 branch so the decision record merges atomically with the work it documents.
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
