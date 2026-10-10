@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Cetana Labs — Working Model (living diagram), committed export for the in-app /docs embed (BK-037).
-  SOURCE OF TRUTH: Kiro Crew artifact slug fd26dcf5ca990145 (v14, refreshed 2026-10-10).
+  SOURCE OF TRUTH: Kiro Crew artifact slug fd26dcf5ca990145 (v15, three-tier roles, 2026-10-10).
   On any process change, update the artifact AND re-export this file in the same session (maintenance rule).
   Themed via CSS variables injected by DiagramEmbed.svelte (--text, --bg, --accent, …).
 -->
@@ -20,9 +20,9 @@
   .wm-card{flex:1 1 180px;border:1px solid var(--border,#d1d5db);border-radius:10px;padding:12px 14px;background:var(--card,#f8f9fa);color:var(--card-fg,var(--text,#111));cursor:pointer;transition:transform .1s,box-shadow .1s,border-color .1s}
   .wm-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.13);border-color:var(--accent,#2563eb)}
   .wm-card.sel{box-shadow:0 0 0 2px var(--accent,#2563eb) inset}
-  .wm-op-b{border-top:3px solid var(--info,#2563eb)}.wm-ex-b{border-top:3px solid var(--ok,#16a34a)}.wm-fb-b{border-top:3px solid var(--muted,#9ca3af)}.wm-bw-b{border-top:3px solid #7c3aed}
+  .wm-op-b{border-top:3px solid var(--info,#2563eb)}.wm-ex-b{border-top:3px solid var(--ok,#16a34a)}.wm-fb-b{border-top:3px solid #eab308}.wm-bw-b{border-top:3px solid #7c3aed}
   .wm-badge{display:inline-block;font-size:0.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:6px}
-  .wm-op{background:var(--info-subtle,var(--accent-subtle,#dbeafe));color:var(--info,#1d4ed8)}.wm-ex{background:var(--ok-subtle,#dcfce7);color:var(--ok,#15803d)}.wm-fb{background:var(--bg-hover,#e5e7eb);color:var(--muted-strong,var(--muted,#4b5563))}.wm-bw{background:var(--accent-subtle,#ddd6fe);color:#6d28d9}
+  .wm-op{background:var(--info-subtle,var(--accent-subtle,#dbeafe));color:var(--info,#1d4ed8)}.wm-ex{background:var(--ok-subtle,#dcfce7);color:var(--ok,#15803d)}.wm-fb{background:var(--warn-subtle,#fef3c7);color:var(--warn,#b45309)}.wm-bw{background:var(--accent-subtle,#ddd6fe);color:#6d28d9}
   .wm-title{font-weight:700;font-size:0.95rem;margin:0 0 1px;color:var(--card-fg,var(--text,#111))}
   .wm-role{font-size:0.72rem;color:var(--muted,#6b7280);margin:0 0 8px}
   .wm-grp{font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted,#6b7280);margin:7px 0 3px}
@@ -92,16 +92,16 @@
   <div class="wm-view on" data-view="surfaces">
     <div class="wm-row">
       <div class="wm-card wm-op-b" data-k="op">
-        <span class="wm-badge wm-op">Operator</span><p class="wm-title">🤖 KiroCrew</p>
+        <span class="wm-badge wm-op">Primary Operator</span><p class="wm-title">🤖 KiroCrew</p>
         <p class="wm-role">Decide &amp; coordinate · stateful · never merges</p>
         <div class="wm-grp">Plan / Sprint</div><div class="wm-chips"><span class="wm-chip">/sprint-start</span><span class="wm-chip">/plan-start</span><span class="wm-chip">/plan-done</span><span class="wm-chip">/sprint-done</span></div>
         <div class="wm-grp">Govern / Project</div><div class="wm-chips"><span class="wm-chip">/project-update</span><span class="wm-chip">/project-status</span><span class="wm-chip">/project-validate</span><span class="wm-chip">/ping-leads</span><span class="wm-chip">just export-live-data</span></div>
         <div class="wm-grp">Review / Record</div><div class="wm-chips"><span class="wm-chip">/review-pr</span><span class="wm-chip">/audit-doc</span><span class="wm-chip">/audit-project</span><span class="wm-chip">/log-milestone</span><span class="wm-chip">/commit-changes</span><span class="wm-chip">/push-changes</span><span class="wm-chip">/commit-and-push-changes</span></div>
       </div>
       <div class="wm-card wm-ex-b" data-k="ex">
-        <span class="wm-badge wm-ex">Executor(s)</span><p class="wm-title">💻 Antigravity + Kiro IDE</p>
-        <p class="wm-role">Build &amp; verify · stateful · cost-first routing · never merges</p>
-        <div class="wm-grp">Routing (RFC-014 §7 ✓)</div><div class="wm-chips"><span class="wm-chip def">⚡ Antigravity — default (free)</span><span class="wm-chip esc">💻 Kiro IDE — escalate (reason)</span></div>
+        <span class="wm-badge wm-ex">Primary Executor</span><p class="wm-title">🪐 Antigravity</p>
+        <p class="wm-role">Build &amp; verify · executor-only · never operates · never merges</p>
+        <div class="wm-grp">Role</div><div class="wm-chips"><span class="wm-chip def">⚡ default runner — all builds (free)</span></div>
         <div class="wm-grp">Build / Verify</div><div class="wm-chips"><span class="wm-chip">tasks.md</span><span class="wm-chip">/spec-run</span><span class="wm-chip">/validate-local</span><span class="wm-chip">/verification-done</span><span class="wm-chip">/env-doctor</span></div>
         <div class="wm-grp">Local stack</div><div class="wm-chips"><span class="wm-chip">/start-local</span><span class="wm-chip">/stop-local</span><span class="wm-chip">/status-local</span></div>
         <div class="wm-grp">Deploy / Staging</div><div class="wm-chips"><span class="wm-chip">/deploy-adhoc</span><span class="wm-chip">/status-staging</span><span class="wm-chip">/validate-staging</span></div>
@@ -113,13 +113,13 @@
         <div class="wm-grp">Never</div><div class="wm-chips"><span class="wm-chip">push main</span><span class="wm-chip">merge</span></div>
       </div>
       <div class="wm-card wm-fb-b" data-k="fb">
-        <span class="wm-badge wm-fb">Fallback</span><p class="wm-title">🌐 Kiro Web</p>
-        <p class="wm-role">Spare · stateless · rarely used</p>
-        <div class="wm-grp">Skills</div><p class="wm-none">None — stateless. Shares committed <code>.kiro/</code> but holds no memory.</p>
-        <div class="wm-grp">Use for</div><div class="wm-chips"><span class="wm-chip">throwaway brainstorm</span><span class="wm-chip">no-install access</span><span class="wm-chip">config-sync check</span></div>
+        <span class="wm-badge wm-fb">Secondary · break-glass</span><p class="wm-title">🌐💻 Kiro Web / IDE</p>
+        <p class="wm-role">Either role — only if KiroCrew is unavailable</p>
+        <div class="wm-grp">Can stand in as</div><div class="wm-chips"><span class="wm-chip">Operator (author Spec, govern)</span><span class="wm-chip">Executor (build)</span></div>
+        <div class="wm-grp">Rule</div><p class="wm-none">Kiro-native (reads committed <code>.kiro/</code> → skills are real <code>/commands</code>). <b>Emergency continuity, not a parallel operator lane</b> — an operator stint here loses KiroCrew's persistent memory.</p>
       </div>
     </div>
-    <div class="wm-rule">Operator decides &amp; governs → an <span class="wm-k">Executor</span> builds &amp; verifies → <span class="wm-k">the merge gate is always yours</span>. <span class="wm-k">Executor is a role, not one tool</span>: route routine builds to <span class="wm-k">Antigravity (free, default)</span>, escalate complex/Kiro-native work to <span class="wm-k">Kiro IDE</span> with a reason (RFC-014). More executors = more throughput, never more merge authority. Workers do bounded off-path work (never merge); Web is the spare. Each surface uses a <span class="wm-k">separate clone</span>, sync via origin. <span class="wm-k">Project metadata</span> is now app-CRUD (<code>admin/projects</code>) → <code>just export-live-data</code> → committed <code>data/</code> (RFC-016 Phase 3).</div>
+    <div class="wm-rule"><span class="wm-k">Three tiers.</span> <span class="wm-k">KiroCrew = Primary Operator</span> (decides &amp; governs, stateful) → <span class="wm-k">Antigravity = Primary Executor</span> (builds &amp; verifies, <span class="wm-k">executor-only — never operates</span>, because it is stateless) → <span class="wm-k">the merge gate is always yours</span>. <span class="wm-k">Kiro Web / IDE = Secondary (break-glass)</span>: Kiro-native, so each can stand in for <i>either</i> role — but <span class="wm-k">only when KiroCrew is unavailable</span>, as emergency continuity, never routine. Operator authority stays concentrated where the memory + governance live; executor throughput scales out on Antigravity. <span class="wm-k">More executors = more throughput, never more operator or merge authority.</span> Each surface uses a <span class="wm-k">separate clone</span>, sync via origin. Project metadata is app-CRUD (<code>admin/projects</code>) → <code>just export-live-data</code> → committed <code>data/</code> (RFC-016 Phase 3).</div>
   </div>
   <div class="wm-view" data-view="flow">
     <div class="wm-lanes">
@@ -136,22 +136,22 @@
         <div class="wm-step gate" data-s="f6"><span class="n">⑥</span>Surface PR checklist<span class="sk">/review-pr → STOP</span></div>
         <div class="wm-step" data-s="f8"><span class="n">⑧</span>Lockstep + capture why<span class="sk">/log-milestone·Decision Journal</span></div>
       </div></div>
-      <div class="wm-lane"><div class="wm-lh ex">💻 Executor</div><div class="wm-lbody">
-        <div class="wm-step" data-s="f4"><span class="n">④</span>Execute on feat/ branch<span class="sk">Antigravity (default) · /spec-run (Kiro IDE)</span></div>
-        <div class="wm-step" data-s="f4b"><span class="n">④</span>Open PR + self-validate<span class="sk">CI + 5-pillar + EARS</span></div>
+      <div class="wm-lane"><div class="wm-lh ex">🪐 Antigravity</div><div class="wm-lbody">
+        <div class="wm-step" data-s="f4"><span class="n">④</span>Execute on feat/ branch<span class="sk">/spec-run · tasks.md</span></div>
+        <div class="wm-step" data-s="f4b"><span class="n">④</span>Open PR + self-validate<span class="sk">CI + 6-pillar + EARS</span></div>
       </div></div>
     </div>
-    <p class="wm-note">① → ⑧ top-to-bottom; the ball crosses lanes at each handoff. Merge-first: Spec (②) merges (③) before build (④). The Executor lane is whichever executor the cost-first routing picks (Antigravity default; Kiro IDE on escalation). Gate-free background workers (not shown) run in parallel off this path for bounded, reversible work.</p>
+    <p class="wm-note">① → ⑧ top-to-bottom; the ball crosses lanes at each handoff. Merge-first: Spec (②) merges (③) before build (④). The executor lane is <b>Antigravity</b> (primary, executor-only); Kiro Web/IDE stand in only as break-glass if KiroCrew is unavailable. Gate-free background workers (not shown) run in parallel off this path for bounded, reversible work.</p>
   </div>
   <div class="wm-view" data-view="seq">
     <div class="sq">
       <div class="sq-head">
-        <span class="sq-actor you">👤 You</span><span class="sq-actor op">🤖 KiroCrew</span><span class="sq-actor ex">💻 Executor</span>
+        <span class="sq-actor you">👤 You</span><span class="sq-actor op">🤖 KiroCrew</span><span class="sq-actor ex">🪐 Antigravity</span>
       </div>
       <div class="sq-grid" id="sqgrid">
         <span class="sq-life l0"></span><span class="sq-life l1"></span><span class="sq-life l2"></span>
       </div>
-      <p class="wm-note">Each message sits on its sender's lifeline, arrow spans to the receiver. ↺ = self-step. Click a message for detail. Two gates (blue), final merge (green). The Executor is Antigravity by default, Kiro IDE on escalation.</p>
+      <p class="wm-note">Each message sits on its sender's lifeline, arrow spans to the receiver. ↺ = self-step. Click a message for detail. Two gates (blue), final merge (green). The executor is Antigravity (primary, executor-only); Kiro Web/IDE are break-glass secondaries.</p>
     </div>
   </div>
   <p class="wm-hint">💡 Click a surface, step, or message — detail pops up right beside it.</p>
@@ -182,10 +182,10 @@
     place(anchor);
   }
   var SURF={
-    op:{t:'🤖 KiroCrew — Operator',rows:[['Role','Decide &amp; coordinate; holds persistent per-project memory.'],['Does','Brainstorm, author RFCs/Specs, governance ops, PR review, spawn workers.'],['Never','Merges — opens PRs, self-validates, STOP-and-holds at your gate.'],['Skills','plan/sprint · project/govern (project metadata now app-CRUD → <code>just export-live-data</code>) · review/record (incl. /push-changes + /commit-and-push-changes).']]},
-    ex:{t:'💻 Executor(s) — Antigravity + Kiro IDE',rows:[['Role','Build &amp; verify; where the running system lives. Executor is a <b>role, not one tool</b> (RFC-014, §7 trial passed 2026-10-02).'],['Routing','<b>Cost-first:</b> default routine/mechanical/docs-skills/low-risk builds to <b>Antigravity</b> (free, AI Pro — executes the Spec&rsquo;s <code>tasks.md</code> directly). Escalate complex / high-stakes / deep-codebase / Kiro-native-dependent builds to <b>Kiro IDE</b> (budgeted) with a one-line reason.'],['Contract','Identical for both: read the Kiro Spec, build on a <code>feat/</code> branch, write <code>REPORT.md</code>, open a PR via <code>gh api</code>, STOP-and-hold. Only the tool differs, never the contract.'],['Never','Pushes <code>main</code> or merges — every PR, any executor, goes through <code>/review-pr</code> + your gate. More executors = more throughput, never more merge authority.'],['Workspace','Clone-per-executor: <code>cetana-labs-antigravity/</code>, <code>cetana-labs-kiro-ide/</code> — sync via origin, never a shared worktree.']]},
-    bw:{t:'⚙️ Background worker — Delegated',rows:[['Role','Operator-spawned parallel worker for bounded, reversible, off-protected-path work.'],['Good for','Research, analysis, doc drafts, diagram data, scoped investigation, bulk processing.'],['How','<code>spawn_run</code> → runs in parallel → Operator validates the result + reports.'],['Never','Pushes <code>main</code> or merges. Code destined for main still goes via an Executor + PR + the human gate.']]},
-    fb:{t:'🌐 Kiro Web — Fallback',rows:[['Role','Stateless spare, rarely used.'],['Use for','Throwaway brainstorm, no-install access, config-sync parity check.'],['Skills','None — shares committed <code>.kiro/</code> but holds no memory.']]}
+    op:{t:'🤖 KiroCrew — Primary Operator',rows:[['Role','Decide &amp; coordinate; holds persistent per-project memory.'],['Does','Brainstorm, author RFCs/Specs, governance ops, PR review, spawn workers.'],['Never','Merges — opens PRs, self-validates, STOP-and-holds at your gate.'],['Skills','plan/sprint · project/govern (project metadata now app-CRUD → <code>just export-live-data</code>) · review/record (incl. /push-changes + /commit-and-push-changes).']]},
+    ex:{t:'🪐 Antigravity — Primary Executor',rows:[['Role','Build &amp; verify; where the running system lives. <b>Executor-only — never operates</b>, because it is a stateless build surface with no persistent memory or governance skills.'],['Default','Runs <b>all</b> builds (free, AI Pro): reads the Spec&rsquo;s <code>tasks.md</code> directly, builds on a <code>feat/</code> branch, opens a PR via <code>gh api</code>, STOP-and-holds.'],['Never','Pushes <code>main</code>, merges, or acts as Operator. Every PR goes through <code>/review-pr</code> + your gate.'],['Workspace','Its own clone <code>cetana-labs-antigravity/</code> — sync via origin, never a shared worktree.']]},
+    bw:{t:'⚙️ Background worker — Delegated',rows:[['Role','Operator-spawned parallel worker for bounded, reversible, off-protected-path work.'],['Good for','Research, analysis, doc drafts, diagram data, scoped investigation, bulk processing.'],['How','<code>spawn_run</code> → runs in parallel → Operator validates the result + reports.'],['Never','Pushes <code>main</code> or merges. Code destined for main still goes via Antigravity + PR + the human gate.']]},
+    fb:{t:'🌐💻 Kiro Web / IDE — Secondary (break-glass)',rows:[['Role','Emergency continuity. Kiro-native (reads committed <code>.kiro/</code> → skills are real <code>/commands</code>), so each can stand in for <i>either</i> role.'],['Can operate','Author a Spec, run a governance skill — but a stint here loses KiroCrew&rsquo;s persistent memory, so it is break-glass only.'],['Can execute','Run a build like Antigravity when needed.'],['Rule','<b>Only when KiroCrew is genuinely unavailable</b> — emergency continuity, NOT a parallel operator lane. Primary things stay planned/modeled around KiroCrew.']]}
   };
   root.querySelectorAll('.wm-card').forEach(function(c){c.addEventListener('click',function(e){
     e.stopPropagation();root.querySelectorAll('.wm-card,.wm-step,.sq-msg').forEach(function(x){x.classList.remove('sel')});c.classList.add('sel');
@@ -197,8 +197,8 @@
     f2:['② Author Spec',[['Who','KiroCrew'],['What','requirements (EARS DoD) · design · tasks.']]],
     f3:['③ Gate: approve Spec merge',[['Who','You — GATE 1'],['What','Approve merging the Spec to main.']]],
     f3b:['③ Merge Spec to main',[['Who','KiroCrew'],['Via','<code>/plan-done</code>'],['What','Doc PR — merge-first, before build.']]],
-    f4:['④ Execute',[['Who','Executor (Antigravity default; Kiro IDE on escalation)'],['Via','<code>tasks.md</code> direct (Antigravity) · <code>/spec-run</code> (Kiro IDE)'],['What','Run tasks.md on the feat/ branch.']]],
-    f4b:['④ Open PR + self-validate',[['Who','Executor'],['What','CI + 5-pillar + EARS DoD self-check.']]],
+    f4:['④ Execute',[['Who','Antigravity (Primary Executor)'],['Via','<code>/spec-run</code> → <code>tasks.md</code>'],['What','Run tasks.md on the feat/ branch. Kiro Web/IDE only as break-glass if KiroCrew is unavailable.']]],
+    f4b:['④ Open PR + self-validate',[['Who','Antigravity'],['What','CI + 6-pillar + EARS DoD self-check.']]],
     f5:['⑤ Verify feature',[['Who','You'],['Via','<code>/verification-done</code>'],['What','Exercise the feature; fixes land on the same PR.']]],
     f6:['⑥ Surface PR checklist',[['Who','KiroCrew'],['Via','<code>/review-pr</code>'],['What','CI + diff + EARS + lockstep → STOP.']]],
     f7:['⑦ Approve &amp; merge PR',[['Who','You — GATE 2'],['What','Squash-merge to main.']]],
@@ -208,21 +208,21 @@
     e.stopPropagation();root.querySelectorAll('.wm-card,.wm-step,.sq-msg').forEach(function(x){x.classList.remove('sel')});s.classList.add('sel');
     var d=FLOW[s.dataset.s];if(d)show(d[0],d[1],s);
   });});
-  var CEN=[16.66,50,83.33],ACT=['You','KiroCrew','Executor'];
+  var CEN=[16.66,50,83.33],ACT=['You','KiroCrew','Antigravity'];
   var msgs=[
     {n:1,f:0,t:1,l:'"Let&rsquo;s build X" — set direction',det:'You frame the goal to the Operator.'},
     {n:2,f:1,t:1,l:'author Spec <code>/plan-start</code>',det:'KiroCrew drafts requirements·design·tasks.'},
     {n:3,f:1,t:0,l:'"Spec ready — approve merge?"',det:'KiroCrew asks for your merge approval.'},
     {n:4,f:0,t:1,l:'<span class="g">GATE 1</span> approve',k:'gate',det:'You approve merging the Spec (first human gate).'},
     {n:5,f:1,t:1,l:'merge Spec to main <code>/plan-done</code>',det:'Doc PR merged — merge-first, before any build.'},
-    {n:6,f:0,t:2,l:'kick off build (route by cost-first)',det:'You kick off execution on the chosen executor — Antigravity by default (free), Kiro IDE on escalation.'},
-    {n:7,f:2,t:2,l:'execute <code>tasks.md</code> on <code>feat/</code>',det:'The executor builds on the feat/ branch the Spec named (Antigravity runs tasks.md directly; Kiro IDE via /spec-run).'},
-    {n:8,f:2,t:2,l:'open PR + self-validate',det:'CI + 5-pillar + EARS DoD self-check; STOP-and-hold (never merges).'},
+    {n:6,f:0,t:2,l:'kick off build on Antigravity',det:'You kick off execution on Antigravity, the primary (free) executor.'},
+    {n:7,f:2,t:2,l:'execute <code>tasks.md</code> on <code>feat/</code>',det:'Antigravity builds on the feat/ branch the Spec named (runs tasks.md via /spec-run).'},
+    {n:8,f:2,t:2,l:'open PR + self-validate',det:'CI + 6-pillar + EARS DoD self-check; STOP-and-hold (never merges).'},
     {n:9,f:0,t:2,l:'verify <code>/verification-done</code>',det:'You exercise the feature; fixes land on the same PR.'},
-    {alt:'issues found → executor fixes on the SAME PR, re-verify ↺'},
+    {alt:'issues found → Antigravity fixes on the SAME PR, re-verify ↺'},
     {n:10,f:2,t:1,l:'verification record → <code>IN_REVIEW</code>',det:'The executor records the verdict; lifecycle advances.'},
-    {n:11,f:1,t:0,l:'<code>/review-pr</code> checklist + STOP',det:'KiroCrew surfaces the gate checklist, then stops. Same gate for any executor.'},
-    {alt:'changes requested → You ask the executor to iterate ↺'},
+    {n:11,f:1,t:0,l:'<code>/review-pr</code> checklist + STOP',det:'KiroCrew surfaces the gate checklist, then stops.'},
+    {alt:'changes requested → You ask Antigravity to iterate ↺'},
     {n:12,f:0,t:1,l:'<span class="m">GATE 2</span> approve &amp; squash-merge',k:'merge',det:'You squash-merge to main (second human gate).'},
     {n:13,f:1,t:1,l:'lockstep + Decision Journal <code>/log-milestone</code>',det:'KiroCrew syncs registries + records the why.'}
   ];
