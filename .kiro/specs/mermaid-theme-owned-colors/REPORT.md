@@ -70,6 +70,21 @@ Delivered **Mermaid Node Labels — Theme-Owned Colors (Option C)** (`BK-039` / 
 - **V4 (Local Pre-Flight Gate)**:
   - Run `just validate-local` and confirm all 5 governance pillars and web builds pass cleanly.
 
+## 4. Verification Log — human functional verification (appended by `/verification-done`)
+
+### Verification Log — 2026-10-10 (PR #104)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1 (Sprint Lifecycle Flowchart & State Machine)** | ✅ | Flowchart and state-machine nodes display labels cleanly with native SVG `<text>` and `<tspan>` rows across light and dark themes. Initial issue with empty boxes traced to Mermaid 12 deprecating `flowchart.htmlLabels` (requiring global `htmlLabels: false`) which caused `<foreignObject>` to be stripped by DOMPurify; semicolon `;` in transition text also eliminated to fix phantom state tokens (commit `2b74bd8`). |
+| **V2 (Project Owner Flowchart)** | ✅ | All 9 boxes and decision diamond in `/docs?doc=project-owner` render clean, centered labels across light and dark themes. HTML tags (`<b>`, `<i>`, `&amp;`) replaced with clean text and `\n` to prevent literal markup leaking into SVG `<text>`. |
+| **V3 (Architecture Diagrams & Living Diagrams)** | ✅ | Living diagrams remain interactive and sequence diagrams render without regression. |
+| **V4 (Local Pre-Flight Gate)** | ✅ | `just validate-local` passes 100% green across all 5 governance pillars and web builds. |
+
+- **Iterations:** 2 (initial Option C commit `cccab8d`; deep debug and Mermaid 12 global config + label cleanup fixup `2b74bd8`)
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu · **Surface:** Google Antigravity (IDE)
+
 ---
 
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../../README.md) · [📚 Docs Hub](../../../docs/README.md)

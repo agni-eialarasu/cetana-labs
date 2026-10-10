@@ -22,10 +22,10 @@
 - [x] Open PR via `gh api` ([PR #104](https://github.com/agni-eialarasu/cetana-labs/pull/104)); write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
 
 ## Task 3 — Human visual verification (in `/verification-done` / `/review-pr`)
-- [ ] V1: `/docs?doc=sprint-lifecycle` — flowchart AND `stateDiagram` nodes show labels, **light + dark**.
-- [ ] V2: `/docs?doc=project-owner` — flowchart nodes show labels, light + dark.
-- [ ] V3: `/docs?doc=diagrams` — living + sequence diagrams unchanged.
-- [ ] V4: `just validate-local` green.
+- [x] V1: `/docs?doc=sprint-lifecycle` — flowchart AND `stateDiagram` nodes show labels, **light + dark**.
+- [x] V2: `/docs?doc=project-owner` — flowchart nodes show labels, light + dark.
+- [x] V3: `/docs?doc=diagrams` — living + sequence diagrams unchanged.
+- [x] V4: `just validate-local` green.
 
 ## Definition of Done
 - **R1** custom `classDef`/`class` fill+color removed from both flowchart sources.
