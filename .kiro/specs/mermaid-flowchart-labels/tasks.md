@@ -8,15 +8,15 @@
 | **Gate** | Full gate: `/spec-run` → PR → `/review-pr` → human merge. Merge-first: this Spec on `main` before build. |
 
 ## Task 1 — Config fix
-- [ ] In `app/web/src/lib/docs/mermaid.ts`, add `flowchart: { htmlLabels: false }` to the `mermaid.initialize({...})` object (keep `securityLevel: 'strict'`, keep `theme`, keep the DOMPurify SVG-profile sanitize unchanged).
+- [x] In `app/web/src/lib/docs/mermaid.ts`, add `flowchart: { htmlLabels: false }` to the `mermaid.initialize({...})` object (keep `securityLevel: 'strict'`, keep `theme`, keep the DOMPurify SVG-profile sanitize unchanged).
 - **Verify (code):** no other change to the render/sanitize/fail-soft logic; `svelte-check` + typecheck clean.
 
 ## Task 2 — Build + self-validate (DoD)
-- [ ] `pnpm build` (adapter-static) succeeds.
-- [ ] `just validate-local` green (R6).
-- [ ] README registry byte-identical (`generate_registry.py --check`).
-- [ ] CHANGELOG `[Unreleased]` entry for BK-038.
-- [ ] Open PR via `gh api`; write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
+- [x] `pnpm build` (adapter-static) succeeds.
+- [x] `just validate-local` green (R6).
+- [x] README registry byte-identical (`generate_registry.py --check`).
+- [x] CHANGELOG `[Unreleased]` entry for BK-038.
+- [x] Open PR via `gh api`; write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
 
 ## Task 3 — Human visual verification (in `/review-pr` / `/verification-done`)
 - [ ] V1: `/docs?doc=sprint-lifecycle` flowchart labels render (light + dark).
