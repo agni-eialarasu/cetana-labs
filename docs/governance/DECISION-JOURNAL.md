@@ -834,4 +834,26 @@ historical one.
 - **Class:** governance/design decision + a new governance doc → doc fast-path (merge-first, so the Phase-3 Spec can cite it). No code change.
 ---
 
+## Entry 027 — Docs audit: restructure the information architecture for DX
+
+> _A deliberate docs-IA pass driven by "the docs are not impacting my mind-level register — make my DX good." Shipped as three doc-class PRs (#93 A, #94 B, #95 C), human-gated, no code change._
+
+### D72 — Split the dev-guide monolith into purpose-scoped guides; one source per concept; two-way nav
+
+- **The problem:** `developer-guide.md` had grown to 482 lines fusing three distinct docs (local setup · the AIDLC process · deploy/release ops); AIDLC and Mini-AIDLC had no first-class guide; there was no dedicated release/staging guide; the root README was a 20-link wall + a stale repo-structure dump; the repo-structure tree was duplicated in 3 drifting places; and `ai-collaboration-model.md` still named "Kiro IDE = Executor" (pre-RFC-014).
+- **The decision — split by purpose, cross-reference instead of copy:**
+  - **New guides:** `aidlc-guide.md` (the method/concept — surfaces, work-class routing, RGS placement), `mini-aidlc-guide.md` (POC-speed entry pointing to the `aidlc-mini/` kickstarter), `release-guide.md` (promote-to-staging & operate, extracted from dev-guide §9/§9A). Dev-guide slimmed to setup/DB/auth only.
+  - **One source per concept:** the state-machine lives in `sprint-lifecycle.md` (AIDLC guide references it); the kickstarter lives in `templates/aidlc-mini/` (mini guide points to it); the authoritative repo layout lives in `.kiro/steering/structure.md` (README shows an at-a-glance view). No duplication.
+  - **Crisp README:** replaced the link-wall with a task-oriented `## 🧭 Navigate` TOC + a `## 🚀 Quick start` + a `## ⚡ Cheatsheet`; de-staled the layout tree. 114 → 98 lines of navigation value. The generated registry block untouched (byte-identical).
+  - **Executor hierarchy corrected** (`ai-collaboration-model.md` §2) to the cost-first two-executor model per RFC-014: Operator (never merges) · Antigravity (primary, free) · Kiro IDE (escalation, budgeted) · Web (fallback), with a mermaid routing diagram.
+  - **Footer-nav standard:** every `docs/**` doc now closes with `> 🧭 Navigation: ⬆️ Top · 🏠 Repo · 📚 Docs Hub` (optional `🔗 Related:` line) — paired with the top breadcrumb for smooth two-way navigation. Documented as the copyable convention in the docs hub.
+
+### Downstream
+- The docs IA is now purpose-scoped and single-sourced; adding a doc means picking a category folder, adding the breadcrumb + nav footer, and indexing it in the hub.
+- No functional/product impact — pure governance/docs maintenance.
+
+### Session meta
+- **Class:** governance/documentation → simplified fast-path. Shipped as 3 branch PRs (reviewable multi-file restructures) rather than direct-to-main, each human-merged. Three invariants held throughout: human merge gate, agent never pushed `main`, validators green. Two safety-policy over-blocks encountered (a fused-`&&` push read as bare, a spurious ssh-regex match on a multiline command) and routed correctly by splitting into clean single-purpose commands — never re-spelled to evade.
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
