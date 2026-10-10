@@ -31,11 +31,6 @@ flowchart LR
     B --> I --> V --> G --> D
     V -. "fix on same PR" .-> V
     G -. "request changes" .-> I
-
-    classDef web fill:#1e3a5f,stroke:#3b82f6,color:#fff;
-    classDef ide fill:#0f2a1e,stroke:#22c55e,color:#fff;
-    class B,G,D web;
-    class I,V ide;
 ```
 
 - **Order is the contract.** Every command is *phase-aware*: it checks the current state and self-corrects rather than executing blindly (§5).

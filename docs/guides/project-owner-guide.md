@@ -31,11 +31,6 @@ flowchart TB
     V --> P1 & P2 & P3 & P4 & P5 --> GATE
     GATE -- "yes" --> U --> U1 --> U2 --> U3
     GATE -- "no" --> FIX --> V
-
-    classDef gate fill:#1e3a5f,stroke:#3b82f6,color:#fff;
-    classDef act fill:#0f2a1e,stroke:#22c55e,color:#fff;
-    class V,GATE gate;
-    class U,U3 act;
 ```
 
 ---
