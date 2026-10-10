@@ -32,6 +32,7 @@ export async function renderMermaidIn(
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: 'strict',
+      flowchart: { htmlLabels: false },
       theme
     });
 
