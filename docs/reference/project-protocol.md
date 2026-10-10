@@ -139,3 +139,6 @@ To eliminate metric drift, hallucinated test numbers, and line-budget overflows,
 3. **Git Hygiene**: Working tree clean and local branch in parity with remote tracking branch.
 4. **Architectural & Math Parity**: AST boundary checks pass and zero absolute path leaks.
 5. **Live Test Suite Verification**: Real test suite executed, extracting certified passed/skipped/failed tallies into `.gemini/governance/validation_receipt.json`.
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

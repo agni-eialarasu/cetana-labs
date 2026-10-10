@@ -17,20 +17,49 @@
 Decisions are the human's. Execution is AI-accelerated. Nothing reaches `main` without a
 human-approved, CI-gated pull request. This keeps velocity high *and* accountability clear.
 
-## 2. Two surfaces, two roles (RFC-LAB-000-007)
+## 2. Surfaces & roles — Operator + two executors (RFC-LAB-000-007, RFC-LAB-000-014)
 
 | Surface | Role | Used for |
 | :--- | :--- | :--- |
-| **KiroCrew** (Operator) | **Brainstorm, plan & govern** (stateful) | Direction-setting, RFCs, Spec authoring, scoping, decision capture, governance ops, PR review, persistent per-project memory |
-| **Kiro IDE** (Executor/Worker, local) | **Execute & verify** (stateful) | Running the stack, DB work, UI dev, `/spec-run`, local verification, pushing `feat/` branches |
-| **Background worker** (Operator-spawned) | **Delegated specialist work** (bounded, gate-free) | Reversible, off-protected-path tasks the Operator delegates in parallel: research, analysis, doc drafts, diagram data, scoped investigations, bulk processing. Returns a result the Operator validates + reports |
-| **Kiro Web** | **Stateless fallback** | Throwaway brainstorm with no persistent memory, no-install access from any machine, config-sync parity checks |
+| **KiroCrew** (Operator) | **Brainstorm, plan & govern** (stateful) | Direction-setting, RFCs, Spec authoring, scoping, decision capture, governance ops, PR review, persistent per-project memory. **Never merges.** |
+| **Google Antigravity** (Primary executor) | **Execute — cost-first default** | Routine / mechanical / docs-skills / low-risk builds — executes the Spec's `tasks.md` directly. Free (AI Pro), so it is the default runner. |
+| **Kiro IDE** (Escalation executor, local) | **Execute & verify — budgeted** | Complex / high-stakes / deep-codebase / Kiro-native-dependent builds. Runs the stack, DB work, UI dev, `/spec-run`, local verification, pushes `feat/` branches. Escalate here with a one-line reason. |
+| **Kiro Web** | **Stateless fallback** (special case) | Throwaway brainstorm with no persistent memory, no-install access, config-sync parity checks. |
+| **Background worker** (Operator-spawned) | **Delegated specialist work** (bounded, gate-free) | Reversible, off-protected-path tasks the Operator delegates in parallel: research, analysis, doc drafts, diagram data, scoped investigations, bulk processing. Returns a result the Operator validates + reports. |
+
+**Cost-first executor routing (`RFC-LAB-000-014`, two-executor trial passed 2026-10-02):** default a build to **Antigravity** (free); **escalate to Kiro IDE** (budgeted) only with a stated reason — security-sensitive, live-data, deep-codebase, or Kiro-native-dependent. The gate never relaxes for the executor: **every** PR from **either** executor goes through `/review-pr` + the human merge gate.
+
+```mermaid
+flowchart TB
+    OP["🤖 <b>KiroCrew — Operator</b><br/>brainstorm · Spec · review · memory<br/><i>never merges</i>"]
+    RT{"🧭 <b>Route the build</b><br/>cost-first"}
+    AG["🪐 <b>Antigravity</b><br/>PRIMARY executor (free)<br/>routine · docs · low-risk"]
+    IDE["💻 <b>Kiro IDE</b><br/>ESCALATION executor (budgeted)<br/>complex · live-data · deep"]
+    WEB["🌐 <b>Kiro Web</b><br/>stateless fallback"]
+    GATE{"👤 <b>Human merge gate</b><br/>/review-pr · always"}
+
+    OP --> RT
+    RT -->|"default"| AG
+    RT -->|"with a reason"| IDE
+    OP -. "no-install / no-memory" .-> WEB
+    AG --> GATE
+    IDE --> GATE
+
+    classDef op fill:#1e3a5f,stroke:#3b82f6,color:#fff;
+    classDef exec fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    classDef human fill:#3a1e1e,stroke:#ef4444,color:#fff;
+    class OP op;
+    class AG,IDE,WEB exec;
+    class GATE human;
+```
 
 Brainstorming, planning, and governance happen on the **Operator** (KiroCrew) — where iteration
-is cheap *and* memory persists across sessions; execution and verification happen on the
-**Executor** (Kiro IDE), where the running system lives. **Kiro Web** is a stateless fallback
-only — use it when you explicitly want no persistent memory or are working without the KiroCrew
-app. The same repo config (`.kiro/`) travels to all three.
+is cheap *and* memory persists across sessions. Execution is **cost-first**: **Antigravity** is the
+primary (free) executor for routine builds; **Kiro IDE** is the budgeted escalation executor for
+high-stakes work, where the running system lives. **Kiro Web** is a stateless fallback — use it when
+you explicitly want no persistent memory or are working without the KiroCrew app. The same repo
+config (`.kiro/`) travels to all surfaces, and executors work in **separate clones**
+(`cetana-labs-antigravity/`, `cetana-labs-kiro-ide/`) syncing via `origin` only.
 
 > The Operator never merges — it opens PRs, self-validates, and STOP-and-holds at the human gate
 > (§3, §6). Decisions and coordination default to the Operator; code execution is delegated to the
@@ -46,11 +75,11 @@ app. The same repo config (`.kiro/`) travels to all three.
 > the human gate. The worker produces the *artifact* (a draft, a branch, a findings doc); the gate
 > still decides what lands. Use the full IDE Executor path for anything that becomes a `main` code change.
 
-> **Workspace isolation.** The Operator and the Executor work in **separate clones** of the repo
-> (e.g. Operator in `cetana-labs/`, the IDE Executor in a sibling `cetana-labs-kiro-ide/`), syncing
+> **Workspace isolation.** The Operator and each executor work in **separate clones** of the repo
+> (Operator in `cetana-labs/`, Antigravity in `cetana-labs-antigravity/`, Kiro IDE in `cetana-labs-kiro-ide/`), syncing
 > only through `origin` — never through a shared working tree. This prevents two writers racing on
 > one worktree (the hazard that a shared tree creates when a `/spec-run` build and an Operator edit
-> overlap), and lets the Operator safely spawn background workers without colliding with an IDE run.
+> overlap), and lets the Operator safely spawn background workers without colliding with an executor run.
 
 ## 3. The loop
 
@@ -156,3 +185,6 @@ The forward experiment: delegate a well-scoped sprint to an agent, human-gated t
 The method is dogfooded here: a portfolio control plane evolving into a governed web app, via
 **9+ RFCs**, **12+ CI-gated PRs**, and staged releases — every decision recorded, every merge
 gated. See [`DECISION-JOURNAL.md`](DECISION-JOURNAL.md) and [`docs/rfc/`](../rfc/).
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

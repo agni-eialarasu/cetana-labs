@@ -832,3 +832,6 @@ historical one.
 
 ### Session meta
 - **Class:** governance/design decision + a new governance doc → doc fast-path (merge-first, so the Phase-3 Spec can cite it). No code change.
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

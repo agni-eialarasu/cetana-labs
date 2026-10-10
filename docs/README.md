@@ -69,4 +69,20 @@ Every markdown doc under `docs/` (**except** `rfc/*`, `templates/*`, and `index.
 - Relative depth: `../../` reaches the repo root `README.md`; `../` reaches this hub (`docs/README.md`). All docs sit one level under a category folder, so these depths are uniform.
 - New docs MUST follow this standard (it is the copyable convention — referenced from [`AGENTS.md`](../AGENTS.md)).
 
-> 🔙 Back to the repository root: [`../README.md`](../README.md).
+### Footer navigation (smooth back-nav)
+
+Every doc also **closes with a minimal footer-nav line** so a reader at the bottom of a long doc can jump back without scrolling up:
+
+```markdown
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+```
+
+- **⬆️ Top** (`#`) returns to the top of the current page; **🏠 Repo** is the repo root; **📚 Docs Hub** is this index (the "back to parent").
+- A doc MAY add a second `> 🔗 **Related:** …` line beneath it with sibling/RFC cross-links.
+- Same uniform depths as the breadcrumb (`../../` repo root, `../` hub).
+
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../README.md)

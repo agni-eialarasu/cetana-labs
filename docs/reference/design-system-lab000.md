@@ -99,3 +99,6 @@ Map the existing Cetana health badges onto the `DESIGN.md` severity roles:
 | ⏸️ Paused / informational | Info | `--info-soft` / `--info` |
 
 Always render the **word** alongside the color (e.g. "On Track", "Blocked").
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

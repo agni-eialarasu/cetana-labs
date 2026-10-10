@@ -56,7 +56,7 @@ Companion files in that folder:
 - [`POC-LOG.md`](../../templates/aidlc-mini/POC-LOG.md) — the single collapsed artifact stub (sectioned along graduation seams).
 - [`POC-SPEC.md`](../../templates/aidlc-mini/POC-SPEC.md) — the lightweight, forward-compatible contract stub.
 - [`MIGRATION.md`](../../templates/aidlc-mini/MIGRATION.md) — the graduation runbook (POC → standard).
-
 ---
 
-> 🔙 Back to the [Docs Hub](../README.md) · Related: [AIDLC Guide (full method)](aidlc-guide.md) · [Mini-AIDLC Kickstarter](../../templates/aidlc-mini/KICKSTART.md)
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🔗 **Related:** [AIDLC Guide (full method)](aidlc-guide.md) · [Mini-AIDLC Kickstarter](../../templates/aidlc-mini/KICKSTART.md)

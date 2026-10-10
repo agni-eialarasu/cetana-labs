@@ -115,3 +115,6 @@ We follow a simple **direct-to-`main`** commit workflow without branches or PR o
 | **Project Edit** | `chore(<id>): update <attribute>` | `chore(lab-003): update lead to Eialarasu` |
 | **Global Docs & Config** | `docs: <summary>` or `chore: <summary>` | `docs: update user guide and backlog` |
 | **Governance / Sprint** | `feat(governance): <summary>` | `feat(governance): initialize bare-minimum sprint tracking` |
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

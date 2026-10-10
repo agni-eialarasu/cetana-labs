@@ -116,3 +116,6 @@ This flip implies, in the Phase-3 (BK-036) Spec:
 | **Core** | Phase 3 (BK-036) = **invert the data flow** (PB master, `data/` export) — the one consequential change; status spine untouched. |
 
 **Phase 3 is now unblocked to be specced** — its Spec cites this doc for the OQ answers.
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

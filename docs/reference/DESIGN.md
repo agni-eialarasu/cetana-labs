@@ -231,3 +231,6 @@ dark ink in dark when accent is bright.
 | 2026-09-16 | D3 overview charts (composition + severity) | User: add graphs with D3; Apple chart a11y |
 | 2026-09-18 | Live UI aligned to DESIGN.md SoT | Tokens, IBM Plex, dark-first, grouped IA, ThemeToggle, login chrome, D3 bars |
 | 2026-09-18 | Compact Menu toggle ≤1000px | Stacked full sidebar ate the fold; HIG: compact control when space is limited |
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

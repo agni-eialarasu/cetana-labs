@@ -85,3 +85,6 @@ flowchart TD
 
 Each artifact is data-driven (one model object) with a shared sticky-dock interaction. When a change
 alters any lens, update the artifact **and** its doc counterpart in the same session.
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
