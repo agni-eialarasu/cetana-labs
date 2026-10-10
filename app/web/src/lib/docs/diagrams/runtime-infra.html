@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--
+  Cetana Labs — Runtime Infrastructure (living diagram), committed export for the in-app /docs embed (BK-037).
+  SOURCE OF TRUTH: Kiro Crew artifact slug cetana-labs-runtime-infrastructure (v7, refreshed 2026-10-10).
+  On any infra change, update the artifact AND re-export this file in the same session (maintenance rule).
+  Themed via CSS variables injected by DiagramEmbed.svelte.
+-->
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0">
+<style>
+  .in{position:relative;font-family:ui-sans-serif,system-ui,sans-serif;color:var(--text,#111);background:var(--bg,#fff);padding:6px 4px}
+  .in-h{font-size:1.05rem;font-weight:700;margin:0 0 2px;color:var(--text-strong,var(--text,#111))}
+  .in-sub{font-size:0.8rem;color:var(--muted,#555);margin:0 0 12px}
+  .in-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .in-tab{font-size:0.76rem;font-weight:600;padding:5px 12px;border-radius:7px;border:1px solid var(--border,#d1d5db);background:var(--card,#f8f9fa);color:var(--muted,#555);cursor:pointer}
+  .in-tab.on{background:var(--accent,#2563eb);border-color:var(--accent,#2563eb);color:#fff}
+  .in-flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+  .in-col{display:flex;flex-direction:column;gap:8px;justify-content:center}
+  .in-conn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:60px;padding:0 2px}
+  .in-conn .lab{font-size:0.6rem;color:var(--muted,#6b7280);text-align:center;margin-bottom:2px;white-space:nowrap}
+  .in-conn .ar{color:var(--muted,#94a3b8);font-size:1rem;font-weight:700}
+  .in-node{border:1px solid var(--border,#d1d5db);border-radius:9px;padding:9px 11px;background:var(--card,#f8f9fa);color:var(--card-fg,var(--text,#111));cursor:pointer;transition:transform .1s,box-shadow .1s,border-color .1s;min-width:140px}
+  .in-node:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.14);border-color:var(--accent,#2563eb)}
+  .in-node.sel{border-color:var(--accent,#2563eb);box-shadow:0 0 0 2px var(--accent,#2563eb) inset}
+  .in-node .host{display:inline-block;font-size:0.56rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:1px 6px;border-radius:999px;margin-bottom:5px}
+  .in-node .nm{font-weight:700;font-size:0.84rem;line-height:1.2}
+  .in-node .ty{font-size:0.68rem;color:var(--muted,#6b7280);margin-top:1px}
+  .in-node .warn{font-size:0.62rem;color:var(--warn,#b45309);margin-top:4px}
+  .h-browser{background:var(--bg-hover,#e5e7eb);color:var(--text-strong,#111)}
+  .h-vercel{background:var(--info-subtle,#dbeafe);color:var(--info,#1d4ed8)}
+  .h-railway{background:var(--accent-subtle,#ddd6fe);color:#6d28d9}
+  .h-github{background:var(--ok-subtle,#dcfce7);color:var(--ok,#15803d)}
+  .h-local{background:var(--warn-subtle,#fef3c7);color:var(--warn,#b45309)}
+  .b-browser{border-top:3px solid #64748b}.b-vercel{border-top:3px solid var(--info,#2563eb)}
+  .b-railway{border-top:3px solid #7c3aed}.b-github{border-top:3px solid var(--ok,#16a34a)}.b-local{border-top:3px solid var(--warn,#d97706)}
+  .in-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .in-leg{font-size:0.66rem;display:flex;align-items:center;gap:4px;color:var(--muted,#555)}
+  .in-leg .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .in-note{font-size:0.68rem;color:var(--muted,#9ca3af);margin-top:10px}
+  .in-expand{font-size:0.66rem;color:var(--muted,#9ca3af);margin-top:4px;font-style:italic}
+  .in-hint{font-size:0.68rem;color:var(--muted,#9ca3af);margin-top:12px;font-style:italic}
+  .ov{position:absolute;width:min(360px,86%);max-height:300px;overflow:auto;z-index:9999;border:1px solid var(--border,#d1d5db);border-left:3px solid var(--accent,#2563eb);border-radius:10px;padding:11px 13px;background:var(--bg-elevated,var(--card,#fff));box-shadow:0 8px 26px rgba(0,0,0,.26);font-size:0.78rem;line-height:1.5;color:var(--card-fg,var(--text,#111));display:none}
+  .ov.open{display:block}
+  .ov .dh{font-weight:700;font-size:0.9rem;margin:0 0 5px;display:flex;align-items:center;gap:7px;justify-content:space-between}
+  .ov .dh .x{cursor:pointer;color:var(--muted,#9ca3af);font-weight:700;font-size:1.05rem;padding:0 4px;line-height:1}
+  .ov .dh .x:hover{color:var(--text,#111)}
+  .ov .row{margin:3px 0}
+  .ov .lk{font-weight:600;color:var(--muted,#6b7280);display:inline-block;min-width:60px}
+  .ov code{background:var(--bg-hover,#eef0f2);padding:0 3px;border-radius:3px;font-size:0.9em}
+  .ov .st-ok{color:var(--ok,#15803d);font-weight:600}
+  .ov .st-warn{color:var(--warn,#b45309);font-weight:600}
+</style>
+<div class="in">
+  <p class="in-h">🏗️ Runtime Infrastructure — Cetana Labs web app</p>
+  <p class="in-sub">What runs where, and what each part does. Living map — grows with the app. Click a node — detail pops up beside it.</p>
+  <div class="in-tabs">
+    <span class="in-tab on" data-v="local">💻 Local runtime</span>
+    <span class="in-tab" data-v="cloud">☁️ Cloud runtime</span>
+    <span class="in-tab" data-v="deploy">🚀 Deploy plane</span>
+  </div>
+  <div class="in-stage" id="in-stage"></div>
+  <div class="in-legend" id="in-legend"></div>
+  <p class="in-expand">🧩 Data-driven — a new component (cache, queue, email, a new collection) is added as one entry in the model and renders automatically.</p>
+  <p class="in-note">Grounded in RFC-LAB-000-011 (Vercel + Railway) &amp; -012 (deploy ops). Refreshed 2026-10-10: PocketBase un-pinned to 0.40.4 (BK-018 fixed), OAuth redirect flow live &amp; verified (BK-023 pt1). Companion to the “Working Model” process artifact.</p>
+  <p class="in-hint">💡 Click a node — detail pops up right beside it.</p>
+  <div class="ov" id="in-detail"></div>
+</div>
+<script>
+(function(){
+  var root=(document.currentScript&&document.currentScript.closest&&document.currentScript.closest('.in'));
+  if(!root){var ins=document.querySelectorAll('.in');root=ins[ins.length-1];}
+  if(!root)root=document;
+  var HOSTS={
+    browser:{label:'Client',cls:'browser'}, vercel:{label:'Vercel',cls:'vercel'},
+    railway:{label:'Railway',cls:'railway'}, github:{label:'GitHub',cls:'github'},
+    local:{label:'Local machine',cls:'local'}
+  };
+  var VIEWS={
+    local:{
+      cols:[[{id:'l-dev'}],[{id:'l-pb'}],[{id:'l-sqlite'},{id:'l-snap'}]],
+      edges:{'l-dev':'HTTP :5173→:8090','l-pb':'reads/writes'},
+      nodes:{
+        'l-dev':{host:'local',nm:'SvelteKit dev',ty:'Vite · :5173',dh:'SvelteKit “Sleek UI” (dev server)',does:'Serves the SPA with HMR; reads structural data from PocketBase via the JS SDK.',how:'<code>pnpm dev</code> on <code>:5173</code>; <code>ssr=false</code> static SPA.',cfg:'<code>VITE_PB_URL=http://127.0.0.1:8090</code>, <code>VITE_PB_SOURCE=auto</code>',st:'ok',sttxt:'runs via /start-local'},
+        'l-pb':{host:'local',nm:'PocketBase',ty:'binary · :8090',dh:'PocketBase backend (local)',does:'REST/Realtime API + Admin UI; serves the collections. PocketBase is the master; <code>data/</code> is a generated export (RFC-016 Phase 3).',how:'single Go binary <code>./pocketbase serve --http=0.0.0.0:8090</code>; Admin at <code>/_/</code>.',cfg:'binary fetched by <code>.devcontainer/setup-pocketbase.sh</code> (0.40.4, not committed)',st:'ok',sttxt:'runs via /start-local'},
+        'l-sqlite':{host:'local',nm:'SQLite',ty:'pb_data/',dh:'SQLite datastore (local)',does:'Persists collections, users, memberships, settings on disk.',how:'embedded SQLite file under <code>app/pocketbase/pb_data/</code> (gitignored).',cfg:'seeded via <code>python3 scripts/pb_import.py --apply</code>; export back via <code>just export-live-data</code>',st:'ok',sttxt:'local file'},
+        'l-snap':{host:'local',nm:'Snapshot fallback',ty:'static/data/*.json',dh:'Bundled data snapshot',does:'Read-time fallback so the SPA renders even when PocketBase is unreachable.',how:'static JSON in the bundle; used when <code>VITE_PB_SOURCE=auto</code> and PB is down.',cfg:'generated export from PocketBase (<code>data/</code>)',st:'ok',sttxt:'safety net'}
+      }
+    },
+    cloud:{
+      cols:[[{id:'c-browser'}],[{id:'c-vercel'}],[{id:'c-railway'},{id:'c-oauth'}],[{id:'c-vol'}]],
+      edges:{'c-browser':'HTTPS','c-vercel':'REST/SDK (HTTPS)','c-railway':'volume'},
+      nodes:{
+        'c-browser':{host:'browser',nm:'Browser',ty:'end user',dh:'User browser',does:'Loads the SPA, calls PocketBase directly via the SDK, does GitHub OAuth.',how:'static assets from Vercel; API calls to the Railway PB URL.',cfg:'—',st:'ok',sttxt:'live'},
+        'c-vercel':{host:'vercel',nm:'SvelteKit SPA',ty:'Vercel · static',dh:'Frontend — Vercel',does:'Serves the built static SPA globally; all routes rewrite to <code>/index.html</code>.',how:'<code>adapter-static</code>, <code>buildCommand: pnpm build</code>, <code>outputDirectory: build</code>.',cfg:'Vercel env <code>VITE_PB_URL</code> → Railway PB URL (no secrets in bundle); <code>ignoreCommand</code> skips deploys when no <code>app/web/</code> change',st:'warn',sttxt:'default vercel.app domain — custom domain deferred to BK-013'},
+        'c-railway':{host:'railway',nm:'PocketBase',ty:'Railway · container',dh:'Backend — Railway',does:'Always-on PocketBase: REST API, auth, API rules; the system of record.',how:'container built from <code>Containerfile</code> (<code>railway.json</code> builder=DOCKERFILE); Railway-managed TLS + URL.',cfg:'env: PB superuser, GitHub OAuth client id/secret',st:'ok',sttxt:'PocketBase 0.40.4 (un-pinned — BK-018 fixed)'},
+        'c-vol':{host:'railway',nm:'Persistent volume',ty:'SQLite',dh:'Railway volume',does:'Persists the SQLite <code>pb_data/</code> across container restarts/redeploys.',how:'Railway volume mounted at the PB data dir (one-time [HUMAN] dashboard attach).',cfg:'single-writer SQLite; forward path = managed Postgres if it outgrows',st:'ok',sttxt:'live'},
+        'c-oauth':{host:'github',nm:'GitHub OAuth',ty:'identity provider',dh:'GitHub OAuth (external IdP)',does:'Authenticates users; PocketBase exchanges the code for identity, upsert-by-handle binds to the existing record (RFC-016 Phase 1).',how:'redirect-based <code>authWithOAuth2Code</code> flow (avoids <code>/api/realtime</code> behind Railway proxy — the BK-018 fix).',cfg:'client id/secret on the PB <code>users</code> collection; redirect → Vercel <code>/oauth/callback</code>',st:'ok',sttxt:'live &amp; verified on staging (/api/realtime = 0 requests)'}
+      }
+    },
+    deploy:{
+      cols:[[{id:'d-main'}],[{id:'d-vercelgit'},{id:'d-gha'}],[{id:'d-vercel2'},{id:'d-railway2'}]],
+      edges:{'d-main':'merge','d-vercelgit':'build+deploy','d-gha':'railway up'},
+      nodes:{
+        'd-main':{host:'github',nm:'main branch',ty:'single ref env',dh:'main — the one reference environment',does:'A gated squash-merge to <code>main</code> is “done” and auto-deploys both tiers.',how:'protected branch; app code via PR+CI, docs may fast-path (RFC-004).',cfg:'no promotion pipeline — one env (Entry 014)',st:'ok',sttxt:'live'},
+        'd-vercelgit':{host:'vercel',nm:'Vercel Git',ty:'auto on push',dh:'Vercel Git integration',does:'Builds &amp; deploys the frontend on every push to <code>main</code> (preview per PR). Its REAL deploy health is the commit-status <code>Vercel</code> context — read at the <code>/review-pr</code> gate (BK-023 pt2).',how:'native SvelteKit build; env vars set in the Vercel project; <code>ignoreCommand</code> skips the build when no <code>app/web/</code> file changed.',cfg:'deploy signal = commit-status <code>Vercel</code> context (NOT "Vercel Preview Comments"); post-deploy backstop = <code>verify-live-frontend.sh</code>',st:'ok',sttxt:'automatic + real status read by the gate (BK-023 pt2 / TSK-063)'},
+        'd-gha':{host:'github',nm:'GitHub Actions',ty:'deploy-backend.yml',dh:'Backend deploy workflow',does:'Deploys PocketBase to Railway when <code>app/pocketbase/**</code> changes on <code>main</code>.',how:'Railway CLI <b>pinned @5.2.0</b>; <code>railway up --path-as-root .</code>; path-filtered.',cfg:'<code>RAILWAY_TOKEN</code> project token (GitHub Actions secret only)',st:'ok',sttxt:'automatic + manual dispatch'},
+        'd-vercel2':{host:'vercel',nm:'Frontend live',ty:'Vercel',dh:'Deployed frontend',does:'The live SPA (cloud-runtime tab). Deploy health gated via the real Vercel commit-status + a post-deploy live-bundle check.',how:'—',cfg:'—',st:'ok',sttxt:'live'},
+        'd-railway2':{host:'railway',nm:'Backend live',ty:'Railway',dh:'Deployed backend',does:'The live PocketBase (cloud-runtime tab).',how:'—',cfg:'—',st:'ok',sttxt:'live (PB 0.40.4)'}
+      }
+    }
+  };
+  var stage=root.querySelector('#in-stage'),detail=root.querySelector('#in-detail'),legend=root.querySelector('#in-legend');
+  function closeOv(){detail.classList.remove('open');root.querySelectorAll('.in-node').forEach(function(n){n.classList.remove('sel')});}
+  function place(anchor){
+    detail.style.visibility='hidden';detail.classList.add('open');
+    var rr=root.getBoundingClientRect(),ar=anchor.getBoundingClientRect();
+    var ow=detail.offsetWidth,oh=detail.offsetHeight;
+    var top=(ar.bottom-rr.top)+6;
+    var left=(ar.left-rr.left)+(ar.offsetWidth/2)-(ow/2);
+    left=Math.max(4,Math.min(left,rr.width-ow-4));
+    if(top+oh>rr.height-2 && (ar.top-rr.top)-oh-6>0){top=(ar.top-rr.top)-oh-6;}
+    detail.style.left=left+'px';detail.style.top=top+'px';detail.style.visibility='';
+  }
+  function showDetail(d,anchor){
+    detail.innerHTML='<p class="dh"><span>'+d.dh+'</span><span class="x" data-x="1">✕</span></p>'+
+      '<p class="row"><span class="lk">Does</span> '+d.does+'</p>'+
+      '<p class="row"><span class="lk">How</span> '+d.how+'</p>'+
+      (d.cfg&&d.cfg!=='—'?'<p class="row"><span class="lk">Config</span> '+d.cfg+'</p>':'')+
+      '<p class="row"><span class="lk">Status</span> <span class="'+(d.st==='warn'?'st-warn':'st-ok')+'">'+(d.st==='warn'?'⚠️ ':'● ')+d.sttxt+'</span></p>';
+    var x=detail.querySelector('[data-x]');if(x)x.addEventListener('click',function(e){e.stopPropagation();closeOv();});
+    place(anchor);
+  }
+  function nodeEl(id,def){
+    var h=HOSTS[def.host];var el=document.createElement('div');
+    el.className='in-node b-'+h.cls;el.dataset.id=id;
+    el.innerHTML='<span class="host h-'+h.cls+'">'+h.label+'</span><div class="nm">'+def.nm+'</div><div class="ty">'+def.ty+'</div>'+(def.st==='warn'?'<div class="warn">⚠️ '+def.sttxt+'</div>':'');
+    el.addEventListener('click',function(e){e.stopPropagation();root.querySelectorAll('.in-node').forEach(function(n){n.classList.remove('sel')});el.classList.add('sel');showDetail(def,el);});
+    return el;
+  }
+  function render(v){
+    var V=VIEWS[v];stage.innerHTML='';var flow=document.createElement('div');flow.className='in-flow';
+    V.cols.forEach(function(col,ci){
+      var c=document.createElement('div');c.className='in-col';
+      col.forEach(function(n){c.appendChild(nodeEl(n.id,V.nodes[n.id]))});flow.appendChild(c);
+      if(ci<V.cols.length-1){var firstId=col[0].id,lab=V.edges[firstId]||'';var conn=document.createElement('div');conn.className='in-conn';conn.innerHTML='<span class="lab">'+lab+'</span><span class="ar">→</span>';flow.appendChild(conn);}
+    });
+    stage.appendChild(flow);closeOv();
+    var used={};Object.keys(V.nodes).forEach(function(k){used[V.nodes[k].host]=1});
+    legend.innerHTML='';Object.keys(used).forEach(function(h){var hh=HOSTS[h];var cmap={browser:'#64748b',vercel:'#2563eb',railway:'#7c3aed',github:'#16a34a',local:'#d97706'};var e=document.createElement('span');e.className='in-leg';e.innerHTML='<span class="sw" style="background:'+cmap[h]+'"></span>'+hh.label;legend.appendChild(e);});
+  }
+  document.addEventListener('click',function(e){if(detail.classList.contains('open')&&!detail.contains(e.target)&&!e.target.closest('.in-node'))closeOv();});
+  var tabs=root.querySelectorAll('.in-tab');
+  tabs.forEach(function(t){t.addEventListener('click',function(){tabs.forEach(function(x){x.classList.remove('on')});t.classList.add('on');render(t.dataset.v);})});
+  render('local');
+})();
+</script>
+</body>
+</html>
