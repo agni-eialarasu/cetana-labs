@@ -52,7 +52,7 @@ Full setup, DB/auth, and gotchas → **[Developer Guide](docs/guides/developer-g
 
 | ID | Project Name | Archetype | Health | Dev Env | Lead | Codebase / Reference | Executive Status (`STATUS.md`) |
 | :---: | :--- | :---: | :---: | :---: | :---: | :--- | :---: |
-| **`LAB-000`** | **[Cetana Labs Control Hub](projects/LAB-000-cetana-labs/README.md)** (Protocol Engine) | 💻 Control Plane | `🟢 On Track` | 💻 Local | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/cetana-labs) | [STATUS.md](projects/LAB-000-cetana-labs/STATUS.md) |
+| **`LAB-000`** | **[Cetana Labs Control Hub](projects/LAB-000-cetana-labs/README.md)** (Protocol Engine) | 💻 Control Plane | `🟢 On Track` | ☁️ Cloud | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/cetana-labs) | [STATUS.md](projects/LAB-000-cetana-labs/STATUS.md) |
 | **`LAB-001`** | **[AAMAS](projects/LAB-001-ammas/README.md)** (Autism Activity Monitor) | 💻 Mini-App | `✅ Completed` | 💻 Local | Eialarasu | [GitHub Repo](https://github.com/agni-eialarasu/ammas) | [STATUS.md](projects/LAB-001-ammas/STATUS.md) |
 | **`LAB-002`** | **[WrenAI Evaluation](projects/LAB-002-wrenai-eval/README.md)** (Semantic GenBI) | 📑 Research | `✅ Completed` | ☁️ Cloud | Eialarasu | [getwren.ai](https://www.getwren.ai/) | [STATUS.md](projects/LAB-002-wrenai-eval/STATUS.md) |
 | **`LAB-003`** | **[Nexus Pulse](projects/LAB-003-nexus-pulse/README.md)** (Vertical Engine) | 💻 Mini-App | `🟢 On Track` | 💻 Local | Eialarasu | [GitHub Repo](https://github.com/eAgni-Technologies/nexus-pulse) | [STATUS.md](projects/LAB-003-nexus-pulse/STATUS.md) |
