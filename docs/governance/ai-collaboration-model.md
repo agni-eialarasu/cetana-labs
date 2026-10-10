@@ -18,48 +18,48 @@
 Decisions are the human's. Execution is AI-accelerated. Nothing reaches `main` without a
 human-approved, CI-gated pull request. This keeps velocity high *and* accountability clear.
 
-## 2. Surfaces & roles — Operator + two executors (RFC-LAB-000-007, RFC-LAB-000-014)
+## 2. Surfaces & roles — three tiers: Primary Operator · Primary Executor · Secondary (break-glass) (RFC-LAB-000-007, RFC-LAB-000-014)
 
-| Surface | Role | Used for |
-| :--- | :--- | :--- |
-| **KiroCrew** (Operator) | **Brainstorm, plan & govern** (stateful) | Direction-setting, RFCs, Spec authoring, scoping, decision capture, governance ops, PR review, persistent per-project memory. **Never merges.** |
-| **Google Antigravity** (Primary executor) | **Execute — cost-first default** | Routine / mechanical / docs-skills / low-risk builds — executes the Spec's `tasks.md` directly. Free (AI Pro), so it is the default runner. |
-| **Kiro IDE** (Escalation executor, local) | **Execute & verify — budgeted** | Complex / high-stakes / deep-codebase / Kiro-native-dependent builds. Runs the stack, DB work, UI dev, `/spec-run`, local verification, pushes `feat/` branches. Escalate here with a one-line reason. |
-| **Kiro Web** | **Stateless fallback** (special case) | Throwaway brainstorm with no persistent memory, no-install access, config-sync parity checks. |
-| **Background worker** (Operator-spawned) | **Delegated specialist work** (bounded, gate-free) | Reversible, off-protected-path tasks the Operator delegates in parallel: research, analysis, doc drafts, diagram data, scoped investigations, bulk processing. Returns a result the Operator validates + reports. |
+| Surface | Tier | Role | Used for |
+| :--- | :--- | :--- | :--- |
+| **KiroCrew** | **Primary Operator** | **Brainstorm, plan & govern** (stateful) | Direction-setting, RFCs, Spec authoring, scoping, decision capture, governance ops, PR review, persistent per-project memory. **Never merges.** |
+| **Google Antigravity** | **Primary Executor** (executor-only) | **Execute — cost-first default** | Executes the Spec's `tasks.md` directly on a `feat/` branch, opens a PR, STOP-and-holds. Free (AI Pro), so it is the default runner for **all** builds. **Never an Operator** — it is a stateless build surface with no persistent memory or governance skills, so it cannot hold the Operator role. |
+| **Kiro Web / Kiro IDE** | **Secondary Operator/Executor** (break-glass) | **Emergency continuity** — either role | Kiro-native (reads `.kiro/` → skills are real `/commands`), so in a pinch each can stand in for *either* KiroCrew (operate: author a Spec, run a governance skill) *or* Antigravity (execute a build). **Used only when KiroCrew is genuinely unavailable — emergency continuity, not a parallel operator lane.** An operator stint on Web (stateless) or IDE loses the persistent memory that makes the Operator role work, so this is break-glass, never routine. |
+| **Background worker** (Operator-spawned) | — | **Delegated specialist work** (bounded, gate-free) | Reversible, off-protected-path tasks the Operator delegates in parallel: research, analysis, doc drafts, diagram data, scoped investigations, bulk processing. Returns a result the Operator validates + reports. |
 
-**Cost-first executor routing (`RFC-LAB-000-014`, two-executor trial passed 2026-10-02):** default a build to **Antigravity** (free); **escalate to Kiro IDE** (budgeted) only with a stated reason — security-sensitive, live-data, deep-codebase, or Kiro-native-dependent. The gate never relaxes for the executor: **every** PR from **either** executor goes through `/review-pr` + the human merge gate.
+**The asymmetry is principled, not arbitrary.** Operator authority stays concentrated where the memory and governance live (the Kiro-native surfaces — KiroCrew primary, Web/IDE break-glass); executor throughput scales out on **Antigravity**, which is executor-only *because* it is stateless. So: **more executors = more throughput, never more operator or merge authority.** Antigravity is never routed as an Operator; Kiro Web/IDE operate only as emergency continuity for KiroCrew.
+
+**Routing (`RFC-LAB-000-014`):** route **all** `/spec-run` builds to **Antigravity** (free, primary) by default. The gate never relaxes for the executor: **every** PR goes through `/review-pr` + the human merge gate. Kiro Web/IDE enter only when KiroCrew is unavailable.
 
 ```mermaid
 flowchart TB
-    OP["🤖 <b>KiroCrew — Operator</b><br/>brainstorm · Spec · review · memory<br/><i>never merges</i>"]
-    RT{"🧭 <b>Route the build</b><br/>cost-first"}
-    AG["🪐 <b>Antigravity</b><br/>PRIMARY executor (free)<br/>routine · docs · low-risk"]
-    IDE["💻 <b>Kiro IDE</b><br/>ESCALATION executor (budgeted)<br/>complex · live-data · deep"]
-    WEB["🌐 <b>Kiro Web</b><br/>stateless fallback"]
+    OP["🤖 <b>KiroCrew — Primary Operator</b><br/>brainstorm · Spec · review · memory<br/><i>never merges</i>"]
+    AG["🪐 <b>Antigravity — Primary Executor</b><br/>executor-only (free, default)<br/>runs tasks.md · opens PR"]
+    SEC["🌐💻 <b>Kiro Web / IDE — Secondary</b><br/>Operator OR Executor<br/><i>break-glass: only if KiroCrew is unavailable</i>"]
     GATE{"👤 <b>Human merge gate</b><br/>/review-pr · always"}
 
-    OP --> RT
-    RT -->|"default"| AG
-    RT -->|"with a reason"| IDE
-    OP -. "no-install / no-memory" .-> WEB
+    OP -->|"route all builds (default)"| AG
+    OP -. "emergency continuity only" .-> SEC
     AG --> GATE
-    IDE --> GATE
+    SEC -. "break-glass" .-> GATE
 
     classDef op fill:#1e3a5f,stroke:#3b82f6,color:#fff;
     classDef exec fill:#0f2a1e,stroke:#22c55e,color:#fff;
+    classDef sec fill:#2a240f,stroke:#eab308,color:#fff;
     classDef human fill:#3a1e1e,stroke:#ef4444,color:#fff;
     class OP op;
-    class AG,IDE,WEB exec;
+    class AG exec;
+    class SEC sec;
     class GATE human;
 ```
 
 Brainstorming, planning, and governance happen on the **Operator** (KiroCrew) — where iteration
-is cheap *and* memory persists across sessions. Execution is **cost-first**: **Antigravity** is the
-primary (free) executor for routine builds; **Kiro IDE** is the budgeted escalation executor for
-high-stakes work, where the running system lives. **Kiro Web** is a stateless fallback — use it when
-you explicitly want no persistent memory or are working without the KiroCrew app. The same repo
-config (`.kiro/`) travels to all surfaces, and executors work in **separate clones**
+is cheap *and* memory persists across sessions. Execution runs on **Antigravity** — the primary,
+free, **executor-only** surface — for **all** builds; it is never routed as an Operator because it is
+stateless. **Kiro Web and Kiro IDE** are the **secondary, break-glass** tier: Kiro-native, so each can
+stand in for *either* role (operate or execute) — but **only when KiroCrew is unavailable**, as
+emergency continuity, never a parallel operator lane. The same repo
+config (`.kiro/`) travels to all surfaces, and each surface works in a **separate clone**
 (`cetana-labs-antigravity/`, `cetana-labs-kiro-ide/`) syncing via `origin` only.
 
 > The Operator never merges — it opens PRs, self-validates, and STOP-and-holds at the human gate
@@ -74,7 +74,7 @@ config (`.kiro/`) travels to all surfaces, and executors work in **separate clon
 > validates and reports. **The merge gate is unchanged:** a worker **never pushes `main` and never
 > merges** — if its output is code destined for `main`, it still flows through `/spec-run` + a PR +
 > the human gate. The worker produces the *artifact* (a draft, a branch, a findings doc); the gate
-> still decides what lands. Use the full IDE Executor path for anything that becomes a `main` code change.
+> still decides what lands. Use the full Antigravity executor path (Spec → `/spec-run` → PR → gate) for anything that becomes a `main` code change.
 
 > **Workspace isolation.** The Operator and each executor work in **separate clones** of the repo
 > (Operator in `cetana-labs/`, Antigravity in `cetana-labs-antigravity/`, Kiro IDE in `cetana-labs-kiro-ide/`), syncing
@@ -115,16 +115,16 @@ flowchart TB
 ### 3.1 One complete cycle — sequence of execution
 
 The flowchart above shows the *states*; this sequence shows the **handoffs over time** between the
-three actors — 👤 **You** (direction + both gates), 🤖 **KiroCrew** (Operator — brainstorm, Spec,
-review surface, lockstep), 💻 **Kiro IDE** (Executor — build, PR, verify). Kiro Web (stateless
-fallback) is not a participant in the execution flow.
+three actors — 👤 **You** (direction + both gates), 🤖 **KiroCrew** (Primary Operator — brainstorm, Spec,
+review surface, lockstep), 🪐 **Antigravity** (Primary Executor — build, PR, self-validate). Kiro Web/IDE
+(secondary, break-glass) are not participants in the normal execution flow.
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor You as 👤 You
     participant KC as 🤖 KiroCrew (Operator)
-    participant IDE as 💻 Kiro IDE (Executor)
+    participant IDE as 🪐 Antigravity (Executor)
 
     You->>KC: "Let's build X" — set direction
     KC->>KC: author Spec (requirements·design·tasks) · /plan-start
