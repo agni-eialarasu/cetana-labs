@@ -15,14 +15,14 @@ You **never write this file by hand**. Your AI coding assistant (Cursor, Claude 
 
 ```mermaid
 flowchart TB
-    V["🛡️ <b>/project-validate</b><br/><i>5-pillar pre-flight gate</i>"]
-    P1["1 · Scraper budget ≤ 35 lines &amp; schema"]
-    P2["2 · Registries in lockstep<br/>CHANGELOG / SPRINT_TRACKER / BACKLOG"]
+    V["🛡️ /project-validate\n5-pillar pre-flight gate"]
+    P1["1 · Scraper budget ≤ 35 lines & schema"]
+    P2["2 · Registries in lockstep\nCHANGELOG / SPRINT_TRACKER / BACKLOG"]
     P3["3 · Git worktree clean"]
-    P4["4 · AST architecture &amp; golden-math parity"]
+    P4["4 · AST architecture & golden-math parity"]
     P5["5 · Auto-count live tests → validation_receipt.json"]
-    GATE{"5 pillars<br/>GREEN?"}
-    U["📝 <b>/status-update</b><br/><i>certified from the receipt</i>"]
+    GATE{"5 pillars\nGREEN?"}
+    U["📝 /status-update\ncertified from the receipt"]
     U1["Synthesize commits → business wins"]
     U2["Update STATUS.md with certified test tallies"]
     U3["📱 Ready-to-send WhatsApp standup"]
@@ -31,11 +31,6 @@ flowchart TB
     V --> P1 & P2 & P3 & P4 & P5 --> GATE
     GATE -- "yes" --> U --> U1 --> U2 --> U3
     GATE -- "no" --> FIX --> V
-
-    classDef gate fill:#1e3a5f,stroke:#3b82f6,color:#fff;
-    classDef act fill:#0f2a1e,stroke:#22c55e,color:#fff;
-    class V,GATE gate;
-    class U,U3 act;
 ```
 
 ---

@@ -8,24 +8,24 @@
 | **Gate** | Full gate: `/spec-run` → PR → `/review-pr` → human merge. Merge-first: Spec on `main` first. |
 
 ## Task 0 — Confirm clean base
-- [ ] Cut `fix/mermaid-theme-owned-colors` from `main`. Confirm `app/web/src/lib/docs/mermaid.ts` on `main` has NO `themeVariables` block (the spike did not merge). If present, remove it. Keep `htmlLabels: false`, `securityLevel: 'strict'`, and the DOMPurify SVG profile unchanged.
+- [x] Cut `fix/mermaid-theme-owned-colors` from `main`. Confirm `app/web/src/lib/docs/mermaid.ts` on `main` has NO `themeVariables` block (the spike did not merge). If present, remove it. Keep `htmlLabels: false`, `securityLevel: 'strict'`, and the DOMPurify SVG profile unchanged.
 
 ## Task 1 — Strip custom colors from the two flowchart sources
-- [ ] `docs/guides/sprint-lifecycle.md`: remove the `classDef web/ide` lines + `class B,G,D web` / `class I,V ide`. Optionally preserve the gate/step distinction via node shape or a label prefix (design §2) — NO `fill:`+`color:` on nodes.
-- [ ] `docs/guides/project-owner-guide.md`: remove `classDef gate/act` + `class V,GATE gate` / `class U,U3 act`. Same accent guidance.
-- **Verify (source):** no `classDef … color:#` or `fill:#…color:` remains in either flowchart.
+- [x] `docs/guides/sprint-lifecycle.md`: remove the `classDef web/ide` lines + `class B,G,D web` / `class I,V ide`. Optionally preserve the gate/step distinction via node shape or a label prefix (design §2) — NO `fill:`+`color:` on nodes.
+- [x] `docs/guides/project-owner-guide.md`: remove `classDef gate/act` + `class V,GATE gate` / `class U,U3 act`. Same accent guidance.
+- [x] **Verify (source):** no `classDef … color:#` or `fill:#…color:` remains in either flowchart.
 
 ## Task 2 — Build + self-validate (DoD)
-- [ ] `pnpm build` (adapter-static) succeeds; `just validate-local` green.
-- [ ] README registry byte-identical (`generate_registry.py --check`).
-- [ ] CHANGELOG `[Unreleased]` entry for BK-039 (correction of BK-038).
-- [ ] Open PR via `gh api`; write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
+- [x] `pnpm build` (adapter-static) succeeds; `just validate-local` green.
+- [x] README registry byte-identical (`generate_registry.py --check`).
+- [x] CHANGELOG `[Unreleased]` entry for BK-039 (correction of BK-038).
+- [x] Open PR via `gh api` ([PR #104](https://github.com/agni-eialarasu/cetana-labs/pull/104)); write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
 
 ## Task 3 — Human visual verification (in `/verification-done` / `/review-pr`)
-- [ ] V1: `/docs?doc=sprint-lifecycle` — flowchart AND `stateDiagram` nodes show labels, **light + dark**.
-- [ ] V2: `/docs?doc=project-owner` — flowchart nodes show labels, light + dark.
-- [ ] V3: `/docs?doc=diagrams` — living + sequence diagrams unchanged.
-- [ ] V4: `just validate-local` green.
+- [x] V1: `/docs?doc=sprint-lifecycle` — flowchart AND `stateDiagram` nodes show labels, **light + dark**.
+- [x] V2: `/docs?doc=project-owner` — flowchart nodes show labels, light + dark.
+- [x] V3: `/docs?doc=diagrams` — living + sequence diagrams unchanged.
+- [x] V4: `just validate-local` green.
 
 ## Definition of Done
 - **R1** custom `classDef`/`class` fill+color removed from both flowchart sources.
