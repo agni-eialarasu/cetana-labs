@@ -6,6 +6,7 @@
 | **Feature** | Fix in-app mermaid flowchart rendering: configure `flowchart: { htmlLabels: false }` so node labels render as native SVG `<text>` elements and survive strict mode + SVG-profile sanitization in `/docs`. |
 | **Backlog** | `BK-038` (`TSK-077`, SPRINT-13) — defect follow-up to `BK-037` (#100) |
 | **Branch** | `fix/mermaid-flowchart-labels` |
+| **PR** | [PR #102](https://github.com/agni-eialarasu/cetana-labs/pull/102) |
 | **Executor** | Google Antigravity (Primary Executor per `RFC-LAB-000-014`) |
 | **Date** | 2026-10-10 |
 
