@@ -19,7 +19,7 @@
 - [x] `pnpm build` (adapter-static) succeeds; `just validate-local` green.
 - [x] README registry byte-identical (`generate_registry.py --check`).
 - [x] CHANGELOG `[Unreleased]` entry for BK-039 (correction of BK-038).
-- [ ] Open PR via `gh api`; write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
+- [x] Open PR via `gh api` ([PR #104](https://github.com/agni-eialarasu/cetana-labs/pull/104)); write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
 
 ## Task 3 — Human visual verification (in `/verification-done` / `/review-pr`)
 - [ ] V1: `/docs?doc=sprint-lifecycle` — flowchart AND `stateDiagram` nodes show labels, **light + dark**.

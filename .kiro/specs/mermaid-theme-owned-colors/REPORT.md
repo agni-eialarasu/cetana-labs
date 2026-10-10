@@ -6,7 +6,7 @@
 | **Feature** | Fully fix in-app mermaid flowchart and state-diagram node labels rendering as empty boxes. Stripped custom `classDef` and `class` fill + `color:#fff` directives from bundled flowchart sources so mermaid's theme owns both node fill and label contrast (rendered as native SVG `<text>`). Kept `flowchart: { htmlLabels: false }`, `securityLevel: 'strict'`, and DOMPurify SVG profile unchanged. |
 | **Backlog** | `BK-039` (`TSK-078`, SPRINT-13) — correction of `BK-038` (#102) |
 | **Branch** | `fix/mermaid-theme-owned-colors` |
-| **PR** | Pending / Open |
+| **PR** | [PR #104](https://github.com/agni-eialarasu/cetana-labs/pull/104) |
 | **Executor** | Google Antigravity (Primary Executor per `RFC-LAB-000-014`) |
 | **Date** | 2026-10-10 |
 
