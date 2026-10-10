@@ -1,28 +1,42 @@
-# Cetana Labs (Master Registry & Lab Notebook)
+# Cetana Labs — Master Registry & Lab Notebook
 
-> 🌐 **Live App (Sleek UI — Vercel + Railway):** [cetana-labs.vercel.app](https://cetana-labs.vercel.app)  
-> 📚 **All Documentation (hub):** [docs/README.md](docs/README.md)  
-> 📖 **User Guide:** [docs/guides/user-guide.md](docs/guides/user-guide.md)  
-> 🛠️ **Developer Guide (setup, commands, Kiro Web + IDE):** [docs/guides/developer-guide.md](docs/guides/developer-guide.md)  
-> 🔄 **Sprint Lifecycle & Delivery Process (visual, both paths):** [docs/guides/sprint-lifecycle.md](docs/guides/sprint-lifecycle.md)  
-> 🤖 **AIDLC Guide (method, work-class routing, executors, RGS):** [docs/guides/aidlc-guide.md](docs/guides/aidlc-guide.md)  
-> 🛰️ **Release Guide (promote to staging & operate):** [docs/guides/release-guide.md](docs/guides/release-guide.md)  
-> 🗂️ **Portfolio & Sprint Tracking Model (Backlog → Sprint → Changelog):** [docs/rfc/RFC-LAB-000-010-tracking-model.md](docs/rfc/RFC-LAB-000-010-tracking-model.md)  
-> 🚀 **Deployment Architecture (Vercel + Railway):** [docs/rfc/RFC-LAB-000-011-deployment.md](docs/rfc/RFC-LAB-000-011-deployment.md)  
-> 🛰️ **Deploy Operations (CLI-first, casual→qualified environments):** [docs/rfc/RFC-LAB-000-012-deploy-operations.md](docs/rfc/RFC-LAB-000-012-deploy-operations.md)  
-> 🧪 **Mini AIDLC — POC Kickstarter (copy for new POCs, tech-agnostic):** [templates/aidlc-mini/KICKSTART.md](templates/aidlc-mini/KICKSTART.md)  
-> 🧠 **Decision Journal (how key decisions were reached):** [docs/governance/DECISION-JOURNAL.md](docs/governance/DECISION-JOURNAL.md)  
-> 🤝 **AI Collaboration Model (how we work with AI):** [docs/governance/ai-collaboration-model.md](docs/governance/ai-collaboration-model.md)  
-> 👥 **Project Owner Guide & AI Prompts:** [docs/guides/project-owner-guide.md](docs/guides/project-owner-guide.md)  
-> 📋 **Project Status Protocol (`STATUS.md`):** [docs/reference/project-protocol.md](docs/reference/project-protocol.md)  
-> 🎯 **Sprint Tracker (active + delivered):** [SPRINT_TRACKER.md](SPRINT_TRACKER.md)  
-> 💡 **Product Backlog (idea bucket):** [BACKLOG.md](BACKLOG.md)  
-> 📜 **Project Changelog:** [CHANGELOG.md](CHANGELOG.md)  
-> 💬 **On-Demand Management Broadcasts:** Run `/project-status` or `/project-status <ID>` for WhatsApp-ready executive updates.
+> The central **engineering control plane** for a portfolio of initiatives (mini-apps, research spikes, data pipelines, benchmarks). Leads report a ≤35-line `STATUS.md`; leadership gets an auto-generated portfolio + daily broadcast. A master control plane, **not a monorepo** — mini-app source lives in external repos.
 
----
+🌐 **Live app:** [cetana-labs.vercel.app](https://cetana-labs.vercel.app) · 📚 **Docs hub:** [docs/README.md](docs/README.md) · 🤖 **Agent rules:** [AGENTS.md](AGENTS.md)
 
-Welcome to **Cetana Labs** — the central command plane, master project registry, and operational lab notebook for engineering initiatives, research spikes, mini-apps, data pipelines, and benchmark verifications.
+## 🧭 Navigate
+
+| I want to… | Go to |
+| :--- | :--- |
+| **See the portfolio** | [Master Registry](#-master-project-registry) (below) · live at [the app](https://cetana-labs.vercel.app) |
+| **Develop locally** | [Developer Guide](docs/guides/developer-guide.md) (setup · DB · auth) |
+| **Understand how we ship** | [AIDLC Guide](docs/guides/aidlc-guide.md) (method · executors · work classes) · [Sprint Lifecycle](docs/guides/sprint-lifecycle.md) (runbook) |
+| **Promote to staging / deploy** | [Release Guide](docs/guides/release-guide.md) |
+| **Start a POC fast** | [Mini-AIDLC Guide](docs/guides/mini-aidlc-guide.md) · [kickstarter](templates/aidlc-mini/KICKSTART.md) |
+| **Write a project `STATUS.md`** | [Project Owner Guide](docs/guides/project-owner-guide.md) · [Status Protocol](docs/reference/project-protocol.md) |
+| **Gather a fuzzy requirement** | [RGS Guide](docs/guides/rgs-guide.md) |
+| **See why a decision was made** | [Decision Journal](docs/governance/DECISION-JOURNAL.md) · [AI Collaboration Model](docs/governance/ai-collaboration-model.md) · [RFCs](docs/rfc/) |
+| **Track work** | [Sprint Tracker](SPRINT_TRACKER.md) · [Backlog](BACKLOG.md) · [Changelog](CHANGELOG.md) |
+
+## 🚀 Quick start
+
+```bash
+just setup          # one-time: env + deps + PocketBase superuser + schema + seed
+just start-local    # PocketBase :8090 + SvelteKit :5173
+just validate-local # full pre-flight (mirrors CI) before any PR
+```
+Full setup, DB/auth, and gotchas → **[Developer Guide](docs/guides/developer-guide.md)**.
+
+## ⚡ Cheatsheet
+
+| Do | Command |
+| :--- | :--- |
+| List every recipe | `just` / `just --list` |
+| Local stack up / down / status | `just start-local` · `just stop-local` · `just status-local` |
+| Validate (CI parity) | `just validate-local` |
+| Reconcile live app → `data/` → README | `just export-live-data` then `python3 scripts/generate_registry.py` |
+| Executive broadcast | `/project-status` (or `/project-status <ID>`) |
+| Deliver a feature | Spec → `/spec-run <id>` → `/review-pr <PR>` → **human merge** ([AIDLC](docs/guides/aidlc-guide.md)) |
 
 ---
 
@@ -50,65 +64,35 @@ Welcome to **Cetana Labs** — the central command plane, master project registr
 
 ---
 
-## 🗂️ Repository Structure
+## 🗂️ Repository layout
 
 ```text
 cetana-labs/
-├── README.md                      # Master Dashboard & Project Registry (You are here)
-├── STATUS.md                      # 📋 Authoritative Root Status for Cetana Labs (LAB-000)
-├── SPRINT_TRACKER.md              # 🎯 Current Sprint & Delivered Sprints Archive
-├── BACKLOG.md                     # 💡 Product Backlog (idea bucket — BK- initiatives)
-├── CHANGELOG.md                   # 📜 Keep a Changelog Historical Releases
-├── .github/workflows/
-│   ├── project-status-cron.yml    # ⏰ Scheduled weekday GitHub Actions broadcast workflow
-│   ├── lead-ping-cron.yml         # 🔔 Weekly stale/onboarding lead ping alert workflow
-│   └── ci-validate.yml            # 🛡️ PR CI: portfolio + 5-pillar + registry/schema checks + web build
-├── scripts/
-│   ├── generate_status.py         # 📱 Standalone WhatsApp executive status generator
-│   ├── ping_leads.py              # 🔔 Automated lead ping engine (stale & onboarding alerts)
-│   └── validate_portfolio.py      # 🛡️ CI linter & project structure validator
-├── app/                           # 🖥️ Web app (BK-011): pocketbase/ backend + web/ SvelteKit Sleek UI
-├── docs/                          # 📚 Documentation (see docs/README.md — the hub)
-│   ├── README.md                  # 📚 Docs hub: index by category + breadcrumb nav standard
-│   ├── guides/                    # 📖 How-to: user, developer, sprint-lifecycle, project-owner
-│   ├── reference/                 # 📐 Specs & standards: project-protocol, DESIGN, design-system
-│   ├── governance/                # ⚖️ Decision Journal & AI collaboration model
-│   ├── rfc/                       # 📜 Numbered decision records (RFC-LAB-000-001 … -010)
-│   └── templates/                 # 🧩 Reusable artifact templates (REPORT.template.md)
-├── AGENTS.md                      # 🤖 Universal AI Instructions (Rules, Constraints, Workflows)
-├── CLAUDE.md                      # 🤖 Agent pointer for Claude Code
+├── README.md · STATUS.md · SPRINT_TRACKER.md · BACKLOG.md · CHANGELOG.md   # control-plane root
+├── AGENTS.md                 # universal AI agent rules, commit & branch conventions
+├── justfile                  # task runner (just --list) · Makefile = thin forwarding shim
+├── data/                     # generated JSON export snapshots (PocketBase is master — never hand-edit)
+├── scripts/                  # zero-dep Python governance engine: generators + validators
+├── app/
+│   ├── pocketbase/           # backend (Containerfile · pb_hooks · pb_schema.json → Railway)
+│   └── web/                  # SvelteKit "Sleek UI" (→ Vercel)
+├── docs/                     # documentation hub — see docs/README.md
+│   ├── guides/               # user · developer · aidlc · mini-aidlc · sprint-lifecycle · release · project-owner · rgs
+│   ├── reference/            # project-protocol · capability-map · design system
+│   ├── governance/           # Decision Journal · AI collaboration model · intake · registry-retirement
+│   ├── rfc/                  # numbered decision records (RFC-LAB-000-001 … -016)
+│   └── templates/            # reusable artifact templates
 ├── .kiro/
-│   ├── skills/                    # 🤖 Kiro-native project /commands (shared across Web + IDE)
-│   │   ├── project-{status,add,update,edit,validate}/  # Portfolio lifecycle commands
-│   │   ├── sprint-{start,done}/   # Open / close the sprint container
-│   │   ├── plan-{start,done}/     # Per-feature planning session (authors + merges a Spec)
-│   │   ├── spec-run/              # IDE one-liner: execute a merged Spec end-to-end
-│   │   ├── review-pr/             # Human PR gate (verify phase)
-│   │   ├── verification-done/     # Record the human functional-verification loop
-│   │   ├── brainstorm-save/       # Append curated decisions to the Decision Journal
-│   │   ├── ping-leads/, log-milestone/, commit-changes/  # Automation + git helpers
-│   │   ├── audit-{doc,project}/   # Documentation / project health audits
-│   │   ├── env-doctor/, validate-{local,staging}/        # Environment + pre-flight checks
-│   │   └── {start,stop,status}-local/, status-staging/   # Local stack lifecycle
-│   ├── specs/                     # 📐 Kiro Specs (requirements / design / tasks per feature)
-│   └── steering/                  # 🧭 product / tech / structure steering + conventions
-├── templates/                     # Standardized scaffolds for rapid onboarding
-└── projects/                      # All lab initiatives (flat hierarchy)
-    ├── LAB-000-cetana-labs/       # Central Command Plane & Protocol Engine
-    ├── LAB-001-ammas/             # Behavioral CV Edge System & GenBI Analytics
-    ├── LAB-002-wrenai-eval/       # WrenAI Capabilities & Semantic GenBI Evaluation
-    ├── LAB-003-nexus-pulse/       # Governed Operational & Financial Intelligence Engine
-    ├── LAB-004-zerobea-ai/        # AI Security Control Plane & Governed Gateway
-    └── LAB-005-nexus-beacon/      # Telemetry & Operational Alert Service
+│   ├── skills/               # Kiro-native project /commands (shared across executors)
+│   ├── specs/                # Kiro Specs (requirements · design · tasks per feature)
+│   └── steering/             # product · tech · structure steering + conventions
+├── templates/                # archetype scaffolds + the aidlc-mini/ POC kickstarter
+└── projects/LAB-XXX-<slug>/  # per-project README · STATUS.md · journal.md (flat, sequential IDs)
 ```
+> The authoritative, annotated layout + conventions live in [`.kiro/steering/structure.md`](.kiro/steering/structure.md); this is the at-a-glance view.
 
----
+## 🏷️ Project archetypes
 
-## 🏷️ Project Archetypes
+💻 **Mini-App / Coding** (external repos) · 📑 **Research / Spike** (feasibility, Go/No-Go) · 📊 **Data Collection** (pipelines, schemas) · 🔬 **Verification / Benchmark** (test rigs, SLA/accuracy).
 
-- 💻 **Mini-App / Coding**: Independent software services with external repositories.
-- 📑 **Research / Spike**: Feasibility studies, literature surveys, trade-off evaluations, and Go/No-Go decisions.
-- 📊 **Data Collection**: Datasets, web scraping pipelines, annotations, and schemas.
-- 🔬 **Verification / Benchmark**: Test rigs, SLA validations, model accuracy benchmarks, and stress tests.
-
-For detailed guidelines, see **[docs/guides/user-guide.md](docs/guides/user-guide.md)** and **[docs/reference/project-protocol.md](docs/reference/project-protocol.md)**.
+Details → **[User Guide](docs/guides/user-guide.md)** · **[Status Protocol](docs/reference/project-protocol.md)**.
