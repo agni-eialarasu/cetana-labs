@@ -65,4 +65,21 @@ Delivered **Mermaid Flowchart Labels Fix** (`BK-038` / `TSK-077`), resolving the
 
 ---
 
+## 4. Verification Log — human functional verification (appended by `/verification-done`)
+
+### Verification Log — 2026-10-10 (PR #102)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1 (Sprint Lifecycle State Machine Flowchart)** | ✅ | State machine and flow-at-a-glance flowchart nodes in `/docs?doc=sprint-lifecycle` render label text cleanly (light + dark). |
+| **V2 (Project Owner Flowchart)** | ✅ | 5-pillar pre-flight flowchart in `/docs?doc=project-owner` displays all node labels without empty boxes. |
+| **V3 (Architecture Diagrams & Living Diagrams)** | ✅ | Living diagrams remain interactive; sequence diagrams render without regression. |
+| **V4 (Local Pre-Flight Gate)** | ✅ | `just validate-local` passes 100% green across all 5 governance pillars and web builds. |
+
+- **Iterations:** 1 (clean pass; initial config fix validated with zero defects)
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu · **Surface:** Google Antigravity (IDE)
+
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../../README.md) · [📚 Docs Hub](../../../docs/README.md)

@@ -19,10 +19,10 @@
 - [x] Open PR via `gh api`; write `REPORT.md` with the EARS R1–R6 self-check; STOP-and-hold. **Never merge.**
 
 ## Task 3 — Human visual verification (in `/review-pr` / `/verification-done`)
-- [ ] V1: `/docs?doc=sprint-lifecycle` flowchart labels render (light + dark).
-- [ ] V2: `/docs?doc=project-owner` flowchart labels render.
-- [ ] V3: `/docs?doc=diagrams` living diagrams + any flowchart render, no regression; sequence diagrams unaffected.
-- [ ] V4: `just validate-local` green.
+- [x] V1: `/docs?doc=sprint-lifecycle` flowchart labels render (light + dark).
+- [x] V2: `/docs?doc=project-owner` flowchart labels render.
+- [x] V3: `/docs?doc=diagrams` living diagrams + any flowchart render, no regression; sequence diagrams unaffected.
+- [x] V4: `just validate-local` green.
 
 ## Definition of Done
 - **R1–R2** `flowchart: { htmlLabels: false }` set; flowchart node labels render (no empty boxes), light + dark.
