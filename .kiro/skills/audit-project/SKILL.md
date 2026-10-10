@@ -18,9 +18,9 @@ A broad governance & hygiene sweep across a project (or the whole portfolio), ag
 
 ### 1. Run the automated validators
 ```bash
-python3 scripts/validate_portfolio.py            # structure, protocol, referential integrity, README reg
-python3 scripts/generate_registry.py --check       # README registry vs data/
-python3 scripts/generate_pb_schema.py --check       # PocketBase schema vs data/
+python3 scripts/validate_portfolio.py            # structure, protocol, referential integrity, export lockstep
+python3 scripts/generate_registry.py --check       # README registry vs data/ export
+python3 scripts/generate_pb_schema.py --check       # PocketBase schema vs data/ model
 python3 scripts/generate_status_json.py --check      # status.json vs STATUS.md
 python3 scripts/project_validate.py --allow-dirty    # 5-pillar gate (scoped to --dir for one project)
 ```
@@ -31,7 +31,7 @@ For a single ID: `python3 scripts/project_validate.py --dir projects/<ID>-<slug>
 - Cross-reference `/ping-leads` logic (do not open issues here — report only).
 
 ### 3. Lockstep & consistency
-- `README.md` registry, `BACKLOG.md`, `CHANGELOG.md`, `data/*.json`, and `projects/` directories agree (owner_id resolves, dir↔record, no duplicate `TSK`/`LAB` ids).
+- `README.md` registry, `BACKLOG.md`, `CHANGELOG.md`, `data/*.json` (committed PocketBase export), and `projects/` directories agree (owner_id resolves, dir↔record, no duplicate `TSK`/`LAB` ids).
 - CHANGELOG version ladder is monotonic; `[Unreleased]` present.
 
 ### 4. Required docs present

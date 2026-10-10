@@ -28,7 +28,7 @@ in external repos).
 ## Capability domains
 
 ### Registry & Portfolio — *the master catalog*
-- ✅ **Master registry** — indexed catalog of initiatives (`LAB-000`…`005`); README table generated. *Driven by `/project-add`, `/project-edit`, `generate_registry.py`; data: `portfolio.json`.*
+- ✅ **Master registry** — indexed catalog of initiatives (`LAB-000`…`005`); README table generated. *Driven by app CRUD (`admin/projects`) → `just export-live-data` → `generate_registry.py`; data: PocketBase master with `portfolio.json` export snapshot.*
 - ✅ **Portfolio UI** — owner-first cards with health badges on the Sleek UI. *Reads PocketBase (snapshot fallback); data: `portfolio` + `users`.*
 
 ### Status Engine & Validation — *the certified-truth core*
@@ -57,7 +57,7 @@ in external repos).
 
 ```mermaid
 flowchart TD
-    O["① Lead onboards a project<br/><i>/project-add · /status-init</i>"]
+    O["① Project created in-app<br/><i>admin/projects · just export-live-data</i>"]
     W["② Lead does the work<br/><i>own external repo</i>"]
     V["③ Pre-flight validation<br/><i>/project-validate → receipt</i>"]
     U["④ Close sprint → update status<br/><i>/project-update</i>"]

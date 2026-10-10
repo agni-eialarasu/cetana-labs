@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-Cetana Labs — Master Registry Generator (BK-009 / RFC-LAB-000-002)
+Cetana Labs — Master Registry Generator (BK-009 / RFC-LAB-000-002 / RFC-LAB-000-016)
 
-Renders the root README.md "Master Project Registry" table from the relational
-JSON data layer (data/portfolio.json + data/users.json), resolving owner_id ->
-user name and reading live Health from each project's STATUS.md.
+Renders the root README.md "Master Project Registry" table from the committed
+data export (data/portfolio.json + data/users.json, produced by just export-live-data
+from live PocketBase), resolving owner_id -> user name and reading live Health
+from each project's STATUS.md.
 
 The generated block is written between the marker comments:
     <!-- BEGIN:registry -->
