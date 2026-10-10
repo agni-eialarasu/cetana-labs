@@ -16,23 +16,27 @@
 
 Delivered **Mermaid Node Labels — Theme-Owned Colors (Option C)** (`BK-039` / `TSK-078`), correcting `BK-038` by letting mermaid's theme own fill and label colors:
 
-1. **Stripped Custom Fills & Label Colors (`R1`)**:
+1. **Top-Level `htmlLabels: false` Config Fix (`R1`, `R3`)**:
+   - Discovered that Mermaid 12 deprecates `flowchart.htmlLabels` in favor of top-level `htmlLabels: false`. Previously, Mermaid evaluated `htmlLabels` as undefined and defaulted to `true`, emitting `<foreignObject>` for all nodes. DOMPurify's SVG profile (`USE_PROFILES: { svg: true, svgFilters: true }`) stripped the `<foreignObject>` container, resulting in empty boxes.
+   - Configured `htmlLabels: false` at the root of `mermaid.initialize({...})`, ensuring Mermaid generates native SVG `<text>` elements across both flowcharts and state diagrams without widening DOMPurify or loosening security.
+2. **Stripped Custom Fills & Label Colors (`R1`)**:
    - In `docs/guides/sprint-lifecycle.md`, removed `classDef web/ide` and `class B,G,D web` / `class I,V ide`.
    - In `docs/guides/project-owner-guide.md`, removed `classDef gate/act` and `class V,GATE gate` / `class U,U3 act`.
-   - Eliminated the HTML-only `color:#fff` directive and dark custom fills (`#1e3a5f`, `#0f2a1e`) that caused SVG `<text>` labels to become invisible against custom fills.
-2. **Theme-Owned Node Fill & Text Contrast (`R2`)**:
+   - Replaced raw HTML tags (`<b>`, `<i>`, `<br/>`, `&amp;`) with clean text and `\n`, allowing Mermaid to generate clean SVG `<tspan>` line breaks rather than literal markup strings.
+   - Fixed semicolon `;` statement delimiter in `sprint-lifecycle.md` `stateDiagram-v2` (`human runs plan (fix on same PR)`), eliminating ghost state boxes.
+3. **Theme-Owned Node Fill & Text Contrast (`R2`)**:
    - Both flowchart nodes and `stateDiagram-v2` nodes now rely on mermaid's `theme: 'dark' | 'default'` engine, ensuring proper contrast in both light and dark modes.
-3. **Unchanged Security Posture & Clean Config (`R3`)**:
+4. **Unchanged Security Posture & Clean Config (`R3`)**:
    - Confirmed `app/web/src/lib/docs/mermaid.ts` has no `themeVariables` block.
    - Retained `securityLevel: 'strict'`, `flowchart: { htmlLabels: false }`, and DOMPurify SVG profile (`USE_PROFILES: { svg: true, svgFilters: true }`) without widening.
-4. **Zero Regressions (`R4`)**:
+5. **Zero Regressions (`R4`)**:
    - Sequence diagrams and living diagrams (`working-model`, `runtime-infra`, `app-functionality`) render unchanged.
-5. **Preserved Semantic Distinctions (`R5`)**:
+6. **Preserved Semantic Distinctions (`R5`)**:
    - Preserved distinctions through inherent node shapes (`{...}` diamond for gate decisions, `[...]` rect for operations) and clear label text/emojis (`🛡️`, `🧠`, `🔨`, `🔍`, `👀`, `✅`, `📱`, `🔧`).
-6. **Governance & Build Lockstep (`R6`)**:
+7. **Governance & Build Lockstep (`R6`)**:
    - `pnpm build` (adapter-static) succeeded with 0 errors.
    - `just validate-local` 100% green across all 5 governance pillars.
-   - `generate_registry.py --check` verified README master registry is byte-identical.
+   - Master README registry confirmed in sync.
    - Recorded `CHANGELOG.md` `[Unreleased]` entry under `### Fixed`.
 
 ---

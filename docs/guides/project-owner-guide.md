@@ -15,14 +15,14 @@ You **never write this file by hand**. Your AI coding assistant (Cursor, Claude 
 
 ```mermaid
 flowchart TB
-    V["🛡️ <b>/project-validate</b><br/><i>5-pillar pre-flight gate</i>"]
-    P1["1 · Scraper budget ≤ 35 lines &amp; schema"]
-    P2["2 · Registries in lockstep<br/>CHANGELOG / SPRINT_TRACKER / BACKLOG"]
+    V["🛡️ /project-validate\n5-pillar pre-flight gate"]
+    P1["1 · Scraper budget ≤ 35 lines & schema"]
+    P2["2 · Registries in lockstep\nCHANGELOG / SPRINT_TRACKER / BACKLOG"]
     P3["3 · Git worktree clean"]
-    P4["4 · AST architecture &amp; golden-math parity"]
+    P4["4 · AST architecture & golden-math parity"]
     P5["5 · Auto-count live tests → validation_receipt.json"]
-    GATE{"5 pillars<br/>GREEN?"}
-    U["📝 <b>/status-update</b><br/><i>certified from the receipt</i>"]
+    GATE{"5 pillars\nGREEN?"}
+    U["📝 /status-update\ncertified from the receipt"]
     U1["Synthesize commits → business wins"]
     U2["Update STATUS.md with certified test tallies"]
     U3["📱 Ready-to-send WhatsApp standup"]

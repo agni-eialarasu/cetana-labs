@@ -22,11 +22,11 @@ Both paths run the **same five phases** and the **same human gate**; only the *B
 
 ```mermaid
 flowchart LR
-    B["🧠 <b>brainstorm</b><br/>/plan-start* · /plan-done<br/><i>Web · Scope</i>"]
-    I["🔨 <b>implement</b><br/>/spec-run id<br/>or lead-paired<br/><i>IDE · Build</i>"]
-    V["🔍 <b>verify — human loop</b><br/>run plan · /verification-done<br/><i>IDE · human verify</i>"]
-    G["👀 <b>verify — gate</b><br/>/review-pr PR<br/><i>Web · Review</i>"]
-    D["✅ <b>done</b><br/>/sprint-done<br/><i>Record</i>"]
+    B["🧠 brainstorm\n/plan-start* · /plan-done\nWeb · Scope"]
+    I["🔨 implement\n/spec-run id\nor lead-paired\nIDE · Build"]
+    V["🔍 verify — human loop\nrun plan · /verification-done\nIDE · human verify"]
+    G["👀 verify — gate\n/review-pr PR\nWeb · Review"]
+    D["✅ done\n/sprint-done\nRecord"]
 
     B --> I --> V --> G --> D
     V -. "fix on same PR" .-> V
@@ -47,7 +47,7 @@ stateDiagram-v2
     [*] --> PLANNING : /sprint-start then /plan-start
     PLANNING --> READY_TO_BUILD : /plan-done (Spec merged to main)
     READY_TO_BUILD --> IN_VERIFICATION : /spec-run id opens PR + emits Human Verification Plan
-    IN_VERIFICATION --> IN_VERIFICATION : human runs plan; fix on SAME PR (iterate)
+    IN_VERIFICATION --> IN_VERIFICATION : human runs plan (fix on same PR)
     IN_VERIFICATION --> IN_REVIEW : /verification-done (log recorded, verdict PASS)
     IN_REVIEW --> READY_TO_BUILD : /review-pr requests changes (iterate)
     IN_REVIEW --> RECORDED : human approves + squash-merge
