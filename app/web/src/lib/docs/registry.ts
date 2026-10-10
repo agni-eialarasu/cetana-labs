@@ -1,5 +1,8 @@
 import DOMPurify from 'dompurify';
 import { marked, Renderer } from 'marked';
+import workingModelHtml from './diagrams/working-model.html?raw';
+import runtimeInfraHtml from './diagrams/runtime-infra.html?raw';
+import appFunctionalityHtml from './diagrams/app-functionality.html?raw';
 
 // src/lib/docs/registry.ts  — the ONE place the in-app doc set is defined.
 // NOTE: a doc listed here becomes a CONSUMER SURFACE — editing it changes what
@@ -7,10 +10,46 @@ import { marked, Renderer } from 'marked';
 // (See docs/governance/ai-collaboration-model.md — in-app docs are consumer surfaces.)
 export const INCLUDED_DOCS = [
   { slug: 'user-guide', src: 'guides/user-guide.md', title: 'User Guide' },
-  { slug: 'project-owner', src: 'guides/project-owner-guide.md', title: 'Project Owner Guide' }
-  // OPTIONAL third ("how we build this"): enable deliberately.
+  { slug: 'project-owner', src: 'guides/project-owner-guide.md', title: 'Project Owner Guide' },
+  // R4.2: consumer-facing engineering guide explaining the four-phase sprint cadence (brainstorm, implement, verify, done)
+  { slug: 'sprint-lifecycle', src: 'guides/sprint-lifecycle.md', title: 'Sprint Lifecycle' }
+  // OPTIONAL fourth ("how we build this"): enable deliberately.
   // { slug: 'how-we-build', src: 'governance/ai-collaboration-model.md', title: 'How We Build This' },
 ] as const;
+
+export interface LivingDiagram {
+  id: string;
+  title: string;
+  description: string;
+  html: string;
+}
+
+export const LIVING_DIAGRAMS: LivingDiagram[] = [
+  {
+    id: 'working-model',
+    title: 'Working Model',
+    description: 'Autonomous execution hierarchy, roles, sprint lifecycle, and gate protocols.',
+    html: workingModelHtml
+  },
+  {
+    id: 'runtime-infra',
+    title: 'Runtime Infrastructure',
+    description: 'Local runtime, cloud runtime, deploy plane, and telemetry probes.',
+    html: runtimeInfraHtml
+  },
+  {
+    id: 'app-functionality',
+    title: 'App Functionality',
+    description: 'System purpose and capabilities: executive portfolio visibility and control plane.',
+    html: appFunctionalityHtml
+  }
+];
+
+export const DIAGRAMS_DOC = {
+  slug: 'diagrams',
+  title: 'Living Diagrams',
+  description: 'Interactive architecture maps: working model, runtime infrastructure, and app functionality.'
+} as const;
 
 export interface RenderedDoc {
   slug: string;

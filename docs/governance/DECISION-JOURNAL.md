@@ -880,4 +880,29 @@ historical one.
 - **Class:** governance/documentation → simplified fast-path. Shipped as 2 branch PRs (#96, #97), human-merged. Three invariants held: human merge gate, agent never pushed `main`, validators green (registry block byte-identical throughout). This entry rides on the #97 branch so the decision record merges atomically with the work it documents.
 ---
 
+## Entry 029 — In-App Docs Visuals: Sandboxed iframe vs. Svelte Component Architecture (BK-037)
+
+**Date:** 2026-10-10 · **Contributor(s):** Agni Eialarasu (`arasu@agnitechnologies.com`), AI-assisted (Spec `in-app-docs-visuals`, `BK-037`, `TSK-076`) · **Mode:** IDE `/spec-run` · **Outcome:** Lazy mermaid rendering + sandboxed living-diagram embeds + standard breadcrumbs.
+
+### D74 — Living diagrams embedding architecture: Sandboxed `<iframe sandbox="allow-scripts" srcdoc="...">` with theme CSS injection (R5.2)
+
+- **The problem:** Cetana maintainers maintain three rich, interactive architectural diagrams (Working Model, Runtime Infrastructure, App Functionality) as living artifacts. Previously, leads could only view raw markdown or copy pasted diagrams. The markdown rendering pipeline (`marked` + `DOMPurify`) strips `<script>` tags, making direct embedding impossible without either re-authoring them or weakening the sanitizer.
+- **Options considered:**
+  1. **Option A: Sandboxed `<iframe sandbox="allow-scripts" srcdoc="...">` (Chosen):** Embeds committed, refreshed first-party HTML into a sandboxed iframe. Theme variables are injected directly into `:root` in `srcdoc`.
+     - *Pros:* Verbatim artifact execution; zero re-authoring; complete sandbox isolation (`allow-scripts` only; NO `allow-same-origin`, NO `allow-top-navigation` prevents any parent cookie, local storage, or DOM access); zero runtime external dependencies.
+     - *Cons:* Fixed responsive height with internal scrollbar for v1.
+  2. **Option B: Port diagrams to bespoke Svelte 5 components:** Re-author all 3 diagrams (~400 lines of complex SVG/DOM and event logic each) into native Svelte components.
+     - *Pros:* Native Svelte reactivity, no iframe boundary.
+     - *Cons:* Huge manual translation effort and ongoing maintenance drag; anytime living diagram artifacts are refreshed, they would diverge or require manual re-porting.
+  3. **Option C: Inject scripts directly into markdown through DOMPurify:** Loosen sanitizer configuration to permit inline scripts in rendered guides.
+     - *Rejected on security:* Introducing script execution in sanitized markdown is an intolerable XSS footgun.
+- **Decision & rationale:** Option A won decisively. The sandboxed iframe preserves living-diagram fidelity and single-source maintenance while maintaining absolute security isolation (strict `sandbox="allow-scripts"` boundary with no access to parent credentials or PB auth token).
+
+### Downstream
+- The `/docs` surface renders mermaid diagrams client-side lazily with dark/light theme switching and fail-soft fallback.
+- Living diagrams are committed under `app/web/src/lib/docs/diagrams/` and embedded cleanly in `/docs?doc=diagrams`.
+- Navigation standardizes on `Dashboard › Docs › <Guide>` breadcrumbs with zero duplicate back links.
+
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

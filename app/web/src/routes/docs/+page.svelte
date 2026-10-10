@@ -1,32 +1,56 @@
 <script lang="ts">
-  import { DOCS, INCLUDED_DOCS } from '$lib/docs/registry';
+  import { DOCS, LIVING_DIAGRAMS, DIAGRAMS_DOC } from '$lib/docs/registry';
+  import DiagramEmbed from '$lib/components/DiagramEmbed.svelte';
+  import { renderMermaidIn } from '$lib/docs/mermaid';
+  import { theme } from '$lib/theme.svelte';
   import { page } from '$app/state';
   import { base } from '$app/paths';
+  import { browser } from '$app/environment';
+  import { tick } from 'svelte';
 
-  // Read ?doc=<slug> from query param, default to first included doc
+  // Read ?doc=<slug> from query param
   const docParam = $derived(page.url.searchParams.get('doc'));
-  const activeDoc = $derived(DOCS.find((d) => d.slug === docParam) ?? DOCS[0]);
+  const isDiagramsView = $derived(docParam === 'diagrams');
+  const activeDoc = $derived(
+    isDiagramsView ? null : (DOCS.find((d) => d.slug === docParam) ?? DOCS[0])
+  );
+  const activeTitle = $derived(
+    isDiagramsView ? DIAGRAMS_DOC.title : (activeDoc?.title ?? 'Documentation')
+  );
+
+  let docEl = $state<HTMLElement | null>(null);
+
+  // Client-only, lazy, theme-aware mermaid render pass (SSR-safe: $effect runs client-only)
+  $effect(() => {
+    if (!browser || !docEl || isDiagramsView) return;
+    const _docSlug = activeDoc?.slug;
+    const currentTheme = theme.resolved === 'dark' ? 'dark' : 'default';
+
+    tick().then(() => {
+      if (docEl) {
+        renderMermaidIn(docEl, currentTheme);
+      }
+    });
+  });
 </script>
 
 <svelte:head>
-  <title>{activeDoc ? `${activeDoc.title} — Cetana Labs Docs` : 'Documentation — Cetana Labs'}</title>
+  <title>{activeTitle} — Cetana Labs Docs</title>
 </svelte:head>
 
 <div class="mx-auto max-w-content px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
   <!-- Top Navigation & Header -->
   <header class="mb-8 flex flex-col gap-4 border-b border-line pb-6">
     <div class="flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-4">
-        <a
-          href="{base}/"
-          class="inline-flex items-center gap-1.5 text-xs font-semibold text-muted hover:text-ink transition-colors"
-        >
-          <span>←</span>
-          <span>Back to Dashboard</span>
-        </a>
-        <span class="text-line-strong">•</span>
-        <span class="text-xs font-mono text-muted">Help &amp; Documentation</span>
-      </div>
+      <!-- Standard In-App Breadcrumb: Dashboard › Docs › <active guide> (Task 5 / R3.1) -->
+      <nav aria-label="Breadcrumb" class="flex items-center gap-1.5 text-xs font-medium text-muted">
+        <a href="{base}/" class="hover:text-ink transition-colors">Dashboard</a>
+        <span class="text-line-strong">›</span>
+        <a href="{base}/docs" class="hover:text-ink transition-colors">Docs</a>
+        <span class="text-line-strong">›</span>
+        <span class="font-semibold text-ink">{activeTitle}</span>
+      </nav>
+
       <div class="flex items-center gap-3">
         <a
           href="https://github.com/agni-eialarasu/cetana-labs"
@@ -42,7 +66,7 @@
     <div>
       <h1 class="text-3xl font-bold tracking-tight text-ink">Documentation</h1>
       <p class="mt-1 text-sm text-muted">
-        Authoritative guides and playbooks for maintainers, project leads, and collaborators.
+        Authoritative guides, architectural diagrams, and playbooks for maintainers, project leads, and collaborators.
       </p>
     </div>
   </header>
@@ -57,7 +81,7 @@
         </div>
         <nav class="flex flex-col gap-1" aria-label="Documentation navigation">
           {#each DOCS as doc (doc.slug)}
-            {@const isActive = activeDoc?.slug === doc.slug}
+            {@const isActive = !isDiagramsView && activeDoc?.slug === doc.slug}
             <a
               href="{base}/docs?doc={doc.slug}"
               class="flex items-center justify-between rounded-control px-3 py-2 text-sm transition-colors {isActive
@@ -70,6 +94,25 @@
               {/if}
             </a>
           {/each}
+        </nav>
+
+        <div class="my-3 border-t border-line"></div>
+
+        <div class="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted">
+          Architecture
+        </div>
+        <nav class="flex flex-col gap-1" aria-label="Architecture diagrams navigation">
+          <a
+            href="{base}/docs?doc=diagrams"
+            class="flex items-center justify-between rounded-control px-3 py-2 text-sm transition-colors {isDiagramsView
+              ? 'border border-brand-line bg-brand-soft/30 font-semibold text-brand'
+              : 'text-ink-secondary hover:bg-panel hover:text-ink'}"
+          >
+            <span>{DIAGRAMS_DOC.title}</span>
+            {#if isDiagramsView}
+              <span class="text-xs text-brand">●</span>
+            {/if}
+          </a>
         </nav>
       </div>
 
@@ -91,7 +134,40 @@
 
     <!-- Main Content Area -->
     <main class="min-w-0">
-      {#if activeDoc}
+      {#if isDiagramsView}
+        <!-- Living Architecture Diagrams View (BK-037 R2) -->
+        <div class="flex flex-col gap-8">
+          <div class="rounded-card border border-line bg-panel/20 p-6 md:p-8">
+            <div class="mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4">
+              <div>
+                <span class="text-xs font-mono text-muted">app/web/src/lib/docs/diagrams/</span>
+              </div>
+              <a
+                href="https://github.com/agni-eialarasu/cetana-labs/tree/main/app/web/src/lib/docs/diagrams"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs text-muted hover:text-brand transition-colors"
+              >
+                View source on GitHub ↗
+              </a>
+            </div>
+            <h2 class="text-2xl font-bold tracking-tight text-ink mb-2">Living Architecture Diagrams</h2>
+            <p class="text-sm text-ink-secondary leading-relaxed max-w-3xl">
+              Authoritative, interactive architectural maps representing Cetana Labs execution hierarchy,
+              runtime deployment plane, and product functionality. These are committed first-party assets
+              embedded inside isolated sandboxes (<code class="text-xs">allow-scripts</code> only).
+            </p>
+          </div>
+
+          {#each LIVING_DIAGRAMS as diagram (diagram.id)}
+            <DiagramEmbed
+              src={diagram.html}
+              title={diagram.title}
+              description={diagram.description}
+            />
+          {/each}
+        </div>
+      {:else if activeDoc}
         <article class="rounded-card border border-line bg-panel/20 p-6 md:p-8">
           <!-- Doc Meta Header -->
           <div class="mb-6 flex flex-wrap items-center justify-between gap-2 border-b border-line pb-4">
@@ -109,7 +185,7 @@
           </div>
 
           <!-- Rendered HTML Content -->
-          <div class="doc-content">
+          <div class="doc-content" bind:this={docEl}>
             {@html activeDoc.html}
           </div>
         </article>
@@ -287,5 +363,21 @@
   .doc-content :global(strong) {
     color: var(--np-text);
     font-weight: 600;
+  }
+
+  .doc-content :global(.mermaid-block) {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    padding: 1.25rem;
+    background-color: var(--np-bg-subtle);
+    border: 1px solid var(--np-border);
+    border-radius: 8px;
+  }
+
+  .doc-content :global(.mermaid-block svg) {
+    max-width: 100%;
+    height: auto;
   }
 </style>
