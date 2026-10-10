@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<!--
+  Cetana Labs — App Functionality (living diagram), committed export for the in-app /docs embed (BK-037).
+  SOURCE OF TRUTH: Kiro Crew artifact slug cetana-labs-app-functionality (v6, refreshed 2026-10-10).
+  On any functionality change, update the artifact AND re-export this file in the same session (maintenance rule).
+  Themed via CSS variables injected by DiagramEmbed.svelte.
+-->
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0">
+<style>
+  .fn{position:relative;font-family:ui-sans-serif,system-ui,sans-serif;color:var(--text,#111);background:var(--bg,#fff);padding:6px 4px}
+  .fn-h{font-size:1.05rem;font-weight:700;margin:0 0 2px;color:var(--text-strong,var(--text,#111))}
+  .fn-sub{font-size:0.8rem;color:var(--muted,#555);margin:0 0 12px}
+  .fn-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+  .fn-tab{font-size:0.76rem;font-weight:600;padding:5px 12px;border-radius:7px;border:1px solid var(--border,#d1d5db);background:var(--card,#f8f9fa);color:var(--muted,#555);cursor:pointer}
+  .fn-tab.on{background:var(--accent,#2563eb);border-color:var(--accent,#2563eb);color:#fff}
+  .fn-view{display:none}.fn-view.on{display:block}
+  .fn-legend{display:flex;gap:12px;flex-wrap:wrap;margin:0 0 10px;font-size:0.68rem;color:var(--muted,#555)}
+  .fn-dom{border:1px solid var(--border,#d1d5db);border-radius:10px;padding:10px 12px;margin-bottom:10px;background:var(--card,#f8f9fa)}
+  .fn-dom-h{display:flex;align-items:center;gap:7px;margin:0 0 7px}
+  .fn-dom-t{font-weight:700;font-size:0.88rem;color:var(--text-strong,var(--text,#111))}
+  .fn-dom-s{font-size:0.64rem;color:var(--muted,#6b7280)}
+  .fn-cards{display:flex;flex-wrap:wrap;gap:7px}
+  .fn-cap{border:1px solid var(--border,#d1d5db);border-radius:8px;padding:7px 9px;background:var(--bg,#fff);cursor:pointer;min-width:150px;transition:transform .1s,box-shadow .1s,border-color .1s}
+  .fn-cap:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.13);border-color:var(--accent,#2563eb)}
+  .fn-cap.sel{border-color:var(--accent,#2563eb);box-shadow:0 0 0 2px var(--accent,#2563eb) inset}
+  .fn-cap .cn{font-weight:600;font-size:0.78rem;color:var(--text,#111);display:flex;align-items:center;gap:5px}
+  .fn-cap .cd{font-size:0.66rem;color:var(--muted,#6b7280);margin-top:2px}
+  .st{font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:999px;white-space:nowrap}
+  .st-ship{background:var(--ok-subtle,#dcfce7);color:var(--ok,#15803d)}
+  .st-flight{background:var(--info-subtle,#dbeafe);color:var(--info,#1d4ed8)}
+  .st-back{background:var(--warn-subtle,#fef3c7);color:var(--warn,#b45309)}
+  .fn-j{display:flex;flex-direction:column;gap:0}
+  .fn-jstep{display:grid;grid-template-columns:30px 1fr;gap:9px;align-items:stretch}
+  .fn-jrail{display:flex;flex-direction:column;align-items:center}
+  .fn-jdot{width:22px;height:22px;border-radius:50%;background:var(--accent,#2563eb);color:#fff;font-size:0.66rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .fn-jdot.ship{background:var(--ok,#16a34a)}.fn-jdot.flight{background:var(--info,#2563eb)}.fn-jdot.back{background:var(--warn,#d97706)}
+  .fn-jline{width:2px;flex:1;background:var(--border,#d1d5db);min-height:10px}
+  .fn-jcard{border:1px solid var(--border,#d1d5db);border-radius:8px;padding:8px 11px;margin-bottom:9px;background:var(--card,#f8f9fa);cursor:pointer}
+  .fn-jcard:hover{border-color:var(--accent,#2563eb)}
+  .fn-jcard.sel{border-color:var(--accent,#2563eb);box-shadow:0 0 0 2px var(--accent,#2563eb) inset}
+  .fn-jcard .jt{font-weight:700;font-size:0.8rem;display:flex;align-items:center;gap:7px}
+  .fn-jcard .jw{font-size:0.68rem;color:var(--muted,#6b7280);margin-top:2px}
+  .fn-jcard .ja{font-size:0.64rem;color:var(--muted,#9ca3af);margin-top:3px;font-family:ui-monospace,monospace}
+  .fn-note{font-size:0.68rem;color:var(--muted,#9ca3af);margin-top:10px}
+  .fn-expand{font-size:0.66rem;color:var(--muted,#9ca3af);margin-top:4px;font-style:italic}
+  .fn-hint{font-size:0.68rem;color:var(--muted,#9ca3af);margin-top:12px;font-style:italic}
+  .ov{position:absolute;width:min(360px,86%);max-height:300px;overflow:auto;z-index:9999;border:1px solid var(--border,#d1d5db);border-left:3px solid var(--accent,#2563eb);border-radius:10px;padding:11px 13px;background:var(--bg-elevated,var(--card,#fff));box-shadow:0 8px 26px rgba(0,0,0,.26);font-size:0.78rem;line-height:1.5;color:var(--card-fg,var(--text,#111));display:none}
+  .ov.open{display:block}
+  .ov .dh{font-weight:700;font-size:0.9rem;margin:0 0 5px;display:flex;align-items:center;gap:7px;justify-content:space-between}
+  .ov .dh .x{cursor:pointer;color:var(--muted,#9ca3af);font-weight:700;font-size:1.05rem;padding:0 4px;line-height:1}
+  .ov .dh .x:hover{color:var(--text,#111)}
+  .ov .row{margin:3px 0}.ov .lk{font-weight:600;color:var(--muted,#6b7280);display:inline-block;min-width:60px}
+  .ov code{background:var(--bg-hover,#eef0f2);padding:0 3px;border-radius:3px;font-size:0.9em}
+</style>
+<div class="fn">
+  <p class="fn-h">⚙️ What the App Does — Cetana Labs</p>
+  <p class="fn-sub">Purpose: zero-overhead executive visibility. Leads report a 30-line STATUS; leadership gets an auto portfolio view. Living map — grows with the product.</p>
+  <div class="fn-tabs">
+    <span class="fn-tab on" data-v="dom">🧩 Capability domains</span>
+    <span class="fn-tab" data-v="journey">🚶 User journey</span>
+  </div>
+  <div class="fn-legend">
+    <span><span class="st st-ship">✅ shipped</span> live (M1–M5)</span>
+    <span><span class="st st-flight">🔨 in-flight</span> being built</span>
+    <span><span class="st st-back">📋 backlog</span> planned</span>
+  </div>
+  <div class="fn-view on" data-view="dom"><div id="fn-domains"></div></div>
+  <div class="fn-view" data-view="journey"><div class="fn-j" id="fn-journey"></div></div>
+  <p class="fn-expand">🧩 Data-driven — a new capability is one entry in the model; it renders with its status and detail automatically.</p>
+  <p class="fn-note">Grounded in the User Guide, Project-Owner Guide, product.md, and RFC-006/-008/-013/-016. Trio: Working Model (process) · Runtime Infrastructure (infra) · this (function).</p>
+  <p class="fn-hint">💡 Click a capability or step — detail pops up right beside it.</p>
+  <div class="ov" id="fn-detail"></div>
+</div>
+<script>
+(function(){
+  var root=(document.currentScript&&document.currentScript.closest&&document.currentScript.closest('.fn'));
+  if(!root){var fns=document.querySelectorAll('.fn');root=fns[fns.length-1];}
+  if(!root)root=document;
+  function stchip(s){var m={ship:['st-ship','✅'],flight:['st-flight','🔨'],back:['st-back','📋']}[s];return '<span class="st '+m[0]+'">'+m[1]+'</span>';}
+  var DOMAINS=[
+    {t:'Registry & Portfolio',sub:'the master catalog',caps:[
+      {id:'reg',n:'Master registry',st:'ship',d:'Indexed catalog of all initiatives (LAB-000…005)',does:'Single source of truth for active/completed/onboarding projects; README registry table is a generated export of PocketBase (RFC-016 Phase 3).',how:'App CRUD <code>admin/projects</code> → <code>just export-live-data</code> → <code>generate_registry.py</code>',data:'PocketBase → <code>portfolio.json</code> (export)',sk:'admin/projects · just export-live-data'},
+      {id:'cards',n:'Portfolio UI',st:'ship',d:'Live Sleek-UI portfolio cards',does:'Renders owner-first project cards with health badges on the deployed SPA.',how:'SvelteKit SPA reads PocketBase (or snapshot fallback)',data:'<code>portfolio</code> + <code>users</code>',sk:'app/web'}
+    ]},
+    {t:'Status Engine & Validation',sub:'the certified-truth core',caps:[
+      {id:'status',n:'STATUS.md protocol',st:'ship',d:'30-line executive status per project',does:'Lead reports health/wins/focus/blockers in ≤35 lines; never hand-written — AI generates it.',how:'<code>/project-update</code> → prepends wins, appends journal milestone',data:'<code>STATUS.md</code> + <code>journal.md</code>',sk:'/project-update'},
+      {id:'validate',n:'6-pillar gate',st:'ship',d:'Pre-flight validation → receipt',does:'Audits scraper budget, registry lockstep (now export-matches-live-PB), git hygiene, AST boundaries, live test counts — kills metric drift.',how:'<code>project_validate.py</code> → <code>validation_receipt.json</code>',data:'<code>.gemini/governance/</code>',sk:'/project-validate'}
+    ]},
+    {t:'Broadcasts & Automation',sub:'the visibility output',caps:[
+      {id:'broadcast',n:'WhatsApp briefings',st:'ship',d:'Mobile executive status blocks',does:'Generates emoji-rich, mobile-scannable portfolio/project digests for leadership.',how:'<code>generate_status.py</code>; filters completed + LAB-000',data:'reads <code>STATUS.md</code>',sk:'/project-status'},
+      {id:'cron',n:'9:30 AM IST cron',st:'ship',d:'Daily automated brief',does:'Weekday scheduled broadcast on the GitHub Actions job summary (1-click copy).',how:'<code>project-status-cron.yml</code> (4:00 UTC)',data:'—',sk:'GitHub Actions'},
+      {id:'ping',n:'Lead pings',st:'ship',d:'Stale/onboarding alerts',does:'Idempotent GitHub issues for projects >14d stale or onboarding-pending (excludes LAB-000/completed).',how:'<code>ping_leads.py</code>',data:'reads <code>STATUS.md</code>',sk:'/ping-leads'}
+    ]},
+    {t:'Data Model',sub:'relational source of truth',caps:[
+      {id:'m2m',n:'users ⇄ memberships ⇄ portfolio',st:'ship',d:'Many-to-many relational layer',does:'Models who owns/belongs-to which project; identity keyed by a single authoritative <code>github_handle</code> (RFC-016 Phase 1).',how:'PocketBase master; <code>data/*.json</code> is the committed export; PB schema generated from the model',data:'PocketBase → <code>data/*.json</code>',sk:'generate_pb_schema.py'}
+    ]},
+    {t:'Auth & RBAC',sub:'the access layer',caps:[
+      {id:'oauth',n:'GitHub OAuth',st:'ship',d:'Sign in with GitHub',does:'Authenticates users via PocketBase; upsert-by-handle binds to the existing record (RFC-016 Phase 1, #89), redirect-flow un-pins PB 0.40 (BK-018).',how:'<code>authWithOAuth2Code</code>; <code>OnRecordAuthWithOAuth2</code> upsert hook',data:'<code>users</code> (keyed by <code>github_handle</code>)',sk:'RFC-006/-016 · #89'},
+      {id:'rbac',n:'Per-project roles',st:'ship',d:'Role-scoped access + is_admin tier',does:'Access enforced by PocketBase API rules per the M2M join; the <code>is_admin</code> tier unblocks in-app administration (RFC-008 A1).',how:'PB collection API rules + is_admin',data:'<code>memberships</code>',sk:'RFC-006/-008'},
+      {id:'ownerwrite',n:'Owner-write path',st:'ship',d:'Admins manage projects/developers in-app',does:'Admin CRUD surfaces (admin/projects, admin/developers) write to PocketBase directly (BK-014).',how:'admin CRUD routes → PocketBase',data:'<code>portfolio</code> + <code>users</code>',sk:'BK-014'}
+    ]},
+    {t:'Settings, Branding, Docs & AI',sub:'platform',caps:[
+      {id:'settings',n:'App-level settings',st:'ship',d:'Key/value config + typed accessor + editor',does:'App name/description/branding read from settings; in-app Settings editor (BK-031).',how:'KV collection + typed TS façade + admin/settings UI',data:'<code>settings</code>',sk:'RFC-013 · BK-012/-031'},
+      {id:'branding',n:'Branding & logo',st:'ship',d:'Header/footer branding + logo',does:'App name/description/logo render in the global header/footer (BK-013/-027).',how:'settings-driven header/footer',data:'<code>settings</code>',sk:'BK-013 · BK-027'},
+      {id:'docs',n:'In-app docs view',st:'ship',d:'Consumer docs in the Sleek UI (/docs)',does:'Surfaces audience-filtered docs (User + Project Owner guides) inside the app via a footer link; build-time markdown import. Rich visuals (mermaid + living diagrams) in flight (BK-037).',how:'Vite build-time import + marked/DOMPurify; /docs route',data:'<code>docs/*.md</code> (git)',sk:'BK-024 · BK-037 (visuals)'},
+      {id:'ai',n:'AI assistant',st:'flight',d:'In-app AI capability',does:'Assistant feature — RFC accepted (RFC-015), feasibility spike pending (BK-015).',how:'PocketBase-hook runtime; structured-first retrieval',data:'TBD',sk:'RFC-015 · BK-015'}
+    ]}
+  ];
+  var JOURNEY=[
+    {id:'j-onboard',st:'ship',t:'Admin onboards a project',w:'App CRUD (admin/projects) creates the project by owner github_handle → export → STATUS.md, badge → 🟢 On Track',a:'admin/projects · just export-live-data'},
+    {id:'j-work',st:'ship',t:'Lead does the work',w:'Builds in their OWN external repo (code lives remote, not here)',a:'remote repo'},
+    {id:'j-validate',st:'ship',t:'Pre-flight validation',w:'6-pillar gate certifies metrics → validation_receipt.json',a:'/project-validate'},
+    {id:'j-update',st:'ship',t:'Lead closes sprint → updates status',w:'Certified wins prepended; journal milestone appended; ≤35 lines',a:'/project-update'},
+    {id:'j-portfolio',st:'ship',t:'Status goes live on the portfolio',w:'Sleek UI (Vercel) renders the updated card from PocketBase',a:'app/web'},
+    {id:'j-broadcast',st:'ship',t:'Leadership sees the brief',w:'9:30 AM IST cron posts the WhatsApp-ready digest; on-demand /project-status anytime',a:'cron · /project-status'},
+    {id:'j-ping',st:'ship',t:'Stale project nudged',w:'>14d without update → gentle reminder issue to the lead',a:'/ping-leads'},
+    {id:'j-auth',st:'ship',t:'User signs in with GitHub',w:'GitHub OAuth (upsert-by-handle) + RBAC + is_admin → admins self-serve CRUD in-app',a:'RFC-006/-016 · #89 · BK-014'}
+  ];
+  var detail=root.querySelector('#fn-detail');
+  function closeOv(){detail.classList.remove('open');root.querySelectorAll('.fn-cap,.fn-jcard').forEach(function(x){x.classList.remove('sel')});}
+  function place(anchor){
+    detail.style.visibility='hidden';detail.classList.add('open');
+    var rr=root.getBoundingClientRect(),ar=anchor.getBoundingClientRect();
+    var ow=detail.offsetWidth,oh=detail.offsetHeight;
+    var top=(ar.bottom-rr.top)+6;
+    var left=(ar.left-rr.left)+(ar.offsetWidth/2)-(ow/2);
+    left=Math.max(4,Math.min(left,rr.width-ow-4));
+    if(top+oh>rr.height-2 && (ar.top-rr.top)-oh-6>0){top=(ar.top-rr.top)-oh-6;}
+    detail.style.left=left+'px';detail.style.top=top+'px';detail.style.visibility='';
+  }
+  function cls(){return '<span class="x" data-x="1">✕</span>';}
+  function wire(){var x=detail.querySelector('[data-x]');if(x)x.addEventListener('click',function(e){e.stopPropagation();closeOv();});}
+  function showCap(c,anchor){
+    detail.innerHTML='<p class="dh"><span>'+c.n+' '+stchip(c.st)+'</span>'+cls()+'</p><p class="row"><span class="lk">Does</span> '+c.does+'</p><p class="row"><span class="lk">How</span> '+c.how+'</p><p class="row"><span class="lk">Data</span> '+c.data+'</p><p class="row"><span class="lk">Driven by</span> <code>'+c.sk+'</code></p>';wire();place(anchor);
+  }
+  function showStep(s,anchor){
+    detail.innerHTML='<p class="dh"><span>'+s.t+' '+stchip(s.st)+'</span>'+cls()+'</p><p class="row"><span class="lk">What</span> '+s.w+'</p><p class="row"><span class="lk">Via</span> <code>'+s.a+'</code></p>';wire();place(anchor);
+  }
+  var dc=root.querySelector('#fn-domains');
+  DOMAINS.forEach(function(dom){
+    var d=document.createElement('div');d.className='fn-dom';
+    d.innerHTML='<div class="fn-dom-h"><span class="fn-dom-t">'+dom.t+'</span><span class="fn-dom-s">· '+dom.sub+'</span></div>';
+    var cards=document.createElement('div');cards.className='fn-cards';
+    dom.caps.forEach(function(c){
+      var el=document.createElement('div');el.className='fn-cap';
+      el.innerHTML='<div class="cn">'+c.n+' '+stchip(c.st)+'</div><div class="cd">'+c.d+'</div>';
+      el.addEventListener('click',function(e){e.stopPropagation();root.querySelectorAll('.fn-cap,.fn-jcard').forEach(function(x){x.classList.remove('sel')});el.classList.add('sel');showCap(c,el);});
+      cards.appendChild(el);
+    });
+    d.appendChild(cards);dc.appendChild(d);
+  });
+  var jc=root.querySelector('#fn-journey');
+  JOURNEY.forEach(function(s,i){
+    var step=document.createElement('div');step.className='fn-jstep';
+    step.innerHTML='<div class="fn-jrail"><div class="fn-jdot '+s.st+'">'+(i+1)+'</div>'+(i<JOURNEY.length-1?'<div class="fn-jline"></div>':'')+'</div>';
+    var card=document.createElement('div');card.className='fn-jcard';
+    card.innerHTML='<div class="jt">'+s.t+' '+stchip(s.st)+'</div><div class="jw">'+s.w+'</div><div class="ja">'+s.a+'</div>';
+    card.addEventListener('click',function(e){e.stopPropagation();root.querySelectorAll('.fn-cap,.fn-jcard').forEach(function(x){x.classList.remove('sel')});card.classList.add('sel');showStep(s,card);});
+    step.appendChild(card);jc.appendChild(step);
+  });
+  document.addEventListener('click',function(e){if(detail.classList.contains('open')&&!detail.contains(e.target)&&!e.target.closest('.fn-cap')&&!e.target.closest('.fn-jcard'))closeOv();});
+  var tabs=root.querySelectorAll('.fn-tab'),views=root.querySelectorAll('.fn-view');
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('on')});t.classList.add('on');
+    views.forEach(function(v){v.classList.toggle('on',v.getAttribute('data-view')===t.dataset.v)});closeOv();
+  })});
+})();
+</script>
+</body>
+</html>

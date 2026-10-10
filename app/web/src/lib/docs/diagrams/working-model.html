@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--
+  Cetana Labs — Working Model (living diagram), committed export for the in-app /docs embed (BK-037).
+  SOURCE OF TRUTH: Kiro Crew artifact slug fd26dcf5ca990145 (v15, three-tier roles, 2026-10-10).
+  On any process change, update the artifact AND re-export this file in the same session (maintenance rule).
+  Themed via CSS variables injected by DiagramEmbed.svelte (--text, --bg, --accent, …).
+-->
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0">
+<style>
+  .wm{position:relative;font-family:ui-sans-serif,system-ui,sans-serif;color:var(--text,#111);background:var(--bg,#fff);padding:6px 4px}
+  .wm-h{font-size:1.05rem;font-weight:700;margin:0 0 2px;color:var(--text-strong,var(--text,#111))}
+  .wm-sub{font-size:0.8rem;color:var(--muted,#555);margin:0 0 12px}
+  .wm-tabs{display:flex;gap:6px;margin-bottom:14px}
+  .wm-tab{font-size:0.76rem;font-weight:600;padding:5px 12px;border-radius:7px;border:1px solid var(--border,#d1d5db);background:var(--card,#f8f9fa);color:var(--muted,#555);cursor:pointer}
+  .wm-tab.on{background:var(--accent,#2563eb);border-color:var(--accent,#2563eb);color:#fff}
+  .wm-view{display:none}.wm-view.on{display:block}
+  .wm-row{display:flex;gap:10px;flex-wrap:wrap}
+  .wm-card{flex:1 1 180px;border:1px solid var(--border,#d1d5db);border-radius:10px;padding:12px 14px;background:var(--card,#f8f9fa);color:var(--card-fg,var(--text,#111));cursor:pointer;transition:transform .1s,box-shadow .1s,border-color .1s}
+  .wm-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.13);border-color:var(--accent,#2563eb)}
+  .wm-card.sel{box-shadow:0 0 0 2px var(--accent,#2563eb) inset}
+  .wm-op-b{border-top:3px solid var(--info,#2563eb)}.wm-ex-b{border-top:3px solid var(--ok,#16a34a)}.wm-fb-b{border-top:3px solid #eab308}.wm-bw-b{border-top:3px solid #7c3aed}
+  .wm-badge{display:inline-block;font-size:0.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;margin-bottom:6px}
+  .wm-op{background:var(--info-subtle,var(--accent-subtle,#dbeafe));color:var(--info,#1d4ed8)}.wm-ex{background:var(--ok-subtle,#dcfce7);color:var(--ok,#15803d)}.wm-fb{background:var(--warn-subtle,#fef3c7);color:var(--warn,#b45309)}.wm-bw{background:var(--accent-subtle,#ddd6fe);color:#6d28d9}
+  .wm-title{font-weight:700;font-size:0.95rem;margin:0 0 1px;color:var(--card-fg,var(--text,#111))}
+  .wm-role{font-size:0.72rem;color:var(--muted,#6b7280);margin:0 0 8px}
+  .wm-grp{font-size:0.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted,#6b7280);margin:7px 0 3px}
+  .wm-chips{display:flex;flex-wrap:wrap;gap:4px}
+  .wm-chip{font-size:0.68rem;font-family:ui-monospace,monospace;padding:1px 6px;border-radius:5px;background:var(--bg-hover,#eef0f2);border:1px solid var(--border,#e5e7eb);color:var(--text,#111)}
+  .wm-chip.def{background:var(--ok-subtle,#dcfce7);border-color:var(--ok,#16a34a);color:var(--ok,#15803d);font-weight:700}
+  .wm-chip.esc{background:var(--warn-subtle,#fef3c7);border-color:var(--warn,#d97706);color:var(--warn,#b45309);font-weight:700}
+  .wm-none{font-size:0.72rem;font-style:italic;color:var(--muted,#9ca3af)}
+  .wm-lanes{display:grid;grid-template-columns:92px 1fr;border:1px solid var(--border,#d1d5db);border-radius:10px;overflow:hidden}
+  .wm-lane{display:contents}
+  .wm-lh{padding:9px 8px;font-size:0.7rem;font-weight:700;display:flex;align-items:center;border-bottom:1px solid var(--border,#e5e7eb);background:var(--card,#f8f9fa)}
+  .wm-lh.you{color:var(--text-strong,#111)}.wm-lh.op{color:var(--info,#1d4ed8)}.wm-lh.ex{color:var(--ok,#15803d)}
+  .wm-lbody{padding:8px;border-bottom:1px solid var(--border,#e5e7eb);display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
+  .wm-step{font-size:0.72rem;padding:6px 9px;border-radius:7px;border:1px solid var(--border,#d1d5db);background:var(--bg,#fff);color:var(--text,#111);min-width:118px;cursor:pointer}
+  .wm-step:hover{border-color:var(--accent,#2563eb)}
+  .wm-step.sel{box-shadow:0 0 0 2px var(--accent,#2563eb) inset}
+  .wm-step .n{font-weight:700;opacity:.6;margin-right:3px}
+  .wm-step .sk{display:block;font-family:ui-monospace,monospace;font-size:0.66rem;color:var(--muted,#6b7280);margin-top:2px}
+  .wm-step.gate{border-color:var(--info,#2563eb)}
+  .wm-step.merge{border-color:var(--ok,#16a34a)}
+  .wm-rule{margin-top:12px;font-size:0.76rem;color:var(--muted,#555);border-left:3px solid var(--accent,#2563eb);padding-left:10px}
+  .wm-k{font-weight:700;color:var(--text-strong,var(--text,#111))}
+  .wm-note{font-size:0.68rem;color:var(--muted,#9ca3af);margin-top:8px}
+  .wm-hint{font-size:0.68rem;color:var(--muted,#9ca3af);margin-top:12px;font-style:italic}
+  .sq{position:relative}
+  .sq-head{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0}
+  .sq-actor{text-align:center;font-size:0.74rem;font-weight:700;padding:7px 4px;border-radius:7px;margin:0 6px}
+  .sq-actor.you{background:var(--bg-hover,#eef0f2);color:var(--text-strong,#111)}
+  .sq-actor.op{background:var(--info-subtle,#dbeafe);color:var(--info,#1d4ed8)}
+  .sq-actor.ex{background:var(--ok-subtle,#dcfce7);color:var(--ok,#15803d)}
+  .sq-grid{position:relative;display:grid;grid-template-columns:1fr 1fr 1fr}
+  .sq-life{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed var(--border,#cbd5e1)}
+  .sq-life.l0{left:16.66%}.sq-life.l1{left:50%}.sq-life.l2{left:83.33%}
+  .sq-msg{grid-column:1 / -1;position:relative;min-height:34px;display:flex;align-items:center;padding:3px 0;z-index:1;cursor:pointer}
+  .sq-msg:hover .sq-lbl{border-color:var(--accent,#2563eb)}
+  .sq-bar{position:absolute;height:0;border-top:2px solid var(--muted,#64748b);top:50%}
+  .sq-bar.gate-c{border-color:var(--info,#2563eb)}.sq-bar.merge-c{border-color:var(--ok,#16a34a)}
+  .sq-bar::after{content:"";position:absolute;top:-5px;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent}
+  .sq-bar.toR::after{right:-1px;border-left:7px solid var(--muted,#64748b)}
+  .sq-bar.toL::after{left:-1px;border-right:7px solid var(--muted,#64748b)}
+  .sq-bar.gate-c.toR::after{border-left-color:var(--info,#2563eb)}.sq-bar.gate-c.toL::after{border-right-color:var(--info,#2563eb)}
+  .sq-bar.merge-c.toR::after{border-left-color:var(--ok,#16a34a)}.sq-bar.merge-c.toL::after{border-right-color:var(--ok,#16a34a)}
+  .sq-lbl{position:absolute;top:50%;transform:translateY(-50%) translateX(-50%);background:var(--bg,#fff);padding:2px 7px;border:1px solid var(--border,#e5e7eb);border-radius:6px;font-size:0.7rem;color:var(--text,#111);white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.06);max-width:62%;overflow:hidden;text-overflow:ellipsis}
+  .sq-lbl code{background:var(--bg-hover,#eef0f2);padding:0 3px;border-radius:3px;font-size:0.9em}
+  .sq-lbl .g{font-weight:700;color:var(--info,#1d4ed8)}.sq-lbl .m{font-weight:700;color:var(--ok,#15803d)}
+  .sq-n{position:absolute;left:-2px;top:50%;transform:translateY(-50%);font-size:0.62rem;font-weight:700;color:var(--muted,#9ca3af);z-index:2}
+  .sq-self{position:absolute;top:50%;transform:translateY(-50%) translateX(-50%);display:flex;align-items:center;gap:5px}
+  .sq-self .loop{font-size:0.85rem;color:var(--muted,#64748b)}
+  .sq-alt{grid-column:1 / -1;position:relative;z-index:1;text-align:center;padding:5px 0}
+  .sq-alt span{background:var(--warn-subtle,#fef3c7);color:var(--warn,#b45309);font-size:0.67rem;font-style:italic;padding:2px 10px;border-radius:999px;border:1px dashed var(--warn,#d97706)}
+  .ov{position:absolute;width:min(360px,86%);max-height:300px;overflow:auto;z-index:9999;border:1px solid var(--border,#d1d5db);border-left:3px solid var(--accent,#2563eb);border-radius:10px;padding:11px 13px;background:var(--bg-elevated,var(--card,#fff));box-shadow:0 8px 26px rgba(0,0,0,.26);font-size:0.78rem;line-height:1.5;color:var(--card-fg,var(--text,#111));display:none}
+  .ov.open{display:block}
+  .ov .dh{font-weight:700;font-size:0.9rem;margin:0 0 5px;display:flex;align-items:center;gap:7px;justify-content:space-between}
+  .ov .dh .x{cursor:pointer;color:var(--muted,#9ca3af);font-weight:700;font-size:1.05rem;padding:0 4px;line-height:1}
+  .ov .dh .x:hover{color:var(--text,#111)}
+  .ov .row{margin:3px 0}.ov .lk{font-weight:600;color:var(--muted,#6b7280);display:inline-block;min-width:60px}
+  .ov code{background:var(--bg-hover,#eef0f2);padding:0 3px;border-radius:3px;font-size:0.9em}
+</style>
+<div class="wm">
+  <p class="wm-h">🧭 How We Work — Cetana Labs</p>
+  <p class="wm-sub">Human-directed · AI-assisted · human-gated. Living doc. Click a surface, step, or message — detail pops up beside it.</p>
+  <div class="wm-tabs">
+    <span class="wm-tab on" data-v="surfaces">Surfaces + Skills</span>
+    <span class="wm-tab" data-v="flow">Flow (lanes)</span>
+    <span class="wm-tab" data-v="seq">Sequence</span>
+  </div>
+  <div class="wm-view on" data-view="surfaces">
+    <div class="wm-row">
+      <div class="wm-card wm-op-b" data-k="op">
+        <span class="wm-badge wm-op">Primary Operator</span><p class="wm-title">🤖 KiroCrew</p>
+        <p class="wm-role">Decide &amp; coordinate · stateful · never merges</p>
+        <div class="wm-grp">Plan / Sprint</div><div class="wm-chips"><span class="wm-chip">/sprint-start</span><span class="wm-chip">/plan-start</span><span class="wm-chip">/plan-done</span><span class="wm-chip">/sprint-done</span></div>
+        <div class="wm-grp">Govern / Project</div><div class="wm-chips"><span class="wm-chip">/project-update</span><span class="wm-chip">/project-status</span><span class="wm-chip">/project-validate</span><span class="wm-chip">/ping-leads</span><span class="wm-chip">just export-live-data</span></div>
+        <div class="wm-grp">Review / Record</div><div class="wm-chips"><span class="wm-chip">/review-pr</span><span class="wm-chip">/audit-doc</span><span class="wm-chip">/audit-project</span><span class="wm-chip">/log-milestone</span><span class="wm-chip">/commit-changes</span><span class="wm-chip">/push-changes</span><span class="wm-chip">/commit-and-push-changes</span></div>
+      </div>
+      <div class="wm-card wm-ex-b" data-k="ex">
+        <span class="wm-badge wm-ex">Primary Executor</span><p class="wm-title">🪐 Antigravity</p>
+        <p class="wm-role">Build &amp; verify · executor-only · never operates · never merges</p>
+        <div class="wm-grp">Role</div><div class="wm-chips"><span class="wm-chip def">⚡ default runner — all builds (free)</span></div>
+        <div class="wm-grp">Build / Verify</div><div class="wm-chips"><span class="wm-chip">tasks.md</span><span class="wm-chip">/spec-run</span><span class="wm-chip">/validate-local</span><span class="wm-chip">/verification-done</span><span class="wm-chip">/env-doctor</span></div>
+        <div class="wm-grp">Local stack</div><div class="wm-chips"><span class="wm-chip">/start-local</span><span class="wm-chip">/stop-local</span><span class="wm-chip">/status-local</span></div>
+        <div class="wm-grp">Deploy / Staging</div><div class="wm-chips"><span class="wm-chip">/deploy-adhoc</span><span class="wm-chip">/status-staging</span><span class="wm-chip">/validate-staging</span></div>
+      </div>
+      <div class="wm-card wm-bw-b" data-k="bw">
+        <span class="wm-badge wm-bw">Delegated</span><p class="wm-title">⚙️ Background worker</p>
+        <p class="wm-role">Operator-spawned · bounded · gate-free</p>
+        <div class="wm-grp">Good for</div><div class="wm-chips"><span class="wm-chip">research</span><span class="wm-chip">analysis</span><span class="wm-chip">doc drafts</span><span class="wm-chip">diagram data</span><span class="wm-chip">investigation</span><span class="wm-chip">bulk processing</span></div>
+        <div class="wm-grp">Never</div><div class="wm-chips"><span class="wm-chip">push main</span><span class="wm-chip">merge</span></div>
+      </div>
+      <div class="wm-card wm-fb-b" data-k="fb">
+        <span class="wm-badge wm-fb">Secondary · break-glass</span><p class="wm-title">🌐💻 Kiro Web / IDE</p>
+        <p class="wm-role">Either role — only if KiroCrew is unavailable</p>
+        <div class="wm-grp">Can stand in as</div><div class="wm-chips"><span class="wm-chip">Operator (author Spec, govern)</span><span class="wm-chip">Executor (build)</span></div>
+        <div class="wm-grp">Rule</div><p class="wm-none">Kiro-native (reads committed <code>.kiro/</code> → skills are real <code>/commands</code>). <b>Emergency continuity, not a parallel operator lane</b> — an operator stint here loses KiroCrew's persistent memory.</p>
+      </div>
+    </div>
+    <div class="wm-rule"><span class="wm-k">Three tiers.</span> <span class="wm-k">KiroCrew = Primary Operator</span> (decides &amp; governs, stateful) → <span class="wm-k">Antigravity = Primary Executor</span> (builds &amp; verifies, <span class="wm-k">executor-only — never operates</span>, because it is stateless) → <span class="wm-k">the merge gate is always yours</span>. <span class="wm-k">Kiro Web / IDE = Secondary (break-glass)</span>: Kiro-native, so each can stand in for <i>either</i> role — but <span class="wm-k">only when KiroCrew is unavailable</span>, as emergency continuity, never routine. Operator authority stays concentrated where the memory + governance live; executor throughput scales out on Antigravity. <span class="wm-k">More executors = more throughput, never more operator or merge authority.</span> Each surface uses a <span class="wm-k">separate clone</span>, sync via origin. Project metadata is app-CRUD (<code>admin/projects</code>) → <code>just export-live-data</code> → committed <code>data/</code> (RFC-016 Phase 3).</div>
+  </div>
+  <div class="wm-view" data-view="flow">
+    <div class="wm-lanes">
+      <div class="wm-lane"><div class="wm-lh you">👤 You</div><div class="wm-lbody">
+        <div class="wm-step" data-s="f1"><span class="n">①</span>Set direction</div>
+        <div class="wm-step gate" data-s="f3"><span class="n">③</span>Gate: approve Spec merge<span class="sk">/plan-done (your OK)</span></div>
+        <div class="wm-step" data-s="f5"><span class="n">⑤</span>Verify feature<span class="sk">/verification-done</span></div>
+        <div class="wm-step merge" data-s="f7"><span class="n">⑦</span>Approve &amp; merge PR<span class="sk">your call — gate</span></div>
+      </div></div>
+      <div class="wm-lane"><div class="wm-lh op">🤖 KiroCrew</div><div class="wm-lbody">
+        <div class="wm-step" data-s="f1b"><span class="n">①</span>Brainstorm w/ you<span class="sk">/plan-start</span></div>
+        <div class="wm-step" data-s="f2"><span class="n">②</span>Author Spec<span class="sk">reqs·design·tasks</span></div>
+        <div class="wm-step" data-s="f3b"><span class="n">③</span>Merge Spec to main<span class="sk">/plan-done</span></div>
+        <div class="wm-step gate" data-s="f6"><span class="n">⑥</span>Surface PR checklist<span class="sk">/review-pr → STOP</span></div>
+        <div class="wm-step" data-s="f8"><span class="n">⑧</span>Lockstep + capture why<span class="sk">/log-milestone·Decision Journal</span></div>
+      </div></div>
+      <div class="wm-lane"><div class="wm-lh ex">🪐 Antigravity</div><div class="wm-lbody">
+        <div class="wm-step" data-s="f4"><span class="n">④</span>Execute on feat/ branch<span class="sk">/spec-run · tasks.md</span></div>
+        <div class="wm-step" data-s="f4b"><span class="n">④</span>Open PR + self-validate<span class="sk">CI + 6-pillar + EARS</span></div>
+      </div></div>
+    </div>
+    <p class="wm-note">① → ⑧ top-to-bottom; the ball crosses lanes at each handoff. Merge-first: Spec (②) merges (③) before build (④). The executor lane is <b>Antigravity</b> (primary, executor-only); Kiro Web/IDE stand in only as break-glass if KiroCrew is unavailable. Gate-free background workers (not shown) run in parallel off this path for bounded, reversible work.</p>
+  </div>
+  <div class="wm-view" data-view="seq">
+    <div class="sq">
+      <div class="sq-head">
+        <span class="sq-actor you">👤 You</span><span class="sq-actor op">🤖 KiroCrew</span><span class="sq-actor ex">🪐 Antigravity</span>
+      </div>
+      <div class="sq-grid" id="sqgrid">
+        <span class="sq-life l0"></span><span class="sq-life l1"></span><span class="sq-life l2"></span>
+      </div>
+      <p class="wm-note">Each message sits on its sender's lifeline, arrow spans to the receiver. ↺ = self-step. Click a message for detail. Two gates (blue), final merge (green). The executor is Antigravity (primary, executor-only); Kiro Web/IDE are break-glass secondaries.</p>
+    </div>
+  </div>
+  <p class="wm-hint">💡 Click a surface, step, or message — detail pops up right beside it.</p>
+  <div class="ov" id="wm-detail"></div>
+</div>
+<script>
+(function(){
+  var scripts=document.getElementsByTagName('script');
+  var root=(document.currentScript&&document.currentScript.closest&&document.currentScript.closest('.wm'));
+  if(!root){var wms=document.querySelectorAll('.wm');root=wms[wms.length-1];}
+  if(!root)root=document;
+  var detail=root.querySelector('#wm-detail');
+  function closeOv(){detail.classList.remove('open');root.querySelectorAll('.wm-card,.wm-step,.sq-msg').forEach(function(x){x.classList.remove('sel')});}
+  function place(anchor){
+    detail.style.visibility='hidden';detail.classList.add('open');
+    var rr=root.getBoundingClientRect(),ar=anchor.getBoundingClientRect();
+    var ow=detail.offsetWidth,oh=detail.offsetHeight;
+    var top=(ar.bottom-rr.top)+6;
+    var left=(ar.left-rr.left)+(ar.offsetWidth/2)-(ow/2);
+    left=Math.max(4,Math.min(left,rr.width-ow-4));
+    if(top+oh>rr.height-2 && (ar.top-rr.top)-oh-6>0){top=(ar.top-rr.top)-oh-6;}
+    detail.style.left=left+'px';detail.style.top=top+'px';detail.style.visibility='';
+  }
+  function show(title,rows,anchor){
+    var html='<p class="dh"><span>'+title+'</span><span class="x" data-x="1">✕</span></p>';
+    rows.forEach(function(r){html+='<p class="row"><span class="lk">'+r[0]+'</span> '+r[1]+'</p>';});
+    detail.innerHTML=html;var x=detail.querySelector('[data-x]');if(x)x.addEventListener('click',function(e){e.stopPropagation();closeOv();});
+    place(anchor);
+  }
+  var SURF={
+    op:{t:'🤖 KiroCrew — Primary Operator',rows:[['Role','Decide &amp; coordinate; holds persistent per-project memory.'],['Does','Brainstorm, author RFCs/Specs, governance ops, PR review, spawn workers.'],['Never','Merges — opens PRs, self-validates, STOP-and-holds at your gate.'],['Skills','plan/sprint · project/govern (project metadata now app-CRUD → <code>just export-live-data</code>) · review/record (incl. /push-changes + /commit-and-push-changes).']]},
+    ex:{t:'🪐 Antigravity — Primary Executor',rows:[['Role','Build &amp; verify; where the running system lives. <b>Executor-only — never operates</b>, because it is a stateless build surface with no persistent memory or governance skills.'],['Default','Runs <b>all</b> builds (free, AI Pro): reads the Spec&rsquo;s <code>tasks.md</code> directly, builds on a <code>feat/</code> branch, opens a PR via <code>gh api</code>, STOP-and-holds.'],['Never','Pushes <code>main</code>, merges, or acts as Operator. Every PR goes through <code>/review-pr</code> + your gate.'],['Workspace','Its own clone <code>cetana-labs-antigravity/</code> — sync via origin, never a shared worktree.']]},
+    bw:{t:'⚙️ Background worker — Delegated',rows:[['Role','Operator-spawned parallel worker for bounded, reversible, off-protected-path work.'],['Good for','Research, analysis, doc drafts, diagram data, scoped investigation, bulk processing.'],['How','<code>spawn_run</code> → runs in parallel → Operator validates the result + reports.'],['Never','Pushes <code>main</code> or merges. Code destined for main still goes via Antigravity + PR + the human gate.']]},
+    fb:{t:'🌐💻 Kiro Web / IDE — Secondary (break-glass)',rows:[['Role','Emergency continuity. Kiro-native (reads committed <code>.kiro/</code> → skills are real <code>/commands</code>), so each can stand in for <i>either</i> role.'],['Can operate','Author a Spec, run a governance skill — but a stint here loses KiroCrew&rsquo;s persistent memory, so it is break-glass only.'],['Can execute','Run a build like Antigravity when needed.'],['Rule','<b>Only when KiroCrew is genuinely unavailable</b> — emergency continuity, NOT a parallel operator lane. Primary things stay planned/modeled around KiroCrew.']]}
+  };
+  root.querySelectorAll('.wm-card').forEach(function(c){c.addEventListener('click',function(e){
+    e.stopPropagation();root.querySelectorAll('.wm-card,.wm-step,.sq-msg').forEach(function(x){x.classList.remove('sel')});c.classList.add('sel');
+    var d=SURF[c.dataset.k];show(d.t,d.rows,c);
+  });});
+  var FLOW={
+    f1:['① Set direction',[['Who','You'],['What','Frame the goal to the Operator.']]],
+    f1b:['① Brainstorm',[['Who','KiroCrew'],['Via','<code>/plan-start</code>'],['What','Shape the topic with you.']]],
+    f2:['② Author Spec',[['Who','KiroCrew'],['What','requirements (EARS DoD) · design · tasks.']]],
+    f3:['③ Gate: approve Spec merge',[['Who','You — GATE 1'],['What','Approve merging the Spec to main.']]],
+    f3b:['③ Merge Spec to main',[['Who','KiroCrew'],['Via','<code>/plan-done</code>'],['What','Doc PR — merge-first, before build.']]],
+    f4:['④ Execute',[['Who','Antigravity (Primary Executor)'],['Via','<code>/spec-run</code> → <code>tasks.md</code>'],['What','Run tasks.md on the feat/ branch. Kiro Web/IDE only as break-glass if KiroCrew is unavailable.']]],
+    f4b:['④ Open PR + self-validate',[['Who','Antigravity'],['What','CI + 6-pillar + EARS DoD self-check.']]],
+    f5:['⑤ Verify feature',[['Who','You'],['Via','<code>/verification-done</code>'],['What','Exercise the feature; fixes land on the same PR.']]],
+    f6:['⑥ Surface PR checklist',[['Who','KiroCrew'],['Via','<code>/review-pr</code>'],['What','CI + diff + EARS + lockstep → STOP.']]],
+    f7:['⑦ Approve &amp; merge PR',[['Who','You — GATE 2'],['What','Squash-merge to main.']]],
+    f8:['⑧ Lockstep + capture why',[['Who','KiroCrew'],['Via','<code>/log-milestone</code> + Decision Journal'],['What','Sync registries + record the why.']]]
+  };
+  root.querySelectorAll('.wm-step').forEach(function(s){s.addEventListener('click',function(e){
+    e.stopPropagation();root.querySelectorAll('.wm-card,.wm-step,.sq-msg').forEach(function(x){x.classList.remove('sel')});s.classList.add('sel');
+    var d=FLOW[s.dataset.s];if(d)show(d[0],d[1],s);
+  });});
+  var CEN=[16.66,50,83.33],ACT=['You','KiroCrew','Antigravity'];
+  var msgs=[
+    {n:1,f:0,t:1,l:'"Let&rsquo;s build X" — set direction',det:'You frame the goal to the Operator.'},
+    {n:2,f:1,t:1,l:'author Spec <code>/plan-start</code>',det:'KiroCrew drafts requirements·design·tasks.'},
+    {n:3,f:1,t:0,l:'"Spec ready — approve merge?"',det:'KiroCrew asks for your merge approval.'},
+    {n:4,f:0,t:1,l:'<span class="g">GATE 1</span> approve',k:'gate',det:'You approve merging the Spec (first human gate).'},
+    {n:5,f:1,t:1,l:'merge Spec to main <code>/plan-done</code>',det:'Doc PR merged — merge-first, before any build.'},
+    {n:6,f:0,t:2,l:'kick off build on Antigravity',det:'You kick off execution on Antigravity, the primary (free) executor.'},
+    {n:7,f:2,t:2,l:'execute <code>tasks.md</code> on <code>feat/</code>',det:'Antigravity builds on the feat/ branch the Spec named (runs tasks.md via /spec-run).'},
+    {n:8,f:2,t:2,l:'open PR + self-validate',det:'CI + 6-pillar + EARS DoD self-check; STOP-and-hold (never merges).'},
+    {n:9,f:0,t:2,l:'verify <code>/verification-done</code>',det:'You exercise the feature; fixes land on the same PR.'},
+    {alt:'issues found → Antigravity fixes on the SAME PR, re-verify ↺'},
+    {n:10,f:2,t:1,l:'verification record → <code>IN_REVIEW</code>',det:'The executor records the verdict; lifecycle advances.'},
+    {n:11,f:1,t:0,l:'<code>/review-pr</code> checklist + STOP',det:'KiroCrew surfaces the gate checklist, then stops.'},
+    {alt:'changes requested → You ask Antigravity to iterate ↺'},
+    {n:12,f:0,t:1,l:'<span class="m">GATE 2</span> approve &amp; squash-merge',k:'merge',det:'You squash-merge to main (second human gate).'},
+    {n:13,f:1,t:1,l:'lockstep + Decision Journal <code>/log-milestone</code>',det:'KiroCrew syncs registries + records the why.'}
+  ];
+  var grid=root.querySelector('#sqgrid');
+  msgs.forEach(function(m){
+    if(m.alt){var a=document.createElement('div');a.className='sq-alt';a.innerHTML='<span>alt — '+m.alt+'</span>';grid.appendChild(a);return;}
+    var rowel=document.createElement('div');rowel.className='sq-msg';
+    rowel.innerHTML='<span class="sq-n">'+m.n+'</span>';
+    if(m.f===m.t){
+      var self=document.createElement('div');self.className='sq-self';self.style.left=CEN[m.f]+'%';
+      self.innerHTML='<span class="loop">↺</span><span class="sq-lbl" style="position:static;transform:none;max-width:none">'+m.l+'</span>';
+      rowel.appendChild(self);
+    }else{
+      var lo=Math.min(CEN[m.f],CEN[m.t]),hi=Math.max(CEN[m.f],CEN[m.t]),dir=m.t>m.f?'toR':'toL';
+      var bar=document.createElement('div');bar.className='sq-bar '+dir+(m.k==='gate'?' gate-c':(m.k==='merge'?' merge-c':''));
+      bar.style.left=lo+'%';bar.style.width=(hi-lo)+'%';rowel.appendChild(bar);
+      var lbl=document.createElement('span');lbl.className='sq-lbl';lbl.innerHTML=m.l;lbl.style.left=((lo+hi)/2)+'%';rowel.appendChild(lbl);
+    }
+    rowel.addEventListener('click',function(e){
+      e.stopPropagation();root.querySelectorAll('.wm-card,.wm-step,.sq-msg').forEach(function(x){x.classList.remove('sel')});rowel.classList.add('sel');
+      show('Step '+m.n+' · '+ACT[m.f]+' → '+ACT[m.t],[['What',m.det]],rowel);
+    });
+    grid.appendChild(rowel);
+  });
+  document.addEventListener('click',function(e){if(detail.classList.contains('open')&&!detail.contains(e.target)&&!e.target.closest('.wm-card')&&!e.target.closest('.wm-step')&&!e.target.closest('.sq-msg'))closeOv();});
+  var tabs=root.querySelectorAll('.wm-tab'),views=root.querySelectorAll('.wm-view');
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    tabs.forEach(function(x){x.classList.remove('on')});t.classList.add('on');
+    views.forEach(function(view){view.classList.toggle('on',view.getAttribute('data-view')===t.dataset.v)});closeOv();
+  })});
+})();
+</script>
+</body>
+</html>

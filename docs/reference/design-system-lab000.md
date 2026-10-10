@@ -100,6 +100,24 @@ Map the existing Cetana health badges onto the `DESIGN.md` severity roles:
 | ⏸️ Paused / informational | Info | `--info-soft` / `--info` |
 
 Always render the **word** alongside the color (e.g. "On Track", "Blocked").
+
+---
+
+## 6. In-App Navigation Standard
+
+Per `BK-037` (`in-app-docs-visuals`), in-app consumer views adhere to a strict separation of concerns between top-level shell chrome and contextual subpage navigation:
+
+- **Header owns "home" & primary planes**: The global sticky header (`+layout.svelte`) provides brand identity, dashboard/portfolio home access, admin tabs, and user authentication state. Home controls are not duplicated inside subpage content.
+- **Breadcrumb owns parent hierarchy ("where am I / back to parent")**: Subpages (such as `/docs`) render a single semantic breadcrumb at the top of the content view:
+  ```text
+  Dashboard › Docs › <Active Guide Title>
+  ```
+  - `Dashboard` links to `{base}/`
+  - `Docs` links to `{base}/docs`
+  - `<Active Guide Title>` denotes the current document or interactive view (e.g. `User Guide`, `Project Owner Guide`, `Sprint Lifecycle`, `Living Diagrams`)
+- **No redundant back-links**: Subpages must not render secondary back controls (e.g. standalone "← Back to Dashboard" links) that duplicate the breadcrumb and header affordances.
+- **External links are explicitly marked**: Repository files and external tools use dedicated affordances marked with `↗` (e.g. `View source on GitHub ↗`). In-app views never leak raw repo paths into primary consumer navigation.
+
 ---
 
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
