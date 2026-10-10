@@ -5,6 +5,8 @@
 > 📖 **User Guide:** [docs/guides/user-guide.md](docs/guides/user-guide.md)  
 > 🛠️ **Developer Guide (setup, commands, Kiro Web + IDE):** [docs/guides/developer-guide.md](docs/guides/developer-guide.md)  
 > 🔄 **Sprint Lifecycle & Delivery Process (visual, both paths):** [docs/guides/sprint-lifecycle.md](docs/guides/sprint-lifecycle.md)  
+> 🤖 **AIDLC Guide (method, work-class routing, executors, RGS):** [docs/guides/aidlc-guide.md](docs/guides/aidlc-guide.md)  
+> 🛰️ **Release Guide (promote to staging & operate):** [docs/guides/release-guide.md](docs/guides/release-guide.md)  
 > 🗂️ **Portfolio & Sprint Tracking Model (Backlog → Sprint → Changelog):** [docs/rfc/RFC-LAB-000-010-tracking-model.md](docs/rfc/RFC-LAB-000-010-tracking-model.md)  
 > 🚀 **Deployment Architecture (Vercel + Railway):** [docs/rfc/RFC-LAB-000-011-deployment.md](docs/rfc/RFC-LAB-000-011-deployment.md)  
 > 🛰️ **Deploy Operations (CLI-first, casual→qualified environments):** [docs/rfc/RFC-LAB-000-012-deploy-operations.md](docs/rfc/RFC-LAB-000-012-deploy-operations.md)  
