@@ -91,3 +91,7 @@ _my_works
 # The rest of .kiro/ (skills, specs, steering) IS committed; only settings/ is local.
 .kiro/settings/
 
+
+# macOS cruft
+.DS_Store
+**/.DS_Store

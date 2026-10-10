@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Governance / **Requirements Intake**
 
 # Requirements Intake Ledger — Cetana Labs
@@ -30,4 +31,4 @@
 _(RGS emits a detail block per entry — paste it here under its own `## INTAKE-NNN — <Title> (detail)` heading, byte-compatible with the register row above. None yet.)_
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

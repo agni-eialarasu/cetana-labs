@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Sprint Lifecycle**
 
 # Cetana Labs — Sprint Lifecycle & Delivery Process
@@ -231,4 +232,4 @@ M1 ("wire the Sleek UI to live PocketBase") is the first delegated-agent Spec (`
 - [`DECISION-JOURNAL.md`](../governance/DECISION-JOURNAL.md) — Entries 002–004 (how this lifecycle was reasoned).
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

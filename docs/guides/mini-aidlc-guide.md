@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Mini-AIDLC Guide**
 
 # Cetana Labs — Mini-AIDLC Guide (POC-Speed Delivery)
@@ -58,5 +59,5 @@ Companion files in that folder:
 - [`MIGRATION.md`](../../templates/aidlc-mini/MIGRATION.md) — the graduation runbook (POC → standard).
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
 > 🔗 **Related:** [AIDLC Guide (full method)](aidlc-guide.md) · [Mini-AIDLC Kickstarter](../../templates/aidlc-mini/KICKSTART.md)

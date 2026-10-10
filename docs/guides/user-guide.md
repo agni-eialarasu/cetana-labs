@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **User Guide**
 
 # Cetana Labs — User Guide & Playbook
@@ -117,4 +118,4 @@ We follow a simple **direct-to-`main`** commit workflow without branches or PR o
 | **Governance / Sprint** | `feat(governance): <summary>` | `feat(governance): initialize bare-minimum sprint tracking` |
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

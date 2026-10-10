@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Project Owner Guide**
 
 # Project Lead & Developer Guide — Automated Status Protocol
@@ -211,4 +212,4 @@ Copy and send this to project leads on WhatsApp / Slack / Email:
 > *Full guide & copy-paste prompts: [docs/guides/project-owner-guide.md](https://github.com/agni-eialarasu/cetana-labs/blob/main/docs/guides/project-owner-guide.md)"*
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
