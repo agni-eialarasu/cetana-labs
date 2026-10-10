@@ -39,7 +39,7 @@
 ## T7 — Lockstep + PR
 - [x] Register nothing new in `data/` by hand. Update CHANGELOG under TSK-075.
 - [x] `just validate-local` green.
-- [ ] Push `feat/registry-inversion`; open PR via `gh api` REST; self-validate against R1-R7; STOP-and-hold for `/review-pr`. **Never merge.**
+- [x] Push `feat/registry-inversion`; open PR via `gh api` REST; self-validate against R1-R7; STOP-and-hold for `/review-pr`. **Never merge.**
 
 ## Scope floor (R7) — do NOT touch
 - `STATUS.md`, `journal.md`, `generate_status.py`, `generate_status_json.py`, `project-update`, `project-status` (status spine).
