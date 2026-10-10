@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Reference / **Design System (LAB-000)**
 
 # Design System — LAB-000 Adaptation (SvelteKit)
@@ -101,4 +102,4 @@ Map the existing Cetana health badges onto the `DESIGN.md` severity roles:
 Always render the **word** alongside the color (e.g. "On Track", "Blocked").
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

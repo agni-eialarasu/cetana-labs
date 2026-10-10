@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **RGS Guide**
 
 # RGS Guide — the Requirement Gathering System (`/rgs`)
@@ -63,4 +64,4 @@ Two clearly separated copy-paste blocks:
 - Architecture context: `RFC-LAB-000-015` (AI assistant) and the Decision Journal (D67–D69).
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Reference / **Design System (Nexus Pulse)**
 
 # Design System — Nexus Pulse
@@ -233,4 +234,4 @@ dark ink in dark when accent is bright.
 | 2026-09-18 | Compact Menu toggle ≤1000px | Stacked full sidebar ate the fold; HIG: compact control when space is limited |
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

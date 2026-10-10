@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Reference / **Project Protocol**
 
 # Project Status Protocol — The `STATUS.md` Standard
@@ -141,4 +142,4 @@ To eliminate metric drift, hallucinated test numbers, and line-budget overflows,
 5. **Live Test Suite Verification**: Real test suite executed, extracting certified passed/skipped/failed tallies into `.gemini/governance/validation_receipt.json`.
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

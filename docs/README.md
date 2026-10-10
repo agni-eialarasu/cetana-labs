@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../README.md) / **📚 Docs**
 
 # Cetana Labs — Documentation Hub
@@ -35,8 +36,8 @@ docs/
 | :--- | :--- |
 | [Project Protocol](reference/project-protocol.md) | The authoritative 30-line `STATUS.md` standard + 5-pillar validation. |
 | [Capability Map](reference/capability-map.md) | What the app does — capability domains + user journey (doc counterpart of the App Functionality artifact). |
-| [Design System (Nexus Pulse)](reference/DESIGN.md) | The org visual source of truth — tokens, type, color, dark-first. |
-| [Design System (LAB-000)](reference/design-system-lab000.md) | The SvelteKit + Tailwind mapping of the Nexus Pulse system for the Sleek UI. |
+| [Design System — org authority (Nexus Pulse)](reference/DESIGN.md) | The **org-wide** visual source of truth (tokens, type, color, dark-first), authored in Nexus Pulse and kept here as the imported reference our SvelteKit mapping follows. |
+| [Design System (LAB-000 mapping)](reference/design-system-lab000.md) | The SvelteKit + Tailwind mapping of the org design system onto the Sleek UI — the Cetana-specific layer. |
 
 ## ⚖️ Governance
 
@@ -76,7 +77,7 @@ Every doc also **closes with a minimal footer-nav line** so a reader at the bott
 ```markdown
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
 ```
 
 - **⬆️ Top** (`#`) returns to the top of the current page; **🏠 Repo** is the repo root; **📚 Docs Hub** is this index (the "back to parent").
@@ -85,4 +86,4 @@ Every doc also **closes with a minimal footer-nav line** so a reader at the bott
 
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../README.md)

@@ -1,6 +1,9 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **Developer Guide**
 
 # Cetana Labs — Developer Guide (Local Setup & Environment)
+
+> 🔗 **Quick Links:** [⚡ Cheat-Sheet](#-command-cheat-sheet) • [1. Surfaces](#1-local-dev-surfaces-where-setup-work-happens) • [2. Prerequisites](#2-prerequisites-kiro-ide--local) • [3. Setup](#3-initial-setup-first-time-local) • [4. Local Stack](#4-starting-the-local-stack) • [5. DB & Auth](#5-database--auth-local) • [6. Clean Reset](#6-full-clean-reset) • [7. Config Sync](#7-config-sync--personal-vs-project-one-way) • [8. Process & Release](#8-development-process-delivery--release--see-the-dedicated-guides)
 
 > **Scope:** local/cloud **setup, commands, database & auth** — how to *develop* on this repo. For the delivery process (Spec → gate) see [`aidlc-guide.md`](aidlc-guide.md); for promoting to staging see [`release-guide.md`](release-guide.md); for how **leads write `STATUS.md`** see [`project-owner-guide.md`](project-owner-guide.md).
 >
@@ -11,6 +14,24 @@
 > *(Renamed from `work-environment.md`; process + deploy content split out into the AIDLC + Release guides.)*
 
 This is the authoritative guide for **setting up and running Cetana Labs locally**. Who executes a build (KiroCrew Operator · Antigravity primary · Kiro IDE escalation · Kiro Web fallback) is the **AIDLC Guide's** executor model — see [`aidlc-guide.md`](aidlc-guide.md) §3.
+
+---
+
+## 📑 Table of Contents
+
+- [⚡ Command Cheat-Sheet](#-command-cheat-sheet)
+- [1. Local-dev surfaces](#1-local-dev-surfaces-where-setup-work-happens)
+  - [Cloud workflow (Kiro Web) — the stateless loop](#cloud-workflow-kiro-web--the-stateless-loop)
+- [2. Prerequisites (Kiro IDE / local)](#2-prerequisites-kiro-ide--local)
+- [3. Initial Setup (first time, local)](#3-initial-setup-first-time-local)
+- [4. Starting the Local Stack](#4-starting-the-local-stack)
+  - [State A — Clean slate](#state-a--clean-slate-recommended-default) · [State B — Seeded](#state-b--seeded-from-data) · [Stop](#stop)
+- [5. Database & Auth (local)](#5-database--auth-local)
+  - [5.0 Local Environment & Credentials Matrix](#50-local-environment--credentials-matrix)
+  - [5.1 GitHub OAuth setup](#51-github-oauth-setup-pocketbase-v040) · [5.2 App Settings](#52-app-level-settings-pattern-rfc-lab-000-013--bk-012) · [5.3 White-Labeling](#53-white-labeling-a-deploy-bk-013--rfc-lab-000-011) · [5.4 In-App CRUD & Reconciliation](#54-in-app-crud--data-reconciliation-bk-014--d-crud-1)
+- [6. Full Clean Reset](#6-full-clean-reset)
+- [7. Config Sync — Personal vs Project](#7-config-sync--personal-vs-project-one-way)
+- [8. Development process, delivery & release](#8-development-process-delivery--release--see-the-dedicated-guides)
 
 ---
 
@@ -171,12 +192,22 @@ just stop-local             # frees :5173 and :8090; pb_data preserved
 
 ## 5. Database & Auth (local)
 
-| Parameter | Value |
-|---|---|
-| PocketBase URL | `http://127.0.0.1:8090` |
-| Admin UI | `http://127.0.0.1:8090/_/` |
-| Data file | `app/pocketbase/pb_data/` (SQLite, gitignored) |
-| Superuser | from `.env` (`PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD`) |
+### 5.0 Local Environment & Credentials Matrix
+
+Everything you need to reach the local stack, in one place. **These are local-only throwaway defaults** — they exist solely for zero-friction local DX and are **never** used in staging/production (those secrets live in Railway/PB admin and are never committed).
+
+| Subsystem | Local URL | Credential (local default) | Health / inspection |
+|---|---|---|---|
+| **SvelteKit web (Sleek UI)** | [http://localhost:5173](http://localhost:5173) | — (GitHub OAuth sign-in) | the app itself; `/admin/*` routes are admin-gated |
+| **PocketBase API** | [http://127.0.0.1:8090](http://127.0.0.1:8090) | — | `curl .../api/collections/projects/records` → 6 projects |
+| **PocketBase Admin UI** | [http://127.0.0.1:8090/_/](http://127.0.0.1:8090/_/) | `admin@cetana.local` / `CetanaLocal2026!` | superuser escape hatch (independent of OAuth) |
+| **Data file** | `app/pocketbase/pb_data/` (SQLite, gitignored) | — | the canonical data dir (§ gotcha below) |
+| **Env vars** | root `.env` (gitignored) | `PB_ADMIN_EMAIL` / `PB_ADMIN_PASSWORD` | `set -a && source .env && set +a` for raw calls |
+
+> 🔐 **Credential safety.** `admin@cetana.local` / `CetanaLocal2026!` is a **local throwaway superuser** seeded by `just setup` (override via `PB_ADMIN_EMAIL`/`PB_ADMIN_PASSWORD` in `.env`). It only ever exists in your local `pb_data`. **No deployed environment uses it** — staging/prod superuser + the GitHub OAuth client secret live in Railway/PB admin and are never in the repo. Exposing the *local* default here is deliberate: it removes a day-0 setup guess with zero security cost.
+
+> ⚠️ Browse the web app at **`http://localhost:5173`** (not `127.0.0.1`) to match the registered GitHub OAuth callback (§5.1 — a host mismatch 400s the token exchange).
+
 
 > ⚠️ **The `pb_data` location gotcha (learned the hard way — `RFC-LAB-000-008` M3–M4).**
 > PocketBase resolves `pb_data` **relative to its current working directory**. The
@@ -336,4 +367,4 @@ The developer guide stops at *setup and local development*. The process and depl
 - **The agent never pushes `main` and never merges — that gate is always the human's.** After an Operator governance/docs fast-path commit you will routinely see local `main` "1 ahead of origin"; that is the *designed* handoff — **you push it** (GitHub Desktop or `git push origin main`). If a push/merge fails with `remote: Internal Server Error` + a Request ID while reads work, that is a transient GitHub write-path outage — wait and retry (do not re-author or re-branch).
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Governance / **Registry-Retirement Design (BK-035 · RFC-016 Phase 2)**
 
 # Registry-Retirement Design — Cetana Labs
@@ -118,4 +119,4 @@ This flip implies, in the Phase-3 (BK-036) Spec:
 **Phase 3 is now unblocked to be specced** — its Spec cites this doc for the OQ answers.
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

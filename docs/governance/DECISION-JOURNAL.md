@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Governance / **Decision Journal**
 
 # Decision Journal — Cetana Labs
@@ -856,4 +857,4 @@ historical one.
 - **Class:** governance/documentation → simplified fast-path. Shipped as 3 branch PRs (reviewable multi-file restructures) rather than direct-to-main, each human-merged. Three invariants held throughout: human merge gate, agent never pushed `main`, validators green. Two safety-policy over-blocks encountered (a fused-`&&` push read as bare, a spurious ssh-regex match on a multiline command) and routed correctly by splitting into clean single-purpose commands — never re-spelled to evade.
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

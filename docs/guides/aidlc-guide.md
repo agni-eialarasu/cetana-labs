@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Guides / **AIDLC Guide**
 
 # Cetana Labs — AIDLC Guide (AI-Driven Development Lifecycle)
@@ -104,5 +105,5 @@ So the full funnel is: **fuzzy ask → `/rgs` (INTAKE) → backlog (BK) → Spec
 - **Linear history:** squash-merge, branch deletion, no force-push to `main`.
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
 > 🔗 **Related:** [Sprint Lifecycle (runbook)](sprint-lifecycle.md) · [AI Collaboration Model](../governance/ai-collaboration-model.md) · [RGS Guide](rgs-guide.md) · [Release Guide](release-guide.md) · [`RFC-LAB-000-009`](../rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) · [`RFC-LAB-000-014`](../rfc/RFC-LAB-000-014-multi-executor.md)

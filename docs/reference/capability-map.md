@@ -1,3 +1,4 @@
+<a id="top"></a>
 [🏠 Cetana Labs](../../README.md) / [📚 Docs](../README.md) / Reference / **Capability Map**
 
 # Cetana Labs — Capability Map (what the app does)
@@ -87,4 +88,4 @@ Each artifact is data-driven (one model object) with a shared sticky-dock intera
 alters any lens, update the artifact **and** its doc counterpart in the same session.
 ---
 
-> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
