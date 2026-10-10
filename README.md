@@ -17,6 +17,7 @@
 | **Gather a fuzzy requirement** | [RGS Guide](docs/guides/rgs-guide.md) |
 | **See why a decision was made** | [Decision Journal](docs/governance/DECISION-JOURNAL.md) · [AI Collaboration Model](docs/governance/ai-collaboration-model.md) · [RFCs](docs/rfc/) |
 | **Track work** | [Sprint Tracker](SPRINT_TRACKER.md) · [Backlog](BACKLOG.md) · [Changelog](CHANGELOG.md) |
+| **Read the repo as an agent** | [`llms.txt`](llms.txt) — curated entry map of the canonical docs |
 
 ## 🚀 Quick start
 
