@@ -1,0 +1,35 @@
+# Cetana Labs (LAB-000)
+
+> Cetana Labs is the master **engineering control plane** for a portfolio of Agni initiatives — mini-apps, research spikes, data pipelines, benchmark verifications. It is NOT a monorepo: mini-app source lives in external repos. Purpose: zero-overhead executive visibility (leads report a ≤35-line `STATUS.md`; leadership gets an auto portfolio registry + daily broadcast). Stack: zero-dependency Python governance scripts, a relational `data/` layer, a PocketBase backend (Railway) and a SvelteKit "Sleek UI" (Vercel). Delivery follows a converged AIDLC lifecycle with a human-held merge gate.
+
+This file is a convenience **entry map** for agents and humans reading the repo cold — a curated index of the canonical docs. It is a mirror, not a source of truth: when it disagrees with the linked doc, the doc wins.
+
+## Start here
+- [AGENTS.md](AGENTS.md): the authoritative agent contract — operating principles, commit conventions, branch model, the skill-hook convention, two-phase governance.
+- [README.md](README.md): the front door — repo layout, quick start, cheatsheet, and the generated project master registry.
+- [Docs hub](docs/README.md): the full documentation index with the breadcrumb + footer-nav standard.
+
+## Guides (how to do the work)
+- [Developer guide](docs/guides/developer-guide.md): local setup, DB, auth, config — the environment-only guide.
+- [AIDLC guide](docs/guides/aidlc-guide.md): the delivery method — the four surfaces, work-class routing (functional / engineering / governance), RGS placement.
+- [Mini-AIDLC guide](docs/guides/mini-aidlc-guide.md): the POC-speed fast path.
+- [Release guide](docs/guides/release-guide.md): promote-to-staging, Railway + Vercel deploy, live-bundle verification.
+- [Sprint lifecycle](docs/guides/sprint-lifecycle.md): the brainstorm → implement → verify → done state machine.
+- [Project owner guide](docs/guides/project-owner-guide.md): how a lead onboards and reports a project.
+- [RGS guide](docs/guides/rgs-guide.md): the requirement-gathering chat skill.
+- [User guide](docs/guides/user-guide.md): using the Sleek UI web app.
+
+## Governance (why it works this way)
+- [Decision Journal](docs/governance/DECISION-JOURNAL.md): every architectural decision, dated.
+- [AI collaboration model](docs/governance/ai-collaboration-model.md): the Operator / Antigravity / Kiro IDE / Web surface roles and the merge gate.
+- [Requirements intake](docs/governance/REQUIREMENTS_INTAKE.md): how external asks become backlog items.
+
+## Reference & decisions
+- [Project protocol](docs/reference/project-protocol.md): the ≤35-line `STATUS.md` contract.
+- [Capability map](docs/reference/capability-map.md): what the app does, feature by feature.
+- [RFCs](docs/rfc/): decision records `RFC-LAB-000-001` … `-016`.
+
+## Tracking
+- [SPRINT_TRACKER.md](SPRINT_TRACKER.md): committed / in-flight sprint work.
+- [BACKLOG.md](BACKLOG.md): the `BK-` idea backlog.
+- [CHANGELOG.md](CHANGELOG.md): released history (semver; `vX.Y.0` tagged at each sprint close).

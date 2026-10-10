@@ -67,7 +67,19 @@ When scaffolding a new project, use the corresponding template from `templates/`
 
 ## 4. Reusable AI Agent Skills Suite (`.kiro/skills/`)
 
-Project `/commands` live in **`.kiro/skills/<name>/SKILL.md`** (Kiro-native; committed → shared automatically across the **KiroCrew Operator** + **Kiro IDE Executor**). Personal commands (`/sign-in`, `/sign-off`, `/session-save`, `/session-resume`) live in the developer's local `~/.kiro/skills/` and sync via Configuration Sync. (Surface roles — Operator / Executor / Kiro Web fallback — are defined in [`RFC-LAB-000-007`](docs/rfc/RFC-LAB-000-007-work-environment.md) and [`ai-collaboration-model.md`](docs/governance/ai-collaboration-model.md).)
+All project `/commands` live in **`.kiro/skills/<name>/SKILL.md`**, committed to the repo — one file, one location. This is the Kiro-native location, and **the "skill hook" is the mechanism by which that single committed file becomes a live `/command` on every surface**:
+- **Kiro IDE** and **Kiro Web** read `.kiro/` natively → the skill is an invokable `/command`.
+- **Google Antigravity** reads the repo copy in-tree → the skill is available to the primary executor.
+- **KiroCrew** symlinks `~/.kiro/crew/skills/cetana-labs → <repo>/.kiro/skills` (machine-local) → the Operator sees the same skills.
+
+**One file, four surfaces, zero duplication.**
+
+> [!IMPORTANT]
+> **One skill, one file, one location.** Do NOT duplicate skills into `.agents/skills/` or `.gemini/skills/` (the pre-AIDLC layout — now retired); `.agents/skills/README.md` is a redirect-only stub. Cetana Labs is the canonical source of this convention (`RFC-LAB-000-009`), adopted cross-repo by Nexus Pulse.
+
+**Committed vs machine-local boundary:** everything under `.kiro/` is committed **except** `.kiro/settings/` (gitignored — CLI runtime state). Personal commands (`/sign-in`, `/sign-off`, `/session-save`, `/session-resume`) live in the developer's own `~/.kiro/skills/` and sync via Configuration Sync — they are never committed here.
+
+(Surface roles — Operator / Antigravity primary executor / Kiro IDE escalation / Kiro Web fallback — are defined in [`RFC-LAB-000-007`](docs/rfc/RFC-LAB-000-007-work-environment.md) and [`ai-collaboration-model.md`](docs/governance/ai-collaboration-model.md).)
 
 **Project lifecycle & governance:**
 - **`/project-validate [ID]`**: Pre-flight 5-pillar audit (scraper budget ≤ 35 lines, registry lockstep, git hygiene, AST boundaries, live test count) emitting `.gemini/governance/validation_receipt.json`.
