@@ -6,9 +6,9 @@ The documentation index for **Cetana Labs Control Hub (`LAB-000`)**. Docs are gr
 
 ```
 docs/
-├── guides/       # how-to: onboarding, dev setup, lifecycle, lead protocol
-├── reference/    # specs & standards: STATUS protocol, design system
-├── governance/   # decision records & collaboration model
+├── guides/       # how-to: user, developer (setup), AIDLC, mini-AIDLC, sprint-lifecycle, release, project-owner, RGS
+├── reference/    # specs & standards: STATUS protocol, capability map, design system
+├── governance/   # decision records, collaboration model, intake, registry-retirement
 ├── rfc/          # numbered decision records (RFC-LAB-000-0XX)
 └── templates/    # reusable artifact templates
 ```
@@ -21,8 +21,11 @@ docs/
 | Doc | Purpose |
 | :--- | :--- |
 | [User Guide](guides/user-guide.md) | Navigating the portfolio — archetypes, statuses, AI prompts, front-door playbook. |
-| [Developer Guide](guides/developer-guide.md) | Local/cloud **setup, commands, and Kiro Web + IDE surfaces** — how to develop on this repo (renamed from `work-environment.md`; absorbed the former cloud-dev guide). |
-| [Sprint Lifecycle](guides/sprint-lifecycle.md) | The five-phase AIDLC delivery process (both paths) — visual state + sequence guide. |
+| [Developer Guide](guides/developer-guide.md) | Local **setup, commands, database & auth** — how to run this repo locally (process + deploy content split out into the AIDLC + Release guides). |
+| [AIDLC Guide](guides/aidlc-guide.md) | **What AIDLC is & how we practise it** — the delivery method, work-class routing (functional vs engineering vs governance), who executes (Operator · Antigravity · Kiro IDE · Web), RGS. |
+| [Mini-AIDLC Guide](guides/mini-aidlc-guide.md) | **POC-speed AIDLC** — the lightweight sibling; when to use it + the maturity ladder (points to the `aidlc-mini/` kickstarter). |
+| [Sprint Lifecycle](guides/sprint-lifecycle.md) | The five-phase AIDLC delivery process **runbook** (both paths) — visual state machine + command sequence. |
+| [Release Guide](guides/release-guide.md) | **Promote to staging & operate** — the deploy model (merge = promotion), Vercel + Railway, CLI ops, verify-bundle, the real Vercel signal. |
 | [Project Owner Guide](guides/project-owner-guide.md) | How project **leads write `STATUS.md`** and run the `/status-init` · `/status-update` prompts. |
 | [RGS Guide](guides/rgs-guide.md) | How to use **`/rgs`** (Requirement Gathering System) — turn a fuzzy ask into a ledger-ready `INTAKE-NNN` entry; the chat-only elicitation flow + where drafts land. |
 
