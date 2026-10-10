@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **Spec ID** | `in-app-docs-visuals` |
 | **Backlog** | `BK-037` |
-| **Status** | Design — authored by the Operator 2026-10-10 for Kiro IDE `/spec-run` after merge-first. |
+| **Status** | Design — authored by the Operator 2026-10-10 for Antigravity (Primary Executor) `/spec-run` after merge-first. |
 
 ---
 

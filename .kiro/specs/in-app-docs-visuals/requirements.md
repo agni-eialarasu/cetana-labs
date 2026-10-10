@@ -9,7 +9,7 @@
 | **Depends on** | `BK-024` (in-app docs view + `registry.ts` allow-list — live), `BK-027` (global header/footer + center-nav slot — merged `#71`), `BK-032` (density/nav pass — `ui-density-nav-pass`). |
 | **Prerequisite (doc-class, lands first)** | Refresh the three living-diagram artifacts to current state (they predate `#89`–`#97`: show retired `/project-add` + `/project-edit`, label OAuth/RBAC as "frontier"). The refreshed, verified HTML is the embed source — a stale embed would ship drift into the product. |
 | **RFCs** | `RFC-LAB-000-005` (Sleek UI design system), `RFC-LAB-000-007` / `ai-collaboration-model.md` (in-app docs are **consumer surfaces**). |
-| **Executor role** | **Kiro IDE** (escalation per `RFC-LAB-000-014`) — this touches the markdown render pipeline, client-side mermaid loading, iframe sandboxing/XSS boundary, and the sanitizer; subtle security/SSR regressions could hide here, so it is NOT routine Antigravity work. |
+| **Executor role** | **Antigravity (Primary Executor).** Build the SvelteKit/mermaid/iframe changes on Antigravity per the standing roles (Kiro Crew = Primary Operator · Antigravity = Primary Executor · Kiro Web & IDE = Secondary Operator/Executor). The render-pipeline / iframe-sandbox / sanitizer surface is handled carefully via the EARS DoD (R1.3 fail-soft, R1.4 SSR-safe, R2.5 XSS boundary) and the human `/review-pr` gate — not by routing away from the primary executor. |
 | **Source** | Operator session 2026-10-10 — user screenshot showed a raw `flowchart TB` block rendering as text in the Project Owner Guide; user asked to validate the Cetana-tagged artifacts and bring them into the app docs. |
 
 ---
