@@ -101,4 +101,23 @@ Delivered **In-App Docs Rich Visuals & Standard Navigation** (`BK-037` / `TSK-07
 
 ---
 
+## 4. Verification Log — human functional verification (appended by `/verification-done`)
+
+### Verification Log — 2026-10-10 (PR #100)
+
+| Plan step | Result | Finding / correction |
+| :--- | :---: | :--- |
+| **V1 (In-App Mermaid Rendering)** | ✅ | Flowcharts in `project-owner` and `sprint-lifecycle` render as interactive SVGs instead of raw code blocks. |
+| **V2 (Theme Switching on Mermaid)** | ✅ | Dark and light themes apply seamlessly to mermaid diagrams via dynamic re-render on theme change. |
+| **V3 (Living Diagrams Embed & Interactivity)** | ✅ | Navigated to `/docs?doc=diagrams`; all 3 diagrams render stacked with titles; tabs switch and popovers trigger cleanly. |
+| **V4 (Iframe Security Boundary)** | ✅ | Confirmed `sandbox="allow-scripts"` only; no `allow-same-origin` or `allow-top-navigation` present. |
+| **V5 (Navigation Breadcrumb Standard)** | ✅ | Single `Dashboard › Docs › <Guide>` breadcrumb renders with working links; duplicate back links removed. |
+| **V6 (Local Pre-Flight Gate)** | ✅ | `just validate-local` 100% green; static build verified. |
+
+- **Iterations:** 1 (clean pass; initial build validated with zero defects)
+- **Verdict:** PASS — human functional verification complete.
+- **Verified by:** Agni Eialarasu · **Surface:** Google Antigravity (IDE)
+
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../../README.md) · [📚 Docs Hub](../../../docs/README.md)
