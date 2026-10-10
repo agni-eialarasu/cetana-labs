@@ -6,7 +6,7 @@
 | **Feature** | Client-side lazy themed mermaid rendering, sandboxed living-diagram embeds (`working-model`, `runtime-infra`, `app-functionality`), and `Dashboard › Docs › Guide` breadcrumb navigation standard. |
 | **Backlog** | `BK-037` (`TSK-076`, SPRINT-13) |
 | **Branch** | `feat/in-app-docs-visuals` |
-| **PR** | Pending open via `gh api` |
+| **PR** | [PR #100](https://github.com/agni-eialarasu/cetana-labs/pull/100) |
 | **Executor** | Google Antigravity (Primary Executor per `RFC-LAB-000-014` / `#99`) |
 | **Date** | 2026-10-10 |
 

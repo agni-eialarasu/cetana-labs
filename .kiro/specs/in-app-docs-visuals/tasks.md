@@ -45,7 +45,7 @@
 - [x] `pnpm build` (adapter-static) succeeds with mermaid + embeds present (R5.3).
 - [x] README registry block byte-identical (`generate_registry.py --check`).
 - [x] CHANGELOG `[Unreleased]` entry; Decision Journal entry recording the iframe-vs-component decision (R5.2).
-- [ ] Open PR via `gh api`; write `REPORT.md` with the EARS R1–R5 self-check per criterion; STOP-and-hold (never merge).
+- [x] Open PR via `gh api`; write `REPORT.md` with the EARS R1–R5 self-check per criterion; STOP-and-hold (never merge).
 
 ---
 
