@@ -183,7 +183,7 @@ just verify-live-frontend URL=https://<app>.vercel.app EXPECTED=https://<app>.up
 This is an **ops-alert, not a gate** — a red result is a check + logs to investigate; it never reverts the merge (`done` = the gated merge).
 
 **[HUMAN] — make it enforce itself (durable).** The lasting fix is to make the **`Vercel` deployment status a required status check** on `main` (GitHub → Settings → Branches → branch-protection rule for `main` → *Require status checks to pass* → add the **`Vercel`** context). Then a failing Vercel build blocks merge automatically. One-time GitHub-settings action, **deferred until branch protection lands post-org-transfer** (`RFC-LAB-000-004`); until then, `/review-pr` step 2b is the enforcement.
-
 ---
 
-> 🔙 Back to the [Docs Hub](../README.md) · Related: [Developer Guide](developer-guide.md) · [AIDLC Guide](aidlc-guide.md) · [`RFC-LAB-000-011`](../rfc/RFC-LAB-000-011-deployment.md) · [`RFC-LAB-000-012`](../rfc/RFC-LAB-000-012-deploy-operations.md)
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🔗 **Related:** [Developer Guide](developer-guide.md) · [AIDLC Guide](aidlc-guide.md) · [`RFC-LAB-000-011`](../rfc/RFC-LAB-000-011-deployment.md) · [`RFC-LAB-000-012`](../rfc/RFC-LAB-000-012-deploy-operations.md)

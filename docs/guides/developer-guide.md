@@ -334,3 +334,6 @@ The developer guide stops at *setup and local development*. The process and depl
 - **App code / `data/` / migrations** → feature branch → PR → green CI → squash-merge to `main`. **Governance / docs** → may fast-path to `main`.
 - Always run `just validate-local` before a PR or `/sprint-done`. Never force-push `main`; roll back via revert PR.
 - **The agent never pushes `main` and never merges — that gate is always the human's.** After an Operator governance/docs fast-path commit you will routinely see local `main` "1 ahead of origin"; that is the *designed* handoff — **you push it** (GitHub Desktop or `git push origin main`). If a push/merge fails with `remote: Internal Server Error` + a Request ID while reads work, that is a transient GitHub write-path outage — wait and retry (do not re-author or re-branch).
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

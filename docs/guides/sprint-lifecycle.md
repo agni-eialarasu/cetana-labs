@@ -229,3 +229,6 @@ M1 ("wire the Sleek UI to live PocketBase") is the first delegated-agent Spec (`
 - [`work-environment.md`](developer-guide.md) — Kiro Web vs IDE surfaces + command cheat-sheet.
 - [`RFC-LAB-000-004`](../rfc/RFC-LAB-000-004-branching-model.md) — branching, PR policy, squash-merge.
 - [`DECISION-JOURNAL.md`](../governance/DECISION-JOURNAL.md) — Entries 002–004 (how this lifecycle was reasoned).
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

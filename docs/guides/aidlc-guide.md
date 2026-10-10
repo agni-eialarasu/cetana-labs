@@ -102,7 +102,7 @@ So the full funnel is: **fuzzy ask → `/rgs` (INTAKE) → backlog (BK) → Spec
 - **Lockstep:** CHANGELOG / BACKLOG / SPRINT_TRACKER / journal / `data/` stay synchronised (validator-enforced).
 - **Auditable reasoning:** the Decision Journal records *why*, with honest failure/recovery notes.
 - **Linear history:** squash-merge, branch deletion, no force-push to `main`.
-
 ---
 
-> 🔙 Back to the [Docs Hub](../README.md) · Related: [Sprint Lifecycle (runbook)](sprint-lifecycle.md) · [AI Collaboration Model](../governance/ai-collaboration-model.md) · [RGS Guide](rgs-guide.md) · [Release Guide](release-guide.md) · [`RFC-LAB-000-009`](../rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) · [`RFC-LAB-000-014`](../rfc/RFC-LAB-000-014-multi-executor.md)
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
+> 🔗 **Related:** [Sprint Lifecycle (runbook)](sprint-lifecycle.md) · [AI Collaboration Model](../governance/ai-collaboration-model.md) · [RGS Guide](rgs-guide.md) · [Release Guide](release-guide.md) · [`RFC-LAB-000-009`](../rfc/RFC-LAB-000-009-sprint-lifecycle-aidlc.md) · [`RFC-LAB-000-014`](../rfc/RFC-LAB-000-014-multi-executor.md)

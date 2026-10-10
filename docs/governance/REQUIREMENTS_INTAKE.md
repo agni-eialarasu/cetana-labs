@@ -28,3 +28,6 @@
 ## Detail blocks
 
 _(RGS emits a detail block per entry — paste it here under its own `## INTAKE-NNN — <Title> (detail)` heading, byte-compatible with the register row above. None yet.)_
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)

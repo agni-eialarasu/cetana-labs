@@ -61,3 +61,6 @@ Two clearly separated copy-paste blocks:
 - The intake ledger: [`docs/governance/REQUIREMENTS_INTAKE.md`](../governance/REQUIREMENTS_INTAKE.md).
 - The AIDLC delivery process the funnel feeds: [Sprint Lifecycle](sprint-lifecycle.md).
 - Architecture context: `RFC-LAB-000-015` (AI assistant) and the Decision Journal (D67–D69).
+---
+
+> 🧭 **Navigation:** [⬆️ Top](#) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
