@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **Spec ID** | `in-app-docs-visuals` · **Backlog** `BK-037` |
 | **Branch** | `feat/in-app-docs-visuals` |
-| **Executor** | Kiro IDE (escalation — render pipeline + iframe sandbox + sanitizer boundary). |
+| **Executor** | Antigravity (Primary Executor) — SvelteKit/mermaid/iframe build; render-pipeline + sandbox care via the EARS DoD + human gate. |
 | **Gate** | Full gate: `/spec-run` → PR → `/review-pr` scorecard → human merge. Merge-first: this Spec on `main` before build. |
 
 > **Prerequisite (doc-class, must land first):** the three living-diagram artifacts are refreshed to current state and human-verified; their HTML is exported to `app/web/src/lib/docs/diagrams/*.html`. Do NOT start Task 3 until the refreshed HTML is committed. (Tracked as a separate doc-class task — see Task 0.)
