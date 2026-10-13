@@ -925,4 +925,20 @@ historical one.
 
 ---
 
+## Entry 031 — Cetana → Nexus Pulse convergence pass closed (all rows Converged)
+
+> _The NP side of the upgrade initiative completed; this entry mirrors the outcome in Cetana's journal and closes the loop opened by D75. Governance-tooling simplified path (ledger + journal, no code). Date: 2026-10-13 · Contributor: Agni Eialarasu._
+
+### D76 — Flip all convergence-ledger adoption/correction rows (A-1..A-4, X-1..X-3) to `✅ Converged`
+
+- **The outcome:** Nexus Pulse ran the Entry 028 kickoff brief under its own lifecycle. **Three NP PRs merged** into nexus-pulse `main`: **#81** uniform docs-navigation standard (NP Entry 006/D8), **#82** `llms.txt` agent entry map (NP Entry 007/D9), **#83** early-sprint archive hygiene (NP Entry 008/D10). The remaining four themes were **already satisfied** NP-side and verified: A-2 (NP dev-guide already split into `DEVELOPER_GUIDE` / `RELEASE_PROMOTION_PROCESS` / `SPRINT_LIFECYCLE_PROCESS` / `COMMAND_SUITE`), A-3 (NP codified two-work-classes first, Entry 005/D7), X-1 (`.DS_Store` already gitignored, zero tracked), X-3 (status board already state + real derived metrics).
+- **Honesty nuance recorded (X-2):** PR #83 also folded in a tracker-honesty fix — two stale `IN_REVIEW` sprint statuses (Sprint 13 #63, Sprint 17 #74) corrected to `DELIVERED` against the authoritative Delivery Registry (the X-3 "state over invented number" principle applied to the tracker).
+- **Decision & rationale:** Update `docs/governance/CONVERGENCE-LEDGER.md` to reflect reality — all seven rows `✅ Converged`, each with its NP evidence (merged PR + NP Decision Journal entry, or the "already satisfied" verification). The boundary rule held throughout: Cetana never reached into nexus-pulse; the NP side ran under NP's own gated lifecycle, and this ledger is the read-model of that convergence. The Cetana → NP first-pass convergence initiative is **closed**.
+
+### Downstream
+- Convergence ledger: C-1, C-2 (prior) + A-1..A-4 + X-1..X-3 all `✅ Converged`; R-1 reverse-adoption already converged. The adoption-pass section is marked CLOSED.
+- The ledger pattern is proven end-to-end: a Cetana-authored brief → NP's own lifecycle → convergence tracked here, with zero cross-repo actuation.
+
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
