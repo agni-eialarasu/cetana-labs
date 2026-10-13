@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agni-eialarasu.github.io/cetana-labs/data/portfolio.schema.json",
+  "title": "Cetana Labs Project Master",
+  "description": "Project master records (stable structural metadata). Maps to a future PocketBase 'projects' collection (RFC-LAB-000-002).",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "slug", "name", "archetype", "owner_id", "dev_environment", "status_source"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^LAB-\\d{3}$",
+        "description": "Zero-padded sequential project ID, e.g. 'LAB-004'."
+      },
+      "slug": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$",
+        "description": "Lowercase hyphenated slug; mirrors the projects/ directory slug."
+      },
+      "name": { "type": "string", "minLength": 1 },
+      "descriptor": { "type": ["string", "null"], "description": "Short parenthetical descriptor shown in the registry." },
+      "archetype": {
+        "type": "string",
+        "enum": ["control-plane", "mini-app", "research", "data-collection", "verification"]
+      },
+      "owner_id": {
+        "type": "string",
+        "pattern": "^usr-[a-z0-9-]+$",
+        "description": "Primary owner. FK -> users.json[].id (PocketBase single relation)."
+      },
+      "repo_url": { "type": ["string", "null"], "format": "uri" },
+      "reference_url": { "type": ["string", "null"], "format": "uri", "description": "Display reference link (repo or external product/paper URL)." },
+      "dev_environment": {
+        "type": "string",
+        "enum": ["cloud", "local"],
+        "description": "Per RFC-LAB-000-001 classification heuristic."
+      },
+      "status_source": {
+        "type": "string",
+        "enum": ["local", "remote"],
+        "description": "Whether STATUS.md is authored locally in cetana-labs or synced from the external repo."
+      }
+    }
+  }
+}

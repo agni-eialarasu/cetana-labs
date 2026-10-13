@@ -28,5 +28,17 @@
     "value": "",
     "type": "url",
     "group": "branding"
+  },
+  {
+    "key": "llm_model",
+    "value": "gpt-4o-mini",
+    "type": "string",
+    "group": "ai"
+  },
+  {
+    "key": "llm_endpoint",
+    "value": "https://api.openai.com/v1/chat/completions",
+    "type": "url",
+    "group": "ai"
   }
 ]

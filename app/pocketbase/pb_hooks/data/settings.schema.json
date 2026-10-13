@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agni-eialarasu.github.io/cetana-labs/data/settings.schema.json",
+  "title": "Cetana Labs App-Level Settings",
+  "description": "Key/value application settings. Maps to the PocketBase 'settings' collection (RFC-LAB-000-013). Logo keys (logo_icon_url, logo_small_url, logo_medium_url) are reserved for BK-013.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["key", "value", "type"],
+    "properties": {
+      "key": {
+        "type": "string",
+        "description": "Unique setting key, e.g. 'app_name'."
+      },
+      "value": {
+        "type": "string",
+        "description": "Serialized setting value."
+      },
+      "type": {
+        "type": "string",
+        "enum": ["string", "number", "boolean", "url"],
+        "description": "Value type used by the accessor façade for casting."
+      },
+      "group": {
+        "type": "string",
+        "description": "Optional grouping category, e.g. 'branding'."
+      }
+    }
+  }
+}
