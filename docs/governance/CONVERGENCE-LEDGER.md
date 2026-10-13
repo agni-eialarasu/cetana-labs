@@ -28,26 +28,26 @@
 
 ---
 
-## In-flight adoptions (Cetana → Nexus Pulse)
+## Cetana → Nexus Pulse adoption pass (CLOSED — all converged)
 
-> The current upgrade pass: patterns Cetana has matured that Nexus Pulse should adopt. Each runs under **NP's own lifecycle** from the kickoff brief; this table tracks state only.
+> The first upgrade pass: patterns Cetana matured that Nexus Pulse adopted. **Closed 2026-10-13** — three NP PRs merged (#81 nav standard, #82 `llms.txt`, #83 archive hygiene); the other four themes were already satisfied NP-side and verified. Each ran under NP's own lifecycle; this table is the convergence read-model.
 
 | # | Pattern | Direction | Brief | Status | NP record |
 | :---: | :--- | :--- | :--- | :---: | :--- |
-| A-1 | **Uniform docs navigation standard** — breadcrumb at top + `🧭 Navigation` footer on every `docs/**` file (jump back without scrolling) | Cetana → NP | Entry 028 brief, Part A | `🎯 Proposed` | _pending NP PR_ |
-| A-2 | **Purpose-scoped guide split** — break a monolithic dev-guide into focused guides (AIDLC · Release · local-setup), one source per concept, no duplication | Cetana → NP | Entry 028 brief, Part A | `🎯 Proposed` | _pending NP PR_ |
-| A-3 | **Two-work-classes routing table** — ceremony scales to a change's *purpose* (sprint deliverable → full gate · governance tooling → simplified path), not its file path | Cetana ↔ NP (codified NP-side first) | `pref.two_work_classes_process` (NP Entry 005/D7) | `✅ Converged` | NP `main` `e09a465` — already live NP-side; Cetana adopted into `AGENTS.md` §1 |
-| A-4 | **Agent entry map (`llms.txt`)** — repo-root curated start-here map (llmstxt.org format), framed as a convenience mirror, not a source of truth | Cetana → NP | Entry 028 / D73 | `🎯 Proposed` | _pending NP PR_ |
+| A-1 | **Uniform docs navigation standard** — breadcrumb at top + `🧭 Navigation` footer on every `docs/**` file (jump back without scrolling) | Cetana → NP | Entry 028 brief, Part A | `✅ Converged` | nexus-pulse PR #81 (merged) · NP Decision Journal Entry 006/D8 |
+| A-2 | **Purpose-scoped guide split** — break a monolithic dev-guide into focused guides (AIDLC · Release · local-setup), one source per concept, no duplication | Cetana → NP | Entry 028 brief, Part A | `✅ Converged` | Already satisfied — NP dev-guide already split (`DEVELOPER_GUIDE` / `RELEASE_PROMOTION_PROCESS` / `SPRINT_LIFECYCLE_PROCESS` / `COMMAND_SUITE`); no PR needed |
+| A-3 | **Two-work-classes routing table** — ceremony scales to a change's *purpose* (sprint deliverable → full gate · governance tooling → simplified path), not its file path | Cetana ↔ NP (codified NP-side first) | `pref.two_work_classes_process` (NP Entry 005/D7) | `✅ Converged` | NP `main` `e09a465` — AGENTS.md §1 carries the "PURPOSE, not file path" wording verbatim; Cetana adopted into `AGENTS.md` §1 |
+| A-4 | **Agent entry map (`llms.txt`)** — repo-root curated start-here map (llmstxt.org format), framed as a convenience mirror, not a source of truth | Cetana → NP | Entry 028 / D73 | `✅ Converged` | nexus-pulse PR #82 (merged) · NP Decision Journal Entry 007/D9 |
 
 ## Corrections noticed in Nexus Pulse (verify before acting)
 
 > Observations from the comparison pass. **Flagged, not fixed** — each is NP's own call under NP's lifecycle.
 
-| # | Observation (in NP) | Suggested action | Status |
+| # | Observation (in NP) | Action / evidence | Status |
 | :---: | :--- | :--- | :---: |
-| X-1 | Committed `.DS_Store` artifacts | Add `**/.DS_Store` to `.gitignore`, untrack | `🎯 Proposed` |
-| X-2 | Early-sprint archive entries carried in the live tracker | Move delivered sprints to the archive section | `🎯 Proposed` |
-| X-3 | Badge/metric honesty — cosmetic hand-typed metrics that can drift | Prefer state alone over an invented number (`pref.status_board_metric_honesty`) | `🎯 Proposed` |
+| X-1 | Committed `.DS_Store` artifacts | Already satisfied — `.DS_Store` in NP `.gitignore` (line 60); zero tracked; no PR needed | `✅ Converged` |
+| X-2 | Early-sprint archive entries carried in the live tracker | nexus-pulse PR #83 (merged) · NP Entry 008/D10 — delivered sprints moved to an in-file "Delivered Sprint Archive"; current/open sprints kept live. **Honesty fix folded in:** two stale `IN_REVIEW` statuses (Sprint 13 #63, Sprint 17 #74) corrected to `DELIVERED` to match the authoritative Delivery Registry (the X-3 principle applied to the tracker) | `✅ Converged` |
+| X-3 | Badge/metric honesty — cosmetic hand-typed metrics that can drift | Already satisfied — NP status board uses state + real derived metrics (test/AST counts), no cosmetic hand-typed %; no PR needed | `✅ Converged` |
 
 ## Reverse-adoptions (NP → Cetana — pull back what NP does better)
 
