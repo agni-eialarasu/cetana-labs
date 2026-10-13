@@ -36,6 +36,7 @@ docs/
 | :--- | :--- |
 | [Project Protocol](reference/project-protocol.md) | The authoritative 30-line `STATUS.md` standard + 5-pillar validation. |
 | [Capability Map](reference/capability-map.md) | What the app does — capability domains + user journey (doc counterpart of the App Functionality artifact). |
+| [RGS Stage B — Scoping](reference/rgs-stage-b-scoping.md) | Pre-Spec scoping for the RGS **web UI** (`BK-040`, Option 1) — on the BK-015 AI runtime; states the BK-015 gate. |
 | [Design System — org authority (Nexus Pulse)](reference/DESIGN.md) | The **org-wide** visual source of truth (tokens, type, color, dark-first), authored in Nexus Pulse and kept here as the imported reference our SvelteKit mapping follows. |
 | [Design System (LAB-000 mapping)](reference/design-system-lab000.md) | The SvelteKit + Tailwind mapping of the org design system onto the Sleek UI — the Cetana-specific layer. |
 
