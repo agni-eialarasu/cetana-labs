@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agni-eialarasu.github.io/cetana-labs/data/memberships.schema.json",
+  "title": "Cetana Labs Memberships (User <-> Project Join)",
+  "description": "Many-to-many join between users and projects with role. Maps to a future PocketBase 'memberships' collection (RFC-LAB-000-002).",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "user_id", "project_id", "role"],
+    "properties": {
+      "id": {
+        "type": "string",
+        "pattern": "^mem-[a-z0-9-]+$",
+        "description": "Stable membership id, e.g. 'mem-lab004-abishek-singhavi'."
+      },
+      "user_id": {
+        "type": "string",
+        "pattern": "^usr-[a-z0-9-]+$",
+        "description": "FK -> users.json[].id."
+      },
+      "project_id": {
+        "type": "string",
+        "pattern": "^LAB-\\d{3}$",
+        "description": "FK -> portfolio.json[].id."
+      },
+      "role": {
+        "type": "string",
+        "enum": ["owner", "lead", "contributor", "stakeholder", "reviewer"]
+      }
+    }
+  }
+}
