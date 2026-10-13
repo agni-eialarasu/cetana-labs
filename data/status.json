@@ -2,21 +2,20 @@
   {
     "id": "LAB-000",
     "health": "🟢 On Track",
-    "last_updated": "2026-10-07",
+    "last_updated": "2026-10-13",
     "pitch": "The central engineering command plane, lab notebook, and automated management reporting engine that eliminates manual status friction across all active engineering initiatives.",
     "wins": [
-      "**Sprint 12 Closeout & v0.14.0 — First Post-MVP Product Features**: delivered the planned product sequence in full plus the requirement-gathering skill, and de-risked the flagship.",
-      "**App-level settings + branding/white-labeling (`BK-012` → `BK-013`)**: a key/value settings collection + typed accessor, consumed by logo/name branding — white-labeling a deploy is now a **data change, not a code change**.",
-      "**Requirement Gathering System (`BK-026`, `/rgs`)**: an AI elicitation skill that turns a fuzzy ask into a ledger-ready `INTAKE-NNN` draft — the business-analyst front-end for the intake lifecycle.",
-      "**AI-Assistant flagship de-risked (`RFC-LAB-000-015` Accepted)**: architecture decided (PocketBase-hook runtime, structured-first retrieval, config-driven model, fail-closed public-read boundary); feasibility spike next."
+      "**Admin-tier trio shipped (`BK-030` → `BK-031` → `BK-014`)**: `is_admin` auth tier + in-app App Settings UI + Projects/Developers CRUD — the control plane is now self-administered in-app, with PocketBase the live write target reconciled to committed `data/`.",
+      "**RFC-016 fully delivered (all 3 phases)**: single GitHub-handle identity (`BK-034`) + registry inversion (`BK-036`) — PocketBase is now the metadata master, `data/*.json` a generated export; retired the file-based `project-add`/`project-edit` skills.",
+      "**In-app `/docs` now renders rich visuals (`BK-037`)**: lazy client-side mermaid, the three living diagrams as sandboxed-iframe panels, and a uniform `Dashboard › Docs › Guide` breadcrumb.",
+      "**Mermaid empty-box bug fully resolved (`BK-038` → spike → `BK-039`)**: flowchart + state-diagram node/edge labels render legibly in light + dark, with `securityLevel:'strict'` and the tight DOMPurify profile unchanged."
     ],
-    "focus": "Sprint 13: run the **`BK-015` AI-Assistant feasibility spike** (`RFC-LAB-000-015` §5 — runtime/grounding/cost probes) to decide whether the flagship graduates to a build Spec; pick up ecosystem carry-forwards (`BK-004`, `BK-001`) as capacity allows.",
+    "focus": "Sprint 13 headline: run the **`BK-015` AI-Assistant feasibility spike** (`RFC-LAB-000-015` §5 — runtime/grounding/cost probes) to decide whether the flagship graduates to a build Spec. Needs a test LLM key on the probe surface. Carry-forwards (`BK-004`, `BK-001`) opportunistic.",
     "blockers": "None",
     "risks": "`BK-015` (AI Assistant) is high-effort — RFC/spike first to de-risk",
     "metrics": [
       "6/6 projects passing portfolio integrity checks; `/project-validate` 5-pillar gate green.",
-      "Backend deploy proven live end-to-end (`Deploy complete` on Railway); PB on 0.40.4.",
-      "Linear git history on `main`; every merge human-gated (`/review-pr`, auto-recorded on the PR); **v0.14.0** tagged."
+      "SPRINT-13: 7 PRs gated + human-merged ("
     ],
     "is_onboarding_pending": false,
     "is_completed": false

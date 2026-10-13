@@ -905,4 +905,24 @@ historical one.
 
 ---
 
+## Entry 030 — Build the cross-repo convergence ledger (the single standard-adoption pane)
+
+> _Driven by "build the convergence ledger" + "I have to upgrade Nexus Pulse to Cetana Labs standard." The convergence-ledger candidate (SPRINT_TRACKER) and the Stage-D org-hub pairing (D69) are both realized here. Governance-tooling simplified path (new doc, no code). Date: 2026-10-13 · Contributor: Agni Eialarasu._
+
+### D75 — Create `docs/governance/CONVERGENCE-LEDGER.md` in the master control plane; it tracks convergence but never actuates it
+
+- **The problem:** Two cross-repo standards have fully converged across Agni repos — the shared `/command` vocabulary (Cetana → NP, Entry 028/D73) and the `just` task runner (NP → Cetana, `BK-025`/#63) — plus an in-flight Cetana → NP docs-pattern adoption pass (Entry 028 brief). That convergence had no single home: it was scattered across two repos' Decision Journals and the Operator's memory, so "what standards do we share, and what's mid-adoption?" had no answer a reader could see.
+- **Options considered:**
+  1. **Option A: A convergence ledger in Cetana's governance docs (Chosen).** Cetana is the org's master engineering control plane, so the org-wide adoption view belongs here — the same rationale that put the intake ledger here (D69). One table of converged standards + one of in-flight adoptions + corrections/reverse-adoptions.
+  2. **Option B: Per-repo adoption notes.** Each repo tracks its own adoptions in its own Decision Journal. *Rejected:* no single pane; duplicates the view; the "do we share this?" question still spans two files.
+  3. **Option C: A new tracking tool/app.** *Rejected:* violates "no new process" — a committed doc + a status legend inside existing governance suffices.
+- **Decision & rationale:** Option A. The ledger is explicitly a **read-model** of convergence, not an actuator: the boundary rule (`cross_repo_handoff_structure`) is unchanged — a standard is adopted by the **receiving repo's own gated lifecycle** from a self-contained kickoff brief, never bulk-applied or auto-crossed from here. This pairs with the Stage-D org-hub evolution of `REQUIREMENTS_INTAKE.md` (both the inbound-ask view and the standards-convergence view live in the control plane).
+
+### Downstream
+- `docs/governance/CONVERGENCE-LEDGER.md` created: C-1 `/command` vocab + C-2 `just` runner recorded `✅ Converged`; the Cetana → NP docs-pattern pass (A-1..A-4), NP corrections (X-1..X-3), and the reverse-adoption (R-1) seeded.
+- Indexed in the docs hub governance table.
+- **Nexus Pulse upgrade:** the NP-side adoptions run under NP's own lifecycle from the Entry 028 kickoff brief; this ledger tracks their state (flip `🎯 Proposed` → `✅ Converged` as NP merges each).
+
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
