@@ -941,4 +941,24 @@ historical one.
 
 ---
 
+## Entry 032 — BK-015 AI-Assistant feasibility spike: architecture confirmed (ratify §4, one revision)
+
+> _The SPRINT-13 headline (`TSK-061`). Ran the `RFC-LAB-000-015` §5 three-probe spike against the real `data/` + docs with a throwaway OpenAI key (`gpt-4o-mini`). Throwaway spike per §6 — the probe scripts stay in scratch; THIS finding is the merged artifact. Governance-tooling simplified path. Date: 2026-10-13 · Contributor: Agni Eialarasu._
+
+### D77 — Ratify RFC-015 §4.1–§4.5; graduate BK-015 to a build Spec. One revision: narrative retrieval must select by section/id, not blind-truncate.
+
+- **The three probes:**
+  1. **Runtime (OQ-1) → ✅ RATIFIED.** PocketBase's JSVM ships a first-class documented global **`$http.send({url,method,body,headers,timeout})`** → `{statusCode, body, json, headers, cookies}`, intended for exactly this (outbound LLM call). Confirmed on PB v0.40.5 (our Railway backend 0.40.4, same line); our existing `oauth_github_handle.pb.js` already uses the JSVM app bindings. **The Vercel-function fallback is NOT needed.** One real constraint found: `$http.send` has **no SSE/streaming** — it blocks and returns the whole body, so `/api/ask` is request/response, not streamed tokens (bake into the build Spec).
+  2. **Grounding (3 structured + 2 narrative) → ✅ RATIFIED + 1 revision.** Structured half (3/3): "how many active" (2), "which at risk" (none), "who owns LAB-003" (Eialarasu) answered **deterministically from `data/*.json`, zero LLM, cited to the row** — §4.2 structured-first thesis proven. Narrative: Q5 ("what is LAB-002?") answered correctly, grounded, **cited**. Q4 ("what shipped in Sprint 12?") **correctly fail-closed** — refused rather than invent — but exposed that naive whole-doc truncation fed the wrong slice (live `SPRINT_TRACKER` shows Sprint 13; Sprint 12 lives in a truncated archive section). **Revision:** narrative retrieval must **select by section/sprint-id anchor**, not blind head-truncate — cheap at this corpus size, but a real retrieval-quality requirement for the build.
+  3. **Cost → ✅ RATIFIED.** `gpt-4o-mini`: ~**$0.00035/narrative question**; structured questions **$0.00** (no LLM). Extrapolated ~**$0.035/month** for 100 narrative questions. Cost is a non-issue.
+- **Decision & rationale:** The load-bearing §4.1 "where it runs" decision holds — `pb_hooks` + `$http.send` is the proven server runtime, no second service. Structured-first routing (§4.2) is free + perfect; narrative grounding is honest (fail-closed §4.5 verified: Q4 refused rather than hallucinate) and affordable (§4.4) — with the one retrieval-quality revision. **BK-015 graduates to a build Spec** in a future sprint. The config-driven model seam (§4.3) stands; `gpt-4o-mini` is the cheapest-adequate starting model.
+
+### Downstream
+- `TSK-061` → spike COMPLETE; `BK-015` cleared to graduate to a build Spec (`/plan-start` when scheduled).
+- **Unblocks Stage B (`BK-040`)** — its server runtime (the `pb_hooks` AI route) is now proven; the Stage B scoping doc's hard gate clears.
+- Build-Spec carry-ins: (1) `/api/ask` is request/response, not streamed; (2) narrative retrieval selects by section/id; (3) the LLM key lives in Railway service env (RFC-015 §4.3), never in chat/repo.
+- **Security note:** the spike used a throwaway OpenAI key supplied in chat; it was used in-process only (env var, never written to disk or committed) and flagged to the user for immediate rotation.
+
+---
+
 > 🧭 **Navigation:** [⬆️ Top](#top) · [🏠 Repo](../../README.md) · [📚 Docs Hub](../README.md)
